@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class GuiBuggy extends GuiContainerGC {
-    private static ResourceLocation[] sealerTexture = new ResourceLocation[4];
+    private static final ResourceLocation[] sealerTexture = new ResourceLocation[4];
 
     static {
         for (int i = 0; i < 4; i++) {
@@ -39,7 +39,7 @@ public class GuiBuggy extends GuiContainerGC {
     @Override
     public void initGui() {
         super.initGui();
-        List<String> oxygenDesc = new ArrayList<String>();
+        final List<String> oxygenDesc = new ArrayList<>();
         oxygenDesc.add(GCCoreUtil.translate("gui.fuelTank.desc.0"));
         oxygenDesc.add(GCCoreUtil.translate("gui.fuelTank.desc.1"));
         this.infoRegions.add(new GuiElementInfoRegion(

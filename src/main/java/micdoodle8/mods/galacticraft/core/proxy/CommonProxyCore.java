@@ -42,8 +42,10 @@ public class CommonProxyCore {
     public void spawnParticle(String particleID, Vector3 position, Vector3 motion, Object[] otherInfo) {}
 
     public World getWorldForID(int dimensionID) {
-        MinecraftServer theServer = FMLCommonHandler.instance().getMinecraftServerInstance();
-        if (theServer == null) return null;
+        final MinecraftServer theServer = FMLCommonHandler.instance().getMinecraftServerInstance();
+        if (theServer == null) {
+            return null;
+        }
         return theServer.worldServerForDimension(dimensionID);
     }
 

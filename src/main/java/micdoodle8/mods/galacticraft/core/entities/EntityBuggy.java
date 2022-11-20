@@ -12,7 +12,11 @@ import micdoodle8.mods.galacticraft.api.entity.IDockable;
 import micdoodle8.mods.galacticraft.api.tile.IFuelDock;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.items.GCItems;
-import micdoodle8.mods.galacticraft.core.network.*;
+import micdoodle8.mods.galacticraft.core.network.IPacketReceiver;
+import micdoodle8.mods.galacticraft.core.network.NetworkUtil;
+import micdoodle8.mods.galacticraft.core.network.PacketControllableEntity;
+import micdoodle8.mods.galacticraft.core.network.PacketDynamic;
+import micdoodle8.mods.galacticraft.core.network.PacketEntityUpdate;
 import micdoodle8.mods.galacticraft.core.network.PacketEntityUpdate.IEntityFullSync;
 import micdoodle8.mods.galacticraft.core.tick.KeyHandlerClient;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityBuggyFueler;
@@ -41,7 +45,7 @@ import net.minecraftforge.fluids.FluidTank;
 public class EntityBuggy extends Entity
         implements IInventory, IPacketReceiver, IDockable, IControllableEntity, IEntityFullSync {
     public static final int tankCapacity = 1000;
-    public FluidTank buggyFuelTank = new FluidTank(this.tankCapacity);
+    public FluidTank buggyFuelTank = new FluidTank(tankCapacity);
     protected long ticks = 0;
     public int buggyType;
     public int currentDamage;
@@ -95,7 +99,7 @@ public class EntityBuggy extends Entity
     public int getScaledFuelLevel(int i) {
         final double fuelLevel = this.buggyFuelTank.getFluid() == null ? 0 : this.buggyFuelTank.getFluid().amount;
 
-        return (int) (fuelLevel * i / this.tankCapacity);
+        return (int) (fuelLevel * i / EntityBuggy.tankCapacity);
     }
 
     public ModelBase getModel() {
@@ -197,11 +201,11 @@ public class EntityBuggy extends Entity
         if (this.isDead || var1.equals(DamageSource.cactus)) {
             return true;
         } else {
-            Entity e = var1.getEntity();
-            boolean flag = var1.getEntity() instanceof EntityPlayer
+            final Entity e = var1.getEntity();
+            final boolean flag = var1.getEntity() instanceof EntityPlayer
                     && ((EntityPlayer) var1.getEntity()).capabilities.isCreativeMode;
 
-            if (this.isEntityInvulnerable() || (e instanceof EntityLivingBase && !(e instanceof EntityPlayer))) {
+            if (this.isEntityInvulnerable() || e instanceof EntityLivingBase && !(e instanceof EntityPlayer)) {
                 return false;
             } else {
                 this.dataWatcher.updateObject(
@@ -243,14 +247,14 @@ public class EntityBuggy extends Entity
     }
 
     public void dropBuggyAsItem() {
-        List<ItemStack> dropped = this.getItemsDropped();
+        final List<ItemStack> dropped = this.getItemsDropped();
 
         if (dropped == null) {
             return;
         }
 
         for (final ItemStack item : dropped) {
-            EntityItem entityItem = this.entityDropItem(item, 0);
+            final EntityItem entityItem = this.entityDropItem(item, 0);
 
             if (item.hasTagCompound()) {
                 entityItem.getEntityItem().setTagCompound((NBTTagCompound)
@@ -260,14 +264,14 @@ public class EntityBuggy extends Entity
     }
 
     public List<ItemStack> getItemsDropped() {
-        final List<ItemStack> items = new ArrayList<ItemStack>();
+        final List<ItemStack> items = new ArrayList<>();
 
-        ItemStack buggy = new ItemStack(GCItems.buggy, 1, this.buggyType);
+        final ItemStack buggy = new ItemStack(GCItems.buggy, 1, this.buggyType);
         buggy.setTagCompound(new NBTTagCompound());
         buggy.getTagCompound().setInteger("BuggyFuel", this.buggyFuelTank.getFluidAmount());
         items.add(buggy);
 
-        for (ItemStack item : this.cargoItems) {
+        for (final ItemStack item : this.cargoItems) {
             if (item != null) {
                 items.add(item);
             }
@@ -384,7 +388,7 @@ public class EntityBuggy extends Entity
 
         if (this.isCollidedHorizontally && this.shouldClimb) {
             this.speed *= 0.9;
-            this.motionY = 0.15D * ((-Math.pow((this.timeClimbing) - 1, 2)) / 250.0F) + 0.15F;
+            this.motionY = 0.15D * (-Math.pow(this.timeClimbing - 1, 2) / 250.0F) + 0.15F;
             this.motionY = Math.max(-0.15, this.motionY);
             this.shouldClimb = false;
         }
@@ -407,7 +411,7 @@ public class EntityBuggy extends Entity
         }
 
         if (!this.worldObj.isRemote && Math.abs(this.motionX * this.motionZ) > 0.000001) {
-            double d = this.motionX * this.motionX + this.motionZ * this.motionZ;
+            final double d = this.motionX * this.motionX + this.motionZ * this.motionZ;
 
             if (d != 0 && this.ticks % (MathHelper.floor_double(2 / d) + 1) == 0) {
                 this.removeFuel(1);
@@ -445,7 +449,7 @@ public class EntityBuggy extends Entity
 
         try {
             this.buggyFuelTank = NetworkUtil.readFluidTank(buffer);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }
@@ -593,7 +597,9 @@ public class EntityBuggy extends Entity
             return true;
         } else {
             if (this.riddenByEntity != null) {
-                if (this.riddenByEntity == var1) var1.mountEntity(null);
+                if (this.riddenByEntity == var1) {
+                    var1.mountEntity(null);
+                }
                 return true;
             } else {
                 var1.mountEntity(this);
@@ -638,7 +644,9 @@ public class EntityBuggy extends Entity
 
     @Override
     public int addFuel(FluidStack liquid, boolean doDrain) {
-        if (this.landingPad != null) return FluidUtil.fillWithGCFuel(this.buggyFuelTank, liquid, doDrain);
+        if (this.landingPad != null) {
+            return FluidUtil.fillWithGCFuel(this.buggyFuelTank, liquid, doDrain);
+        }
 
         return 0;
     }
@@ -657,7 +665,7 @@ public class EntityBuggy extends Entity
         int count = 0;
 
         for (count = 0; count < this.cargoItems.length; count++) {
-            ItemStack stackAt = this.cargoItems[count];
+            final ItemStack stackAt = this.cargoItems[count];
 
             if (stackAt != null
                     && stackAt.getItem() == stack.getItem()
@@ -672,8 +680,8 @@ public class EntityBuggy extends Entity
                     return EnumCargoLoadingState.SUCCESS;
                 } else {
                     // Part of the stack can fill this slot but there will be some left over
-                    int origSize = stackAt.stackSize;
-                    int surplus = origSize + stack.stackSize - stackAt.getMaxStackSize();
+                    final int origSize = stackAt.stackSize;
+                    final int surplus = origSize + stack.stackSize - stackAt.getMaxStackSize();
 
                     if (doAdd) {
                         this.cargoItems[count].stackSize = stackAt.getMaxStackSize();
@@ -692,7 +700,7 @@ public class EntityBuggy extends Entity
         }
 
         for (count = 0; count < this.cargoItems.length; count++) {
-            ItemStack stackAt = this.cargoItems[count];
+            final ItemStack stackAt = this.cargoItems[count];
 
             if (stackAt == null) {
                 if (doAdd) {
@@ -710,10 +718,10 @@ public class EntityBuggy extends Entity
     @Override
     public RemovalResult removeCargo(boolean doRemove) {
         for (int i = 0; i < this.cargoItems.length; i++) {
-            ItemStack stackAt = this.cargoItems[i];
+            final ItemStack stackAt = this.cargoItems[i];
 
             if (stackAt != null) {
-                ItemStack resultStack = stackAt.copy();
+                final ItemStack resultStack = stackAt.copy();
                 resultStack.stackSize = 1;
 
                 if (doRemove && --stackAt.stackSize <= 0) {
@@ -759,6 +767,6 @@ public class EntityBuggy extends Entity
             return null;
         }
 
-        return this.riddenByEntity != null ? ((EntityPlayer) this.riddenByEntity).getPersistentID() : null;
+        return this.riddenByEntity != null ? this.riddenByEntity.getPersistentID() : null;
     }
 }

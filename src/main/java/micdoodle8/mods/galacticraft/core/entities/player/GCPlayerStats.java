@@ -112,8 +112,8 @@ public class GCPlayerStats implements IExtendedEntityProperties {
     public boolean inLander;
     public boolean justLanded;
 
-    public ArrayList<ISchematicPage> unlockedSchematics = new ArrayList<ISchematicPage>();
-    public ArrayList<ISchematicPage> lastUnlockedSchematics = new ArrayList<ISchematicPage>();
+    public ArrayList<ISchematicPage> unlockedSchematics = new ArrayList<>();
+    public ArrayList<ISchematicPage> lastUnlockedSchematics = new ArrayList<>();
 
     public int cryogenicChamberCooldown;
 
@@ -130,7 +130,7 @@ public class GCPlayerStats implements IExtendedEntityProperties {
     public String startDimension = "";
 
     public GCPlayerStats(EntityPlayerMP player) {
-        this.player = new WeakReference<EntityPlayerMP>(player);
+        this.player = new WeakReference<>(player);
     }
 
     @Override
@@ -150,9 +150,9 @@ public class GCPlayerStats implements IExtendedEntityProperties {
 
         Collections.sort(this.unlockedSchematics);
 
-        NBTTagList tagList = new NBTTagList();
+        final NBTTagList tagList = new NBTTagList();
 
-        for (ISchematicPage page : this.unlockedSchematics) {
+        for (final ISchematicPage page : this.unlockedSchematics) {
             if (page != null) {
                 final NBTTagCompound nbttagcompound = new NBTTagCompound();
                 nbttagcompound.setInteger("UnlockedPage", page.getPageID());
@@ -166,7 +166,7 @@ public class GCPlayerStats implements IExtendedEntityProperties {
         nbt.setInteger("SpaceshipTier", this.spaceshipTier);
         nbt.setInteger("FuelLevel", this.fuelLevel);
         if (this.rocketItem != null) {
-            ItemStack returnRocket = new ItemStack(this.rocketItem, 1, this.rocketType);
+            final ItemStack returnRocket = new ItemStack(this.rocketItem, 1, this.rocketType);
             nbt.setTag("ReturnRocket", returnRocket.writeToNBT(new NBTTagCompound()));
         }
 
@@ -205,7 +205,7 @@ public class GCPlayerStats implements IExtendedEntityProperties {
         this.thermalLevel = nbt.getInteger("thermalLevel");
 
         // Backwards compatibility
-        NBTTagList nbttaglist = nbt.getTagList("Inventory", 10);
+        final NBTTagList nbttaglist = nbt.getTagList("Inventory", 10);
         this.extendedInventory.readFromNBTOld(nbttaglist);
 
         if (nbt.hasKey("ExtendedInventoryGC")) {
@@ -216,9 +216,9 @@ public class GCPlayerStats implements IExtendedEntityProperties {
         // inventory, load it now
         // (if there was no offline load, then the dontload flag in doLoad()
         // will make sure nothing happens)
-        EntityPlayerMP p = this.player.get();
+        final EntityPlayerMP p = this.player.get();
         if (p != null) {
-            ItemStack[] saveinv =
+            final ItemStack[] saveinv =
                     CommandGCInv.getSaveData(p.getGameProfile().getName().toLowerCase());
             if (saveinv != null) {
                 CommandGCInv.doLoad(p);
@@ -234,7 +234,7 @@ public class GCPlayerStats implements IExtendedEntityProperties {
             this.fuelLevel = nbt.getInteger("FuelLevel");
         }
         if (nbt.hasKey("ReturnRocket")) {
-            ItemStack returnRocket = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("ReturnRocket"));
+            final ItemStack returnRocket = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("ReturnRocket"));
             if (returnRocket != null) {
                 this.rocketItem = returnRocket.getItem();
                 this.rocketType = returnRocket.getItemDamage();
@@ -248,7 +248,8 @@ public class GCPlayerStats implements IExtendedEntityProperties {
         this.coordsTeleportedFromZ = nbt.getDouble("coordsTeleportedFromZ");
         this.startDimension = nbt.hasKey("startDimension") ? nbt.getString("startDimension") : "";
         if (nbt.hasKey("spaceStationDimensionID")) {
-            // If loading from an old save file, the home space station is always the overworld, so use 0 as home planet
+            // If loading from an old save file, the home space station is always the
+            // overworld, so use 0 as home planet
             this.spaceStationDimensionData =
                     WorldUtil.stringToSpaceStationData("0$" + nbt.getInteger("spaceStationDimensionID"));
         } else {
@@ -262,7 +263,7 @@ public class GCPlayerStats implements IExtendedEntityProperties {
 
         if (nbt.hasKey("RocketItems") && nbt.hasKey("rocketStacksLength")) {
             final NBTTagList var23 = nbt.getTagList("RocketItems", 10);
-            int length = nbt.getInteger("rocketStacksLength");
+            final int length = nbt.getInteger("rocketStacksLength");
 
             this.rocketStacks = new ItemStack[length];
 
@@ -276,7 +277,7 @@ public class GCPlayerStats implements IExtendedEntityProperties {
             }
         }
 
-        this.unlockedSchematics = new ArrayList<ISchematicPage>();
+        this.unlockedSchematics = new ArrayList<>();
 
         if (p != null) {
             for (int i = 0; i < nbt.getTagList("Schematics", 10).tagCount(); ++i) {
@@ -306,20 +307,28 @@ public class GCPlayerStats implements IExtendedEntityProperties {
                 this.launchpadStack = null;
             }
         } else {
-            // for backwards compatibility with saves which don't have this tag - players can't lose launchpads
+            // for backwards compatibility with saves which don't have this tag - players
+            // can't lose launchpads
             this.launchpadStack = new ItemStack(GCBlocks.landingPad, 9, 0);
         }
 
-        if (nbt.hasKey("BuildFlags")) this.buildFlags = nbt.getInteger("BuildFlags");
+        if (nbt.hasKey("BuildFlags")) {
+            this.buildFlags = nbt.getInteger("BuildFlags");
+        }
 
-        if (nbt.hasKey("ShownSpaceRace")) this.openedSpaceRaceManager = nbt.getBoolean("ShownSpaceRace");
+        if (nbt.hasKey("ShownSpaceRace")) {
+            this.openedSpaceRaceManager = nbt.getBoolean("ShownSpaceRace");
+        }
 
-        if (nbt.hasKey("AstroMinerCount")) this.astroMinerCount = nbt.getInteger("AstroMinerCount");
+        if (nbt.hasKey("AstroMinerCount")) {
+            this.astroMinerCount = nbt.getInteger("AstroMinerCount");
+        }
 
         this.sentFlags = false;
-        if (ConfigManagerCore.enableDebug)
+        if (ConfigManagerCore.enableDebug) {
             GCLog.info("Loading GC player data for "
-                    + player.get().getGameProfile().getName() + " : " + this.buildFlags);
+                    + this.player.get().getGameProfile().getName() + " : " + this.buildFlags);
+        }
     }
 
     @Override

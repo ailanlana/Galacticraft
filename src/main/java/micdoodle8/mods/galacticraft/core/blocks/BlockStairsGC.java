@@ -12,7 +12,7 @@ import net.minecraft.util.IIcon;
 public class BlockStairsGC extends BlockStairs {
     private IIcon[] tinSideIcon;
 
-    public static enum StairsCategoryGC {
+    public enum StairsCategoryGC {
         TIN1("stone"),
         TIN2("stone"),
         MOON_STONE("stone"),
@@ -21,9 +21,9 @@ public class BlockStairsGC extends BlockStairs {
         MARS_BRICKS("stone");
 
         private final List<String> values;
-        private String type;
+        private final String type;
 
-        private StairsCategoryGC(String type) {
+        StairsCategoryGC(String type) {
             this.type = type;
             this.values = Arrays.asList(type);
         }
@@ -69,7 +69,7 @@ public class BlockStairsGC extends BlockStairs {
 
         if (GalacticraftCore.isPlanetsLoaded) {
             try {
-                String prefix = (String) Class.forName("micdoodle8.mods.galacticraft.planets.mars.MarsModule")
+                final String prefix = (String) Class.forName("micdoodle8.mods.galacticraft.planets.mars.MarsModule")
                         .getField("TEXTURE_PREFIX")
                         .get(null);
                 if (this.category == StairsCategoryGC.MARS_COBBLESTONE) // Mars Cobblestone
@@ -79,7 +79,7 @@ public class BlockStairsGC extends BlockStairs {
                 {
                     this.blockIcon = par1IconRegister.registerIcon(prefix + "brick");
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
@@ -90,27 +90,21 @@ public class BlockStairsGC extends BlockStairs {
     }
 
     public boolean isWoodCategory(String block) {
-        String type = StairsCategoryGC.valueOf(block).type;
+        final String type = StairsCategoryGC.valueOf(block).type;
 
-        if (type.equals("wood")) {
-            return true;
-        }
-        return false;
+        return type.equals("wood");
     }
 
     public boolean isStoneCategory(String block) {
-        String type = StairsCategoryGC.valueOf(block).type;
+        final String type = StairsCategoryGC.valueOf(block).type;
 
-        if (type.equals("stone")) {
-            return true;
-        }
-        return false;
+        return type.equals("stone");
     }
 
     public static int getWoodCategoryAmount() {
         int woodCatNo = 0;
 
-        for (StairsCategoryGC cat : StairsCategoryGC.values()) {
+        for (final StairsCategoryGC cat : StairsCategoryGC.values()) {
             if (cat.values.contains("wood")) {
                 ++woodCatNo;
             }
@@ -121,7 +115,7 @@ public class BlockStairsGC extends BlockStairs {
     public static int getStoneCategoryAmount() {
         int woodCatNo = 0;
 
-        for (StairsCategoryGC cat : StairsCategoryGC.values()) {
+        for (final StairsCategoryGC cat : StairsCategoryGC.values()) {
             if (cat.values.contains("stone")) {
                 ++woodCatNo;
             }

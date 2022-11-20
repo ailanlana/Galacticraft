@@ -36,7 +36,7 @@ public class GuiMissingCore extends GuiScreen {
         this.drawCenteredString(
                 this.fontRendererObj, GCCoreUtil.translate("gui.missingCore.name.2"), this.width / 2, offset, 0x999999);
         offset += 20;
-        String s = EnumChatFormatting.UNDERLINE + GCCoreUtil.translate("gui.missingCore.name.3");
+        final String s = EnumChatFormatting.UNDERLINE + GCCoreUtil.translate("gui.missingCore.name.3");
         this.urlX = this.width / 2 - this.fontRendererObj.getStringWidth(s) / 2 - 10;
         this.urlY = offset - 2;
         this.urlWidth = this.fontRendererObj.getStringWidth(s) + 20;
@@ -59,18 +59,19 @@ public class GuiMissingCore extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton par1GuiButton) {
-        FMLClientHandler.instance().getClient().displayGuiScreen((GuiScreen) null);
+        FMLClientHandler.instance().getClient().displayGuiScreen(null);
     }
 
     @Override
     protected void mouseClicked(int x, int y, int which) {
         if (x > this.urlX && x < this.urlX + this.urlWidth && y > this.urlY && y < this.urlY + this.urlHeight) {
             try {
-                Class<?> oclass = Class.forName("java.awt.Desktop");
-                Object object = oclass.getMethod("getDesktop", new Class[0]).invoke((Object) null, new Object[0]);
-                oclass.getMethod("browse", new Class[] {URI.class})
-                        .invoke(object, new Object[] {new URI("https://github.com/GTNewHorizons/Galacticraft")});
-            } catch (Throwable throwable) {
+                final Class<?> oclass = Class.forName("java.awt.Desktop");
+                final Object object =
+                        oclass.getMethod("getDesktop", new Class[0]).invoke(null);
+                oclass.getMethod("browse", URI.class)
+                        .invoke(object, new URI("https://github.com/GTNewHorizons/Galacticraft"));
+            } catch (final Throwable throwable) {
                 throwable.printStackTrace();
             }
         }

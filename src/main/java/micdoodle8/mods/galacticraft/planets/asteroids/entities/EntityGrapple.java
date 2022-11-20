@@ -84,7 +84,7 @@ public class EntityGrapple extends Entity implements IProjectile {
 
     @Override
     public void setThrowableHeading(double par1, double par3, double par5, float par7, float par8) {
-        float f2 = MathHelper.sqrt_double(par1 * par1 + par3 * par3 + par5 * par5);
+        final float f2 = MathHelper.sqrt_double(par1 * par1 + par3 * par3 + par5 * par5);
         par1 /= f2;
         par3 /= f2;
         par5 /= f2;
@@ -97,7 +97,7 @@ public class EntityGrapple extends Entity implements IProjectile {
         this.motionX = par1;
         this.motionY = par3;
         this.motionZ = par5;
-        float f3 = MathHelper.sqrt_double(par1 * par1 + par5 * par5);
+        final float f3 = MathHelper.sqrt_double(par1 * par1 + par5 * par5);
         this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(par1, par5) * 180.0D / Math.PI);
         this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(par3, f3) * 180.0D / Math.PI);
         this.ticksInGround = 0;
@@ -110,6 +110,7 @@ public class EntityGrapple extends Entity implements IProjectile {
         this.setRotation(par7, par8);
     }
 
+    @Override
     public void setPosition(double x, double y, double z) {
         super.setPosition(x, y, z);
     }
@@ -122,7 +123,7 @@ public class EntityGrapple extends Entity implements IProjectile {
         this.motionZ = par5;
 
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F) {
-            float f = MathHelper.sqrt_double(par1 * par1 + par5 * par5);
+            final float f = MathHelper.sqrt_double(par1 * par1 + par5 * par5);
             this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(par1, par5) * 180.0D / Math.PI);
             this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(par3, f) * 180.0D / Math.PI);
             this.prevRotationPitch = this.rotationPitch;
@@ -142,11 +143,12 @@ public class EntityGrapple extends Entity implements IProjectile {
             this.updateShootingEntity();
 
             if (this.getPullingEntity()) {
-                EntityPlayer shootingEntity = this.getShootingEntity();
+                final EntityPlayer shootingEntity = this.getShootingEntity();
                 if (shootingEntity != null) {
-                    double deltaPosition = this.getDistanceSqToEntity(shootingEntity);
+                    final double deltaPosition = this.getDistanceSqToEntity(shootingEntity);
 
-                    Vector3 mot = new Vector3(shootingEntity.motionX, shootingEntity.motionY, shootingEntity.motionZ);
+                    final Vector3 mot =
+                            new Vector3(shootingEntity.motionX, shootingEntity.motionY, shootingEntity.motionZ);
 
                     if (mot.getMagnitudeSquared() < 0.01 && this.pullingPlayer) {
                         if (deltaPosition < 10) {
@@ -161,7 +163,7 @@ public class EntityGrapple extends Entity implements IProjectile {
             }
         } else {
             if (this.getPullingEntity()) {
-                EntityPlayer shootingEntity = this.getShootingEntity();
+                final EntityPlayer shootingEntity = this.getShootingEntity();
                 if (shootingEntity != null) {
                     shootingEntity.setVelocity(
                             (this.posX - shootingEntity.posX) / 12.0F,
@@ -176,18 +178,18 @@ public class EntityGrapple extends Entity implements IProjectile {
         }
 
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F) {
-            float f = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+            final float f = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.prevRotationYaw =
                     this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
             this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(this.motionY, f) * 180.0D / Math.PI);
         }
 
         if (this.hitVec != null) {
-            Block block = this.worldObj.getBlock(this.hitVec.x, this.hitVec.y, this.hitVec.z);
+            final Block block = this.worldObj.getBlock(this.hitVec.x, this.hitVec.y, this.hitVec.z);
 
             if (block.getMaterial() != Material.air) {
                 block.setBlockBoundsBasedOnState(this.worldObj, this.hitVec.x, this.hitVec.y, this.hitVec.z);
-                AxisAlignedBB axisalignedbb = block.getCollisionBoundingBoxFromPool(
+                final AxisAlignedBB axisalignedbb = block.getCollisionBoundingBoxFromPool(
                         this.worldObj, this.hitVec.x, this.hitVec.y, this.hitVec.z);
 
                 if (axisalignedbb != null
@@ -203,16 +205,17 @@ public class EntityGrapple extends Entity implements IProjectile {
 
         if (this.inGround) {
             if (this.hitVec != null) {
-                Block block = this.worldObj.getBlock(this.hitVec.x, this.hitVec.y, this.hitVec.z);
-                int j = this.worldObj.getBlockMetadata(this.hitVec.x, this.hitVec.y, this.hitVec.z);
+                final Block block = this.worldObj.getBlock(this.hitVec.x, this.hitVec.y, this.hitVec.z);
+                final int j = this.worldObj.getBlockMetadata(this.hitVec.x, this.hitVec.y, this.hitVec.z);
 
                 if (block == this.hitBlock && j == this.inData) {
                     if (this.shootingEntity != null) {
                         this.shootingEntity.motionX = (this.posX - this.shootingEntity.posX) / 16.0F;
                         this.shootingEntity.motionY = (this.posY - this.shootingEntity.posY) / 16.0F;
                         this.shootingEntity.motionZ = (this.posZ - this.shootingEntity.posZ) / 16.0F;
-                        if (this.shootingEntity instanceof EntityPlayerMP)
+                        if (this.shootingEntity instanceof EntityPlayerMP) {
                             GalacticraftCore.handler.preventFlyingKicks((EntityPlayerMP) this.shootingEntity);
+                        }
                     }
 
                     if (!this.worldObj.isRemote && this.ticksInGround < 5) {
@@ -261,7 +264,7 @@ public class EntityGrapple extends Entity implements IProjectile {
             }
 
             Entity entity = null;
-            List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(
+            final List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(
                     this,
                     this.boundingBox
                             .addCoord(this.motionX, this.motionY, this.motionZ)
@@ -271,15 +274,15 @@ public class EntityGrapple extends Entity implements IProjectile {
             float f1;
 
             for (i = 0; i < list.size(); ++i) {
-                Entity entity1 = (Entity) list.get(i);
+                final Entity entity1 = (Entity) list.get(i);
 
                 if (entity1.canBeCollidedWith() && (entity1 != this.shootingEntity || this.ticksInAir >= 5)) {
                     f1 = 0.3F;
-                    AxisAlignedBB axisalignedbb1 = entity1.boundingBox.expand(f1, f1, f1);
-                    MovingObjectPosition movingobjectposition1 = axisalignedbb1.calculateIntercept(vec31, vec3);
+                    final AxisAlignedBB axisalignedbb1 = entity1.boundingBox.expand(f1, f1, f1);
+                    final MovingObjectPosition movingobjectposition1 = axisalignedbb1.calculateIntercept(vec31, vec3);
 
                     if (movingobjectposition1 != null) {
-                        double d1 = vec31.distanceTo(movingobjectposition1.hitVec);
+                        final double d1 = vec31.distanceTo(movingobjectposition1.hitVec);
 
                         if (d1 < d0 || d0 == 0.0D) {
                             entity = entity1;
@@ -296,7 +299,7 @@ public class EntityGrapple extends Entity implements IProjectile {
             if (movingobjectposition != null
                     && movingobjectposition.entityHit != null
                     && movingobjectposition.entityHit instanceof EntityPlayer) {
-                EntityPlayer entityplayer = (EntityPlayer) movingobjectposition.entityHit;
+                final EntityPlayer entityplayer = (EntityPlayer) movingobjectposition.entityHit;
 
                 if (entityplayer.capabilities.disableDamage
                         || this.shootingEntity != null && !this.shootingEntity.canAttackPlayer(entityplayer)) {
@@ -356,11 +359,10 @@ public class EntityGrapple extends Entity implements IProjectile {
 
             this.rotationPitch = this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * 0.2F;
             this.rotationYaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F;
-            float f3 = 0.99F;
             f1 = 0.05F;
 
             if (this.isInWater()) {
-                float f4 = 0.25F;
+                final float f4 = 0.25F;
                 for (int l = 0; l < 4; ++l) {
                     this.worldObj.spawnParticle(
                             "bubble",
@@ -371,8 +373,6 @@ public class EntityGrapple extends Entity implements IProjectile {
                             this.motionY,
                             this.motionZ);
                 }
-
-                f3 = 0.8F;
             }
 
             if (this.isWet()) {
@@ -410,11 +410,12 @@ public class EntityGrapple extends Entity implements IProjectile {
 
     @Override
     public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) {
-        if (par1NBTTagCompound.hasKey("xTile"))
+        if (par1NBTTagCompound.hasKey("xTile")) {
             this.hitVec = new BlockVec3(
                     par1NBTTagCompound.getShort("xTile"),
                     par1NBTTagCompound.getShort("yTile"),
                     par1NBTTagCompound.getShort("zTile"));
+        }
 
         this.ticksInGround = par1NBTTagCompound.getShort("life");
         this.hitBlock = Block.getBlockById(par1NBTTagCompound.getByte("inTile") & 255);
@@ -472,7 +473,7 @@ public class EntityGrapple extends Entity implements IProjectile {
     }
 
     public EntityPlayer getShootingEntity() {
-        Entity entity = this.worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(10));
+        final Entity entity = this.worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(10));
 
         if (entity instanceof EntityPlayer) {
             return (EntityPlayer) entity;

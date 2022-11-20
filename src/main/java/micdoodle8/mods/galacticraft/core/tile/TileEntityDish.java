@@ -58,14 +58,14 @@ public class TileEntityDish extends TileBaseUniversalElectrical
             }
         }
 
-        float angle = this.worldObj.getCelestialAngle(1.0F) - 0.7845194F < 0 ? 1.0F - 0.7845194F : -0.7845194F;
+        final float angle = this.worldObj.getCelestialAngle(1.0F) - 0.7845194F < 0 ? 1.0F - 0.7845194F : -0.7845194F;
         float celestialAngle = (this.worldObj.getCelestialAngle(1.0F) + angle) * 360.0F;
 
         celestialAngle %= 360;
 
         {
             if (celestialAngle > 30 && celestialAngle < 150) {
-                float difference = this.targetAngle - celestialAngle;
+                final float difference = this.targetAngle - celestialAngle;
 
                 this.targetAngle -= difference / 20.0F;
             } else if (!this.worldObj.isDaytime() || this.worldObj.isRaining() || this.worldObj.isThundering()) {
@@ -77,7 +77,7 @@ public class TileEntityDish extends TileBaseUniversalElectrical
             }
         }
 
-        float difference = this.targetAngle - this.currentAngle;
+        final float difference = this.targetAngle - this.currentAngle;
 
         this.currentAngle += difference / 20.0F;
     }
@@ -104,20 +104,24 @@ public class TileEntityDish extends TileBaseUniversalElectrical
 
     @Override
     public void onCreate(BlockVec3 placedPosition) {
-        int buildHeight = this.worldObj.getHeight() - 1;
+        final int buildHeight = this.worldObj.getHeight() - 1;
 
-        if (placedPosition.y + 1 > buildHeight) return;
+        if (placedPosition.y + 1 > buildHeight) {
+            return;
+        }
         final BlockVec3 vecStrut = new BlockVec3(placedPosition.x, placedPosition.y + 1, placedPosition.z);
         ((BlockMulti) GCBlocks.fakeBlock).makeFakeBlock(this.worldObj, vecStrut, placedPosition, 0);
 
-        if (placedPosition.y + 2 > buildHeight) return;
+        if (placedPosition.y + 2 > buildHeight) {
+            return;
+        }
         for (int x = -1; x < 2; x++) {
             for (int z = -1; z < 2; z++) {
                 final BlockVec3 vecToAdd =
                         new BlockVec3(placedPosition.x + x, placedPosition.y + 2, placedPosition.z + z);
 
                 ((BlockMulti) GCBlocks.fakeBlock)
-                        .makeFakeBlock(this.worldObj, vecToAdd, placedPosition, (this.getTierGC() == 1) ? 4 : 0);
+                        .makeFakeBlock(this.worldObj, vecToAdd, placedPosition, this.getTierGC() == 1 ? 4 : 0);
             }
         }
     }
@@ -205,7 +209,8 @@ public class TileEntityDish extends TileBaseUniversalElectrical
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
-        return AxisAlignedBB.getBoundingBox(xCoord - 1, yCoord, zCoord - 1, xCoord + 2, yCoord + 4, zCoord + 2);
+        return AxisAlignedBB.getBoundingBox(
+                this.xCoord - 1, this.yCoord, this.zCoord - 1, this.xCoord + 2, this.yCoord + 4, this.zCoord + 2);
     }
 
     @Override

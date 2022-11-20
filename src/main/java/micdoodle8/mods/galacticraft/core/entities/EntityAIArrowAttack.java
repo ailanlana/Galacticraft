@@ -13,12 +13,12 @@ public class EntityAIArrowAttack extends EntityAIBase {
     private EntityLivingBase attackTarget;
 
     private int rangedAttackTime;
-    private double entityMoveSpeed;
-    private int field_96561_g;
+    private final double entityMoveSpeed;
+    private final int field_96561_g;
 
-    private int maxRangedAttackTime;
-    private float field_96562_i;
-    private float field_82642_h;
+    private final int maxRangedAttackTime;
+    private final float field_96562_i;
+    private final float field_82642_h;
 
     public EntityAIArrowAttack(IRangedAttackMob par1IRangedAttackMob, double par2, int par4, float par5) {
         this(par1IRangedAttackMob, par2, par4, par4, par5);
@@ -46,7 +46,7 @@ public class EntityAIArrowAttack extends EntityAIBase {
      */
     @Override
     public boolean shouldExecute() {
-        EntityLivingBase entitylivingbase = this.entityHost.getAttackTarget();
+        final EntityLivingBase entitylivingbase = this.entityHost.getAttackTarget();
 
         if (entitylivingbase == null) {
             return false;
@@ -78,9 +78,9 @@ public class EntityAIArrowAttack extends EntityAIBase {
      */
     @Override
     public void updateTask() {
-        double d0 = this.entityHost.getDistanceSq(
+        final double d0 = this.entityHost.getDistanceSq(
                 this.attackTarget.posX, this.attackTarget.boundingBox.minY, this.attackTarget.posZ);
-        boolean flag = this.entityHost.getEntitySenses().canSee(this.attackTarget);
+        final boolean flag = this.entityHost.getEntitySenses().canSee(this.attackTarget);
 
         this.entityHost.getNavigator().tryMoveToEntityLiving(this.attackTarget, this.entityMoveSpeed);
 

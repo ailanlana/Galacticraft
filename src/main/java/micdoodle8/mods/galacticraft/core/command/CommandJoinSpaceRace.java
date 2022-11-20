@@ -36,13 +36,13 @@ public class CommandJoinSpaceRace extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender icommandsender, String[] astring) {
-        EntityPlayerMP playerBase =
+        final EntityPlayerMP playerBase =
                 PlayerUtil.getPlayerBaseServerFromPlayerUsername(icommandsender.getCommandSenderName(), true);
 
         if (astring.length == 0) {
             try {
                 if (playerBase != null) {
-                    GCPlayerStats stats = GCPlayerStats.get(playerBase);
+                    final GCPlayerStats stats = GCPlayerStats.get(playerBase);
 
                     if (stats.spaceRaceInviteTeamID > 0) {
                         SpaceRaceManager.sendSpaceRaceData(
@@ -59,12 +59,11 @@ public class CommandJoinSpaceRace extends CommandBase {
                     throw new Exception("Could not find player with name: " + astring[0]);
                 }
             } catch (final Exception var6) {
-                throw new CommandException(var6.getMessage(), new Object[0]);
+                throw new CommandException(var6.getMessage());
             }
         } else {
             throw new WrongUsageException(
-                    GCCoreUtil.translateWithFormat("commands.joinrace.noTeam", this.getCommandUsage(icommandsender)),
-                    new Object[0]);
+                    GCCoreUtil.translateWithFormat("commands.joinrace.noTeam", this.getCommandUsage(icommandsender)));
         }
     }
 }

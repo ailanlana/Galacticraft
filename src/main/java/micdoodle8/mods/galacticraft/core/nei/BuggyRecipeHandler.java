@@ -4,7 +4,7 @@ import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import java.awt.*;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,14 +37,14 @@ public class BuggyRecipeHandler extends TemplateRecipeHandler {
     }
 
     public Set<Entry<ArrayList<PositionedStack>, PositionedStack>> getRecipes() {
-        HashMap<ArrayList<PositionedStack>, PositionedStack> recipes =
-                new HashMap<ArrayList<PositionedStack>, PositionedStack>();
+        final HashMap<ArrayList<PositionedStack>, PositionedStack> recipes = new HashMap<>();
 
-        for (Entry<HashMap<Integer, PositionedStack>, PositionedStack> stack :
+        for (final Entry<HashMap<Integer, PositionedStack>, PositionedStack> stack :
                 NEIGalacticraftConfig.getBuggyBenchRecipes()) {
-            ArrayList<PositionedStack> inputStacks = new ArrayList<PositionedStack>();
+            final ArrayList<PositionedStack> inputStacks = new ArrayList<>();
 
-            for (Map.Entry<Integer, PositionedStack> input : stack.getKey().entrySet()) {
+            for (final Map.Entry<Integer, PositionedStack> input :
+                    stack.getKey().entrySet()) {
                 inputStacks.add(input.getValue());
             }
 

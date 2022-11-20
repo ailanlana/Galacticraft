@@ -25,12 +25,12 @@ import org.lwjgl.opengl.GL11;
 public class GuiTerraformer extends GuiContainerGC implements ICheckBoxCallback {
     private static final ResourceLocation terraformerGui =
             new ResourceLocation(MarsModule.ASSET_PREFIX, "textures/gui/terraformer.png");
-    private TileEntityTerraformer terraformer;
+    private final TileEntityTerraformer terraformer;
     private GuiButton enableTreesButton;
     private GuiButton enableGrassButton;
     private GuiElementCheckbox checkboxRenderBubble;
-    private GuiElementInfoRegion electricInfoRegion = new GuiElementInfoRegion(0, 0, 52, 9, null, 0, 0, this);
-    private GuiElementInfoRegion waterTankInfoRegion = new GuiElementInfoRegion(0, 0, 41, 28, null, 0, 0, this);
+    private final GuiElementInfoRegion electricInfoRegion = new GuiElementInfoRegion(0, 0, 52, 9, null, 0, 0, this);
+    private final GuiElementInfoRegion waterTankInfoRegion = new GuiElementInfoRegion(0, 0, 41, 28, null, 0, 0, this);
 
     public GuiTerraformer(InventoryPlayer par1InventoryPlayer, TileEntityTerraformer terraformer) {
         super(new ContainerTerraformer(par1InventoryPlayer, terraformer));
@@ -50,10 +50,12 @@ public class GuiTerraformer extends GuiContainerGC implements ICheckBoxCallback 
 
         this.enableTreesButton.displayString = GCCoreUtil.translate(
                         this.terraformer.treesDisabled ? "gui.button.enable.name" : "gui.button.disable.name")
-                + " " + GCCoreUtil.translate("gui.message.trees.name");
+                + " "
+                + GCCoreUtil.translate("gui.message.trees.name");
         this.enableGrassButton.displayString = GCCoreUtil.translate(
                         this.terraformer.grassDisabled ? "gui.button.enable.name" : "gui.button.disable.name")
-                + " " + GCCoreUtil.translate("gui.message.grass.name");
+                + " "
+                + GCCoreUtil.translate("gui.message.grass.name");
 
         super.drawScreen(par1, par2, par3);
     }
@@ -62,13 +64,13 @@ public class GuiTerraformer extends GuiContainerGC implements ICheckBoxCallback 
     @Override
     public void initGui() {
         super.initGui();
-        this.electricInfoRegion.tooltipStrings = new ArrayList<String>();
+        this.electricInfoRegion.tooltipStrings = new ArrayList<>();
         this.electricInfoRegion.xPosition = (this.width - this.xSize) / 2 + 44;
         this.electricInfoRegion.yPosition = (this.height - this.ySize) / 2 + 47;
         this.electricInfoRegion.parentWidth = this.width;
         this.electricInfoRegion.parentHeight = this.height;
         this.infoRegions.add(this.electricInfoRegion);
-        List<String> batterySlotDesc = new ArrayList<String>();
+        List<String> batterySlotDesc = new ArrayList<>();
         batterySlotDesc.add(GCCoreUtil.translate("gui.batterySlot.desc.0"));
         batterySlotDesc.add(GCCoreUtil.translate("gui.batterySlot.desc.1"));
         this.infoRegions.add(new GuiElementInfoRegion(
@@ -80,7 +82,7 @@ public class GuiTerraformer extends GuiContainerGC implements ICheckBoxCallback 
                 this.width,
                 this.height,
                 this));
-        batterySlotDesc = new ArrayList<String>();
+        batterySlotDesc = new ArrayList<>();
         batterySlotDesc.add(GCCoreUtil.translate("gui.showBubble.desc.0"));
         this.infoRegions.add(new GuiElementInfoRegion(
                 (this.width - this.xSize) / 2 + 85,
@@ -91,7 +93,7 @@ public class GuiTerraformer extends GuiContainerGC implements ICheckBoxCallback 
                 this.width,
                 this.height,
                 this));
-        this.waterTankInfoRegion.tooltipStrings = new ArrayList<String>();
+        this.waterTankInfoRegion.tooltipStrings = new ArrayList<>();
         this.waterTankInfoRegion.xPosition = (this.width - this.xSize) / 2 + 55;
         this.waterTankInfoRegion.yPosition = (this.height - this.ySize) / 2 + 17;
         this.waterTankInfoRegion.parentWidth = this.width;
@@ -137,14 +139,15 @@ public class GuiTerraformer extends GuiContainerGC implements ICheckBoxCallback 
 
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-        String displayString = terraformer.getInventoryName();
+        final String displayString = this.terraformer.getInventoryName();
         this.fontRendererObj.drawString(
                 displayString, this.xSize / 2 - this.fontRendererObj.getStringWidth(displayString) / 2, 5, 4210752);
         this.fontRendererObj.drawString(GCCoreUtil.translate("container.inventory"), 8, 144, 4210752);
         this.fontRendererObj.drawSplitString(this.getStatus(), 105, 24, this.xSize - 105, 4210752);
-        //		this.fontRendererObj.drawString(ElectricityDisplay.getDisplay(this.terraformer.ueWattsPerTick * 20,
+        // this.fontRendererObj.drawString(ElectricityDisplay.getDisplay(this.terraformer.ueWattsPerTick
+        // * 20,
         // ElectricUnit.WATT), 105, 56, 4210752);
-        //		this.fontRendererObj.drawString(ElectricityDisplay.getDisplay(this.terraformer.getVoltage(),
+        // this.fontRendererObj.drawString(ElectricityDisplay.getDisplay(this.terraformer.getVoltage(),
         // ElectricUnit.VOLTAGE), 105, 68, 4210752);
     }
 
@@ -205,17 +208,17 @@ public class GuiTerraformer extends GuiContainerGC implements ICheckBoxCallback 
         this.drawTexturedModalRect(var5, var6, 0, 0, this.xSize, this.ySize);
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        int scale = this.terraformer.getScaledElecticalLevel(54);
+        final int scale = this.terraformer.getScaledElecticalLevel(54);
         this.drawTexturedModalRect(var5 + 45, var6 + 48, 176, 26, Math.min(scale, 54), 7);
 
-        List<String> electricityDesc = new ArrayList<String>();
+        final List<String> electricityDesc = new ArrayList<>();
         electricityDesc.add(GCCoreUtil.translate("gui.energyStorage.desc.0"));
         EnergyDisplayHelper.getEnergyDisplayTooltip(
                 this.terraformer.getEnergyStoredGC(), this.terraformer.getMaxEnergyStoredGC(), electricityDesc);
         this.electricInfoRegion.tooltipStrings = electricityDesc;
 
         int waterLevel = this.terraformer.getScaledWaterLevel(100);
-        List<String> processDesc = new ArrayList<String>();
+        final List<String> processDesc = new ArrayList<>();
         processDesc.clear();
         processDesc.add(GCCoreUtil.translate("gui.terraformer.desc.0") + ": " + waterLevel + "%");
         this.waterTankInfoRegion.tooltipStrings = processDesc;

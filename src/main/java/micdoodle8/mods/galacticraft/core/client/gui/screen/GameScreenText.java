@@ -42,40 +42,42 @@ public class GameScreenText implements IGameScreen {
 
     public GameScreenText() {
         if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
-            planes = BufferUtils.createDoubleBuffer(4 * Double.SIZE);
+            this.planes = BufferUtils.createDoubleBuffer(4 * Double.SIZE);
         }
     }
 
+    @Override
     public void setFrameSize(float frameSize) {
         this.frameA = frameSize;
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void render(int type, float ticks, float sizeX, float sizeY, IScreenManager scr) {
-        DrawGameScreen screen = (DrawGameScreen) scr;
+        final DrawGameScreen screen = (DrawGameScreen) scr;
 
-        frameBx = sizeX - frameA;
-        frameBy = sizeY - frameA;
-        drawBlackBackground(0.0F);
-        planeEquation(frameA, frameA, 0, frameA, frameBy, 0, frameA, frameBy, 1);
-        GL11.glClipPlane(GL11.GL_CLIP_PLANE0, planes);
+        this.frameBx = sizeX - this.frameA;
+        this.frameBy = sizeY - this.frameA;
+        this.drawBlackBackground(0.0F);
+        this.planeEquation(this.frameA, this.frameA, 0, this.frameA, this.frameBy, 0, this.frameA, this.frameBy, 1);
+        GL11.glClipPlane(GL11.GL_CLIP_PLANE0, this.planes);
         GL11.glEnable(GL11.GL_CLIP_PLANE0);
-        planeEquation(frameBx, frameBy, 0, frameBx, frameA, 0, frameBx, frameA, 1);
-        GL11.glClipPlane(GL11.GL_CLIP_PLANE1, planes);
+        this.planeEquation(this.frameBx, this.frameBy, 0, this.frameBx, this.frameA, 0, this.frameBx, this.frameA, 1);
+        GL11.glClipPlane(GL11.GL_CLIP_PLANE1, this.planes);
         GL11.glEnable(GL11.GL_CLIP_PLANE1);
-        planeEquation(frameA, frameBy, 0, frameBx, frameBy, 0, frameBx, frameBy, 1);
-        GL11.glClipPlane(GL11.GL_CLIP_PLANE2, planes);
+        this.planeEquation(this.frameA, this.frameBy, 0, this.frameBx, this.frameBy, 0, this.frameBx, this.frameBy, 1);
+        GL11.glClipPlane(GL11.GL_CLIP_PLANE2, this.planes);
         GL11.glEnable(GL11.GL_CLIP_PLANE2);
-        planeEquation(frameBx, frameA, 0, frameA, frameA, 0, frameA, frameA, 1);
-        GL11.glClipPlane(GL11.GL_CLIP_PLANE3, planes);
+        this.planeEquation(this.frameBx, this.frameA, 0, this.frameA, this.frameA, 0, this.frameA, this.frameA, 1);
+        GL11.glClipPlane(GL11.GL_CLIP_PLANE3, this.planes);
         GL11.glEnable(GL11.GL_CLIP_PLANE3);
-        yPos = 0;
+        this.yPos = 0;
 
-        TileEntityTelemetry telemeter = TileEntityTelemetry.getNearest(screen.driver);
-        // Make the text to draw.  To look good it's important the width and height
+        final TileEntityTelemetry telemeter = TileEntityTelemetry.getNearest(screen.driver);
+        // Make the text to draw. To look good it's important the width and height
         // of the whole text box are correctly set here.
         String strName = "";
-        String[] str = {GCCoreUtil.translate("gui.display.nolink"), "", "", "", ""};
+        final String[] str = {GCCoreUtil.translate("gui.display.nolink"), "", "", "", ""};
         Render renderEntity = null;
         Entity entity = null;
         float Xmargin = 0;
@@ -103,9 +105,11 @@ public class GameScreenText implements IGameScreen {
                                     .clientClass
                                     .getConstructor(World.class)
                                     .newInstance(screen.driver.getWorldObj());
-                        } catch (Exception ex) {
+                        } catch (final Exception ex) {
                         }
-                        if (entity != null) strName = entity.getCommandSenderName();
+                        if (entity != null) {
+                            strName = entity.getCommandSenderName();
+                        }
                         renderEntity = (Render) RenderManager.instance.entityRenderMap.get(telemeter.clientClass);
                     }
                 }
@@ -138,54 +142,64 @@ public class GameScreenText implements IGameScreen {
                 ((ITelemetry) entity).receiveData(telemeter.clientData, str);
             } else if (entity instanceof EntityLivingBase) {
                 // Living entity:
-                //  data0 = time to show red damage
-                //  data1 = health in half-hearts
-                //  data2 = pulse
-                //  data3 = hunger (for player); horsetype (for horse)
-                //  data4 = oxygen (for player); horsevariant (for horse)
+                // data0 = time to show red damage
+                // data1 = health in half-hearts
+                // data2 = pulse
+                // data3 = hunger (for player); horsetype (for horse)
+                // data4 = oxygen (for player); horsevariant (for horse)
                 str[0] = telemeter.clientData[0] > 0 ? GCCoreUtil.translate("gui.player.ouch") : "";
                 if (telemeter.clientData[1] >= 0) {
                     str[1] = GCCoreUtil.translate("gui.player.health") + ": " + telemeter.clientData[1] + "%";
-                } else str[1] = "";
+                } else {
+                    str[1] = "";
+                }
                 str[2] = "" + telemeter.clientData[2] + " " + GCCoreUtil.translate("gui.player.bpm");
                 if (telemeter.clientData[3] > -1) {
                     str[3] = GCCoreUtil.translate("gui.player.food") + ": " + telemeter.clientData[3] + "%";
                 }
                 if (telemeter.clientData[4] > -1) {
                     int oxygen = telemeter.clientData[4];
-                    oxygen = (oxygen % 4096) + (oxygen / 4096);
-                    if (oxygen == 180 || oxygen == 90)
+                    oxygen = oxygen % 4096 + oxygen / 4096;
+                    if (oxygen == 180 || oxygen == 90) {
                         str[4] = GCCoreUtil.translate("gui.oxygenStorage.desc.1") + ": OK";
-                    else
+                    } else {
                         str[4] = GCCoreUtil.translate("gui.oxygenStorage.desc.1") + ": " + this.makeOxygenString(oxygen)
                                 + GCCoreUtil.translate("gui.seconds");
+                    }
                 }
             } else
             // Generic - could be boats or minecarts etc - just show the speed
-            // TODO  can add more here, e.g. position data?
+            // TODO can add more here, e.g. position data?
             if (telemeter.clientData[2] >= 0) {
                 str[2] = makeSpeedString(telemeter.clientData[2]);
             }
         } else {
-            // Default - draw a simple time display just to show the Display Screen is working
-            World w1 = screen.driver.getWorldObj();
-            int time1 = w1 != null ? (int) ((w1.getWorldTime() + 6000L) % 24000L) : 0;
-            str[2] = makeTimeString(time1 * 360);
+            // Default - draw a simple time display just to show the Display Screen is
+            // working
+            final World w1 = screen.driver.getWorldObj();
+            final int time1 = w1 != null ? (int) ((w1.getWorldTime() + 6000L) % 24000L) : 0;
+            str[2] = this.makeTimeString(time1 * 360);
         }
 
-        int textWidthPixels = 155;
+        final int textWidthPixels = 155;
         int textHeightPixels = 60; // 1 lines
-        if (str[3].isEmpty()) textHeightPixels -= 10;
-        if (str[4].isEmpty()) textHeightPixels -= 10;
+        if (str[3].isEmpty()) {
+            textHeightPixels -= 10;
+        }
+        if (str[4].isEmpty()) {
+            textHeightPixels -= 10;
+        }
 
         // First pass - approximate border size
-        float borders = frameA * 2 + 0.05F * Math.min(sizeX, sizeY);
+        float borders = this.frameA * 2 + 0.05F * Math.min(sizeX, sizeY);
         float scaleXTest = (sizeX - borders) / textWidthPixels;
         float scaleYTest = (sizeY - borders) / textHeightPixels;
         float scale = sizeX;
-        if (scaleYTest < scaleXTest) scale = sizeY;
+        if (scaleYTest < scaleXTest) {
+            scale = sizeY;
+        }
         // Second pass - the border size may be more accurate now
-        borders = frameA * 2 + 0.05F * scale;
+        borders = this.frameA * 2 + 0.05F * scale;
         scaleXTest = (sizeX - borders) / textWidthPixels;
         scaleYTest = (sizeY - borders) / textHeightPixels;
         scale = sizeX;
@@ -196,21 +210,23 @@ public class GameScreenText implements IGameScreen {
         }
 
         // Centre the text in the display
-        float border = frameA + 0.025F * scale;
-        if (entity != null && renderEntity != null) Xmargin = (sizeX - borders) / 2;
-        float Xoffset = (sizeX - borders - textWidthPixels * scaleText) / 2 + Xmargin;
-        float Yoffset = (sizeY - borders - textHeightPixels * scaleText) / 2 + scaleText;
+        final float border = this.frameA + 0.025F * scale;
+        if (entity != null && renderEntity != null) {
+            Xmargin = (sizeX - borders) / 2;
+        }
+        final float Xoffset = (sizeX - borders - textWidthPixels * scaleText) / 2 + Xmargin;
+        final float Yoffset = (sizeY - borders - textHeightPixels * scaleText) / 2 + scaleText;
         GL11.glTranslatef(border + Xoffset, border + Yoffset, 0.0F);
         GL11.glScalef(scaleText, scaleText, 1.0F);
 
         // Actually draw the text
-        int whiteColour = ColorUtil.to32BitColor(255, 240, 216, 255);
-        drawText(strName, whiteColour);
-        drawText(str[0], whiteColour);
-        drawText(str[1], whiteColour);
-        drawText(str[2], whiteColour);
-        drawText(str[3], whiteColour);
-        drawText(str[4], whiteColour);
+        final int whiteColour = ColorUtil.to32BitColor(255, 240, 216, 255);
+        this.drawText(strName, whiteColour);
+        this.drawText(str[0], whiteColour);
+        this.drawText(str[1], whiteColour);
+        this.drawText(str[2], whiteColour);
+        this.drawText(str[3], whiteColour);
+        this.drawText(str[4], whiteColour);
 
         // If there is an entity to render, draw it on the left of the text
         if (renderEntity != null && entity != null) {
@@ -218,7 +234,7 @@ public class GameScreenText implements IGameScreen {
                     -Xmargin / 2 / scaleText,
                     textHeightPixels / 2 + (-Yoffset + (sizeY - borders) / 2) / scaleText,
                     -0.0005F);
-            float scalefactor = 38F / (float) Math.pow(Math.max(entity.height, entity.width), 0.65);
+            final float scalefactor = 38F / (float) Math.pow(Math.max(entity.height, entity.width), 0.65);
             GL11.glScalef(scalefactor, scalefactor, 0.0015F);
             GL11.glRotatef(180F, 0, 0, 1);
             GL11.glRotatef(180F, 0, 1, 0);
@@ -234,10 +250,11 @@ public class GameScreenText implements IGameScreen {
             OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
         }
 
-        // TODO  Cross-dimensional tracking (i.e. old entity setDead, new entity created)
-        // TODO  Deal with text off screen (including where localizations longer than English)
+        // TODO Cross-dimensional tracking (i.e. old entity setDead, new entity created)
+        // TODO Deal with text off screen (including where localizations longer than
+        // English)
 
-        screen.telemetryLastClass = (telemeter == null) ? null : telemeter.clientClass;
+        screen.telemetryLastClass = telemeter == null ? null : telemeter.clientClass;
         screen.telemetryLastEntity = entity;
         screen.telemetryLastRender = renderEntity;
         screen.telemetryLastName = strName;
@@ -248,43 +265,35 @@ public class GameScreenText implements IGameScreen {
     }
 
     private String makeTimeString(int l) {
-        int hrs = l / 360000;
-        int mins = l / 6000 - hrs * 60;
-        int secs = l / 100 - hrs * 3600 - mins * 60;
-        String hrsStr = hrs > 9 ? "" + hrs : "0" + hrs;
-        String minsStr = mins > 9 ? "" + mins : "0" + mins;
-        String secsStr = secs > 9 ? "" + secs : "0" + secs;
+        final int hrs = l / 360000;
+        final int mins = l / 6000 - hrs * 60;
+        final int secs = l / 100 - hrs * 3600 - mins * 60;
+        final String hrsStr = hrs > 9 ? "" + hrs : "0" + hrs;
+        final String minsStr = mins > 9 ? "" + mins : "0" + mins;
+        final String secsStr = secs > 9 ? "" + secs : "0" + secs;
         return hrsStr + ":" + minsStr + ":" + secsStr;
     }
 
     public static String makeSpeedString(int speed100) {
-        int sp1 = speed100 / 100;
-        int sp2 = (speed100 % 100);
-        String spstr1 = GCCoreUtil.translate("gui.rocket.speed") + ": " + sp1;
-        String spstr2 = (sp2 > 9 ? "" : "0") + sp2;
+        final int sp1 = speed100 / 100;
+        final int sp2 = speed100 % 100;
+        final String spstr1 = GCCoreUtil.translate("gui.rocket.speed") + ": " + sp1;
+        final String spstr2 = (sp2 > 9 ? "" : "0") + sp2;
         return spstr1 + "." + spstr2 + " " + GCCoreUtil.translate("gui.lander.velocityu");
-    }
-
-    private String makeHealthString(int hearts2) {
-        int sp1 = hearts2 / 2;
-        int sp2 = (hearts2 % 2) * 5;
-        String spstr1 = "" + sp1;
-        String spstr2 = "" + sp2;
-        return spstr1 + "." + spstr2 + " hearts";
     }
 
     private String makeOxygenString(int oxygen) {
         // Server takes 1 air away every 9 ticks (OxygenUtil.getDrainSpacing)
-        int sp1 = oxygen * 9 / 20;
-        int sp2 = ((oxygen * 9) % 20) / 2;
-        String spstr1 = "" + sp1;
-        String spstr2 = "" + sp2;
+        final int sp1 = oxygen * 9 / 20;
+        final int sp2 = oxygen * 9 % 20 / 2;
+        final String spstr1 = "" + sp1;
+        final String spstr2 = "" + sp2;
         return spstr1 + "." + spstr2;
     }
 
     private void drawText(String str, int colour) {
-        Minecraft.getMinecraft().fontRenderer.drawString(str, 0, yPos, colour, false);
-        yPos += 10;
+        Minecraft.getMinecraft().fontRenderer.drawString(str, 0, this.yPos, colour, false);
+        this.yPos += 10;
     }
 
     private void drawBlackBackground(float greyLevel) {
@@ -294,10 +303,10 @@ public class GameScreenText implements IGameScreen {
         GL11.glColor4f(greyLevel, greyLevel, greyLevel, 1.0F);
         tess.startDrawingQuads();
 
-        tess.addVertex(frameA, frameBy, 0.005F);
-        tess.addVertex(frameBx, frameBy, 0.005F);
-        tess.addVertex(frameBx, frameA, 0.005F);
-        tess.addVertex(frameA, frameA, 0.005F);
+        tess.addVertex(this.frameA, this.frameBy, 0.005F);
+        tess.addVertex(this.frameBx, this.frameBy, 0.005F);
+        tess.addVertex(this.frameBx, this.frameA, 0.005F);
+        tess.addVertex(this.frameA, this.frameA, 0.005F);
         tess.draw();
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -306,12 +315,12 @@ public class GameScreenText implements IGameScreen {
 
     private void planeEquation(
             float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3) {
-        double[] result = new double[4];
+        final double[] result = new double[4];
         result[0] = y1 * (z2 - z3) + y2 * (z3 - z1) + y3 * (z1 - z2);
         result[1] = z1 * (x2 - x3) + z2 * (x3 - x1) + z3 * (x1 - x2);
         result[2] = x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2);
         result[3] = -(x1 * (y2 * z3 - y3 * z2) + x2 * (y3 * z1 - y1 * z3) + x3 * (y1 * z2 - y2 * z1));
-        planes.put(result, 0, 4);
-        planes.position(0);
+        this.planes.put(result, 0, 4);
+        this.planes.position(0);
     }
 }

@@ -32,10 +32,8 @@ public class SlotBuggyBench extends Slot {
     @Override
     public void onSlotChanged() {
         if (this.player instanceof EntityPlayerMP) {
-            final Object[] toSend = {this.x, this.y, this.z};
-
-            for (int var12 = 0; var12 < this.player.worldObj.playerEntities.size(); ++var12) {
-                final EntityPlayerMP var13 = (EntityPlayerMP) this.player.worldObj.playerEntities.get(var12);
+            for (final Object element : this.player.worldObj.playerEntities) {
+                final EntityPlayerMP var13 = (EntityPlayerMP) element;
 
                 if (var13.dimension == this.player.worldObj.provider.dimensionId) {
                     final double var14 = this.x - var13.posX;
@@ -56,27 +54,27 @@ public class SlotBuggyBench extends Slot {
 
     @Override
     public boolean isItemValid(ItemStack itemStack) {
-        if (index == 1) {
+        if (this.index == 1) {
             return itemStack.getItem() == GCItems.basicItem && itemStack.getItemDamage() == 19;
-        } else if (index == 2) {
+        } else if (this.index == 2) {
             return itemStack.getItem() == GCItems.partBuggy && itemStack.getItemDamage() == 1;
-        } else if (index == 3 && GalacticraftCore.isGalaxySpaceLoaded) {
+        } else if (this.index == 3 && GalacticraftCore.isGalaxySpaceLoaded) {
             return itemStack.getItem()
                             == GameRegistry.findItem(Constants.MOD_ID_GALAXYSPACE, "item.RocketControlComputer")
                     && itemStack.getItemDamage() == 100;
-        } else if (index >= 4 && index <= 7) {
+        } else if (this.index >= 4 && this.index <= 7) {
             return itemStack.getItem() == GCItems.partBuggy && itemStack.getItemDamage() == 0;
-        } else if (index >= 8 && index <= 11) {
+        } else if (this.index >= 8 && this.index <= 11) {
             return itemStack.getItem() == GameRegistry.findItem(Constants.MOD_ID_GREGTECH, "gt.metaitem.01")
                     && itemStack.getItemDamage() == 23306;
-        } else if (index >= 12 && index <= 16) {
+        } else if (this.index >= 12 && this.index <= 16) {
             return itemStack.getItem() == GCItems.meteoricIronIngot && itemStack.getItemDamage() == 1;
-        } else if (index >= 17 && index <= 24) {
+        } else if (this.index >= 17 && this.index <= 24) {
             return itemStack.getItem() == GameRegistry.findItem(Constants.MOD_ID_GREGTECH, "gt.metaitem.01")
                     && itemStack.getItemDamage() == 27306;
-        } else if (index >= 25 && index <= 34) {
+        } else if (this.index >= 25 && this.index <= 34) {
             return itemStack.getItem() == GCItems.heavyPlatingTier1;
-        } else if (index == 35) {
+        } else if (this.index == 35) {
             return itemStack.getItem() == Item.getItemFromBlock(RecipeUtil.getChestBlock())
                     && (itemStack.getItemDamage() == 0
                             || itemStack.getItemDamage() == 1

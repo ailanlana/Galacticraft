@@ -40,7 +40,9 @@ public class EntityParachest extends Entity {
     protected void readEntityFromNBT(NBTTagCompound nbt) {
         final NBTTagList var2 = nbt.getTagList("Items", 10);
         int size = 56;
-        if (nbt.hasKey("CargoLength")) size = nbt.getInteger("CargoLength");
+        if (nbt.hasKey("CargoLength")) {
+            size = nbt.getInteger("CargoLength");
+        }
         this.cargo = new ItemStack[size];
 
         for (int var3 = 0; var3 < var2.tagCount(); ++var3) {
@@ -84,7 +86,7 @@ public class EntityParachest extends Entity {
                     final int y = MathHelper.floor_double(this.posY);
                     final int z = MathHelper.floor_double(this.posZ);
 
-                    Block block = this.worldObj.getBlock(x, y + i, z);
+                    final Block block = this.worldObj.getBlock(x, y + i, z);
 
                     if (block.getMaterial().isReplaceable()) {
                         if (this.placeChest(x, y + i, z)) {

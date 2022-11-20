@@ -9,7 +9,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerSolar extends Container {
-    private TileEntitySolar tileEntity;
+    private final TileEntitySolar tileEntity;
 
     public ContainerSolar(InventoryPlayer par1InventoryPlayer, TileEntitySolar solarGen) {
         this.tileEntity = solarGen;
@@ -68,7 +68,7 @@ public class ContainerSolar extends Container {
             }
 
             if (stack.stackSize == 0) {
-                slot.putStack((ItemStack) null);
+                slot.putStack(null);
             } else {
                 slot.onSlotChanged();
             }

@@ -70,15 +70,11 @@ public class RenderEvolvedSpider extends RenderLiving {
             GL11.glDisable(GL11.GL_ALPHA_TEST);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-            if (par1EntityLiving.isInvisible()) {
-                GL11.glDepthMask(false);
-            } else {
-                GL11.glDepthMask(true);
-            }
+            GL11.glDepthMask(!par1EntityLiving.isInvisible());
 
-            char c0 = 61680;
-            int j = c0 % 65536;
-            int k = c0 / 65536;
+            final char c0 = 61680;
+            final int j = c0 % 65536;
+            final int k = c0 / 65536;
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j / 1.0F, k / 1.0F);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             return 1;

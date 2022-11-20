@@ -123,7 +123,9 @@ public class EntityTier2Rocket extends EntityTieredRocket {
 
             if (this.timeSinceLaunch % MathHelper.floor_double(2 * (1 / multiplier)) == 0) {
                 this.removeFuel(1);
-                if (!this.hasValidFuel()) this.stopRocketSound();
+                if (!this.hasValidFuel()) {
+                    this.stopRocketSound();
+                }
             }
         } else if (!this.hasValidFuel() && this.getLaunched() && !this.worldObj.isRemote) {
             if (Math.abs(Math.sin(this.timeSinceLaunch / 1000)) / 10 != 0.0) {
@@ -134,10 +136,10 @@ public class EntityTier2Rocket extends EntityTieredRocket {
 
     @Override
     public void onTeleport(EntityPlayerMP player) {
-        EntityPlayerMP playerBase = PlayerUtil.getPlayerBaseServerFromPlayer(player, false);
+        final EntityPlayerMP playerBase = PlayerUtil.getPlayerBaseServerFromPlayer(player, false);
 
         if (playerBase != null) {
-            GCPlayerStats stats = GCPlayerStats.get(playerBase);
+            final GCPlayerStats stats = GCPlayerStats.get(playerBase);
 
             if (this.cargoItems == null || this.cargoItems.length == 0) {
                 stats.rocketStacks = new ItemStack[2];
@@ -175,134 +177,134 @@ public class EntityTier2Rocket extends EntityTieredRocket {
             final double x3 = x2 + x1 / 2D;
             final double y3 = y + y1 / 2D;
             final double z3 = z2 + z1 / 2D;
-            Vector3 motionVec = new Vector3(x1, y1, z1);
+            final Vector3 motionVec = new Vector3(x1, y1, z1);
 
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x2 + 0.4 - this.rand.nextDouble() / 10, y, z2 + 0.4 - this.rand.nextDouble() / 10),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x2 - 0.4 + this.rand.nextDouble() / 10, y, z2 + 0.4 - this.rand.nextDouble() / 10),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x2 - 0.4 + this.rand.nextDouble() / 10, y, z2 - 0.4 + this.rand.nextDouble() / 10),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x2 + 0.4 - this.rand.nextDouble() / 10, y, z2 - 0.4 + this.rand.nextDouble() / 10),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x2, y, z2),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x2 + 0.4, y, z2),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x2 - 0.4, y, z2),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x2, y, z2 + 0.4D),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x2, y, z2 - 0.4D),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             // Larger flameball for T2 - positioned behind the smaller one
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x3 + 0.2 - this.rand.nextDouble() / 8, y3 + 0.4, z3 + 0.2 - this.rand.nextDouble() / 8),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x3 - 0.2 + this.rand.nextDouble() / 8, y3 + 0.4, z3 + 0.2 - this.rand.nextDouble() / 8),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x3 - 0.2 + this.rand.nextDouble() / 8, y3 + 0.4, z3 - 0.2 + this.rand.nextDouble() / 8),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x3 + 0.2 - this.rand.nextDouble() / 8, y3 + 0.4, z3 - 0.2 + this.rand.nextDouble() / 8),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x3 + 0.2 - this.rand.nextDouble() / 8, y3 - 0.4, z3 + 0.2 - this.rand.nextDouble() / 8),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x3 - 0.2 + this.rand.nextDouble() / 8, y3 - 0.4, z3 + 0.2 - this.rand.nextDouble() / 8),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x3 - 0.2 + this.rand.nextDouble() / 8, y3 - 0.4, z3 - 0.2 + this.rand.nextDouble() / 8),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x3 + 0.2 - this.rand.nextDouble() / 8, y3 - 0.4, z3 - 0.2 + this.rand.nextDouble() / 8),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x3 + 0.7 - this.rand.nextDouble() / 10, y3, z3 + 0.7 - this.rand.nextDouble() / 10),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x3 - 0.7 + this.rand.nextDouble() / 10, y3, z3 + 0.7 - this.rand.nextDouble() / 10),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x3 - 0.7 + this.rand.nextDouble() / 10, y3, z3 - 0.7 + this.rand.nextDouble() / 10),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x3 + 0.7 - this.rand.nextDouble() / 10, y3, z3 - 0.7 + this.rand.nextDouble() / 10),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x3 + 0.7 - this.rand.nextDouble() / 10, y3, z3 - this.rand.nextDouble() / 10),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x3 - 0.7 + this.rand.nextDouble() / 10, y3, z3 - this.rand.nextDouble() / 10),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x3 + this.rand.nextDouble() / 10, y3, z3 + 0.7 + this.rand.nextDouble() / 10),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(x3 - this.rand.nextDouble() / 10, y3, z3 - 0.7 + this.rand.nextDouble() / 10),
                     motionVec,
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle("blueflame", new Vector3(x2 - 0.8, y, z2), motionVec, new Object[] {});
             GalacticraftCore.proxy.spawnParticle("blueflame", new Vector3(x2 + 0.8, y, z2), motionVec, new Object[] {});
             GalacticraftCore.proxy.spawnParticle("blueflame", new Vector3(x2, y, z2 - 0.8), motionVec, new Object[] {});
@@ -325,17 +327,19 @@ public class EntityTier2Rocket extends EntityTieredRocket {
         super.readEntityFromNBT(par1NBTTagCompound);
     }
 
-    //	@RuntimeInterface(clazz = "icbm.api.IMissileLockable", modID = "ICBM|Explosion")
-    //	public boolean canLock(IMissile missile)
-    //	{
-    //		return true;
-    //	}
+    // @RuntimeInterface(clazz = "icbm.api.IMissileLockable", modID =
+    // "ICBM|Explosion")
+    // public boolean canLock(IMissile missile)
+    // {
+    // return true;
+    // }
     //
-    //	@RuntimeInterface(clazz = "icbm.api.IMissileLockable", modID = "ICBM|Explosion")
-    //	public Vector3 getPredictedPosition(int ticks)
-    //	{
-    //		return new Vector3(this);
-    //	} TODO Re-implement when ICBM is ready
+    // @RuntimeInterface(clazz = "icbm.api.IMissileLockable", modID =
+    // "ICBM|Explosion")
+    // public Vector3 getPredictedPosition(int ticks)
+    // {
+    // return new Vector3(this);
+    // } TODO Re-implement when ICBM is ready
 
     @Override
     public void onPadDestroyed() {
@@ -350,24 +354,28 @@ public class EntityTier2Rocket extends EntityTieredRocket {
         return dock instanceof TileEntityLandingPad;
     }
 
-    //	@RuntimeInterface(clazz = "icbm.api.sentry.IAATarget", modID = "ICBM|Explosion")
-    //	public void destroyCraft()
-    //	{
-    //		this.setDead();
-    //	}
+    // @RuntimeInterface(clazz = "icbm.api.sentry.IAATarget", modID =
+    // "ICBM|Explosion")
+    // public void destroyCraft()
+    // {
+    // this.setDead();
+    // }
     //
-    //	@RuntimeInterface(clazz = "icbm.api.sentry.IAATarget", modID = "ICBM|Explosion")
-    //	public int doDamage(int damage)
-    //	{
-    //		this.shipDamage += damage;
-    //		return damage;
-    //	}
+    // @RuntimeInterface(clazz = "icbm.api.sentry.IAATarget", modID =
+    // "ICBM|Explosion")
+    // public int doDamage(int damage)
+    // {
+    // this.shipDamage += damage;
+    // return damage;
+    // }
     //
-    //	@RuntimeInterface(clazz = "icbm.api.sentry.IAATarget", modID = "ICBM|Explosion")
-    //	public boolean canBeTargeted(Object entity)
-    //	{
-    //		return this.launchPhase == EnumLaunchPhase.LAUNCHED.getPhase() && this.timeSinceLaunch > 50;
-    //	} TODO Fix when ICBM is ready
+    // @RuntimeInterface(clazz = "icbm.api.sentry.IAATarget", modID =
+    // "ICBM|Explosion")
+    // public boolean canBeTargeted(Object entity)
+    // {
+    // return this.launchPhase == EnumLaunchPhase.LAUNCHED.getPhase() &&
+    // this.timeSinceLaunch > 50;
+    // } TODO Fix when ICBM is ready
 
     @Override
     public int getRocketTier() {
@@ -397,7 +405,7 @@ public class EntityTier2Rocket extends EntityTieredRocket {
     @Override
     public List<ItemStack> getItemsDropped(List<ItemStack> droppedItems) {
         super.getItemsDropped(droppedItems);
-        ItemStack rocket = new ItemStack(MarsItems.spaceship, 1, this.rocketType.getIndex());
+        final ItemStack rocket = new ItemStack(MarsItems.spaceship, 1, this.rocketType.getIndex());
         rocket.setTagCompound(new NBTTagCompound());
         rocket.getTagCompound().setInteger("RocketFuel", this.fuelTank.getFluidAmount());
         droppedItems.add(rocket);

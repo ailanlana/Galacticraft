@@ -4,8 +4,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 public class RocketFuel {
-    private int fluidId;
-    private int maxTier;
+    private final int fluidId;
+    private final int maxTier;
 
     public RocketFuel(int fluidId, int maxTier) {
         this.fluidId = fluidId;
@@ -13,14 +13,14 @@ public class RocketFuel {
     }
 
     public int getMaxTier() {
-        return maxTier;
+        return this.maxTier;
     }
 
     public boolean isFluidEqual(FluidStack fluid) {
-        return fluid.getFluidID() == fluidId;
+        return fluid.getFluidID() == this.fluidId;
     }
 
     public boolean isFluidEqual(Fluid fluid) {
-        return fluid.getID() == fluidId;
+        return fluid.getID() == this.fluidId;
     }
 }

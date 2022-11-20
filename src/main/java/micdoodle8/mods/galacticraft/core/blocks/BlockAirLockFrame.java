@@ -60,7 +60,7 @@ public class BlockAirLockFrame extends BlockAdvancedTile implements ItemBlockDes
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack) {
         super.onBlockPlacedBy(world, x, y, z, entityLiving, itemStack);
 
-        TileEntity tile = world.getTileEntity(x, y, z);
+        final TileEntity tile = world.getTileEntity(x, y, z);
 
         if (tile instanceof TileEntityAirLockController && entityLiving instanceof EntityPlayer) {
             ((TileEntityAirLockController) tile).ownerName =
@@ -103,10 +103,10 @@ public class BlockAirLockFrame extends BlockAdvancedTile implements ItemBlockDes
                 return this.airLockIcons[0];
             }
 
-            TileEntity tile = world.getTileEntity(par2, par3, par4);
+            final TileEntity tile = world.getTileEntity(par2, par3, par4);
 
             if (tile instanceof TileEntityAirLockController) {
-                TileEntityAirLockController controller = (TileEntityAirLockController) tile;
+                final TileEntityAirLockController controller = (TileEntityAirLockController) tile;
 
                 if (controller.active) {
                     return this.airLockIcons[6];
@@ -132,15 +132,7 @@ public class BlockAirLockFrame extends BlockAdvancedTile implements ItemBlockDes
                             } else {
                                 return this.airLockIcons[2];
                             }
-                        } else if (orientation.offsetY == 1) {
-                            if (side == 0) {
-                                return this.airLockIcons[0];
-                            } else if (side == 1) {
-                                return this.airLockIcons[1];
-                            } else {
-                                return this.airLockIcons[3];
-                            }
-                        } else if (orientation.ordinal() == side) {
+                        } else if (orientation.offsetY == 1 || orientation.ordinal() == side) {
                             if (side == 0) {
                                 return this.airLockIcons[0];
                             } else if (side == 1) {
@@ -158,29 +150,19 @@ public class BlockAirLockFrame extends BlockAdvancedTile implements ItemBlockDes
 
                         if (connection != null && connection.equals(GCBlocks.airLockSeal)) {
                             if (orientation.offsetX == 1) {
-                                if (side == 0) {
-                                    return this.airLockIcons[4];
-                                } else if (side == 1) {
-                                    return this.airLockIcons[4];
-                                } else if (side == 3) {
+                                if (side == 0 || side == 1 || side == 3) {
                                     return this.airLockIcons[4];
                                 } else if (side == 2) {
                                     return this.airLockIcons[5];
                                 }
                             } else if (orientation.offsetX == -1) {
-                                if (side == 0) {
-                                    return this.airLockIcons[5];
-                                } else if (side == 1) {
-                                    return this.airLockIcons[5];
-                                } else if (side == 3) {
+                                if (side == 0 || side == 1 || side == 3) {
                                     return this.airLockIcons[5];
                                 } else if (side == 2) {
                                     return this.airLockIcons[4];
                                 }
                             } else if (orientation.offsetZ == 1) {
-                                if (side == 0) {
-                                    return this.airLockIcons[2];
-                                } else if (side == 1) {
+                                if (side == 0 || side == 1) {
                                     return this.airLockIcons[2];
                                 } else if (side == 4) {
                                     return this.airLockIcons[4];
@@ -188,9 +170,7 @@ public class BlockAirLockFrame extends BlockAdvancedTile implements ItemBlockDes
                                     return this.airLockIcons[5];
                                 }
                             } else if (orientation.offsetZ == -1) {
-                                if (side == 0) {
-                                    return this.airLockIcons[3];
-                                } else if (side == 1) {
+                                if (side == 0 || side == 1) {
                                     return this.airLockIcons[3];
                                 } else if (side == 4) {
                                     return this.airLockIcons[5];
@@ -248,8 +228,8 @@ public class BlockAirLockFrame extends BlockAdvancedTile implements ItemBlockDes
     @Override
     public boolean onMachineActivated(
             World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
-        int metadata = world.getBlockMetadata(x, y, z);
-        TileEntity tile = world.getTileEntity(x, y, z);
+        final int metadata = world.getBlockMetadata(x, y, z);
+        final TileEntity tile = world.getTileEntity(x, y, z);
 
         if (metadata >= BlockAirLockFrame.METADATA_AIR_LOCK_CONTROLLER && tile instanceof TileEntityAirLockController) {
             entityPlayer.openGui(GalacticraftCore.instance, -1, world, x, y, z);
@@ -261,7 +241,7 @@ public class BlockAirLockFrame extends BlockAdvancedTile implements ItemBlockDes
 
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int par6) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+        final TileEntity tile = world.getTileEntity(x, y, z);
 
         if (tile instanceof TileEntityAirLockController) {
             ((TileEntityAirLockController) tile).unsealAirLock();

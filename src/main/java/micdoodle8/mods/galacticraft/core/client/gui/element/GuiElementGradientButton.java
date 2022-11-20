@@ -13,15 +13,14 @@ public class GuiElementGradientButton extends GuiButton {
     }
 
     @Override
-    public void drawButton(Minecraft p_146112_1_, int p_146112_2_, int p_146112_3_) {
+    public void drawButton(Minecraft mc, int mouseX, int mouseY) {
         if (this.visible) {
-            FontRenderer fontrenderer = p_146112_1_.fontRenderer;
+            final FontRenderer fontrenderer = mc.fontRenderer;
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            this.field_146123_n = p_146112_2_ >= this.xPosition
-                    && p_146112_3_ >= this.yPosition
-                    && p_146112_2_ < this.xPosition + this.width
-                    && p_146112_3_ < this.yPosition + this.height;
-            int k = this.getHoverState(this.field_146123_n);
+            this.field_146123_n = mouseX >= this.xPosition
+                    && mouseY >= this.yPosition
+                    && mouseX < this.xPosition + this.width
+                    && mouseY < this.yPosition + this.height;
             GL11.glEnable(GL11.GL_BLEND);
             OpenGlHelper.glBlendFunc(770, 771, 1, 0);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -44,7 +43,7 @@ public class GuiElementGradientButton extends GuiButton {
                     this.yPosition + this.height,
                     color,
                     color);
-            this.mouseDragged(p_146112_1_, p_146112_2_, p_146112_3_);
+            this.mouseDragged(mc, mouseX, mouseY);
             int l = 14737632;
 
             if (this.packedFGColour != 0) {

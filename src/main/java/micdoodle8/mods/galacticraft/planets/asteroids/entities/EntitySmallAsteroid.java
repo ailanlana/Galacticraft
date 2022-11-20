@@ -20,10 +20,12 @@ public class EntitySmallAsteroid extends Entity {
     public void onEntityUpdate() {
         if (!this.firstUpdate) {
             // Kill non-moving entities
-            if (Math.abs(this.posX - this.prevPosX) + Math.abs(this.posZ - this.prevPosZ) <= 0) this.setDead();
-
-            // Remove entities far outside the build range, or too old (to stop accumulations)
-            else if (this.posY > 288D || this.posY < -32D || this.ticksExisted > 3000) this.setDead();
+            if (Math.abs(this.posX - this.prevPosX) + Math.abs(this.posZ - this.prevPosZ) <= 0
+                    || this.posY > 288D
+                    || this.posY < -32D
+                    || this.ticksExisted > 3000) {
+                this.setDead();
+            }
         }
 
         super.onEntityUpdate();
@@ -39,7 +41,8 @@ public class EntitySmallAsteroid extends Entity {
             this.rotationYaw += this.getSpinYaw();
         }
 
-        double sqrdMotion = this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ;
+        final double sqrdMotion =
+                this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ;
 
         if (sqrdMotion < 0.05) {
             // If the motion is too low (for some odd reason), speed it back up slowly.

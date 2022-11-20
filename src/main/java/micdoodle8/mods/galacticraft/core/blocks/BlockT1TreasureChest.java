@@ -81,10 +81,10 @@ public class BlockT1TreasureChest extends BlockContainer implements ITileEntityP
     public void onBlockAdded(World par1World, int par2, int par3, int par4) {
         super.onBlockAdded(par1World, par2, par3, par4);
         this.unifyAdjacentChests(par1World, par2, par3, par4);
-        Block var5 = par1World.getBlock(par2, par3, par4 - 1);
-        Block var6 = par1World.getBlock(par2, par3, par4 + 1);
-        Block var7 = par1World.getBlock(par2 - 1, par3, par4);
-        Block var8 = par1World.getBlock(par2 + 1, par3, par4);
+        final Block var5 = par1World.getBlock(par2, par3, par4 - 1);
+        final Block var6 = par1World.getBlock(par2, par3, par4 + 1);
+        final Block var7 = par1World.getBlock(par2 - 1, par3, par4);
+        final Block var8 = par1World.getBlock(par2 + 1, par3, par4);
 
         if (var5 == this) {
             this.unifyAdjacentChests(par1World, par2, par3, par4 - 1);
@@ -106,12 +106,12 @@ public class BlockT1TreasureChest extends BlockContainer implements ITileEntityP
     @Override
     public void onBlockPlacedBy(
             World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLiving, ItemStack stack) {
-        Block var6 = par1World.getBlock(par2, par3, par4 - 1);
-        Block var7 = par1World.getBlock(par2, par3, par4 + 1);
-        Block var8 = par1World.getBlock(par2 - 1, par3, par4);
-        Block var9 = par1World.getBlock(par2 + 1, par3, par4);
+        final Block var6 = par1World.getBlock(par2, par3, par4 - 1);
+        final Block var7 = par1World.getBlock(par2, par3, par4 + 1);
+        final Block var8 = par1World.getBlock(par2 - 1, par3, par4);
+        final Block var9 = par1World.getBlock(par2 + 1, par3, par4);
         byte var10 = 0;
-        int var11 = MathHelper.floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+        final int var11 = MathHelper.floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 
         if (var11 == 0) {
             var10 = 2;
@@ -156,10 +156,10 @@ public class BlockT1TreasureChest extends BlockContainer implements ITileEntityP
 
     public void unifyAdjacentChests(World par1World, int par2, int par3, int par4) {
         if (!par1World.isRemote) {
-            Block var5 = par1World.getBlock(par2, par3, par4 - 1);
-            Block var6 = par1World.getBlock(par2, par3, par4 + 1);
-            Block var7 = par1World.getBlock(par2 - 1, par3, par4);
-            Block var8 = par1World.getBlock(par2 + 1, par3, par4);
+            final Block var5 = par1World.getBlock(par2, par3, par4 - 1);
+            final Block var6 = par1World.getBlock(par2, par3, par4 + 1);
+            final Block var7 = par1World.getBlock(par2 - 1, par3, par4);
+            final Block var8 = par1World.getBlock(par2 + 1, par3, par4);
             Block var10;
             Block var11;
             byte var13;
@@ -261,27 +261,19 @@ public class BlockT1TreasureChest extends BlockContainer implements ITileEntityP
             ++var5;
         }
 
-        return var5 > 1
-                ? false
-                : this.isThereANeighborChest(par1World, par2 - 1, par3, par4)
-                        ? false
-                        : this.isThereANeighborChest(par1World, par2 + 1, par3, par4)
-                                ? false
-                                : this.isThereANeighborChest(par1World, par2, par3, par4 - 1)
-                                        ? false
-                                        : !this.isThereANeighborChest(par1World, par2, par3, par4 + 1);
+        return var5 <= 1
+                && !this.isThereANeighborChest(par1World, par2 - 1, par3, par4)
+                && !this.isThereANeighborChest(par1World, par2 + 1, par3, par4)
+                && !this.isThereANeighborChest(par1World, par2, par3, par4 - 1)
+                && !this.isThereANeighborChest(par1World, par2, par3, par4 + 1);
     }
 
     private boolean isThereANeighborChest(World par1World, int par2, int par3, int par4) {
-        return par1World.getBlock(par2, par3, par4) != this
-                ? false
-                : par1World.getBlock(par2 - 1, par3, par4) == this
-                        ? true
-                        : par1World.getBlock(par2 + 1, par3, par4) == this
-                                ? true
-                                : par1World.getBlock(par2, par3, par4 - 1) == this
-                                        ? true
-                                        : par1World.getBlock(par2, par3, par4 + 1) == this;
+        return par1World.getBlock(par2, par3, par4) == this
+                && (par1World.getBlock(par2 - 1, par3, par4) == this
+                        || par1World.getBlock(par2 + 1, par3, par4) == this
+                        || par1World.getBlock(par2, par3, par4 - 1) == this
+                        || par1World.getBlock(par2, par3, par4 + 1) == this);
     }
 
     @Override
@@ -353,11 +345,9 @@ public class BlockT1TreasureChest extends BlockContainer implements ITileEntityP
             float par9) {
         Object var10 = par1World.getTileEntity(par2, par3, par4);
 
-        if (var10 == null) {
-            return true;
-        } else if (par1World.isSideSolid(par2, par3 + 1, par4, ForgeDirection.DOWN)) {
-            return true;
-        } else if (BlockT1TreasureChest.isOcelotBlockingChest(par1World, par2, par3, par4)) {
+        if (var10 == null
+                || par1World.isSideSolid(par2, par3 + 1, par4, ForgeDirection.DOWN)
+                || BlockT1TreasureChest.isOcelotBlockingChest(par1World, par2, par3, par4)) {
             return true;
         } else if (par1World.getBlock(par2 - 1, par3, par4) == this
                 && (par1World.isSideSolid(par2 - 1, par3 + 1, par4, ForgeDirection.DOWN)

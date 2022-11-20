@@ -20,8 +20,8 @@ import net.minecraft.world.World;
 
 /**
  * Metadata: 3 = Tin Decoration Block 1 4 = Tin Decoration Block 2 5 = Copper
- * Ore 6 = Tin Ore 7 = Aluminium Ore 8 = Silicon Ore 9 = Copper Block
- * 10 = Tin Block  11 = Aluminium Block  12 = Meteoric Iron Block
+ * Ore 6 = Tin Ore 7 = Aluminium Ore 8 = Silicon Ore 9 = Copper Block 10 = Tin
+ * Block 11 = Aluminium Block 12 = Meteoric Iron Block
  */
 public class BlockBasic extends Block implements IDetectableResource {
 
@@ -113,8 +113,8 @@ public class BlockBasic extends Block implements IDetectableResource {
     }
 
     @Override
-    public int getDamageValue(World p_149643_1_, int p_149643_2_, int p_149643_3_, int p_149643_4_) {
-        return p_149643_1_.getBlockMetadata(p_149643_2_, p_149643_3_, p_149643_4_);
+    public int getDamageValue(World worldIn, int x, int y, int z) {
+        return worldIn.getBlockMetadata(x, y, z);
     }
 
     @Override
@@ -142,7 +142,7 @@ public class BlockBasic extends Block implements IDetectableResource {
             double explosionX,
             double explosionY,
             double explosionZ) {
-        int metadata = world.getBlockMetadata(x, y, z);
+        final int metadata = world.getBlockMetadata(x, y, z);
 
         if (metadata < 5) {
             return 2.0F;
@@ -193,7 +193,7 @@ public class BlockBasic extends Block implements IDetectableResource {
 
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-        int metadata = world.getBlockMetadata(x, y, z);
+        final int metadata = world.getBlockMetadata(x, y, z);
         if (metadata == 8) {
             return new ItemStack(Item.getItemFromBlock(this), 1, metadata);
         }

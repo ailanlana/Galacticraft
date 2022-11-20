@@ -28,7 +28,7 @@ public class BlockTelemetry extends BlockAdvancedTile implements ItemBlockDesc.I
     private IIcon iconFront;
     private IIcon iconSide;
 
-    // Metadata: 0-3 = orientation;  bits 2,3 = reserved for future use
+    // Metadata: 0-3 = orientation; bits 2,3 = reserved for future use
     protected BlockTelemetry(String assetName) {
         super(Material.iron);
         this.setHardness(1.0F);
@@ -60,9 +60,7 @@ public class BlockTelemetry extends BlockAdvancedTile implements ItemBlockDesc.I
 
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack) {
-        int metadata = 0;
-
-        int angle = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+        final int angle = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
         int change = 0;
 
         switch (angle) {
@@ -109,7 +107,7 @@ public class BlockTelemetry extends BlockAdvancedTile implements ItemBlockDesc.I
             case 5:
                 change = 0;
         }
-        change += (12 & metadata);
+        change += 12 & metadata;
         world.setBlockMetadataWithNotify(x, y, z, change, 2);
 
         return true;
@@ -127,24 +125,16 @@ public class BlockTelemetry extends BlockAdvancedTile implements ItemBlockDesc.I
 
     @Override
     public boolean onMachineActivated(
-            World world,
-            int x,
-            int y,
-            int z,
-            EntityPlayer player,
-            int p_149727_6_,
-            float p_149727_7_,
-            float p_149727_8_,
-            float p_149727_9_) {
+            World world, int x, int y, int z, EntityPlayer player, int side, float subX, float subY, float subZ) {
         if (!world.isRemote) {
-            TileEntity tile = world.getTileEntity(x, y, z);
+            final TileEntity tile = world.getTileEntity(x, y, z);
             if (tile instanceof TileEntityTelemetry) {
-                ItemStack held = player.inventory.getCurrentItem();
+                final ItemStack held = player.inventory.getCurrentItem();
                 // Look for Frequency Module
                 if (held != null && held.getItem() == GCItems.basicItem && held.getItemDamage() == 19) {
                     NBTTagCompound fmData = held.stackTagCompound;
                     if (fmData != null && fmData.hasKey("linkedUUIDMost") && fmData.hasKey("linkedUUIDLeast")) {
-                        UUID uuid = new UUID(fmData.getLong("linkedUUIDMost"), fmData.getLong("linkedUUIDLeast"));
+                        final UUID uuid = new UUID(fmData.getLong("linkedUUIDMost"), fmData.getLong("linkedUUIDLeast"));
                         ((TileEntityTelemetry) tile).addTrackedEntity(uuid);
                         player.addChatMessage(
                                 new ChatComponentText(GCCoreUtil.translate("gui.telemetrySucceed.message")));
@@ -163,14 +153,17 @@ public class BlockTelemetry extends BlockAdvancedTile implements ItemBlockDesc.I
                     return true;
                 }
 
-                ItemStack wearing = GCPlayerStats.get((EntityPlayerMP) player).frequencyModuleInSlot;
+                final ItemStack wearing = GCPlayerStats.get((EntityPlayerMP) player).frequencyModuleInSlot;
                 if (wearing != null) {
-                    if (wearing.hasTagCompound() && wearing.getTagCompound().hasKey("teDim")) return false;
+                    if (wearing.hasTagCompound() && wearing.getTagCompound().hasKey("teDim")) {
+                        return false;
+                    }
                     player.addChatMessage(
                             new ChatComponentText(GCCoreUtil.translate("gui.telemetryFailWearingIt.message")));
-                } else
+                } else {
                     player.addChatMessage(
                             new ChatComponentText(GCCoreUtil.translate("gui.telemetryFailNoFrequencyModule.message")));
+                }
             }
         }
         return false;

@@ -28,10 +28,11 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
     public int facing = ForgeDirection.UNKNOWN.ordinal();
 
     private int preLoadFacing = -1;
-    private float maxRate = 1500;
-    private EnergyStorage storage = new EnergyStorage(
-            10 * maxRate,
-            maxRate); // In broken circuits, Beam Receiver will accept energy for 0.5s (15000gJ max) then stop
+    private final float maxRate = 1500;
+    private final EnergyStorage storage =
+            new EnergyStorage(10 * this.maxRate, this.maxRate); // In broken circuits, Beam Receiver will
+    // accept energy for 0.5s (15000gJ max)
+    // then stop
 
     @NetworkedField(targetSide = Side.CLIENT)
     public int modeReceive = ReceiverMode.UNDEFINED.ordinal();
@@ -51,59 +52,59 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
             if (this.getTarget() != null
                     && this.modeReceive == ReceiverMode.EXTRACT.ordinal()
                     && this.facing != ForgeDirection.UNKNOWN.ordinal()) {
-                TileEntity tile = this.getAttachedTile();
+                final TileEntity tile = this.getAttachedTile();
 
                 if (tile instanceof TileBaseUniversalElectricalSource) {
                     // GC energy source
-                    TileBaseUniversalElectricalSource electricalTile = (TileBaseUniversalElectricalSource) tile;
+                    final TileBaseUniversalElectricalSource electricalTile = (TileBaseUniversalElectricalSource) tile;
 
                     if (electricalTile.storage.getEnergyStoredGC() > 0) {
-                        EnergySourceAdjacent source =
+                        final EnergySourceAdjacent source =
                                 new EnergySourceAdjacent(ForgeDirection.getOrientation(this.facing ^ 1));
-                        float toSend = Math.min(
+                        final float toSend = Math.min(
                                 electricalTile.storage.getMaxExtract(), electricalTile.storage.getEnergyStoredGC());
-                        float transmitted = this.getTarget()
-                                .receiveEnergyGC(
-                                        new EnergySourceWireless(Lists.newArrayList((ILaserNode) this)), toSend, false);
+                        final float transmitted = this.getTarget()
+                                .receiveEnergyGC(new EnergySourceWireless(Lists.newArrayList(this)), toSend, false);
                         electricalTile.extractEnergyGC(source, transmitted, false);
                     }
                 } else if (!(tile instanceof EnergyStorageTile) && !(tile instanceof TileBaseConductor))
                 // Another mod's energy source
-                // But don't use other mods methods to connect Beam Receivers to GC's own wires or machines
+                // But don't use other mods methods to connect Beam Receivers to GC's own wires
+                // or machines
                 {
-                    ForgeDirection inputAdj = ForgeDirection.getOrientation(this.facing);
-                    float availableToSend = EnergyUtil.otherModsEnergyExtract(tile, inputAdj, this.maxRate, true);
+                    final ForgeDirection inputAdj = ForgeDirection.getOrientation(this.facing);
+                    final float availableToSend = EnergyUtil.otherModsEnergyExtract(tile, inputAdj, this.maxRate, true);
                     if (availableToSend > 0F) {
-                        float transmitted = this.getTarget()
+                        final float transmitted = this.getTarget()
                                 .receiveEnergyGC(
-                                        new EnergySourceWireless(Lists.newArrayList((ILaserNode) this)),
-                                        availableToSend,
-                                        false);
+                                        new EnergySourceWireless(Lists.newArrayList(this)), availableToSend, false);
                         EnergyUtil.otherModsEnergyExtract(tile, inputAdj, transmitted, false);
                     }
                 }
             } else if (this.modeReceive == ReceiverMode.RECEIVE.ordinal() && this.storage.getEnergyStoredGC() > 0) {
-                // One Beam Receiver might be powered by multiple transmitters - allow for 5 at maximum transfer rate
-                float maxTransfer = Math.min(this.storage.getEnergyStoredGC(), maxRate * 5);
+                // One Beam Receiver might be powered by multiple transmitters - allow for 5 at
+                // maximum transfer rate
+                final float maxTransfer = Math.min(this.storage.getEnergyStoredGC(), this.maxRate * 5);
 
                 if (maxTransfer < 0.01F)
                 // Stop updating this when de minimis energy remains
                 {
                     this.storage.extractEnergyGCnoMax(maxTransfer, false);
                 } else {
-                    TileEntity tileAdj = this.getAttachedTile();
+                    final TileEntity tileAdj = this.getAttachedTile();
 
                     if (tileAdj instanceof TileBaseUniversalElectrical) {
-                        TileBaseUniversalElectrical electricalTile = (TileBaseUniversalElectrical) tileAdj;
-                        EnergySourceAdjacent source =
+                        final TileBaseUniversalElectrical electricalTile = (TileBaseUniversalElectrical) tileAdj;
+                        final EnergySourceAdjacent source =
                                 new EnergySourceAdjacent(ForgeDirection.getOrientation(this.facing ^ 1));
                         this.storage.extractEnergyGCnoMax(
                                 electricalTile.receiveEnergyGC(source, maxTransfer, false), false);
                     } else if (!(tileAdj instanceof EnergyStorageTile) && !(tileAdj instanceof TileBaseConductor))
-                    // Dont use other mods methods to connect Beam Receivers to GC's own wires or machines
+                    // Dont use other mods methods to connect Beam Receivers to GC's own wires or
+                    // machines
                     {
-                        ForgeDirection inputAdj = ForgeDirection.getOrientation(this.facing);
-                        float otherModTransferred =
+                        final ForgeDirection inputAdj = ForgeDirection.getOrientation(this.facing);
+                        final float otherModTransferred =
                                 EnergyUtil.otherModsEnergyTransfer(tileAdj, inputAdj, maxTransfer, false);
                         if (otherModTransferred > 0F) {
                             this.storage.extractEnergyGCnoMax(otherModTransferred, false);
@@ -131,8 +132,8 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
 
     @Override
     public Vector3 getInputPoint() {
-        Vector3 headVec = new Vector3(this.xCoord + 0.5, this.yCoord + 0.5, this.zCoord + 0.5);
-        ForgeDirection facingDir = ForgeDirection.getOrientation(this.facing);
+        final Vector3 headVec = new Vector3(this.xCoord + 0.5, this.yCoord + 0.5, this.zCoord + 0.5);
+        final ForgeDirection facingDir = ForgeDirection.getOrientation(this.facing);
         headVec.x += facingDir.offsetX * 0.1F;
         headVec.y += facingDir.offsetY * 0.1F;
         headVec.z += facingDir.offsetZ * 0.1F;
@@ -141,8 +142,8 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
 
     @Override
     public Vector3 getOutputPoint(boolean offset) {
-        Vector3 headVec = new Vector3(this.xCoord + 0.5, this.yCoord + 0.5, this.zCoord + 0.5);
-        ForgeDirection facingDir = ForgeDirection.getOrientation(this.facing);
+        final Vector3 headVec = new Vector3(this.xCoord + 0.5, this.yCoord + 0.5, this.zCoord + 0.5);
+        final ForgeDirection facingDir = ForgeDirection.getOrientation(this.facing);
         headVec.x += facingDir.offsetX * 0.1F;
         headVec.y += facingDir.offsetY * 0.1F;
         headVec.z += facingDir.offsetZ * 0.1F;
@@ -159,7 +160,7 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
             return null;
         }
 
-        TileEntity tile = new BlockVec3(this).getTileEntityOnSide(this.worldObj, this.facing);
+        final TileEntity tile = new BlockVec3(this).getTileEntityOnSide(this.worldObj, this.facing);
 
         if (tile == null || tile.isInvalid()) {
             this.setFacing(ForgeDirection.UNKNOWN);
@@ -171,7 +172,7 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
         }
 
         if (tile instanceof EnergyStorageTile) {
-            EnergyStorage attachedStorage = ((EnergyStorageTile) tile).storage;
+            final EnergyStorage attachedStorage = ((EnergyStorageTile) tile).storage;
             this.storage.setCapacity(attachedStorage.getCapacityGC() - attachedStorage.getEnergyStoredGC());
             this.storage.setMaxExtract(attachedStorage.getMaxExtract());
             this.storage.setMaxReceive(attachedStorage.getMaxReceive());
@@ -192,13 +193,14 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
             return 0;
         }
 
-        //		if (received < amount)
-        //		{
-        //			if (tile instanceof EnergyStorageTile)
-        //			{
-        //				received += ((EnergyStorageTile) tile).storage.receiveEnergyGC(amount - received, simulate);
-        //			}
-        //		}
+        // if (received < amount)
+        // {
+        // if (tile instanceof EnergyStorageTile)
+        // {
+        // received += ((EnergyStorageTile) tile).storage.receiveEnergyGC(amount -
+        // received, simulate);
+        // }
+        // }
 
         return this.storage.receiveEnergyGC(amount, simulate);
     }
@@ -209,7 +211,7 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
             return 0;
         }
 
-        TileEntity tile = this.getAttachedTile();
+        final TileEntity tile = this.getAttachedTile();
 
         if (this.facing == ForgeDirection.UNKNOWN.ordinal()) {
             return 0;
@@ -228,8 +230,6 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
 
     @Override
     public float getEnergyStoredGC(EnergySource from) {
-        TileEntity tile = this.getAttachedTile();
-
         if (this.facing == ForgeDirection.UNKNOWN.ordinal()) {
             return 0;
         }
@@ -239,8 +239,6 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
 
     @Override
     public float getMaxEnergyStoredGC(EnergySource from) {
-        TileEntity tile = this.getAttachedTile();
-
         if (this.facing == ForgeDirection.UNKNOWN.ordinal()) {
             return 0;
         }
@@ -250,8 +248,6 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
 
     @Override
     public boolean nodeAvailable(EnergySource from) {
-        TileEntity tile = this.getAttachedTile();
-
         return this.facing != ForgeDirection.UNKNOWN.ordinal();
     }
 
@@ -260,12 +256,13 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
             if (newDirection == ForgeDirection.UNKNOWN) {
                 this.modeReceive = ReceiverMode.UNDEFINED.ordinal();
             } else {
-                TileEntity tile = new BlockVec3(this).getTileEntityOnSide(this.worldObj, newDirection);
+                final TileEntity tile = new BlockVec3(this).getTileEntityOnSide(this.worldObj, newDirection);
 
                 if (tile == null) {
                     this.modeReceive = ReceiverMode.UNDEFINED.ordinal();
                 } else if (tile instanceof EnergyStorageTile) {
-                    ReceiverMode mode = ((EnergyStorageTile) tile).getModeFromDirection(newDirection.getOpposite());
+                    final ReceiverMode mode =
+                            ((EnergyStorageTile) tile).getModeFromDirection(newDirection.getOpposite());
 
                     if (mode != null) {
                         this.modeReceive = mode.ordinal();

@@ -8,15 +8,71 @@ import micdoodle8.mods.galacticraft.api.prefab.entity.EntityTieredRocket;
 import micdoodle8.mods.galacticraft.api.recipe.ISchematicPage;
 import micdoodle8.mods.galacticraft.api.recipe.ISchematicResultPage;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.client.gui.container.*;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiAirLockController;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiCargoLoader;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiCargoUnloader;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiCircuitFabricator;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiCoalGenerator;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiElectricFurnace;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiElectricIngotCompressor;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiEnergyStorageModule;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiExtendedInventory;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiFuelLoader;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiIngotCompressor;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiOxygenCollector;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiOxygenCompressor;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiOxygenDecompressor;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiOxygenDistributor;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiOxygenSealer;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiOxygenStorageModule;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiParaChest;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiRefinery;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiRocketInventory;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiSolar;
 import micdoodle8.mods.galacticraft.core.client.gui.screen.GuiCelestialSelection;
 import micdoodle8.mods.galacticraft.core.client.gui.screen.GuiJoinSpaceRace;
 import micdoodle8.mods.galacticraft.core.client.gui.screen.GuiNewSpaceRace;
 import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
 import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStatsClient;
-import micdoodle8.mods.galacticraft.core.inventory.*;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerCargoLoader;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerCircuitFabricator;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerCoalGenerator;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerElectricFurnace;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerElectricIngotCompressor;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerEnergyStorageModule;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerExtendedInventory;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerFuelLoader;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerIngotCompressor;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerOxygenCollector;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerOxygenCompressor;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerOxygenDecompressor;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerOxygenDistributor;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerOxygenSealer;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerOxygenStorageModule;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerParaChest;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerRefinery;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerRocketInventory;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerSolar;
 import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-import micdoodle8.mods.galacticraft.core.tile.*;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityAirLockController;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityCargoLoader;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityCargoUnloader;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityCircuitFabricator;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityCoalGenerator;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityElectricFurnace;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityElectricIngotCompressor;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityEnergyStorageModule;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityFuelLoader;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityIngotCompressor;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenCollector;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenCompressor;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenDecompressor;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenDistributor;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenSealer;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenStorageModule;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityParaChest;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityRefinery;
+import micdoodle8.mods.galacticraft.core.tile.TileEntitySolar;
 import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.GuiScreen;
@@ -29,7 +85,7 @@ import net.minecraft.world.World;
 public class GuiHandler implements IGuiHandler {
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        EntityPlayerMP playerBase = PlayerUtil.getPlayerBaseServerFromPlayer(player, false);
+        final EntityPlayerMP playerBase = PlayerUtil.getPlayerBaseServerFromPlayer(player, false);
 
         if (playerBase == null) {
             player.addChatMessage(
@@ -37,7 +93,7 @@ public class GuiHandler implements IGuiHandler {
             return null;
         }
 
-        GCPlayerStats stats = GCPlayerStats.get(playerBase);
+        final GCPlayerStats stats = GCPlayerStats.get(playerBase);
 
         if (ID == GuiIdsCore.ROCKET_INVENTORY && player.ridingEntity instanceof EntityTieredRocket) {
             return new ContainerRocketInventory(
@@ -48,7 +104,7 @@ public class GuiHandler implements IGuiHandler {
             return new ContainerExtendedInventory(player, stats.extendedInventory);
         }
 
-        TileEntity tile = world.getTileEntity(x, y, z);
+        final TileEntity tile = world.getTileEntity(x, y, z);
 
         if (tile != null) {
             if (tile instanceof TileEntityRefinery) {
@@ -90,7 +146,7 @@ public class GuiHandler implements IGuiHandler {
             }
         }
 
-        for (ISchematicPage page : stats.unlockedSchematics) {
+        for (final ISchematicPage page : stats.unlockedSchematics) {
             if (ID == page.getGuiID()) {
                 return page.getResultContainer(playerBase, x, y, z);
             }
@@ -110,7 +166,7 @@ public class GuiHandler implements IGuiHandler {
 
     @SideOnly(Side.CLIENT)
     private Object getClientGuiElement(int ID, EntityPlayer player, World world, Vector3 position) {
-        EntityClientPlayerMP playerClient = PlayerUtil.getPlayerBaseClientFromPlayer(player, false);
+        final EntityClientPlayerMP playerClient = PlayerUtil.getPlayerBaseClientFromPlayer(player, false);
 
         if (ID == GuiIdsCore.GALAXY_MAP) {
             return new GuiCelestialSelection(true, null);
@@ -127,7 +183,7 @@ public class GuiHandler implements IGuiHandler {
             return new GuiJoinSpaceRace(playerClient);
         }
 
-        TileEntity tile = world.getTileEntity(position.intX(), position.intY(), position.intZ());
+        final TileEntity tile = world.getTileEntity(position.intX(), position.intY(), position.intZ());
 
         if (tile != null) {
             if (tile instanceof TileEntityRefinery) {
@@ -173,10 +229,10 @@ public class GuiHandler implements IGuiHandler {
         }
 
         if (playerClient != null) {
-            GCPlayerStatsClient stats = GCPlayerStatsClient.get(playerClient);
-            for (ISchematicPage page : stats.unlockedSchematics) {
+            final GCPlayerStatsClient stats = GCPlayerStatsClient.get(playerClient);
+            for (final ISchematicPage page : stats.unlockedSchematics) {
                 if (ID == page.getGuiID()) {
-                    GuiScreen screen =
+                    final GuiScreen screen =
                             page.getResultScreen(playerClient, position.intX(), position.intY(), position.intZ());
 
                     if (screen instanceof ISchematicResultPage) {

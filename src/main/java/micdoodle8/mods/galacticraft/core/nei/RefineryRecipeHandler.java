@@ -4,7 +4,7 @@ import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import java.awt.*;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -36,7 +36,7 @@ public class RefineryRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void drawBackground(int recipe) {
-        int progress = this.ticksPassed % 144;
+        final int progress = this.ticksPassed % 144;
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GuiDraw.changeTexture(RefineryRecipeHandler.refineryGuiTexture);
         GuiDraw.drawTexturedModalRect(-2, 0, 3, 4, 168, 64);
@@ -92,7 +92,7 @@ public class RefineryRecipeHandler extends TemplateRecipeHandler {
     @Override
     public ArrayList<PositionedStack> getIngredientStacks(int recipe) {
         if (this.ticksPassed % 144 > 20) {
-            ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
+            final ArrayList<PositionedStack> stacks = new ArrayList<>();
             stacks.add(new PositionedStack(
                     new ItemStack(GCItems.oilCanister, 1, GCItems.oilCanister.getMaxDamage()),
                     this.arecipes.get(recipe).getIngredients().get(0).relx,

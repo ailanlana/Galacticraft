@@ -42,7 +42,7 @@ public class GuiLaunchController extends GuiContainerGC
     private static final ResourceLocation launchControllerGui =
             new ResourceLocation(MarsModule.ASSET_PREFIX, "textures/gui/launchController.png");
 
-    private TileEntityLaunchController launchController;
+    private final TileEntityLaunchController launchController;
 
     private GuiButton enableControllerButton;
     private GuiButton hideDestinationFrequency;
@@ -51,8 +51,8 @@ public class GuiLaunchController extends GuiContainerGC
     private GuiElementDropdown dropdownTest;
     private GuiElementTextBox frequency;
     private GuiElementTextBox destinationFrequency;
-    private GuiElementInfoRegion electricInfoRegion = new GuiElementInfoRegion(0, 0, 52, 9, null, 0, 0, this);
-    private GuiElementInfoRegion waterTankInfoRegion = new GuiElementInfoRegion(0, 0, 41, 28, null, 0, 0, this);
+    private final GuiElementInfoRegion electricInfoRegion = new GuiElementInfoRegion(0, 0, 52, 9, null, 0, 0, this);
+    private final GuiElementInfoRegion waterTankInfoRegion = new GuiElementInfoRegion(0, 0, 41, 28, null, 0, 0, this);
 
     private int cannotEditTimer;
 
@@ -69,7 +69,7 @@ public class GuiLaunchController extends GuiContainerGC
             this.enablePadRemovalButton.enabled = false;
             this.hideDestinationFrequency.enabled = false;
         } else {
-            boolean isOwner = FMLClientHandler.instance()
+            final boolean isOwner = FMLClientHandler.instance()
                     .getClient()
                     .thePlayer
                     .getGameProfile()
@@ -87,9 +87,9 @@ public class GuiLaunchController extends GuiContainerGC
                 ? GCCoreUtil.translate("gui.button.unhideDest.name")
                 : GCCoreUtil.translate("gui.button.hideDest.name");
         // Hacky way of rendering buttons properly, possibly bugs here:
-        List buttonList = new ArrayList(this.buttonList);
-        List labelList = new ArrayList(this.labelList);
-        List<GuiElementInfoRegion> infoRegions = new ArrayList(this.infoRegions);
+        final List buttonList = new ArrayList(this.buttonList);
+        final List labelList = new ArrayList(this.labelList);
+        final List<GuiElementInfoRegion> infoRegions = new ArrayList(this.infoRegions);
         this.buttonList.clear();
         this.labelList.clear();
         this.infoRegions.clear();
@@ -118,12 +118,12 @@ public class GuiLaunchController extends GuiContainerGC
         this.labelList = labelList;
         this.infoRegions = infoRegions;
 
-        //		GL11.glEnable(GL11.GL_TEXTURE_2D);
+        // GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         RenderHelper.enableStandardItemLighting();
 
-        if (Math.random() < 0.025 && !destinationFrequency.isTextFocused) {
+        if (Math.random() < 0.025 && !this.destinationFrequency.isTextFocused) {
             if (!Minecraft.getMinecraft()
                             .thePlayer
                             .getGameProfile()
@@ -133,13 +133,14 @@ public class GuiLaunchController extends GuiContainerGC
                 // in case the player is not equal to the owner of the controller,
                 // scramble the destination number such that other players can't
                 // fly to it directly
-                Random r = new Random();
+                final Random r = new Random();
                 String fakefrequency = "";
-                for (int i = 0; i < this.destinationFrequency.getMaxLength(); i++)
+                for (int i = 0; i < this.destinationFrequency.getMaxLength(); i++) {
                     fakefrequency += (char) (r.nextInt(126 - 33) + 33);
-                destinationFrequency.text = fakefrequency;
+                }
+                this.destinationFrequency.text = fakefrequency;
             } else {
-                destinationFrequency.text = String.valueOf(this.launchController.destFrequency);
+                this.destinationFrequency.text = String.valueOf(this.launchController.destFrequency);
             }
         }
     }
@@ -164,7 +165,7 @@ public class GuiLaunchController extends GuiContainerGC
             try {
                 Integer.parseInt(string);
                 return true;
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 return false;
             }
         } else {
@@ -210,13 +211,13 @@ public class GuiLaunchController extends GuiContainerGC
         this.buttonList.add(this.frequency);
         this.buttonList.add(this.destinationFrequency);
         this.buttonList.add(this.hideDestinationFrequency);
-        this.electricInfoRegion.tooltipStrings = new ArrayList<String>();
+        this.electricInfoRegion.tooltipStrings = new ArrayList<>();
         this.electricInfoRegion.xPosition = (this.width - this.xSize) / 2 + 98;
         this.electricInfoRegion.yPosition = (this.height - this.ySize) / 2 + 113;
         this.electricInfoRegion.parentWidth = this.width;
         this.electricInfoRegion.parentHeight = this.height;
         this.infoRegions.add(this.electricInfoRegion);
-        List<String> batterySlotDesc = new ArrayList<String>();
+        List<String> batterySlotDesc = new ArrayList<>();
         batterySlotDesc.add(GCCoreUtil.translate("gui.batterySlot.desc.0"));
         batterySlotDesc.add(GCCoreUtil.translate("gui.batterySlot.desc.1"));
         this.infoRegions.add(new GuiElementInfoRegion(
@@ -228,7 +229,7 @@ public class GuiLaunchController extends GuiContainerGC
                 this.width,
                 this.height,
                 this));
-        batterySlotDesc = new ArrayList<String>();
+        batterySlotDesc = new ArrayList<>();
         batterySlotDesc.addAll(GCCoreUtil.translateWithSplit("gui.launchController.desc.0"));
         this.infoRegions.add(new GuiElementInfoRegion(
                 (this.width - this.xSize) / 2 + 5,
@@ -239,7 +240,7 @@ public class GuiLaunchController extends GuiContainerGC
                 this.width,
                 this.height,
                 this));
-        batterySlotDesc = new ArrayList<String>();
+        batterySlotDesc = new ArrayList<>();
         batterySlotDesc.addAll(GCCoreUtil.translateWithSplit("gui.launchController.desc.1"));
         this.infoRegions.add(new GuiElementInfoRegion(
                 (this.width - this.xSize) / 2 + 5,
@@ -250,7 +251,7 @@ public class GuiLaunchController extends GuiContainerGC
                 this.width,
                 this.height,
                 this));
-        batterySlotDesc = new ArrayList<String>();
+        batterySlotDesc = new ArrayList<>();
         batterySlotDesc.addAll(GCCoreUtil.translateWithSplit("gui.launchController.desc.2"));
         this.infoRegions.add(new GuiElementInfoRegion(
                 (this.width - this.xSize) / 2 + 10,
@@ -261,7 +262,7 @@ public class GuiLaunchController extends GuiContainerGC
                 this.width,
                 this.height,
                 this));
-        batterySlotDesc = new ArrayList<String>();
+        batterySlotDesc = new ArrayList<>();
         batterySlotDesc.addAll(GCCoreUtil.translateWithSplit("gui.launchController.desc.3"));
         this.infoRegions.add(new GuiElementInfoRegion(
                 (this.width - this.xSize) / 2 + 10,
@@ -272,7 +273,7 @@ public class GuiLaunchController extends GuiContainerGC
                 this.width,
                 this.height,
                 this));
-        batterySlotDesc = new ArrayList<String>();
+        batterySlotDesc = new ArrayList<>();
         batterySlotDesc.addAll(GCCoreUtil.translateWithSplit("gui.launchController.desc.4"));
         this.infoRegions.add(new GuiElementInfoRegion(
                 (this.width - this.xSize) / 2 + 95,
@@ -330,7 +331,7 @@ public class GuiLaunchController extends GuiContainerGC
 
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-        String displayString = this.launchController.getOwnerName() + "\'s " + this.launchController.getInventoryName();
+        String displayString = this.launchController.getOwnerName() + "'s " + this.launchController.getInventoryName();
         this.fontRendererObj.drawString(
                 displayString, this.xSize / 2 - this.fontRendererObj.getStringWidth(displayString) / 2, 5, 4210752);
 
@@ -347,11 +348,15 @@ public class GuiLaunchController extends GuiContainerGC
         displayString = this.getStatus();
         this.fontRendererObj.drawSplitString(
                 displayString, 60 - this.fontRendererObj.getStringWidth(displayString) / 2, 94, 60, 4210752);
-        //		displayString = ElectricityDisplay.getDisplay(this.launchController.ueWattsPerTick * 20, ElectricUnit.WATT);
-        //		this.fontRendererObj.drawString(displayString, this.xSize - 26 -
+        // displayString =
+        // ElectricityDisplay.getDisplay(this.launchController.ueWattsPerTick * 20,
+        // ElectricUnit.WATT);
+        // this.fontRendererObj.drawString(displayString, this.xSize - 26 -
         // this.fontRendererObj.getStringWidth(displayString), 94, 4210752);
-        //		displayString = ElectricityDisplay.getDisplay(this.launchController.getVoltage(), ElectricUnit.VOLTAGE);
-        //		this.fontRendererObj.drawString(displayString, this.xSize - 26 -
+        // displayString =
+        // ElectricityDisplay.getDisplay(this.launchController.getVoltage(),
+        // ElectricUnit.VOLTAGE);
+        // this.fontRendererObj.drawString(displayString, this.xSize - 26 -
         // this.fontRendererObj.getStringWidth(displayString), 104, 4210752);
         this.fontRendererObj.drawString(GCCoreUtil.translate("gui.message.frequency.name") + ":", 7, 22, 4210752);
         this.fontRendererObj.drawString(GCCoreUtil.translate("gui.message.destFrequency.name") + ":", 7, 44, 4210752);
@@ -382,7 +387,7 @@ public class GuiLaunchController extends GuiContainerGC
         final int var6 = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(var5, var6, 0, 0, this.xSize, this.ySize);
 
-        List<String> electricityDesc = new ArrayList<String>();
+        final List<String> electricityDesc = new ArrayList<>();
         electricityDesc.add(GCCoreUtil.translate("gui.energyStorage.desc.0"));
         EnergyDisplayHelper.getEnergyDisplayTooltip(
                 this.launchController.getEnergyStoredGC(),
@@ -393,7 +398,7 @@ public class GuiLaunchController extends GuiContainerGC
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         if (this.launchController.getEnergyStoredGC() > 0) {
-            int scale = this.launchController.getScaledElecticalLevel(54);
+            final int scale = this.launchController.getScaledElecticalLevel(54);
             this.drawTexturedModalRect(var5 + 99, var6 + 114, 176, 0, Math.min(scale, 54), 7);
         }
 
@@ -486,10 +491,11 @@ public class GuiLaunchController extends GuiContainerGC
                 // in case the player is not equal to the owner of the controller,
                 // scramble the destination number such that other players can't
                 // fly to it directly
-                Random r = new Random();
+                final Random r = new Random();
                 String fakefrequency = "";
-                for (int i = 0; i < this.destinationFrequency.getMaxLength(); i++)
+                for (int i = 0; i < this.destinationFrequency.getMaxLength(); i++) {
                     fakefrequency += (char) (r.nextInt(126 - 33) + 33);
+                }
                 return fakefrequency;
             }
         }

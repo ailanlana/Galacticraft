@@ -46,13 +46,9 @@ public class PlayerServer implements IPlayerServer {
 
     @Override
     public boolean mountEntity(EntityPlayerMP player, Entity par1Entity) {
-        if (updatingRidden
+        return this.updatingRidden
                 && player.ridingEntity instanceof IIgnoreShift
-                && ((IIgnoreShift) player.ridingEntity).shouldIgnoreShiftExit()) {
-            return true;
-        }
-
-        return false;
+                && ((IIgnoreShift) player.ridingEntity).shouldIgnoreShiftExit();
     }
 
     @Override
@@ -73,7 +69,9 @@ public class PlayerServer implements IPlayerServer {
     @Override
     public float attackEntityFrom(EntityPlayerMP player, DamageSource par1DamageSource, float par2) {
         // No damage while in Celestial Selection screen
-        if (player.ridingEntity instanceof EntityCelestialFake) return -1;
+        if (player.ridingEntity instanceof EntityCelestialFake) {
+            return -1;
+        }
 
         if (GalacticraftCore.isPlanetsLoaded) {
             if (par1DamageSource == DamageSource.outOfWorld) {
@@ -89,7 +87,7 @@ public class PlayerServer implements IPlayerServer {
                 int titaniumCount = 0;
                 if (player.inventory != null) {
                     for (int i = 0; i < 4; i++) {
-                        ItemStack armorPiece = player.getCurrentArmor(i);
+                        final ItemStack armorPiece = player.getCurrentArmor(i);
                         if (armorPiece != null && armorPiece.getItem() instanceof ItemArmorAsteroids) {
                             titaniumCount++;
                         }
@@ -98,7 +96,7 @@ public class PlayerServer implements IPlayerServer {
                 if (titaniumCount == 4) {
                     titaniumCount = 5;
                 }
-                par2 *= (1 - 0.15D * titaniumCount);
+                par2 *= 1 - 0.15D * titaniumCount;
             }
         }
 
@@ -111,7 +109,7 @@ public class PlayerServer implements IPlayerServer {
         int deshCount = 0;
         if (player.inventory != null && GalacticraftCore.isPlanetsLoaded) {
             for (int i = 0; i < 4; i++) {
-                ItemStack armorPiece = player.getCurrentArmor(i);
+                final ItemStack armorPiece = player.getCurrentArmor(i);
                 if (armorPiece != null && armorPiece.getItem() instanceof ItemArmorMars) {
                     deshCount++;
                 }
@@ -122,9 +120,9 @@ public class PlayerServer implements IPlayerServer {
                 >= player.getEntityAttribute(SharedMonsterAttributes.knockbackResistance)
                         .getAttributeValue()) {
             player.isAirBorne = deshCount < 2;
-            float f1 = MathHelper.sqrt_double(impulseX * impulseX + impulseZ * impulseZ);
-            float f2 = 0.4F - deshCount * 0.05F;
-            double d1 = 2.0D - deshCount * 0.15D;
+            final float f1 = MathHelper.sqrt_double(impulseX * impulseX + impulseZ * impulseZ);
+            final float f2 = 0.4F - deshCount * 0.05F;
+            final double d1 = 2.0D - deshCount * 0.15D;
             player.motionX /= d1;
             player.motionY /= d1;
             player.motionZ /= d1;
@@ -139,15 +137,13 @@ public class PlayerServer implements IPlayerServer {
     }
 
     public boolean wakeUpPlayer(EntityPlayerMP player, boolean par1, boolean par2, boolean par3, boolean bypass) {
-        ChunkCoordinates c = player.playerLocation;
+        final ChunkCoordinates c = player.playerLocation;
 
         if (c != null) {
-            EventWakePlayer event = new EventWakePlayer(player, c.posX, c.posY, c.posZ, par1, par2, par3, bypass);
+            final EventWakePlayer event = new EventWakePlayer(player, c.posX, c.posY, c.posZ, par1, par2, par3, bypass);
             MinecraftForge.EVENT_BUS.post(event);
 
-            if (bypass || event.result == null || event.result == EntityPlayer.EnumStatus.OK) {
-                return false;
-            }
+            return !bypass && event.result != null && event.result != EntityPlayer.EnumStatus.OK;
         }
 
         return true;

@@ -10,7 +10,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerCargoLoader extends Container {
-    private TileBaseElectricBlock tileEntity;
+    private final TileBaseElectricBlock tileEntity;
 
     public ContainerCargoLoader(InventoryPlayer par1InventoryPlayer, IInventory cargoLoader) {
         this.tileEntity = (TileBaseElectricBlock) cargoLoader;
@@ -72,7 +72,7 @@ public class ContainerCargoLoader extends Container {
             }
 
             if (var5.stackSize == 0) {
-                slot.putStack((ItemStack) null);
+                slot.putStack(null);
             } else {
                 slot.onSlotChanged();
             }

@@ -52,8 +52,8 @@ public abstract class CelestialBody implements Comparable<CelestialBody> {
     public String getLocalizedName() {
         String s = this.getUnlocalizedName();
         s = s == null ? "" : StatCollector.translateToLocal(s);
-        int comment = s.indexOf('#');
-        return (comment > 0) ? s.substring(0, comment).trim() : s;
+        final int comment = s.indexOf('#');
+        return comment > 0 ? s.substring(0, comment).trim() : s;
     }
 
     /**
@@ -83,11 +83,11 @@ public abstract class CelestialBody implements Comparable<CelestialBody> {
     /**
      * Used for rendering planet's location on the map.
      * <p/>
-     * Value of 1π would result in the planet being rendered directly
-     * accross from the original position
+     * Value of 1π would result in the planet being rendered directly accross from
+     * the original position
      * <p/>
-     * Value of 2π is a full rotation and therefore would be rendered at
-     * the same spot as the original position
+     * Value of 2π is a full rotation and therefore would be rendered at the same
+     * spot as the original position
      *
      * @return Phase shift of planet for planet's revolution around the sun.
      */
@@ -100,8 +100,7 @@ public abstract class CelestialBody implements Comparable<CelestialBody> {
      * orbit fully.
      * <p/>
      * Value of 2.0F would result in the planet rotating twice as slow (and
-     * therefore take twice as long) as the earth takes to revolve around the
-     * sun.
+     * therefore take twice as long) as the earth takes to revolve around the sun.
      *
      * @return Multiple value for planet's revolution around the sun.
      */
@@ -177,9 +176,9 @@ public abstract class CelestialBody implements Comparable<CelestialBody> {
     }
 
     /*
-     * Use this to list the atmospheric gases on the celestial body, starting with the most abundant
-     * Do not include trace gases (anything less than 0.25%)
-     * (Do not use for stars!)
+     * Use this to list the atmospheric gases on the celestial body, starting with
+     * the most abundant Do not include trace gases (anything less than 0.25%) (Do
+     * not use for stars!)
      */
     public CelestialBody atmosphereComponent(IAtmosphericGas gas) {
         this.atmosphere.add(gas);
@@ -241,11 +240,11 @@ public abstract class CelestialBody implements Comparable<CelestialBody> {
 
     @Override
     public int compareTo(CelestialBody other) {
-        ScalableDistance thisDistance = this.getRelativeDistanceFromCenter();
-        ScalableDistance otherDistance = other.getRelativeDistanceFromCenter();
+        final ScalableDistance thisDistance = this.getRelativeDistanceFromCenter();
+        final ScalableDistance otherDistance = other.getRelativeDistanceFromCenter();
         return otherDistance.unScaledDistance < thisDistance.unScaledDistance
                 ? 1
-                : (otherDistance.unScaledDistance > thisDistance.unScaledDistance ? -1 : 0);
+                : otherDistance.unScaledDistance > thisDistance.unScaledDistance ? -1 : 0;
     }
 
     public static class ScalableDistance {

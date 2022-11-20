@@ -7,7 +7,15 @@ import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.VersionUtil;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAIAvoidEntity;
+import net.minecraft.entity.ai.EntityAICreeperSwell;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -45,6 +53,7 @@ public class EntityEvolvedCreeper extends EntityCreeper implements IEntityBreath
         this.setSize(0.7F, 2.2F);
     }
 
+    @Override
     protected void entityInit() {
         super.entityInit();
         this.getDataWatcher().addObject(12, Byte.valueOf((byte) 0));
@@ -84,8 +93,9 @@ public class EntityEvolvedCreeper extends EntityCreeper implements IEntityBreath
         this.setCreeperScale(isChild ? 0.5F : 1.0F);
     }
 
+    @Override
     protected final void setSize(float sizeX, float sizeY) {
-        boolean flag = this.sizeXBase > 0.0F && this.sizeYBase > 0.0F;
+        final boolean flag = this.sizeXBase > 0.0F && this.sizeYBase > 0.0F;
         this.sizeXBase = sizeX;
         this.sizeYBase = sizeY;
 
@@ -99,13 +109,15 @@ public class EntityEvolvedCreeper extends EntityCreeper implements IEntityBreath
         // FMLLog.info("" + this.sizeYBase + " " + scale);
     }
 
+    @Override
     public boolean isChild() {
         return this.getDataWatcher().getWatchableObjectByte(12) == 1;
     }
 
+    @Override
     protected int getExperiencePoints(EntityPlayer p_70693_1_) {
         if (this.isChild()) {
-            this.experienceValue = (this.experienceValue * 5) / 2;
+            this.experienceValue = this.experienceValue * 5 / 2;
         }
 
         return super.getExperiencePoints(p_70693_1_);
@@ -115,7 +127,8 @@ public class EntityEvolvedCreeper extends EntityCreeper implements IEntityBreath
         this.getDataWatcher().updateObject(12, Byte.valueOf((byte) (isChild ? 1 : 0)));
 
         if (this.worldObj != null && !this.worldObj.isRemote) {
-            IAttributeInstance iattributeinstance = this.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
+            final IAttributeInstance iattributeinstance =
+                    this.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
             iattributeinstance.removeModifier(babySpeedBoostModifier);
 
             if (isChild) {
@@ -129,14 +142,16 @@ public class EntityEvolvedCreeper extends EntityCreeper implements IEntityBreath
     @Override
     protected void jump() {
         this.motionY = 0.45D / WorldUtil.getGravityFactor(this);
-        if (this.motionY < 0.22D) this.motionY = 0.22D;
+        if (this.motionY < 0.22D) {
+            this.motionY = 0.22D;
+        }
 
         if (this.isPotionActive(Potion.jump)) {
             this.motionY += (this.getActivePotionEffect(Potion.jump).getAmplifier() + 1) * 0.1F;
         }
 
         if (this.isSprinting()) {
-            float f = this.rotationYaw * 0.017453292F;
+            final float f = this.rotationYaw * 0.017453292F;
             this.motionX -= MathHelper.sin(f) * 0.2F;
             this.motionZ += MathHelper.cos(f) * 0.2F;
         }
@@ -147,7 +162,9 @@ public class EntityEvolvedCreeper extends EntityCreeper implements IEntityBreath
 
     @Override
     protected Item getDropItem() {
-        if (this.isBurning()) return Items.blaze_rod;
+        if (this.isBurning()) {
+            return Items.blaze_rod;
+        }
         return Items.redstone;
     }
 
@@ -173,7 +190,9 @@ public class EntityEvolvedCreeper extends EntityCreeper implements IEntityBreath
                 this.entityDropItem(new ItemStack(Blocks.ice), 0.0F);
                 break;
             default:
-                if (ConfigManagerCore.challengeMobDropsAndSpawning) this.dropItem(Items.reeds, 1);
+                if (ConfigManagerCore.challengeMobDropsAndSpawning) {
+                    this.dropItem(Items.reeds, 1);
+                }
                 break;
         }
     }

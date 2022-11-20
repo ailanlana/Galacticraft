@@ -3,7 +3,24 @@ package micdoodle8.mods.galacticraft.core.blocks;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import java.util.ArrayList;
-import micdoodle8.mods.galacticraft.core.items.*;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockAirLock;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockAluminumWire;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockArclamp;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockBase;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockCargoLoader;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockCheese;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockDummy;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockEnclosed;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockGC;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockLandingPad;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockMachine;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockMoon;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockOxygenCompressor;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockSlabGC;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockSolar;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockThruster;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockWallGC;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
@@ -65,8 +82,8 @@ public class GCBlocks {
 
     public static final Material machine = new Material(MapColor.ironColor);
 
-    public static ArrayList<Block> hiddenBlocks = new ArrayList<Block>();
-    public static ArrayList<Block> otherModTorchesLit = new ArrayList<Block>();
+    public static ArrayList<Block> hiddenBlocks = new ArrayList<>();
+    public static ArrayList<Block> otherModTorchesLit = new ArrayList<>();
 
     public static void initBlocks() {
         GCBlocks.breatheableAir = new BlockBreathableAir("breatheableAir");
@@ -190,7 +207,8 @@ public class GCBlocks {
         GCBlocks.hiddenBlocks.add(GCBlocks.spaceStationBase);
         GCBlocks.hiddenBlocks.add(GCBlocks.slabGCDouble);
 
-        // Register blocks before register ores, so that the ItemStack picks up the correct item
+        // Register blocks before register ores, so that the ItemStack picks up the
+        // correct item
         GCBlocks.registerBlocks();
         GCBlocks.setHarvestLevels();
 
@@ -224,14 +242,14 @@ public class GCBlocks {
             try {
                 try {
                     // This is the more recent TConstruct class
-                    Class clazz = Class.forName("slimeknights.tconstruct.gadgets.TinkerGadgets");
+                    final Class clazz = Class.forName("slimeknights.tconstruct.gadgets.TinkerGadgets");
                     modTorch = (Block) clazz.getField("stoneTorch").get(null);
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     // This is the older TConstruct class
-                    Class clazz = Class.forName("tconstruct.world.TinkerWorld");
+                    final Class clazz = Class.forName("tconstruct.world.TinkerWorld");
                     modTorch = (Block) clazz.getField("stoneTorch").get(null);
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
             }
             if (modTorch != null) {
                 torch = new BlockUnlitTorch(false, "unlitTorch_Stone");

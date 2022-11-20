@@ -11,7 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class ContainerCoalGenerator extends Container {
-    private TileEntityCoalGenerator tileEntity;
+    private final TileEntityCoalGenerator tileEntity;
 
     public ContainerCoalGenerator(InventoryPlayer par1InventoryPlayer, TileEntityCoalGenerator tileEntity) {
         this.tileEntity = tileEntity;
@@ -53,10 +53,10 @@ public class ContainerCoalGenerator extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1) {
         ItemStack var2 = null;
-        Slot var3 = (Slot) this.inventorySlots.get(par1);
+        final Slot var3 = (Slot) this.inventorySlots.get(par1);
 
         if (var3 != null && var3.getHasStack()) {
-            ItemStack var4 = var3.getStack();
+            final ItemStack var4 = var3.getStack();
             var2 = var4.copy();
 
             if (par1 != 0) {
@@ -77,7 +77,7 @@ public class ContainerCoalGenerator extends Container {
             }
 
             if (var4.stackSize == 0) {
-                var3.putStack((ItemStack) null);
+                var3.putStack(null);
             } else {
                 var3.onSlotChanged();
             }

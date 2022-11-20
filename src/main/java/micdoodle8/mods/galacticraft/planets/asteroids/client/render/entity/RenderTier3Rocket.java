@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL12;
 
 @SideOnly(Side.CLIENT)
 public class RenderTier3Rocket extends Render {
-    private ResourceLocation rocketTexture;
+    private final ResourceLocation rocketTexture;
 
     protected IModelCustom rocketModelObj;
 
@@ -36,8 +36,6 @@ public class RenderTier3Rocket extends Render {
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         GL11.glPushMatrix();
         final float var24 = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * par9 + 180;
-        final float var25 = entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * par9 + 45;
-
         GL11.glTranslatef((float) par2, (float) par4 - 0.4F, (float) par6);
         GL11.glRotatef(180.0F - par8, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(-var24, 0.0F, 0.0F, 1.0F);
@@ -60,7 +58,7 @@ public class RenderTier3Rocket extends Render {
         GL11.glScalef(0.9F, 0.9F, 0.9F);
 
         this.rocketModelObj.renderOnly("Boosters", "Rocket");
-        Vector3 teamColor = ClientUtil.updateTeamColor(
+        final Vector3 teamColor = ClientUtil.updateTeamColor(
                 FMLClientHandler.instance().getClient().thePlayer.getCommandSenderName(), true);
         if (teamColor != null) {
             GL11.glColor3f(teamColor.floatX(), teamColor.floatY(), teamColor.floatZ());

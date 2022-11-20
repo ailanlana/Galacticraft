@@ -18,8 +18,8 @@ import net.minecraft.world.WorldProvider;
 import org.lwjgl.opengl.GL11;
 
 public class DrawGameScreen extends IScreenManager {
-    private TextureManager renderEngine = FMLClientHandler.instance().getClient().renderEngine;
-    private static FloatBuffer colorBuffer = GLAllocation.createDirectFloatBuffer(16);
+    private final TextureManager renderEngine = FMLClientHandler.instance().getClient().renderEngine;
+    private static final FloatBuffer colorBuffer = GLAllocation.createDirectFloatBuffer(16);
     private static int texCount = 1;
 
     private float tickDrawn = -1F;
@@ -30,8 +30,8 @@ public class DrawGameScreen extends IScreenManager {
     private int callCount = 0;
     private int tickMapDone = -1;
 
-    private float scaleX;
-    private float scaleZ;
+    private final float scaleX;
+    private final float scaleZ;
 
     public TileEntity driver;
     public Class telemetryLastClass;
@@ -51,20 +51,24 @@ public class DrawGameScreen extends IScreenManager {
     }
 
     public boolean check(float scaleXparam, float scaleZparam) {
-        if (this.mapDone) return this.scaleX == scaleXparam && this.scaleZ == scaleZparam;
+        if (this.mapDone) {
+            return this.scaleX == scaleXparam && this.scaleZ == scaleZparam;
+        }
 
         return false;
     }
 
     private void makeMap() {
-        if (this.mapDone || this.reusableMap == null || this.driver.getWorldObj().provider.dimensionId != 0) return;
+        if (this.mapDone || DrawGameScreen.reusableMap == null || this.driver.getWorldObj().provider.dimensionId != 0) {
+            return;
+        }
         this.localMap = new int[MapUtil.SIZE_STD2 * MapUtil.SIZE_STD2];
-        boolean result =
+        final boolean result =
                 MapUtil.getMap(this.localMap, this.driver.getWorldObj(), this.driver.xCoord, this.driver.zCoord);
         if (result) {
             TextureUtil.uploadTexture(
                     reusableMap.getGlTextureId(), this.localMap, MapUtil.SIZE_STD2, MapUtil.SIZE_STD2);
-            mapDone = true;
+            this.mapDone = true;
             GCLog.debug("Created texture no:" + texCount++);
         }
     }
@@ -76,7 +80,7 @@ public class DrawGameScreen extends IScreenManager {
         }
 
         if (cornerBlock) {
-            if ((this.mapFirstTick || ((int) ticks) % 400 == 0) && !mapDone) {
+            if ((this.mapFirstTick || (int) ticks % 400 == 0) && !this.mapDone) {
                 if (this.tickMapDone != (int) ticks) {
                     this.tickMapDone = (int) ticks;
                     this.makeMap();
@@ -93,79 +97,85 @@ public class DrawGameScreen extends IScreenManager {
         // to draw the screen once per tick, for multi-screens
 
         // Spend the first tick just initialising the counter
-        if (initialise) {
-            if (!initialiseLast) {
-                tickDrawn = ticks;
-                readyToInitialise = false;
-                initialiseLast = true;
+        if (this.initialise) {
+            if (!this.initialiseLast) {
+                this.tickDrawn = ticks;
+                this.readyToInitialise = false;
+                this.initialiseLast = true;
                 return;
             }
 
-            if (!readyToInitialise) {
-                if (ticks == tickDrawn) {
+            if (!this.readyToInitialise) {
+                if (ticks == this.tickDrawn) {
                     return;
                 }
             }
 
-            if (!readyToInitialise) {
-                readyToInitialise = true;
-                tickDrawn = ticks;
-                tileCount = 1;
+            if (!this.readyToInitialise) {
+                this.readyToInitialise = true;
+                this.tickDrawn = ticks;
+                this.tileCount = 1;
                 return;
-            } else if (ticks == tickDrawn) {
-                tileCount++;
+            } else if (ticks == this.tickDrawn) {
+                this.tileCount++;
                 return;
             } else {
                 // Start normal operations
-                initialise = false;
-                initialiseLast = false;
-                readyToInitialise = false;
+                this.initialise = false;
+                this.initialiseLast = false;
+                this.readyToInitialise = false;
             }
         }
 
-        if (++callCount < tileCount) {
+        if (++this.callCount < this.tileCount) {
             // Normal situation, everything OK
-            if (callCount == 1 || tickDrawn == ticks) {
-                tickDrawn = ticks;
+            if (this.callCount == 1 || this.tickDrawn == ticks) {
+                this.tickDrawn = ticks;
                 return;
             } else
             // The callCount last tick was less than the tileCount, reinitialise
             {
-                initialise = true;
+                this.initialise = true;
                 // but draw this tick [probably a tileEntity moved out of the frustum]
             }
         }
 
-        if (callCount == tileCount) {
-            callCount = 0;
+        if (this.callCount == this.tileCount) {
+            this.callCount = 0;
             // Again if this is not the tickDrawn then something is wrong, reinitialise
-            if (tileCount > 1 && ticks != tickDrawn) {
-                initialise = true;
+            if (this.tileCount > 1 && ticks != this.tickDrawn) {
+                this.initialise = true;
             }
         }
 
-        tickDrawn = ticks;
+        this.tickDrawn = ticks;
 
         this.doDraw(type, ticks);
     }
 
     private void doDraw(int type, float ticks) {
-        float lightMapSaveX = OpenGlHelper.lastBrightnessX;
-        float lightMapSaveY = OpenGlHelper.lastBrightnessY;
+        final float lightMapSaveX = OpenGlHelper.lastBrightnessX;
+        final float lightMapSaveY = OpenGlHelper.lastBrightnessY;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 
-        if (type > 0) GL11.glDisable(GL11.GL_LIGHTING);
+        if (type > 0) {
+            GL11.glDisable(GL11.GL_LIGHTING);
+        }
 
-        GalacticraftRegistry.getGameScreen(type).render(type, ticks, scaleX, scaleZ, this);
+        GalacticraftRegistry.getGameScreen(type).render(type, ticks, this.scaleX, this.scaleZ, this);
 
-        if (type > 0) GL11.glEnable(GL11.GL_LIGHTING);
+        if (type > 0) {
+            GL11.glEnable(GL11.GL_LIGHTING);
+        }
 
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lightMapSaveX, lightMapSaveY);
     }
 
     @Override
     public WorldProvider getWorldProvider() {
-        if (this.driver != null) return driver.getWorldObj().provider;
+        if (this.driver != null) {
+            return this.driver.getWorldObj().provider;
+        }
 
         return null;
     }

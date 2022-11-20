@@ -2,9 +2,7 @@ package micdoodle8.mods.galacticraft.planets.mars.tile;
 
 import micdoodle8.mods.galacticraft.core.util.VersionUtil;
 import micdoodle8.mods.galacticraft.planets.mars.entities.EntitySlimeling;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntitySlimelingEgg extends TileEntity {
@@ -19,8 +17,10 @@ public class TileEntitySlimelingEgg extends TileEntity {
         if (!this.worldObj.isRemote) {
             if (this.timeToHatch > 0) {
                 this.timeToHatch--;
-            } else if (this.timeToHatch == 0 && lastTouchedPlayerUUID != null && lastTouchedPlayerUUID.length() > 0) {
-                int metadata = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord) % 3;
+            } else if (this.timeToHatch == 0
+                    && this.lastTouchedPlayerUUID != null
+                    && this.lastTouchedPlayerUUID.length() > 0) {
+                final int metadata = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord) % 3;
 
                 float colorRed = 0.0F;
                 float colorGreen = 0.0F;
@@ -39,7 +39,7 @@ public class TileEntitySlimelingEgg extends TileEntity {
                         break;
                 }
 
-                EntitySlimeling slimeling = new EntitySlimeling(this.worldObj, colorRed, colorGreen, colorBlue);
+                final EntitySlimeling slimeling = new EntitySlimeling(this.worldObj, colorRed, colorGreen, colorBlue);
 
                 slimeling.setPosition(this.xCoord + 0.5, this.yCoord + 1.0, this.zCoord + 0.5);
                 VersionUtil.setSlimelingOwner(slimeling, this.lastTouchedPlayerUUID);
@@ -50,8 +50,8 @@ public class TileEntitySlimelingEgg extends TileEntity {
                 }
 
                 slimeling.setTamed(true);
-                slimeling.setPathToEntity((PathEntity) null);
-                slimeling.setAttackTarget((EntityLivingBase) null);
+                slimeling.setPathToEntity(null);
+                slimeling.setAttackTarget(null);
                 slimeling.setHealth(20.0F);
 
                 this.worldObj.setBlockToAir(this.xCoord, this.yCoord, this.zCoord);

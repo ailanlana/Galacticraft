@@ -24,12 +24,15 @@ import micdoodle8.mods.galacticraft.core.wrappers.PlayerGearData;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.*;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraftforge.common.MinecraftForge;
 
 public class PlayerClient implements IPlayerClient {
-    private boolean saveSneak;
     private double downMot2;
     public static boolean startup;
 
@@ -45,7 +48,7 @@ public class PlayerClient implements IPlayerClient {
 
     @Override
     public void onUpdate(EntityPlayerSP player) {
-        GCPlayerStatsClient stats = GCPlayerStatsClient.get(player);
+        final GCPlayerStatsClient stats = GCPlayerStatsClient.get(player);
         stats.tick++;
 
         if (stats.usingParachute && !player.capabilities.isFlying && !player.handleWaterMovement()) {
@@ -66,7 +69,7 @@ public class PlayerClient implements IPlayerClient {
 
     @Override
     public void onLivingUpdatePre(EntityPlayerSP player) {
-        GCPlayerStatsClient stats = GCPlayerStatsClient.get(player);
+        final GCPlayerStatsClient stats = GCPlayerStatsClient.get(player);
 
         if (player.worldObj.provider instanceof IGalacticraftWorldProvider) {
             if (!startup) {
@@ -83,25 +86,27 @@ public class PlayerClient implements IPlayerClient {
             }
         }
 
-        //        if (player.boundingBox != null && stats.boundingBoxBefore == null)
-        //        {
-        //            GCLog.debug("Changed player BB from " + player.boundingBox.minY);
-        //            stats.boundingBoxBefore = player.boundingBox;
-        //            player.boundingBox.setBounds(stats.boundingBoxBefore.minX + 0.4, stats.boundingBoxBefore.minY +
-        // 0.9, stats.boundingBoxBefore.minZ + 0.4, stats.boundingBoxBefore.maxX - 0.4, stats.boundingBoxBefore.maxY -
+        // if (player.boundingBox != null && stats.boundingBoxBefore == null)
+        // {
+        // GCLog.debug("Changed player BB from " + player.boundingBox.minY);
+        // stats.boundingBoxBefore = player.boundingBox;
+        // player.boundingBox.setBounds(stats.boundingBoxBefore.minX + 0.4,
+        // stats.boundingBoxBefore.minY +
+        // 0.9, stats.boundingBoxBefore.minZ + 0.4, stats.boundingBoxBefore.maxX - 0.4,
+        // stats.boundingBoxBefore.maxY -
         // 0.9, stats.boundingBoxBefore.maxZ - 0.4);
-        //            GCLog.debug("Changed player BB to " + player.boundingBox.minY);
-        //        }
-        //        else if (player.boundingBox != null && stats.boundingBoxBefore != null)
-        //        {
-        //            player.boundingBox.setBB(stats.boundingBoxBefore);
-        //            GCLog.debug("Changed player BB to " + player.boundingBox.minY);
-        //        }
+        // GCLog.debug("Changed player BB to " + player.boundingBox.minY);
+        // }
+        // else if (player.boundingBox != null && stats.boundingBoxBefore != null)
+        // {
+        // player.boundingBox.setBB(stats.boundingBoxBefore);
+        // GCLog.debug("Changed player BB to " + player.boundingBox.minY);
+        // }
     }
 
     @Override
     public void onLivingUpdatePost(EntityPlayerSP player) {
-        GCPlayerStatsClient stats = GCPlayerStatsClient.get(player);
+        final GCPlayerStatsClient stats = GCPlayerStatsClient.get(player);
 
         if (player.worldObj.provider instanceof IZeroGDimension) {
             stats.freefallHandler.postVanillaMotion(player);
@@ -110,9 +115,12 @@ public class PlayerClient implements IPlayerClient {
                 // No limb swing
                 player.limbSwing -= player.limbSwingAmount;
                 player.limbSwingAmount = player.prevLimbSwingAmount;
-                float adjust = Math.min(Math.abs(player.limbSwing), Math.abs(player.limbSwingAmount) / 3);
-                if (player.limbSwing < 0) player.limbSwing += adjust;
-                else if (player.limbSwing > 0) player.limbSwing -= adjust;
+                final float adjust = Math.min(Math.abs(player.limbSwing), Math.abs(player.limbSwingAmount) / 3);
+                if (player.limbSwing < 0) {
+                    player.limbSwing += adjust;
+                } else if (player.limbSwing > 0) {
+                    player.limbSwing -= adjust;
+                }
                 player.limbSwingAmount *= 0.9F;
             } else {
                 if (stats.inFreefallLast && this.downMot2 < -0.008D) {
@@ -123,7 +131,7 @@ public class PlayerClient implements IPlayerClient {
                         }
                         stats.landingTicks = GCPlayerStatsClient.MAX_LANDINGTICKS;
                     }
-                    float dYmax = 0.3F * stats.landingTicks / GCPlayerStatsClient.MAX_LANDINGTICKS;
+                    final float dYmax = 0.3F * stats.landingTicks / GCPlayerStatsClient.MAX_LANDINGTICKS;
                     float factor = 1F;
                     for (int i = 0; i <= stats.landingTicks; i++) {
                         stats.landingYOffset[i] = dYmax * MathHelper.sin(i * 3.1415926F / stats.landingTicks) * factor;
@@ -137,14 +145,17 @@ public class PlayerClient implements IPlayerClient {
                 player.limbSwing *= 0.8F;
                 player.limbSwingAmount = 0F;
             }
-        } else stats.inFreefall = false;
+        } else {
+            stats.inFreefall = false;
+        }
 
-        boolean ridingThirdPersonEntity = player.ridingEntity instanceof ICameraZoomEntity
+        final boolean ridingThirdPersonEntity = player.ridingEntity instanceof ICameraZoomEntity
                 && ((ICameraZoomEntity) player.ridingEntity).defaultThirdPerson();
 
         if (ridingThirdPersonEntity && !stats.lastRidingCameraZoomEntity) {
-            if (!ConfigManagerCore.disableVehicleCameraChanges)
+            if (!ConfigManagerCore.disableVehicleCameraChanges) {
                 FMLClientHandler.instance().getClient().gameSettings.thirdPersonView = 1;
+            }
         }
 
         if (player.ridingEntity != null && player.ridingEntity instanceof ICameraZoomEntity) {
@@ -165,7 +176,7 @@ public class PlayerClient implements IPlayerClient {
             player.fallDistance = 0.0F;
         }
 
-        PlayerGearData gearData = ClientProxyCore.playerItemData.get(player.getCommandSenderName());
+        final PlayerGearData gearData = ClientProxyCore.playerItemData.get(player.getCommandSenderName());
 
         stats.usingParachute = false;
 
@@ -177,7 +188,7 @@ public class PlayerClient implements IPlayerClient {
                 } else {
                     player.height = 1.8F;
                 }
-                player.boundingBox.maxY = player.boundingBox.minY + (double) player.height;
+                player.boundingBox.maxY = player.boundingBox.minY + player.height;
             }
         }
 
@@ -206,12 +217,13 @@ public class PlayerClient implements IPlayerClient {
     @Override
     public float getBedOrientationInDegrees(EntityPlayerSP player, float vanillaDegrees) {
         if (player.playerLocation != null) {
-            int x = player.playerLocation.posX;
-            int y = player.playerLocation.posY;
-            int z = player.playerLocation.posZ;
+            final int x = player.playerLocation.posX;
+            final int y = player.playerLocation.posY;
+            final int z = player.playerLocation.posZ;
 
             if (player.worldObj.getTileEntity(x, y, z) instanceof TileEntityAdvanced) {
-                //                int j = player.worldObj.getBlock(x, y, z).getBedDirection(player.worldObj, x, y, z);
+                // int j = player.worldObj.getBlock(x, y, z).getBedDirection(player.worldObj, x,
+                // y, z);
                 switch (player.worldObj.getBlockMetadata(x, y, z) - 4) {
                     case 0:
                         return 90.0F;
@@ -231,8 +243,8 @@ public class PlayerClient implements IPlayerClient {
     }
 
     private void updateFeet(EntityPlayerSP player, double motionX, double motionZ) {
-        GCPlayerStatsClient stats = GCPlayerStatsClient.get(player);
-        double motionSqrd = motionX * motionX + motionZ * motionZ;
+        final GCPlayerStatsClient stats = GCPlayerStatsClient.get(player);
+        final double motionSqrd = motionX * motionX + motionZ * motionZ;
 
         // If the player is on the moon, not airbourne and not riding anything
         if (motionSqrd > 0.001
@@ -240,9 +252,9 @@ public class PlayerClient implements IPlayerClient {
                 && player.worldObj.provider instanceof WorldProviderMoon
                 && player.ridingEntity == null
                 && !player.capabilities.isFlying) {
-            int iPosX = (int) Math.floor(player.posX);
-            int iPosY = (int) Math.floor(player.posY - 2);
-            int iPosZ = (int) Math.floor(player.posZ);
+            final int iPosX = (int) Math.floor(player.posX);
+            final int iPosY = (int) Math.floor(player.posY - 2);
+            final int iPosZ = (int) Math.floor(player.posZ);
 
             // If the block below is the moon block
             if (player.worldObj.getBlock(iPosX, iPosY, iPosZ) == GCBlocks.blockMoon) {
@@ -251,7 +263,8 @@ public class PlayerClient implements IPlayerClient {
                     // If it has been long enough since the last step
                     if (stats.distanceSinceLastStep > 0.35) {
                         Vector3 pos = new Vector3(player);
-                        // Set the footprint position to the block below and add random number to stop z-fighting
+                        // Set the footprint position to the block below and add random number to stop
+                        // z-fighting
                         pos.y = MathHelper.floor_double(player.posY - 1)
                                 + player.getRNG().nextFloat() / 100.0F;
 
@@ -274,7 +287,7 @@ public class PlayerClient implements IPlayerClient {
                         pos = WorldUtil.getFootprintPosition(
                                 player.worldObj, player.rotationYaw - 180, pos, new BlockVec3(player));
 
-                        long chunkKey = ChunkCoordIntPair.chunkXZ2Int(pos.intX() >> 4, pos.intZ() >> 4);
+                        final long chunkKey = ChunkCoordIntPair.chunkXZ2Int(pos.intX() >> 4, pos.intZ() >> 4);
                         ClientProxyCore.footprintRenderer.addFootprint(
                                 chunkKey,
                                 player.worldObj.provider.dimensionId,
@@ -295,15 +308,13 @@ public class PlayerClient implements IPlayerClient {
     }
 
     public boolean wakeUpPlayer(EntityPlayerSP player, boolean par1, boolean par2, boolean par3, boolean bypass) {
-        ChunkCoordinates c = player.playerLocation;
+        final ChunkCoordinates c = player.playerLocation;
 
         if (c != null) {
-            EventWakePlayer event = new EventWakePlayer(player, c.posX, c.posY, c.posZ, par1, par2, par3, bypass);
+            final EventWakePlayer event = new EventWakePlayer(player, c.posX, c.posY, c.posZ, par1, par2, par3, bypass);
             MinecraftForge.EVENT_BUS.post(event);
 
-            if (bypass || event.result == null || event.result == EntityPlayer.EnumStatus.OK) {
-                return false;
-            }
+            return !bypass && event.result != null && event.result != EntityPlayer.EnumStatus.OK;
         }
 
         return true;
@@ -316,14 +327,18 @@ public class PlayerClient implements IPlayerClient {
         // 4,5,6 : Fuel loader, Launchpad, NASA Workbench
         // 7: oil found 8: placed rocket
 
-        GCPlayerStatsClient stats = GCPlayerStatsClient.get(player);
+        final GCPlayerStatsClient stats = GCPlayerStatsClient.get(player);
         int flag = stats.buildFlags;
-        if (flag == -1) flag = 0;
+        if (flag == -1) {
+            flag = 0;
+        }
         int repeatCount = flag >> 9;
         if (repeatCount <= 3) {
             repeatCount++;
         }
-        if ((flag & 1 << i) > 0) return;
+        if ((flag & 1 << i) > 0) {
+            return;
+        }
         flag |= 1 << i;
         stats.buildFlags = (flag & 511) + (repeatCount << 9);
         GalacticraftCore.packetPipeline.sendToServer(
@@ -339,7 +354,8 @@ public class PlayerClient implements IPlayerClient {
                         + "\"color\":\"green\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":" + "{\"text\":\""
                         + GCCoreUtil.translate("gui.message.clicklink") + "\",\"color\":\"yellow\"}},"
                         + "\"clickEvent\":{\"action\":\"open_url\",\"value\":\"" + "http://wiki."
-                        + GalacticraftCore.PREFIX + "com/wiki/1" + "\"}}]"));
+                        + GalacticraftCore.PREFIX
+                        + "com/wiki/1" + "\"}}]"));
                 player.addChatMessage(new ChatComponentText(
                         GCCoreUtil.translate("gui.message.help1a") + EnumColor.AQUA + " /gchelp"));
                 break;
@@ -352,7 +368,8 @@ public class PlayerClient implements IPlayerClient {
                         + "\"color\":\"green\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":" + "{\"text\":\""
                         + GCCoreUtil.translate("gui.message.clicklink") + "\",\"color\":\"yellow\"}},"
                         + "\"clickEvent\":{\"action\":\"open_url\",\"value\":\"" + "http://wiki."
-                        + GalacticraftCore.PREFIX + "com/wiki/2" + "\"}}]"));
+                        + GalacticraftCore.PREFIX
+                        + "com/wiki/2" + "\"}}]"));
                 break;
             case 7:
                 player.addChatMessage(IChatComponent.Serializer.func_150699_a("[{\"text\":\""
@@ -361,7 +378,8 @@ public class PlayerClient implements IPlayerClient {
                         + "\"color\":\"green\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":" + "{\"text\":\""
                         + GCCoreUtil.translate("gui.message.clicklink") + "\",\"color\":\"yellow\"}},"
                         + "\"clickEvent\":{\"action\":\"open_url\",\"value\":\"" + "http://wiki."
-                        + GalacticraftCore.PREFIX + "com/wiki/oil" + "\"}}]"));
+                        + GalacticraftCore.PREFIX
+                        + "com/wiki/oil" + "\"}}]"));
                 break;
             case 8:
                 player.addChatMessage(IChatComponent.Serializer.func_150699_a("[{\"text\":\""
@@ -370,7 +388,8 @@ public class PlayerClient implements IPlayerClient {
                         + "\"color\":\"green\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":" + "{\"text\":\""
                         + GCCoreUtil.translate("gui.message.clicklink") + "\",\"color\":\"yellow\"}},"
                         + "\"clickEvent\":{\"action\":\"open_url\",\"value\":\"" + "http://wiki."
-                        + GalacticraftCore.PREFIX + "com/wiki/pre" + "\"}}]"));
+                        + GalacticraftCore.PREFIX
+                        + "com/wiki/pre" + "\"}}]"));
                 break;
         }
     }

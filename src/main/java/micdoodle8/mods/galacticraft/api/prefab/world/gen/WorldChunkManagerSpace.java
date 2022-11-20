@@ -13,7 +13,8 @@ import net.minecraft.world.gen.layer.IntCache;
 /**
  * Do not include this prefab class in your released mod download.
  * <p/>
- * This chunk manager is used for single-biome dimensions, which is common on basic planets.
+ * This chunk manager is used for single-biome dimensions, which is common on
+ * basic planets.
  */
 public abstract class WorldChunkManagerSpace extends WorldChunkManager {
     private final BiomeCache biomeCache;
@@ -21,7 +22,7 @@ public abstract class WorldChunkManagerSpace extends WorldChunkManager {
 
     public WorldChunkManagerSpace() {
         this.biomeCache = new BiomeCache(this);
-        this.biomesToSpawnIn = new ArrayList<BiomeGenBase>();
+        this.biomesToSpawnIn = new ArrayList<>();
         this.biomesToSpawnIn.add(this.getBiome());
     }
 

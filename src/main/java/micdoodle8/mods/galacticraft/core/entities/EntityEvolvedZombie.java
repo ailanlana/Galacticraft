@@ -5,7 +5,16 @@ import micdoodle8.mods.galacticraft.core.items.GCItems;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAIBreakDoor;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIMoveThroughVillage;
+import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityVillager;
@@ -19,8 +28,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 public class EntityEvolvedZombie extends EntityZombie implements IEntityBreathable {
-    private int conversionTime = 0;
-
     public EntityEvolvedZombie(World par1World) {
         super(par1World);
         this.tasks.taskEntries.clear();
@@ -63,14 +70,16 @@ public class EntityEvolvedZombie extends EntityZombie implements IEntityBreathab
     @Override
     protected void jump() {
         this.motionY = 0.48D / WorldUtil.getGravityFactor(this);
-        if (this.motionY < 0.24D) this.motionY = 0.24D;
+        if (this.motionY < 0.24D) {
+            this.motionY = 0.24D;
+        }
 
         if (this.isPotionActive(Potion.jump)) {
             this.motionY += (this.getActivePotionEffect(Potion.jump).getAmplifier() + 1) * 0.1F;
         }
 
         if (this.isSprinting()) {
-            float f = this.rotationYaw * 0.017453292F;
+            final float f = this.rotationYaw * 0.017453292F;
             this.motionX -= MathHelper.sin(f) * 0.2F;
             this.motionZ += MathHelper.cos(f) * 0.2F;
         }
@@ -115,14 +124,17 @@ public class EntityEvolvedZombie extends EntityZombie implements IEntityBreathab
             case 13:
             case 14:
             case 15:
-                if (ConfigManagerCore.challengeMobDropsAndSpawning) this.dropItem(Items.melon_seeds, 1);
+                if (ConfigManagerCore.challengeMobDropsAndSpawning) {
+                    this.dropItem(Items.melon_seeds, 1);
+                }
                 break;
         }
     }
 
+    @Override
     protected void dropFewItems(boolean p_70628_1_, int p_70628_2_) {
         super.dropFewItems(p_70628_1_, p_70628_2_);
-        Item item = this.getDropItem();
+        final Item item = this.getDropItem();
 
         // Less rotten flesh than vanilla
         int j = this.rand.nextInt(2);
@@ -137,8 +149,10 @@ public class EntityEvolvedZombie extends EntityZombie implements IEntityBreathab
             }
         }
 
-        // Drop copper ingot as semi-rare drop if player hit and if dropping rotten flesh (50% chance)
-        if (p_70628_1_ && (ConfigManagerCore.challengeMobDropsAndSpawning) && j > 0 && this.rand.nextInt(6) == 0)
+        // Drop copper ingot as semi-rare drop if player hit and if dropping rotten
+        // flesh (50% chance)
+        if (p_70628_1_ && ConfigManagerCore.challengeMobDropsAndSpawning && j > 0 && this.rand.nextInt(6) == 0) {
             this.entityDropItem(new ItemStack(GCItems.basicItem, 1, 3), 0.0F);
+        }
     }
 }

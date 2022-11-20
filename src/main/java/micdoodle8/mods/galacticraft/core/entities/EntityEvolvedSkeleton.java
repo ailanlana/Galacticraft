@@ -9,8 +9,15 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.EntityAIArrowAttack;
+import net.minecraft.entity.ai.EntityAIFleeSun;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAIRestrictSun;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -49,15 +56,16 @@ public class EntityEvolvedSkeleton extends EntitySkeleton implements IEntityBrea
         return true;
     }
 
+    @Override
     public void attackEntityWithRangedAttack(EntityLivingBase par1EntityLivingBase, float par2) {
-        EntityArrow entityarrow = new EntityArrow(
+        final EntityArrow entityarrow = new EntityArrow(
                 this.worldObj,
                 this,
                 par1EntityLivingBase,
                 0.4F,
                 17 - this.worldObj.difficultySetting.getDifficultyId() * 4);
-        int i = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, this.getHeldItem());
-        int j = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, this.getHeldItem());
+        final int i = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, this.getHeldItem());
+        final int j = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, this.getHeldItem());
         entityarrow.setDamage(par2 * 2.0F
                 + this.rand.nextGaussian() * 0.25D
                 + this.worldObj.difficultySetting.getDifficultyId() * 0.11F);
@@ -82,14 +90,16 @@ public class EntityEvolvedSkeleton extends EntitySkeleton implements IEntityBrea
     @Override
     protected void jump() {
         this.motionY = 0.45D / WorldUtil.getGravityFactor(this);
-        if (this.motionY < 0.24D) this.motionY = 0.24D;
+        if (this.motionY < 0.24D) {
+            this.motionY = 0.24D;
+        }
 
         if (this.isPotionActive(Potion.jump)) {
             this.motionY += (this.getActivePotionEffect(Potion.jump).getAmplifier() + 1) * 0.1F;
         }
 
         if (this.isSprinting()) {
-            float f = this.rotationYaw * 0.017453292F;
+            final float f = this.rotationYaw * 0.017453292F;
             this.motionX -= MathHelper.sin(f) * 0.2F;
             this.motionZ += MathHelper.cos(f) * 0.2F;
         }
@@ -105,7 +115,7 @@ public class EntityEvolvedSkeleton extends EntitySkeleton implements IEntityBrea
             return;
         }
 
-        int r = this.rand.nextInt(12);
+        final int r = this.rand.nextInt(12);
         switch (r) {
             case 0:
             case 1:
@@ -124,13 +134,16 @@ public class EntityEvolvedSkeleton extends EntitySkeleton implements IEntityBrea
                 this.dropItem(GCItems.canister, 1);
                 break;
             default:
-                if (ConfigManagerCore.challengeMobDropsAndSpawning) this.dropItem(Items.pumpkin_seeds, 1);
+                if (ConfigManagerCore.challengeMobDropsAndSpawning) {
+                    this.dropItem(Items.pumpkin_seeds, 1);
+                }
                 break;
         }
     }
 
+    @Override
     protected void dropFewItems(boolean p_70628_1_, int p_70628_2_) {
-        Item item = this.getDropItem();
+        final Item item = this.getDropItem();
 
         int j = this.rand.nextInt(3);
 
@@ -145,10 +158,13 @@ public class EntityEvolvedSkeleton extends EntitySkeleton implements IEntityBrea
         }
 
         j = this.rand.nextInt(3 + p_70628_2_);
-        if (j > 1) this.dropItem(Items.bone, 1);
+        if (j > 1) {
+            this.dropItem(Items.bone, 1);
+        }
 
         // Drop lapis as semi-rare drop if player hit and if dropping bones
-        if (p_70628_1_ && (ConfigManagerCore.challengeMobDropsAndSpawning) && j > 1 && this.rand.nextInt(12) == 0)
+        if (p_70628_1_ && ConfigManagerCore.challengeMobDropsAndSpawning && j > 1 && this.rand.nextInt(12) == 0) {
             this.entityDropItem(new ItemStack(Items.dye, 1, 4), 0.0F);
+        }
     }
 }

@@ -46,8 +46,11 @@ public class BlockUnlitTorch extends Block implements IOxygenReliantBlock {
     }
 
     public Block changeState() {
-        if (this.lit) return this.litVersion;
-        else return this.unlitVersion;
+        if (this.lit) {
+            return this.litVersion;
+        } else {
+            return this.unlitVersion;
+        }
     }
 
     private static boolean isBlockSolidOnSide(
@@ -159,8 +162,8 @@ public class BlockUnlitTorch extends Block implements IOxygenReliantBlock {
 
     /**
      * Lets the block know when one of its neighbor changes. Doesn't know which
-     * neighbor changed (coordinates passed are their own) Args: x, y, z,
-     * neighbor blockID
+     * neighbor changed (coordinates passed are their own) Args: x, y, z, neighbor
+     * blockID
      */
     @Override
     public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, Block par5) {
@@ -260,10 +263,11 @@ public class BlockUnlitTorch extends Block implements IOxygenReliantBlock {
     @Override
     @SideOnly(Side.CLIENT)
     /**
-     * A randomly called display update to be able to add particles or other items for display
+     * A randomly called display update to be able to add particles or other items
+     * for display
      */
     public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random) {
-        boolean doSmoke = par5Random.nextInt(5) == 0;
+        final boolean doSmoke = par5Random.nextInt(5) == 0;
         if (this.lit || doSmoke) {
             final int var6 = par1World.getBlockMetadata(par2, par3, par4);
             final double var7 = par2 + 0.5F;
@@ -273,20 +277,40 @@ public class BlockUnlitTorch extends Block implements IOxygenReliantBlock {
             final double var15 = 0.27000001072883606D;
 
             if (var6 == 1) {
-                if (doSmoke) par1World.spawnParticle("smoke", var7 - var15, var9 + var13, var11, 0.0D, 0.0D, 0.0D);
-                if (this.lit) par1World.spawnParticle("flame", var7 - var15, var9 + var13, var11, 0.0D, 0.0D, 0.0D);
+                if (doSmoke) {
+                    par1World.spawnParticle("smoke", var7 - var15, var9 + var13, var11, 0.0D, 0.0D, 0.0D);
+                }
+                if (this.lit) {
+                    par1World.spawnParticle("flame", var7 - var15, var9 + var13, var11, 0.0D, 0.0D, 0.0D);
+                }
             } else if (var6 == 2) {
-                if (doSmoke) par1World.spawnParticle("smoke", var7 + var15, var9 + var13, var11, 0.0D, 0.0D, 0.0D);
-                if (this.lit) par1World.spawnParticle("flame", var7 + var15, var9 + var13, var11, 0.0D, 0.0D, 0.0D);
+                if (doSmoke) {
+                    par1World.spawnParticle("smoke", var7 + var15, var9 + var13, var11, 0.0D, 0.0D, 0.0D);
+                }
+                if (this.lit) {
+                    par1World.spawnParticle("flame", var7 + var15, var9 + var13, var11, 0.0D, 0.0D, 0.0D);
+                }
             } else if (var6 == 3) {
-                if (doSmoke) par1World.spawnParticle("smoke", var7, var9 + var13, var11 - var15, 0.0D, 0.0D, 0.0D);
-                if (this.lit) par1World.spawnParticle("flame", var7, var9 + var13, var11 - var15, 0.0D, 0.0D, 0.0D);
+                if (doSmoke) {
+                    par1World.spawnParticle("smoke", var7, var9 + var13, var11 - var15, 0.0D, 0.0D, 0.0D);
+                }
+                if (this.lit) {
+                    par1World.spawnParticle("flame", var7, var9 + var13, var11 - var15, 0.0D, 0.0D, 0.0D);
+                }
             } else if (var6 == 4) {
-                if (doSmoke) par1World.spawnParticle("smoke", var7, var9 + var13, var11 + var15, 0.0D, 0.0D, 0.0D);
-                if (this.lit) par1World.spawnParticle("flame", var7, var9 + var13, var11 + var15, 0.0D, 0.0D, 0.0D);
+                if (doSmoke) {
+                    par1World.spawnParticle("smoke", var7, var9 + var13, var11 + var15, 0.0D, 0.0D, 0.0D);
+                }
+                if (this.lit) {
+                    par1World.spawnParticle("flame", var7, var9 + var13, var11 + var15, 0.0D, 0.0D, 0.0D);
+                }
             } else {
-                if (doSmoke) par1World.spawnParticle("smoke", var7, var9, var11, 0.0D, 0.0D, 0.0D);
-                if (this.lit) par1World.spawnParticle("flame", var7, var9, var11, 0.0D, 0.0D, 0.0D);
+                if (doSmoke) {
+                    par1World.spawnParticle("smoke", var7, var9, var11, 0.0D, 0.0D, 0.0D);
+                }
+                if (this.lit) {
+                    par1World.spawnParticle("flame", var7, var9, var11, 0.0D, 0.0D, 0.0D);
+                }
             }
         }
     }
@@ -307,7 +331,7 @@ public class BlockUnlitTorch extends Block implements IOxygenReliantBlock {
 
     @Override
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-        ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+        final ArrayList<ItemStack> ret = new ArrayList<>();
         ret.add(new ItemStack(this.litVersion));
         return ret;
     }

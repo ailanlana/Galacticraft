@@ -27,7 +27,7 @@ public class BlockScreen extends BlockAdvanced implements ItemBlockDesc.IBlockSh
     private IIcon iconFront;
     private IIcon iconSide;
 
-    // Metadata: 0-5 = direction of screen back;  bit 3 = reserved for future use
+    // Metadata: 0-5 = direction of screen back; bit 3 = reserved for future use
     protected BlockScreen(String assetName) {
         super(Material.circuits);
         this.setHardness(0.1F);
@@ -74,9 +74,7 @@ public class BlockScreen extends BlockAdvanced implements ItemBlockDesc.IBlockSh
 
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack) {
-        int metadata = 0;
-
-        int angle = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+        final int angle = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
         int change = 0;
 
         switch (angle) {
@@ -123,10 +121,10 @@ public class BlockScreen extends BlockAdvanced implements ItemBlockDesc.IBlockSh
             case 5:
                 change = 0;
         }
-        change += (8 & metadata);
+        change += 8 & metadata;
         world.setBlockMetadataWithNotify(x, y, z, change, 2);
 
-        TileEntity tile = world.getTileEntity(x, y, z);
+        final TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileEntityScreen) {
             ((TileEntityScreen) tile).breakScreen(facing);
         }
@@ -146,16 +144,8 @@ public class BlockScreen extends BlockAdvanced implements ItemBlockDesc.IBlockSh
 
     @Override
     public boolean onMachineActivated(
-            World world,
-            int x,
-            int y,
-            int z,
-            EntityPlayer player,
-            int p_149727_6_,
-            float p_149727_7_,
-            float p_149727_8_,
-            float p_149727_9_) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+            World world, int x, int y, int z, EntityPlayer player, int side, float subX, float subY, float subZ) {
+        final TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileEntityScreen) {
             ((TileEntityScreen) tile).changeChannel();
             return true;
@@ -165,7 +155,7 @@ public class BlockScreen extends BlockAdvanced implements ItemBlockDesc.IBlockSh
 
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbour) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+        final TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileEntityScreen) {
             ((TileEntityScreen) tile).refreshConnections(true);
         }
@@ -189,8 +179,8 @@ public class BlockScreen extends BlockAdvanced implements ItemBlockDesc.IBlockSh
     @Override
     public MovingObjectPosition collisionRayTrace(World par1World, int x, int y, int z, Vec3 par5Vec3, Vec3 par6Vec3) {
         final int metadata = par1World.getBlockMetadata(x, y, z) & 7;
-        float boundsFront = 0.094F;
-        float boundsBack = 1.0F - boundsFront;
+        final float boundsFront = 0.094F;
+        final float boundsBack = 1.0F - boundsFront;
 
         switch (metadata) {
             case 0:

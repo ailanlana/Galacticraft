@@ -45,7 +45,7 @@ public class EntityEvolvedSpider extends EntitySpider implements IEntityBreathab
     @Override
     public IEntityLivingData onSpawnWithEgg(IEntityLivingData livingData) {
         if (this.worldObj.rand.nextInt(100) == 0) {
-            EntityEvolvedSkeleton skeleton = new EntityEvolvedSkeleton(this.worldObj);
+            final EntityEvolvedSkeleton skeleton = new EntityEvolvedSkeleton(this.worldObj);
             skeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
             skeleton.onSpawnWithEgg(null);
             this.worldObj.spawnEntityInWorld(skeleton);
@@ -63,7 +63,7 @@ public class EntityEvolvedSpider extends EntitySpider implements IEntityBreathab
         }
 
         if (livingData instanceof EntityEvolvedSpider.GroupData) {
-            int i = ((EntityEvolvedSpider.GroupData) livingData).field_111105_a;
+            final int i = ((EntityEvolvedSpider.GroupData) livingData).field_111105_a;
 
             if (i > 0 && Potion.potionTypes[i] != null) {
                 this.addPotionEffect(new PotionEffect(i, Integer.MAX_VALUE));
@@ -76,14 +76,16 @@ public class EntityEvolvedSpider extends EntitySpider implements IEntityBreathab
     @Override
     protected void jump() {
         this.motionY = 0.52D / WorldUtil.getGravityFactor(this);
-        if (this.motionY < 0.26D) this.motionY = 0.26D;
+        if (this.motionY < 0.26D) {
+            this.motionY = 0.26D;
+        }
 
         if (this.isPotionActive(Potion.jump)) {
             this.motionY += (this.getActivePotionEffect(Potion.jump).getAmplifier() + 1) * 0.1F;
         }
 
         if (this.isSprinting()) {
-            float f = this.rotationYaw * 0.017453292F;
+            final float f = this.rotationYaw * 0.017453292F;
             this.motionX -= MathHelper.sin(f) * 0.2F;
             this.motionZ += MathHelper.cos(f) * 0.2F;
         }
@@ -117,7 +119,9 @@ public class EntityEvolvedSpider extends EntitySpider implements IEntityBreathab
                 this.dropItem(GCItems.oxygenConcentrator, 1);
                 break;
             default:
-                if (ConfigManagerCore.challengeMobDropsAndSpawning) this.dropItem(Items.nether_wart, 1);
+                if (ConfigManagerCore.challengeMobDropsAndSpawning) {
+                    this.dropItem(Items.nether_wart, 1);
+                }
                 break;
         }
     }

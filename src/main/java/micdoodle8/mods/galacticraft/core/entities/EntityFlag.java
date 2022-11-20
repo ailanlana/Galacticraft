@@ -41,7 +41,7 @@ public class EntityFlag extends Entity {
 
     @Override
     public boolean attackEntityFrom(DamageSource par1DamageSource, float par2) {
-        boolean flag = par1DamageSource.getEntity() instanceof EntityPlayer
+        final boolean flag = par1DamageSource.getEntity() instanceof EntityPlayer
                 && ((EntityPlayer) par1DamageSource.getEntity()).capabilities.isCreativeMode;
 
         if (!this.worldObj.isRemote && !this.isDead && !this.indestructable) {
@@ -123,7 +123,7 @@ public class EntityFlag extends Entity {
 
     @Override
     protected void entityInit() {
-        this.dataWatcher.addObject(17, new String(""));
+        this.dataWatcher.addObject(17, "");
         this.dataWatcher.addObject(18, new Float(0.0F));
         this.dataWatcher.addObject(19, new Integer(-1));
         this.dataWatcher.addObject(20, new Integer(-1));
@@ -144,7 +144,7 @@ public class EntityFlag extends Entity {
     @Override
     protected void writeEntityToNBT(NBTTagCompound par1NBTTagCompound) {
         par1NBTTagCompound.setString("Owner", String.valueOf(this.getOwner()));
-        par1NBTTagCompound.setInteger("Type", Integer.valueOf(this.getType()));
+        par1NBTTagCompound.setInteger("Type", this.getType());
         par1NBTTagCompound.setBoolean("Indestructable", this.indestructable);
         par1NBTTagCompound.setInteger("AngleI", this.getFacingAngle());
         par1NBTTagCompound.setDouble("TileX", this.xPosition);

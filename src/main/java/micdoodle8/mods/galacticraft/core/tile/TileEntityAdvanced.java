@@ -22,7 +22,7 @@ public abstract class TileEntityAdvanced extends TileEntity implements IPacketRe
     public int ticks = 0;
     private LinkedHashSet<Field> fieldCacheClient;
     private LinkedHashSet<Field> fieldCacheServer;
-    private Map<Field, Object> lastSentData = new HashMap<Field, Object>();
+    private final Map<Field, Object> lastSentData = new HashMap<>();
     private boolean networkDataChanged = false;
 
     @Override
@@ -36,7 +36,8 @@ public abstract class TileEntityAdvanced extends TileEntity implements IPacketRe
                 }
 
                 if (this.worldObj != null && this.worldObj.isRemote && this.fieldCacheClient.size() > 0) {
-                    // Request any networked information from server on first client update (maybe client just logged
+                    // Request any networked information from server on first client update (maybe
+                    // client just logged
                     // on, but server networkdata didn't change recently)
                     GalacticraftCore.packetPipeline.sendToServer(new PacketDynamic(this));
                 }
@@ -47,13 +48,13 @@ public abstract class TileEntityAdvanced extends TileEntity implements IPacketRe
 
         if (this.isNetworkedTile() && this.ticks % this.getPacketCooldown() == 0) {
             if (this.worldObj.isRemote && this.fieldCacheServer.size() > 0) {
-                PacketDynamic packet = new PacketDynamic(this);
-                if (networkDataChanged) {
+                final PacketDynamic packet = new PacketDynamic(this);
+                if (this.networkDataChanged) {
                     GalacticraftCore.packetPipeline.sendToServer(packet);
                 }
             } else if (!this.worldObj.isRemote && this.fieldCacheClient.size() > 0) {
-                PacketDynamic packet = new PacketDynamic(this);
-                if (networkDataChanged) {
+                final PacketDynamic packet = new PacketDynamic(this);
+                if (this.networkDataChanged) {
                     GalacticraftCore.packetPipeline.sendToAllAround(
                             packet,
                             new TargetPoint(
@@ -69,12 +70,12 @@ public abstract class TileEntityAdvanced extends TileEntity implements IPacketRe
 
     private void initFieldCache() {
         try {
-            this.fieldCacheClient = new LinkedHashSet<Field>();
-            this.fieldCacheServer = new LinkedHashSet<Field>();
+            this.fieldCacheClient = new LinkedHashSet<>();
+            this.fieldCacheServer = new LinkedHashSet<>();
 
-            for (Field field : this.getClass().getFields()) {
+            for (final Field field : this.getClass().getFields()) {
                 if (field.isAnnotationPresent(NetworkedField.class)) {
-                    NetworkedField f = field.getAnnotation(NetworkedField.class);
+                    final NetworkedField f = field.getAnnotation(NetworkedField.class);
 
                     if (f.targetSide() == Side.CLIENT) {
                         this.fieldCacheClient.add(field);
@@ -83,7 +84,7 @@ public abstract class TileEntityAdvanced extends TileEntity implements IPacketRe
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
@@ -115,11 +116,11 @@ public abstract class TileEntityAdvanced extends TileEntity implements IPacketRe
             fieldList = this.fieldCacheClient;
         }
 
-        for (Field f : fieldList) {
+        for (final Field f : fieldList) {
             boolean fieldChanged = false;
             try {
-                Object data = f.get(this);
-                Object lastData = lastSentData.get(f);
+                final Object data = f.get(this);
+                final Object lastData = this.lastSentData.get(f);
 
                 if (!NetworkUtil.fuzzyEquals(lastData, data)) {
                     fieldChanged = true;
@@ -128,9 +129,9 @@ public abstract class TileEntityAdvanced extends TileEntity implements IPacketRe
                 sendData.add(data);
 
                 if (fieldChanged) {
-                    lastSentData.put(f, NetworkUtil.cloneNetworkedObject(data));
+                    this.lastSentData.put(f, NetworkUtil.cloneNetworkedObject(data));
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
 
@@ -140,7 +141,7 @@ public abstract class TileEntityAdvanced extends TileEntity implements IPacketRe
         if (changed) {
             this.addExtraNetworkedData(sendData);
         } else {
-            ArrayList<Object> prevSendData = new ArrayList<Object>(sendData);
+            final ArrayList<Object> prevSendData = new ArrayList<>(sendData);
 
             this.addExtraNetworkedData(sendData);
 
@@ -149,7 +150,7 @@ public abstract class TileEntityAdvanced extends TileEntity implements IPacketRe
             }
         }
 
-        networkDataChanged = changed;
+        this.networkDataChanged = changed;
     }
 
     @Override
@@ -158,9 +159,8 @@ public abstract class TileEntityAdvanced extends TileEntity implements IPacketRe
             this.initFieldCache();
         }
 
-        if (this.worldObj.isRemote && this.fieldCacheClient.size() == 0) {
-            return;
-        } else if (!this.worldObj.isRemote && this.fieldCacheServer.size() == 0) {
+        if (this.worldObj.isRemote && this.fieldCacheClient.size() == 0
+                || !this.worldObj.isRemote && this.fieldCacheServer.size() == 0) {
             return;
         }
 
@@ -172,11 +172,11 @@ public abstract class TileEntityAdvanced extends TileEntity implements IPacketRe
             fieldSet = this.fieldCacheServer;
         }
 
-        for (Field field : fieldSet) {
+        for (final Field field : fieldSet) {
             try {
-                Object obj = NetworkUtil.getFieldValueFromStream(field, buffer, this.worldObj);
+                final Object obj = NetworkUtil.getFieldValueFromStream(field, buffer, this.worldObj);
                 field.set(this, obj);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }

@@ -73,7 +73,7 @@ public class ItemTier2Rocket extends Item implements IHoldableItem {
             for (int i = -1; i < 2; i++) {
                 for (int j = -1; j < 2; j++) {
                     final Block id = par3World.getBlock(par4 + i, par5, par6 + j);
-                    int meta = par3World.getBlockMetadata(par4 + i, par5, par6 + j);
+                    final int meta = par3World.getBlockMetadata(par4 + i, par5, par6 + j);
 
                     if (id == GCBlocks.landingPadFull && meta == 0) {
                         padFound = true;
@@ -87,13 +87,17 @@ public class ItemTier2Rocket extends Item implements IHoldableItem {
                     }
                 }
 
-                if (padFound) break;
+                if (padFound) {
+                    break;
+                }
             }
 
             if (padFound) {
                 // Check whether there is already a rocket on the pad
                 if (tile instanceof TileEntityLandingPad) {
-                    if (((TileEntityLandingPad) tile).getDockedEntity() != null) return false;
+                    if (((TileEntityLandingPad) tile).getDockedEntity() != null) {
+                        return false;
+                    }
                 } else {
                     return false;
                 }
@@ -138,11 +142,9 @@ public class ItemTier2Rocket extends Item implements IHoldableItem {
 
                 if (((IRocketType) rocket).getType().getPreFueled()) {
                     if (rocket instanceof EntityTieredRocket) {
-                        ((EntityTieredRocket) rocket)
-                                .fuelTank.fill(new FluidStack(GalacticraftCore.fluidFuel, rocket.getMaxFuel()), true);
+                        rocket.fuelTank.fill(new FluidStack(GalacticraftCore.fluidFuel, rocket.getMaxFuel()), true);
                     } else {
-                        ((EntityCargoRocket) rocket)
-                                .fuelTank.fill(new FluidStack(GalacticraftCore.fluidFuel, rocket.getMaxFuel()), true);
+                        rocket.fuelTank.fill(new FluidStack(GalacticraftCore.fluidFuel, rocket.getMaxFuel()), true);
                     }
                 }
             } else {

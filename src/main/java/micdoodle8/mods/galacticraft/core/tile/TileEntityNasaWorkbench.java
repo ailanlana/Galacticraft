@@ -30,10 +30,12 @@ public class TileEntityNasaWorkbench extends TileEntityMulti implements IMultiBl
     public void onCreate(BlockVec3 placedPosition) {
         this.mainBlockPosition = placedPosition;
         this.markDirty();
-        int buildHeight = this.worldObj.getHeight() - 1;
+        final int buildHeight = this.worldObj.getHeight() - 1;
 
         for (int y = 1; y < 3; y++) {
-            if (placedPosition.y + y > buildHeight) return;
+            if (placedPosition.y + y > buildHeight) {
+                return;
+            }
 
             for (int x = -1; x < 2; x++) {
                 for (int z = -1; z < 2; z++) {
@@ -49,7 +51,9 @@ public class TileEntityNasaWorkbench extends TileEntityMulti implements IMultiBl
             }
         }
 
-        if (placedPosition.y + 3 > buildHeight) return;
+        if (placedPosition.y + 3 > buildHeight) {
+            return;
+        }
         final BlockVec3 vecToAdd = new BlockVec3(placedPosition.x, placedPosition.y + 3, placedPosition.z);
         ((BlockMulti) GCBlocks.fakeBlock).makeFakeBlock(this.worldObj, vecToAdd, placedPosition, 3);
     }
@@ -104,6 +108,7 @@ public class TileEntityNasaWorkbench extends TileEntityMulti implements IMultiBl
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
-        return AxisAlignedBB.getBoundingBox(xCoord - 1, yCoord, zCoord - 1, xCoord + 2, yCoord + 4, zCoord + 2);
+        return AxisAlignedBB.getBoundingBox(
+                this.xCoord - 1, this.yCoord, this.zCoord - 1, this.xCoord + 2, this.yCoord + 4, this.zCoord + 2);
     }
 }

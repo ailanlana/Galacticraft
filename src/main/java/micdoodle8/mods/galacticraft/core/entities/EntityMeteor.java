@@ -11,7 +11,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.StatCollector;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
@@ -132,8 +137,10 @@ public class EntityMeteor extends Entity {
     protected void onImpact(MovingObjectPosition movingObjPos) {
         if (!this.worldObj.isRemote) {
             if (movingObjPos != null) {
-                Block b = this.worldObj.getBlock(movingObjPos.blockX, movingObjPos.blockY + 1, movingObjPos.blockZ);
-                if (b != null && b.isAir(worldObj, movingObjPos.blockX, movingObjPos.blockY + 1, movingObjPos.blockZ)) {
+                final Block b =
+                        this.worldObj.getBlock(movingObjPos.blockX, movingObjPos.blockY + 1, movingObjPos.blockZ);
+                if (b != null
+                        && b.isAir(this.worldObj, movingObjPos.blockX, movingObjPos.blockY + 1, movingObjPos.blockZ)) {
                     this.worldObj.setBlock(
                             movingObjPos.blockX,
                             movingObjPos.blockY + 1,
@@ -158,13 +165,7 @@ public class EntityMeteor extends Entity {
 
     @Override
     public boolean func_145774_a(
-            Explosion p_145774_1_,
-            World p_145774_2_,
-            int p_145774_3_,
-            int p_145774_4_,
-            int p_145774_5_,
-            Block p_145774_6_,
-            float p_145774_7_) {
+            Explosion explosionIn, World worldIn, int x, int y, int z, Block blockIn, float unused) {
         return ConfigManagerCore.meteorBlockDamageEnabled;
     }
 

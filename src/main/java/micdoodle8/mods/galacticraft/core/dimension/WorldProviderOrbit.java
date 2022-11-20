@@ -30,65 +30,67 @@ public class WorldProviderOrbit extends WorldProviderSpaceStation
         super.setDimension(var1);
     }
 
-    //	@Override
-    //	public IChunkProvider createChunkGenerator()
-    //	{
-    //		return new ChunkProviderOrbit(this.worldObj, this.worldObj.getSeed(),
+    // @Override
+    // public IChunkProvider createChunkGenerator()
+    // {
+    // return new ChunkProviderOrbit(this.worldObj, this.worldObj.getSeed(),
     // this.worldObj.getWorldInfo().isMapFeaturesEnabled());
-    //	}
+    // }
 
-    //	@Override
-    //	protected void generateLightBrightnessTable()
-    //	{
-    //		final float var1 = 0.0F;
+    // @Override
+    // protected void generateLightBrightnessTable()
+    // {
+    // final float var1 = 0.0F;
     //
-    //		for (int var2 = 0; var2 <= 15; ++var2)
-    //		{
-    //			final float var3 = 1.0F - var2 / 15.0F;
-    //			this.lightBrightnessTable[var2] = (1.0F - var3) / (var3 * 3.0F + 1.0F) * (1.0F - var1) + var1;
-    //		}
-    //	}
+    // for (int var2 = 0; var2 <= 15; ++var2)
+    // {
+    // final float var3 = 1.0F - var2 / 15.0F;
+    // this.lightBrightnessTable[var2] = (1.0F - var3) / (var3 * 3.0F + 1.0F) *
+    // (1.0F - var1) + var1;
+    // }
+    // }
 
-    //	@Override
-    //	public float[] calcSunriseSunsetColors(float var1, float var2)
-    //	{
-    //		return null;
-    //	}
+    // @Override
+    // public float[] calcSunriseSunsetColors(float var1, float var2)
+    // {
+    // return null;
+    // }
 
-    //	@SideOnly(Side.CLIENT)
-    //	@Override
-    //	public Vec3 getFogColor(float var1, float var2)
-    //	{
-    //		return Vec3.createVectorHelper((double) 0F / 255F, (double) 0F / 255F, (double) 0F / 255F);
-    //	}
+    // @SideOnly(Side.CLIENT)
+    // @Override
+    // public Vec3 getFogColor(float var1, float var2)
+    // {
+    // return Vec3.createVectorHelper((double) 0F / 255F, (double) 0F / 255F,
+    // (double) 0F / 255F);
+    // }
 
-    //	@Override
-    //	public Vec3 getSkyColor(Entity cameraEntity, float partialTicks)
-    //	{
-    //		return Vec3.createVectorHelper(0, 0, 0);
-    //	}
+    // @Override
+    // public Vec3 getSkyColor(Entity cameraEntity, float partialTicks)
+    // {
+    // return Vec3.createVectorHelper(0, 0, 0);
+    // }
 
-    //	@Override
-    //	public float calculateCelestialAngle(long par1, float par3)
-    //	{
-    //		final int var4 = (int) (par1 % 24000L);
-    //		float var5 = (var4 + par3) / 24000.0F - 0.25F;
+    // @Override
+    // public float calculateCelestialAngle(long par1, float par3)
+    // {
+    // final int var4 = (int) (par1 % 24000L);
+    // float var5 = (var4 + par3) / 24000.0F - 0.25F;
     //
-    //		if (var5 < 0.0F)
-    //		{
-    //			++var5;
-    //		}
+    // if (var5 < 0.0F)
+    // {
+    // ++var5;
+    // }
     //
-    //		if (var5 > 1.0F)
-    //		{
-    //			--var5;
-    //		}
+    // if (var5 > 1.0F)
+    // {
+    // --var5;
+    // }
     //
-    //		final float var6 = var5;
-    //		var5 = 1.0F - (float) ((Math.cos(var5 * Math.PI) + 1.0D) / 2.0D);
-    //		var5 = var6 + (var5 - var6) / 3.0F;
-    //		return var5;
-    //	}
+    // final float var6 = var5;
+    // var5 = 1.0F - (float) ((Math.cos(var5 * Math.PI) + 1.0D) / 2.0D);
+    // var5 = var6 + (var5 - var6) / 3.0F;
+    // return var5;
+    // }
 
     @Override
     public CelestialBody getCelestialBody() {
@@ -135,6 +137,7 @@ public class WorldProviderOrbit extends WorldProviderSpaceStation
         return WorldChunkManagerOrbit.class;
     }
 
+    @Override
     public boolean isDaytime() {
         final float a = this.worldObj.getCelestialAngle(0F);
         // TODO: adjust this according to size of planet below
@@ -182,7 +185,7 @@ public class WorldProviderOrbit extends WorldProviderSpaceStation
     // (with up-to-date API this makes zero difference)
     @Override
     public boolean isSurfaceWorld() {
-        return (this.worldObj == null) ? false : this.worldObj.isRemote;
+        return this.worldObj != null && this.worldObj.isRemote;
     }
 
     // Overriding only in case the Galacticraft API is not up-to-date
@@ -199,46 +202,46 @@ public class WorldProviderOrbit extends WorldProviderSpaceStation
         return this.shouldForceRespawn() ? this.dimensionId : 0;
     }
 
-    //	@Override
-    //	public String getWelcomeMessage()
-    //	{
-    //		return "Entering Earth Orbit";
-    //	}
+    // @Override
+    // public String getWelcomeMessage()
+    // {
+    // return "Entering Earth Orbit";
+    // }
     //
-    //	@Override
-    //	public String getDepartMessage()
-    //	{
-    //		return "Leaving Earth Orbit";
-    //	}
+    // @Override
+    // public String getDepartMessage()
+    // {
+    // return "Leaving Earth Orbit";
+    // }
 
     @Override
     public String getDimensionName() {
         return "Space Station " + this.spaceStationDimensionID;
     }
 
-    //	@Override
-    //	public boolean canSnowAt(int x, int y, int z)
-    //	{
-    //		return false;
-    //	} TODO Fix no snow
+    // @Override
+    // public boolean canSnowAt(int x, int y, int z)
+    // {
+    // return false;
+    // } TODO Fix no snow
 
-    //	@Override
-    //	public boolean canBlockFreeze(int x, int y, int z, boolean byWater)
-    //	{
-    //		return false;
-    //	}
+    // @Override
+    // public boolean canBlockFreeze(int x, int y, int z, boolean byWater)
+    // {
+    // return false;
+    // }
     //
-    //	@Override
-    //	public boolean canDoLightning(Chunk chunk)
-    //	{
-    //		return false;
-    //	}
+    // @Override
+    // public boolean canDoLightning(Chunk chunk)
+    // {
+    // return false;
+    // }
     //
-    //	@Override
-    //	public boolean canDoRainSnowIce(Chunk chunk)
-    //	{
-    //		return false;
-    //	}
+    // @Override
+    // public boolean canDoRainSnowIce(Chunk chunk)
+    // {
+    // return false;
+    // }
 
     @Override
     public float getGravity() {
@@ -313,8 +316,10 @@ public class WorldProviderOrbit extends WorldProviderSpaceStation
     @Override
     @SideOnly(Side.CLIENT)
     public void setSpinDeltaPerTick(float angle) {
-        SkyProviderOrbit skyProvider = ((SkyProviderOrbit) this.getSkyRenderer());
-        if (skyProvider != null) skyProvider.spinDeltaPerTick = angle;
+        final SkyProviderOrbit skyProvider = (SkyProviderOrbit) this.getSkyRenderer();
+        if (skyProvider != null) {
+            skyProvider.spinDeltaPerTick = angle;
+        }
     }
 
     @Override
@@ -326,6 +331,8 @@ public class WorldProviderOrbit extends WorldProviderSpaceStation
                 true));
         this.setSpinDeltaPerTick(this.getSpinManager().getSpinRate());
 
-        if (this.getCloudRenderer() == null) this.setCloudRenderer(new CloudRenderer());
+        if (this.getCloudRenderer() == null) {
+            this.setCloudRenderer(new CloudRenderer());
+        }
     }
 }

@@ -85,8 +85,8 @@ public class EntityAstroMiner extends Entity
     public static final int FAIL_RETURNPATHBLOCKED = 5;
     public static final int FAIL_ANOTHERWASLINKED = 8;
 
-    private boolean TEMPDEBUG = false;
-    private boolean TEMPFAST = false;
+    private final boolean TEMPDEBUG = false;
+    private final boolean TEMPFAST = false;
 
     public ItemStack[] cargoItems;
 
@@ -102,14 +102,14 @@ public class EntityAstroMiner extends Entity
     private BlockVec3 posTarget;
     private BlockVec3 posBase;
     private BlockVec3 waypointBase;
-    private LinkedList<BlockVec3> wayPoints = new LinkedList();
-    private LinkedList<BlockVec3> minePoints = new LinkedList();
+    private final LinkedList<BlockVec3> wayPoints = new LinkedList();
+    private final LinkedList<BlockVec3> minePoints = new LinkedList();
     private BlockVec3 minePointCurrent = null;
     private int baseFacing;
     public int facing;
     private int facingAI;
     private int lastFacing;
-    private static BlockVec3[] headings = {
+    private static final BlockVec3[] headings = {
         new BlockVec3(0, -1, 0),
         new BlockVec3(0, 1, 0),
         new BlockVec3(0, 0, -1),
@@ -117,7 +117,7 @@ public class EntityAstroMiner extends Entity
         new BlockVec3(-1, 0, 0),
         new BlockVec3(1, 0, 0)
     };
-    private static BlockVec3[] headings2 = {
+    private static final BlockVec3[] headings2 = {
         new BlockVec3(0, -3, 0),
         new BlockVec3(0, 2, 0),
         new BlockVec3(0, 0, -3),
@@ -126,11 +126,10 @@ public class EntityAstroMiner extends Entity
         new BlockVec3(2, 0, 0)
     };
 
-    private final int baseSafeRadius = 32;
-    private final double speedbase = TEMPFAST ? 0.16D : 0.022D;
-    private double speed = speedbase;
-    private final float rotSpeedBase = TEMPFAST ? 8F : 1.5F;
-    private float rotSpeed = rotSpeedBase;
+    private final double speedbase = this.TEMPFAST ? 0.16D : 0.022D;
+    private double speed = this.speedbase;
+    private final float rotSpeedBase = this.TEMPFAST ? 8F : 1.5F;
+    private float rotSpeed = this.rotSpeedBase;
     private double speedup = SPEEDUP;
     private boolean noSpeedup = false; // This stops the miner getting stuck at turning points
     public float shipDamage;
@@ -140,14 +139,12 @@ public class EntityAstroMiner extends Entity
     private boolean flagCheckPlayer = false;
 
     // To do:
-    //   break the entity drops it as an item
+    // break the entity drops it as an item
 
     private int turnProgress;
     private double minecartX;
     private double minecartY;
     private double minecartZ;
-    private double minecartYaw;
-    private double minecartPitch;
 
     @SideOnly(Side.CLIENT)
     private double velocityX;
@@ -162,7 +159,7 @@ public class EntityAstroMiner extends Entity
     private int inventoryDrops;
     public boolean stopForTurn;
 
-    private static ArrayList<Block> noMineList = new ArrayList();
+    private static final ArrayList<Block> noMineList = new ArrayList();
     public static BlockTuple blockingBlock = new BlockTuple(Blocks.air, 0);
     private int givenFailMessage = 0;
     private BlockVec3 mineLast = null;
@@ -172,12 +169,12 @@ public class EntityAstroMiner extends Entity
     public LinkedList<Integer> laserTimes = new LinkedList();
     public float retraction = 1F;
     protected IUpdatePlayerListBox soundUpdater;
-    private boolean soundToStop = false;
     private boolean spawnedInCreative = false;
 
     static {
         // Avoid:
-        // Overworld: avoid lava source blocks, mossy cobble, End Portal and Fortress blocks
+        // Overworld: avoid lava source blocks, mossy cobble, End Portal and Fortress
+        // blocks
         // railtrack, levers, redstone dust, GC walkways,
         // Anything with a tileEntity will also be avoided:
         // spawners, chests, oxygen pipes, hydrogen pipes, wires
@@ -214,8 +211,8 @@ public class EntityAstroMiner extends Entity
         this.setSize(cLENGTH, cWIDTH);
         this.yOffset = 0;
         this.myEntitySize = Entity.EnumEntitySize.SIZE_6;
-        //        this.dataWatcher.addObject(this.currentDamage, new Integer(0));
-        //        this.dataWatcher.addObject(this.timeSinceHit, new Integer(0));
+        // this.dataWatcher.addObject(this.currentDamage, new Integer(0));
+        // this.dataWatcher.addObject(this.timeSinceHit, new Integer(0));
         this.noClip = true;
 
         if (world != null && world.isRemote) {
@@ -316,15 +313,16 @@ public class EntityAstroMiner extends Entity
     }
 
     private boolean emptyInventory(TileEntityMinerBase minerBase) {
-        boolean doneOne = false;
         for (int i = 0; i < this.cargoItems.length; i++) {
-            ItemStack stack = this.cargoItems[i];
-            if (stack == null) continue;
+            final ItemStack stack = this.cargoItems[i];
+            if (stack == null) {
+                continue;
+            }
             if (stack.stackSize == 0) {
                 this.cargoItems[i] = null;
                 continue;
             }
-            int sizeprev = stack.stackSize;
+            final int sizeprev = stack.stackSize;
             minerBase.addToInventory(stack);
             if (stack == null || stack.stackSize == 0) {
                 this.cargoItems[i] = null;
@@ -352,7 +350,7 @@ public class EntityAstroMiner extends Entity
             this.setDamage(this.getDamage() - 1.0F);
         }
 
-        stopForTurn = !this.checkRotation();
+        this.stopForTurn = !this.checkRotation();
         this.facing = this.getFacingFromRotation();
         this.setBoundingBoxForFacing();
 
@@ -361,23 +359,30 @@ public class EntityAstroMiner extends Entity
             if (this.turnProgress == 0) {
                 this.turnProgress++;
                 if (this.AIstate < AISTATE_TRAVELLING) {
-                    // It should be stationary, so this deals with the spooky movement (due to minor differences between
+                    // It should be stationary, so this deals with the spooky movement (due to minor
+                    // differences between
                     // server and client position)
                     this.posX = this.minecartX;
                     this.posY = this.minecartY;
                     this.posZ = this.minecartZ;
                 } else {
-                    double diffX = this.minecartX - this.posX;
-                    double diffY = this.minecartY - this.posY;
-                    double diffZ = this.minecartZ - this.posZ;
+                    final double diffX = this.minecartX - this.posX;
+                    final double diffY = this.minecartY - this.posY;
+                    final double diffZ = this.minecartZ - this.posZ;
                     if (Math.abs(diffX) > 1.0D || Math.abs(diffY) > 1.0D || Math.abs(diffZ) > 1.0D) {
                         this.posX = this.minecartX;
                         this.posY = this.minecartY;
                         this.posZ = this.minecartZ;
                     } else {
-                        if (Math.abs(diffX) > Math.abs(this.motionX)) this.motionX += diffX / 10D;
-                        if (Math.abs(diffY) > Math.abs(this.motionY)) this.motionY += diffY / 10D;
-                        if (Math.abs(diffZ) > Math.abs(this.motionZ)) this.motionZ += diffZ / 10D;
+                        if (Math.abs(diffX) > Math.abs(this.motionX)) {
+                            this.motionX += diffX / 10D;
+                        }
+                        if (Math.abs(diffY) > Math.abs(this.motionY)) {
+                            this.motionY += diffY / 10D;
+                        }
+                        if (Math.abs(diffZ) > Math.abs(this.motionZ)) {
+                            this.motionZ += diffZ / 10D;
+                        }
                     }
                 }
             }
@@ -392,7 +397,7 @@ public class EntityAstroMiner extends Entity
             this.boundingBox.maxZ += this.motionZ;
             this.setRotation(this.rotationYaw, this.rotationPitch);
             if (this.AIstate == AISTATE_MINING && this.ticksExisted % 2 == 0) {
-                this.prepareMoveClient(TEMPFAST ? 8 : 1, 2);
+                this.prepareMoveClient(this.TEMPFAST ? 8 : 1, 2);
             }
 
             // Sound updates on client
@@ -406,12 +411,12 @@ public class EntityAstroMiner extends Entity
         if (this.ticksExisted % 10 == 0 || this.flagLink) {
             this.flagLink = false;
             this.checkPlayer();
-            TileEntity tileEntity = posBase.getTileEntity(this.worldObj);
+            final TileEntity tileEntity = this.posBase.getTileEntity(this.worldObj);
             if (tileEntity instanceof TileEntityMinerBase
                     && ((TileEntityMinerBase) tileEntity).isMaster
                     && !tileEntity.isInvalid()) {
                 // Create link with base on loading the EntityAstroMiner
-                UUID linker = ((TileEntityMinerBase) tileEntity).getLinkedMiner();
+                final UUID linker = ((TileEntityMinerBase) tileEntity).getLinkedMiner();
                 if (!this.getUniqueID().equals(linker)) {
                     if (linker == null) {
                         ((TileEntityMinerBase) tileEntity).linkMiner(this);
@@ -419,13 +424,14 @@ public class EntityAstroMiner extends Entity
                         this.freeze(FAIL_ANOTHERWASLINKED);
                         return;
                     }
-                } else if (((TileEntityMinerBase) tileEntity).linkedMiner != this)
+                } else if (((TileEntityMinerBase) tileEntity).linkedMiner != this) {
                     ((TileEntityMinerBase) tileEntity).linkMiner(this);
+                }
             } else {
-                if (this.playerMP != null && (this.givenFailMessage & (1 << FAIL_BASEDESTROYED)) == 0) {
+                if (this.playerMP != null && (this.givenFailMessage & 1 << FAIL_BASEDESTROYED) == 0) {
                     this.playerMP.addChatMessage(new ChatComponentText(
                             GCCoreUtil.translate("gui.message.astroMiner" + FAIL_BASEDESTROYED + ".fail")));
-                    this.givenFailMessage += (1 << FAIL_BASEDESTROYED);
+                    this.givenFailMessage += 1 << FAIL_BASEDESTROYED;
                     // Continue mining even though base was destroyed - maybe it will be replaced
                 }
             }
@@ -435,7 +441,8 @@ public class EntityAstroMiner extends Entity
 
         if (this.playerMP == null) {
             // Go into dormant state if player is offline
-            // but do not actually set the dormant state on the server, so can resume immediately if player comes online
+            // but do not actually set the dormant state on the server, so can resume
+            // immediately if player comes online
             this.motionX = 0;
             this.motionY = 0;
             this.motionZ = 0;
@@ -463,10 +470,12 @@ public class EntityAstroMiner extends Entity
         if (this.AIstate > AISTATE_ATBASE) {
             if (this.energyLevel <= 0) {
                 this.freeze(FAIL_OUTOFENERGY);
-            } else if (!(this.worldObj.provider instanceof WorldProviderAsteroids) && this.ticksExisted % 2 == 0)
+            } else if (!(this.worldObj.provider instanceof WorldProviderAsteroids) && this.ticksExisted % 2 == 0) {
                 this.energyLevel--;
-            // No energy consumption when moving in space in Asteroids dimension (this reduces the risk of the Astro
-            // Miner becoming stranded!)
+                // No energy consumption when moving in space in Asteroids dimension (this
+                // reduces the risk of the Astro
+                // Miner becoming stranded!)
+            }
         }
 
         switch (this.AIstate) {
@@ -478,10 +487,13 @@ public class EntityAstroMiner extends Entity
                         // The base was destroyed - see if it has been replaced?
                         this.atBase();
                     } else {
-                        // See if the return path has been unblocked, and give a small amount of backup energy to try to
+                        // See if the return path has been unblocked, and give a small amount of backup
+                        // energy to try to
                         // get home
                         this.AIstate = AISTATE_RETURNING;
-                        if (this.energyLevel <= 0) this.energyLevel = 20;
+                        if (this.energyLevel <= 0) {
+                            this.energyLevel = 20;
+                        }
                     }
                 }
                 break;
@@ -489,29 +501,31 @@ public class EntityAstroMiner extends Entity
                 this.atBase();
                 break;
             case AISTATE_TRAVELLING:
-                if (!this.moveToTarget()) this.prepareMove(TEMPFAST ? 8 : 2, 2);
+                if (!this.moveToTarget()) {
+                    this.prepareMove(this.TEMPFAST ? 8 : 2, 2);
+                }
                 break;
             case AISTATE_MINING:
                 if (!this.doMining() && this.ticksExisted % 2 == 0) {
                     this.energyLevel--;
-                    this.prepareMove(TEMPFAST ? 8 : 1, 2);
+                    this.prepareMove(this.TEMPFAST ? 8 : 1, 2);
                 }
                 break;
             case AISTATE_RETURNING:
                 this.moveToBase();
-                this.prepareMove(TEMPFAST ? 8 : 4, 1);
+                this.prepareMove(this.TEMPFAST ? 8 : 4, 1);
                 break;
             case AISTATE_DOCKING:
                 if (this.waypointBase != null) {
-                    this.speed = speedbase / 1.6;
-                    this.rotSpeed = rotSpeedBase / 1.6F;
+                    this.speed = this.speedbase / 1.6;
+                    this.rotSpeed = this.rotSpeedBase / 1.6F;
                     if (this.moveToPos(this.waypointBase, true)) {
                         this.AIstate = AISTATE_ATBASE;
                         this.motionX = 0;
                         this.motionY = 0;
                         this.motionZ = 0;
-                        this.speed = speedbase;
-                        this.rotSpeed = rotSpeedBase;
+                        this.speed = this.speedbase;
+                        this.rotSpeed = this.rotSpeedBase;
                     }
                 } else {
                     GCLog.severe("AstroMiner missing base position: this is a bug.");
@@ -531,23 +545,28 @@ public class EntityAstroMiner extends Entity
         this.posZ += this.motionZ;
         this.boundingBox.minZ += this.motionZ;
         this.boundingBox.maxZ += this.motionZ;
-        /*        if (this.dataWatcher.getWatchableObjectInt(this.timeSinceHit) > 0)
-                {
-                    this.dataWatcher.updateObject(this.timeSinceHit, Integer.valueOf(this.dataWatcher.getWatchableObjectInt(this.timeSinceHit) - 1));
-                }
-
-                if (this.dataWatcher.getWatchableObjectInt(this.currentDamage) > 0)
-                {
-                    this.dataWatcher.updateObject(this.currentDamage, Integer.valueOf(this.dataWatcher.getWatchableObjectInt(this.currentDamage) - 1));
-                }
-        */
+        /*
+         * if (this.dataWatcher.getWatchableObjectInt(this.timeSinceHit) > 0) {
+         * this.dataWatcher.updateObject(this.timeSinceHit,
+         * Integer.valueOf(this.dataWatcher.getWatchableObjectInt(this.timeSinceHit) -
+         * 1)); }
+         *
+         * if (this.dataWatcher.getWatchableObjectInt(this.currentDamage) > 0) {
+         * this.dataWatcher.updateObject(this.currentDamage,
+         * Integer.valueOf(this.dataWatcher.getWatchableObjectInt(this.currentDamage) -
+         * 1)); }
+         */
     }
 
     private void checkPlayer() {
         if (this.playerMP == null) {
-            if (this.playerUUID != null) this.playerMP = PlayerUtil.getPlayerByUUID(this.playerUUID);
+            if (this.playerUUID != null) {
+                this.playerMP = PlayerUtil.getPlayerByUUID(this.playerUUID);
+            }
         } else {
-            if (!PlayerUtil.isPlayerOnline(this.playerMP)) this.playerMP = null;
+            if (!PlayerUtil.isPlayerOnline(this.playerMP)) {
+                this.playerMP = null;
+            }
         }
     }
 
@@ -556,10 +575,10 @@ public class EntityAstroMiner extends Entity
         this.motionX = 0;
         this.motionY = 0;
         this.motionZ = 0;
-        if (this.playerMP != null && (this.givenFailMessage & (1 << i)) == 0) {
+        if (this.playerMP != null && (this.givenFailMessage & 1 << i) == 0) {
             this.playerMP.addChatMessage(
                     new ChatComponentText(GCCoreUtil.translate("gui.message.astroMiner" + i + ".fail")));
-            this.givenFailMessage += (1 << i);
+            this.givenFailMessage += 1 << i;
         }
     }
 
@@ -571,11 +590,11 @@ public class EntityAstroMiner extends Entity
         this.targetPitch = buffer.readFloat();
         this.targetYaw = buffer.readFloat();
         this.mineCount = buffer.readInt();
-        int x = buffer.readInt();
-        int y = buffer.readInt();
-        int z = buffer.readInt();
+        final int x = buffer.readInt();
+        final int y = buffer.readInt();
+        final int z = buffer.readInt();
         if (this.worldObj.blockExists(x, y, z)) {
-            TileEntity tile = this.worldObj.getTileEntity(x, y, z);
+            final TileEntity tile = this.worldObj.getTileEntity(x, y, z);
             if (tile instanceof TileEntityMinerBase) {
                 ((TileEntityMinerBase) tile).linkedMiner = this;
                 ((TileEntityMinerBase) tile).linkCountDown = 20;
@@ -602,25 +621,35 @@ public class EntityAstroMiner extends Entity
     public void handlePacketData(Side side, EntityPlayer player) {}
 
     public void recall() {
-        if (this.AIstate > this.AISTATE_ATBASE && this.AIstate < this.AISTATE_RETURNING) {
-            AIstate = AISTATE_RETURNING;
+        if (this.AIstate > EntityAstroMiner.AISTATE_ATBASE && this.AIstate < EntityAstroMiner.AISTATE_RETURNING) {
+            this.AIstate = AISTATE_RETURNING;
             this.pathBlockedCount = 0;
         }
     }
 
     private int getFacingFromRotation() {
-        if (this.rotationPitch > 45F) return 1;
-        if (this.rotationPitch < -45F) return 0;
-        float rY = this.rotationYaw % 360F;
+        if (this.rotationPitch > 45F) {
+            return 1;
+        }
+        if (this.rotationPitch < -45F) {
+            return 0;
+        }
+        final float rY = this.rotationYaw % 360F;
         // rotationYaw 5 90 4 270 2 180 3 0
-        if (rY < 45F || rY > 315F) return 3;
-        if (rY < 135F) return 5;
-        if (rY < 225F) return 2;
+        if (rY < 45F || rY > 315F) {
+            return 3;
+        }
+        if (rY < 135F) {
+            return 5;
+        }
+        if (rY < 225F) {
+            return 2;
+        }
         return 4;
     }
 
     private void atBase() {
-        TileEntity tileEntity = posBase.getTileEntity(this.worldObj);
+        final TileEntity tileEntity = this.posBase.getTileEntity(this.worldObj);
 
         if (!(tileEntity instanceof TileEntityMinerBase)
                 || tileEntity.isInvalid()
@@ -629,14 +658,17 @@ public class EntityAstroMiner extends Entity
             return;
         }
 
-        TileEntityMinerBase minerBase = (TileEntityMinerBase) tileEntity;
-        // If it's successfully reached its base, clear all fail messages except number 6, which is that all mining
+        final TileEntityMinerBase minerBase = (TileEntityMinerBase) tileEntity;
+        // If it's successfully reached its base, clear all fail messages except number
+        // 6, which is that all mining
         // areas are finished (see below)
         this.givenFailMessage &= 64;
         this.wayPoints.clear();
 
         boolean somethingTransferred = true;
-        if (this.ticksExisted % 5 == 0) somethingTransferred = this.emptyInventory(minerBase);
+        if (this.ticksExisted % 5 == 0) {
+            somethingTransferred = this.emptyInventory(minerBase);
+        }
         this.inventoryDrops = 0;
 
         // Recharge
@@ -664,7 +696,9 @@ public class EntityAstroMiner extends Entity
 
     private boolean hasHoldSpace() {
         for (int i = 0; i < this.getSizeInventory(); i++) {
-            if (this.cargoItems[i] == null) return true;
+            if (this.cargoItems[i] == null) {
+                return true;
+            }
             if (this.cargoItems[i].stackSize == 0) {
                 this.cargoItems[i] = null;
                 return true;
@@ -674,10 +708,12 @@ public class EntityAstroMiner extends Entity
     }
 
     private boolean findNextTarget(TileEntityMinerBase minerBase) {
-        // If mining has finished, or path has been blocked two or more times, try mining elsewhere
+        // If mining has finished, or path has been blocked two or more times, try
+        // mining elsewhere
         if (!this.minePoints.isEmpty() && this.pathBlockedCount < 2) {
             this.posTarget = this.minePoints.getFirst().clone();
-            GCLog.debug("Still mining at: " + posTarget.toString() + " Remaining shafts: " + this.minePoints.size());
+            GCLog.debug(
+                    "Still mining at: " + this.posTarget.toString() + " Remaining shafts: " + this.minePoints.size());
             return true;
         }
 
@@ -686,33 +722,34 @@ public class EntityAstroMiner extends Entity
         this.pathBlockedCount = 0;
 
         // No more mining targets, the whole area is mined
-        if (this.posTarget == null) return false;
+        if (this.posTarget == null) {
+            return false;
+        }
 
-        GCLog.debug("Miner target: " + posTarget.toString());
+        GCLog.debug("Miner target: " + this.posTarget.toString());
 
         return true;
     }
 
     /**
-     *
-     * @return  True if reached a turning point
+     * @return True if reached a turning point
      */
     private boolean moveToTarget() {
-        if (this.energyLevel < this.RETURNENERGY || this.inventoryDrops > this.RETURNDROPS) {
-            AIstate = AISTATE_RETURNING;
+        if (this.energyLevel < EntityAstroMiner.RETURNENERGY || this.inventoryDrops > EntityAstroMiner.RETURNDROPS) {
+            this.AIstate = AISTATE_RETURNING;
             this.pathBlockedCount = 0;
             return true;
         }
 
         if (this.posTarget == null) {
             GCLog.severe("AstroMiner missing target: this is a bug.");
-            AIstate = AISTATE_STUCK;
+            this.AIstate = AISTATE_STUCK;
             return true;
         }
 
         if (this.moveToPos(this.posTarget, false)) {
-            AIstate = AISTATE_MINING;
-            wayPoints.add(this.posTarget.clone());
+            this.AIstate = AISTATE_MINING;
+            this.wayPoints.add(this.posTarget.clone());
             this.setMinePoints();
             return true;
         }
@@ -723,7 +760,7 @@ public class EntityAstroMiner extends Entity
     private void moveToBase() {
         if (this.wayPoints.size() == 0) {
             // When it gets there: stop and reverse in!
-            AIstate = AISTATE_DOCKING;
+            this.AIstate = AISTATE_DOCKING;
             if (this.waypointBase != null) {
                 // Teleport back to base in case of any serious problem
                 this.setPosition(this.waypointBase.x, this.waypointBase.y, this.waypointBase.z);
@@ -738,16 +775,22 @@ public class EntityAstroMiner extends Entity
     }
 
     private void setMinePoints() {
-        // Still some areas left to mine from last visit (maybe it was full or out of power?)
-        if (this.minePoints.size() > 0) return;
+        // Still some areas left to mine from last visit (maybe it was full or out of
+        // power?)
+        if (this.minePoints.size() > 0) {
+            return;
+        }
 
-        BlockVec3 inFront = new BlockVec3(
+        final BlockVec3 inFront = new BlockVec3(
                 MathHelper.floor_double(this.posX + 0.5D),
                 MathHelper.floor_double(this.posY + 1.5D),
                 MathHelper.floor_double(this.posZ + 0.5D));
-        int otherEnd =
-                (this.worldObj.provider instanceof WorldProviderAsteroids) ? this.MINE_LENGTH_AST : this.MINE_LENGTH;
-        if (this.baseFacing == 2 || this.baseFacing == 4) otherEnd = -otherEnd;
+        int otherEnd = this.worldObj.provider instanceof WorldProviderAsteroids
+                ? EntityAstroMiner.MINE_LENGTH_AST
+                : EntityAstroMiner.MINE_LENGTH;
+        if (this.baseFacing == 2 || this.baseFacing == 4) {
+            otherEnd = -otherEnd;
+        }
         switch (this.baseFacing) {
             case 2:
             case 3:
@@ -787,17 +830,16 @@ public class EntityAstroMiner extends Entity
     }
 
     /**
-     *
-     * @return  True if reached a turning point
+     * @return True if reached a turning point
      */
     private boolean doMining() {
-        if (this.energyLevel < this.RETURNENERGY
-                || this.inventoryDrops > this.RETURNDROPS
+        if (this.energyLevel < EntityAstroMiner.RETURNENERGY
+                || this.inventoryDrops > EntityAstroMiner.RETURNDROPS
                 || this.minePoints.size() == 0) {
             if (this.minePoints.size() > 0 && this.minePointCurrent != null) {
                 this.minePoints.addFirst(this.minePointCurrent);
             }
-            AIstate = AISTATE_RETURNING;
+            this.AIstate = AISTATE_RETURNING;
             this.pathBlockedCount = 0;
             GCLog.debug("Miner going home: " + this.posBase.toString() + " " + this.minePoints.size()
                     + " shafts still to be mined");
@@ -837,23 +879,29 @@ public class EntityAstroMiner extends Entity
 
     /**
      * Mine out the area in front of the miner (dist blocks from miner centre)
-     * @param limit   Maximum block count to be mined this tick
+     *
+     * @param limit Maximum block count to be mined this tick
      * @param dist
-     * @return  True if the mining failed (meaning the miner's path is blocked)
+     * @return True if the mining failed (meaning the miner's path is blocked)
      */
     private boolean prepareMove(int limit, int dist) {
         if (this.mineCountDown > 0) {
             this.mineCountDown--;
             return false;
         }
-        BlockVec3 inFront = new BlockVec3(
+        final BlockVec3 inFront = new BlockVec3(
                 MathHelper.floor_double(this.posX + 0.5D),
                 MathHelper.floor_double(this.posY + 1.5D),
                 MathHelper.floor_double(this.posZ + 0.5D));
-        if (dist == 2) inFront.add(headings2[this.facingAI]);
-        else {
-            if ((this.facingAI & 1) == 0) dist++;
-            if (dist > 0) inFront.add(headings[this.facingAI].clone().scale(dist));
+        if (dist == 2) {
+            inFront.add(headings2[this.facingAI]);
+        } else {
+            if ((this.facingAI & 1) == 0) {
+                dist++;
+            }
+            if (dist > 0) {
+                inFront.add(headings[this.facingAI].clone().scale(dist));
+            }
         }
 
         if (!inFront.equals(this.mineLast) && this.AIstate != AISTATE_ATBASE) {
@@ -862,14 +910,14 @@ public class EntityAstroMiner extends Entity
             return false;
         }
 
-        int x = inFront.x;
-        int y = inFront.y;
-        int z = inFront.z;
+        final int x = inFront.x;
+        final int y = inFront.y;
+        final int z = inFront.z;
 
         // Test not trying to mine own dock!
         if (y == this.waypointBase.y
-                && x == this.waypointBase.x - ((this.baseFacing == 5) ? 1 : 0)
-                && z == this.waypointBase.z - ((this.baseFacing == 3) ? 1 : 0)) {
+                && x == this.waypointBase.x - (this.baseFacing == 5 ? 1 : 0)
+                && z == this.waypointBase.z - (this.baseFacing == 3 ? 1 : 0)) {
             this.tryBackIn();
             return false;
         }
@@ -877,70 +925,146 @@ public class EntityAstroMiner extends Entity
         this.tryBlockLimit = limit;
 
         // Check not obstructed by something immovable e.g. bedrock
-        // Mine out the 12 blocks in front of it in direction of travel when getting close
-        // There are 12 blocks around ... and 12 in front.  One block per tick?
-        // (That means can move at 5/6 block per second when mining, and 1.67 bps when traveling)
+        // Mine out the 12 blocks in front of it in direction of travel when getting
+        // close
+        // There are 12 blocks around ... and 12 in front. One block per tick?
+        // (That means can move at 5/6 block per second when mining, and 1.67 bps when
+        // traveling)
         switch (this.facingAI & 6) {
             case 0:
-                if (tryMineBlock(x, y, z)) wayBarred = true;
-                if (tryMineBlock(x + 1, y, z)) wayBarred = true;
-                if (tryMineBlock(x + 1, y, z - 1)) wayBarred = true;
-                if (tryMineBlock(x, y, z - 1)) wayBarred = true;
-                if (tryMineBlock(x, y, z - 2)) wayBarred = true;
-                if (tryMineBlock(x - 1, y, z - 2)) wayBarred = true;
-                if (tryMineBlock(x - 1, y, z - 1)) wayBarred = true;
-                if (tryMineBlock(x - 2, y, z - 1)) wayBarred = true;
-                if (tryMineBlock(x - 2, y, z)) wayBarred = true;
-                if (tryMineBlock(x - 1, y, z)) wayBarred = true;
-                if (tryMineBlock(x - 1, y, z + 1)) wayBarred = true;
-                if (tryMineBlock(x, y, z + 1)) wayBarred = true;
+                if (this.tryMineBlock(x, y, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x + 1, y, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x + 1, y, z - 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x, y, z - 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x, y, z - 2)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x - 1, y, z - 2)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x - 1, y, z - 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x - 2, y, z - 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x - 2, y, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x - 1, y, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x - 1, y, z + 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x, y, z + 1)) {
+                    wayBarred = true;
+                }
                 break;
             case 2:
-                if (tryMineBlock(x, y - 2, z)) wayBarred = true;
-                if (tryMineBlock(x - 1, y - 2, z)) wayBarred = true;
-                if (tryMineBlock(x, y - 1, z)) wayBarred = true;
-                if (tryMineBlock(x - 1, y - 1, z)) wayBarred = true;
-                if (tryMineBlock(x + 1, y - 1, z)) wayBarred = true;
-                if (tryMineBlock(x - 2, y - 1, z)) wayBarred = true;
-                if (tryMineBlock(x + 1, y, z)) wayBarred = true;
-                if (tryMineBlock(x - 2, y, z)) wayBarred = true;
-                if (tryMineBlock(x, y, z)) wayBarred = true;
-                if (tryMineBlock(x - 1, y, z)) wayBarred = true;
-                if (tryMineBlock(x, y + 1, z)) wayBarred = true;
-                if (tryMineBlock(x - 1, y + 1, z)) wayBarred = true;
+                if (this.tryMineBlock(x, y - 2, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x - 1, y - 2, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x, y - 1, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x - 1, y - 1, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x + 1, y - 1, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x - 2, y - 1, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x + 1, y, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x - 2, y, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x, y, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x - 1, y, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x, y + 1, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x - 1, y + 1, z)) {
+                    wayBarred = true;
+                }
                 break;
             case 4:
-                if (tryMineBlock(x, y - 2, z - 1)) wayBarred = true;
-                if (tryMineBlock(x, y - 1, z)) wayBarred = true;
-                if (tryMineBlock(x, y - 1, z - 1)) wayBarred = true;
-                if (tryMineBlock(x, y - 1, z + 1)) wayBarred = true;
-                if (tryMineBlock(x, y - 1, z - 2)) wayBarred = true;
-                if (tryMineBlock(x, y, z + 1)) wayBarred = true;
-                if (tryMineBlock(x, y, z - 2)) wayBarred = true;
-                if (tryMineBlock(x, y, z - 1)) wayBarred = true;
-                if (tryMineBlock(x, y - 2, z)) wayBarred = true;
-                if (tryMineBlock(x, y + 1, z - 1)) wayBarred = true;
-                if (tryMineBlock(x, y, z)) wayBarred = true;
-                if (tryMineBlock(x, y + 1, z)) wayBarred = true;
+                if (this.tryMineBlock(x, y - 2, z - 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x, y - 1, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x, y - 1, z - 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x, y - 1, z + 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x, y - 1, z - 2)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x, y, z + 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x, y, z - 2)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x, y, z - 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x, y - 2, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x, y + 1, z - 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x, y, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryMineBlock(x, y + 1, z)) {
+                    wayBarred = true;
+                }
                 break;
         }
 
         // If it is obstructed, return to base, or stand still if that is impossible
         if (wayBarred) {
-            if (this.playerMP != null)
+            if (this.playerMP != null) {
                 this.playerMP.addChatMessage(new ChatComponentText(GCCoreUtil.translate("gui.message.astroMiner1A.fail")
                         + " " + GCCoreUtil.translate(EntityAstroMiner.blockingBlock.toString())));
+            }
             this.motionX = 0;
             this.motionY = 0;
             this.motionZ = 0;
             this.tryBlockLimit = 0;
             if (this.AIstate == AISTATE_TRAVELLING) {
                 this.AIstate = AISTATE_RETURNING;
-            } else if (AIstate == AISTATE_MINING) {
+            } else if (this.AIstate == AISTATE_MINING) {
                 this.pathBlockedCount++;
                 this.AIstate = AISTATE_RETURNING;
-            } else if (this.AIstate == AISTATE_RETURNING) this.tryBackIn();
-            else {
+            } else if (this.AIstate == AISTATE_RETURNING) {
+                this.tryBackIn();
+            } else {
                 this.freeze(FAIL_RETURNPATHBLOCKED);
             }
         }
@@ -955,72 +1079,151 @@ public class EntityAstroMiner extends Entity
     }
 
     private boolean prepareMoveClient(int limit, int dist) {
-        BlockVec3 inFront = new BlockVec3(
+        final BlockVec3 inFront = new BlockVec3(
                 MathHelper.floor_double(this.posX + 0.5D),
                 MathHelper.floor_double(this.posY + 1.5D),
                 MathHelper.floor_double(this.posZ + 0.5D));
-        if (dist == 2) inFront.add(headings2[this.facing]);
-        else {
-            if ((this.facing & 1) == 0) dist++;
-            if (dist > 0) inFront.add(headings[this.facing].clone().scale(dist));
+        if (dist == 2) {
+            inFront.add(headings2[this.facing]);
+        } else {
+            if ((this.facing & 1) == 0) {
+                dist++;
+            }
+            if (dist > 0) {
+                inFront.add(headings[this.facing].clone().scale(dist));
+            }
         }
         if (inFront.equals(this.mineLast)) {
             return false;
         }
 
-        int x = inFront.x;
-        int y = inFront.y;
-        int z = inFront.z;
+        final int x = inFront.x;
+        final int y = inFront.y;
+        final int z = inFront.z;
 
         boolean wayBarred = false;
         this.tryBlockLimit = limit;
 
         // Check not obstructed by something immovable e.g. bedrock
-        // Mine out the 12 blocks in front of it in direction of travel when getting close
-        // There are 12 blocks around ... and 12 in front.  One block per tick?
-        // (That means can move at 5/6 block per second when mining, and 1.67 bps when traveling)
+        // Mine out the 12 blocks in front of it in direction of travel when getting
+        // close
+        // There are 12 blocks around ... and 12 in front. One block per tick?
+        // (That means can move at 5/6 block per second when mining, and 1.67 bps when
+        // traveling)
         switch (this.facing & 6) {
             case 0:
-                if (tryBlockClient(x, y, z)) wayBarred = true;
-                if (tryBlockClient(x + 1, y, z)) wayBarred = true;
-                if (tryBlockClient(x + 1, y, z - 1)) wayBarred = true;
-                if (tryBlockClient(x, y, z - 1)) wayBarred = true;
-                if (tryBlockClient(x, y, z - 2)) wayBarred = true;
-                if (tryBlockClient(x - 1, y, z - 2)) wayBarred = true;
-                if (tryBlockClient(x - 1, y, z - 1)) wayBarred = true;
-                if (tryBlockClient(x - 2, y, z - 1)) wayBarred = true;
-                if (tryBlockClient(x - 2, y, z)) wayBarred = true;
-                if (tryBlockClient(x - 1, y, z)) wayBarred = true;
-                if (tryBlockClient(x - 1, y, z + 1)) wayBarred = true;
-                if (tryBlockClient(x, y, z + 1)) wayBarred = true;
+                if (this.tryBlockClient(x, y, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x + 1, y, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x + 1, y, z - 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x, y, z - 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x, y, z - 2)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x - 1, y, z - 2)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x - 1, y, z - 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x - 2, y, z - 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x - 2, y, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x - 1, y, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x - 1, y, z + 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x, y, z + 1)) {
+                    wayBarred = true;
+                }
                 break;
             case 2:
-                if (tryBlockClient(x, y - 2, z)) wayBarred = true;
-                if (tryBlockClient(x - 1, y - 2, z)) wayBarred = true;
-                if (tryBlockClient(x, y - 1, z)) wayBarred = true;
-                if (tryBlockClient(x - 1, y - 1, z)) wayBarred = true;
-                if (tryBlockClient(x + 1, y - 1, z)) wayBarred = true;
-                if (tryBlockClient(x - 2, y - 1, z)) wayBarred = true;
-                if (tryBlockClient(x + 1, y, z)) wayBarred = true;
-                if (tryBlockClient(x - 2, y, z)) wayBarred = true;
-                if (tryBlockClient(x, y, z)) wayBarred = true;
-                if (tryBlockClient(x - 1, y, z)) wayBarred = true;
-                if (tryBlockClient(x, y + 1, z)) wayBarred = true;
-                if (tryBlockClient(x - 1, y + 1, z)) wayBarred = true;
+                if (this.tryBlockClient(x, y - 2, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x - 1, y - 2, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x, y - 1, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x - 1, y - 1, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x + 1, y - 1, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x - 2, y - 1, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x + 1, y, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x - 2, y, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x, y, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x - 1, y, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x, y + 1, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x - 1, y + 1, z)) {
+                    wayBarred = true;
+                }
                 break;
             case 4:
-                if (tryBlockClient(x, y - 2, z - 1)) wayBarred = true;
-                if (tryBlockClient(x, y - 1, z)) wayBarred = true;
-                if (tryBlockClient(x, y - 1, z - 1)) wayBarred = true;
-                if (tryBlockClient(x, y - 1, z + 1)) wayBarred = true;
-                if (tryBlockClient(x, y - 1, z - 2)) wayBarred = true;
-                if (tryBlockClient(x, y, z + 1)) wayBarred = true;
-                if (tryBlockClient(x, y, z - 2)) wayBarred = true;
-                if (tryBlockClient(x, y, z - 1)) wayBarred = true;
-                if (tryBlockClient(x, y - 2, z)) wayBarred = true;
-                if (tryBlockClient(x, y + 1, z - 1)) wayBarred = true;
-                if (tryBlockClient(x, y, z)) wayBarred = true;
-                if (tryBlockClient(x, y + 1, z)) wayBarred = true;
+                if (this.tryBlockClient(x, y - 2, z - 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x, y - 1, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x, y - 1, z - 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x, y - 1, z + 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x, y - 1, z - 2)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x, y, z + 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x, y, z - 2)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x, y, z - 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x, y - 2, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x, y + 1, z - 1)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x, y, z)) {
+                    wayBarred = true;
+                }
+                if (this.tryBlockClient(x, y + 1, z)) {
+                    wayBarred = true;
+                }
                 break;
         }
 
@@ -1037,17 +1240,24 @@ public class EntityAstroMiner extends Entity
     }
 
     private boolean tryMineBlock(int x, int y, int z) {
-        // Check things to avoid in front of it (see static list for list) including base type things
+        // Check things to avoid in front of it (see static list for list) including
+        // base type things
         // Can move through liquids including flowing lava
-        Block b = this.worldObj.getBlock(x, y, z);
-        if (b.getMaterial() == Material.air) return false;
+        final Block b = this.worldObj.getBlock(x, y, z);
+        if (b.getMaterial() == Material.air) {
+            return false;
+        }
         if (noMineList.contains(b)) {
             blockingBlock.block = b;
             blockingBlock.meta = this.worldObj.getBlockMetadata(x, y, z);
             return true;
         }
-        if (b instanceof BlockLiquid) return false;
-        if (b instanceof IFluidBlock) return false;
+        if (b instanceof BlockLiquid) {
+            return false;
+        }
+        if (b instanceof IFluidBlock) {
+            return false;
+        }
 
         boolean gtFlag = false;
         if (b != GCBlocks.fallenMeteor) {
@@ -1061,14 +1271,14 @@ public class EntityAstroMiner extends Entity
                 blockingBlock.meta = this.worldObj.getBlockMetadata(x, y, z);
                 return true;
             }
-            int meta = this.worldObj.getBlockMetadata(x, y, z);
+            final int meta = this.worldObj.getBlockMetadata(x, y, z);
             if (b.getBlockHardness(this.worldObj, x, y, z) < 0) {
                 blockingBlock.block = b;
                 blockingBlock.meta = meta;
                 return true;
             }
             if (b.hasTileEntity(meta)) {
-                if (CompatibilityManager.isGTLoaded() && gregTechCheck(b)) {
+                if (CompatibilityManager.isGTLoaded() && this.gregTechCheck(b)) {
                     gtFlag = true;
                 } else {
                     blockingBlock.block = b;
@@ -1078,17 +1288,22 @@ public class EntityAstroMiner extends Entity
             }
         }
 
-        if (this.tryBlockLimit == 0) return false;
-        BlockEvent.BreakEvent event = ForgeHooks.onBlockBreakEvent(
+        if (this.tryBlockLimit == 0) {
+            return false;
+        }
+        final BlockEvent.BreakEvent event = ForgeHooks.onBlockBreakEvent(
                 this.worldObj, this.playerMP.theItemInWorldManager.getGameType(), this.playerMP, x, y, z);
-        if (event.isCanceled()) return true;
+        if (event.isCanceled()) {
+            return true;
+        }
 
         this.tryBlockLimit--;
 
-        ItemStack drops = gtFlag ? getGTDrops(this.worldObj, x, y, z, b) : getPickBlock(this.worldObj, x, y, z, b);
+        final ItemStack drops =
+                gtFlag ? this.getGTDrops(this.worldObj, x, y, z, b) : this.getPickBlock(this.worldObj, x, y, z, b);
         if (drops != null && !this.addToInventory(drops)) {
             // drop itemstack if AstroMiner can't hold it
-            dropStack(x, y, z, drops);
+            this.dropStack(x, y, z, drops);
         }
 
         this.worldObj.setBlock(x, y, z, Blocks.air, 0, 3);
@@ -1096,41 +1311,59 @@ public class EntityAstroMiner extends Entity
     }
 
     private void dropStack(int x, int y, int z, ItemStack drops) {
-        float f = 0.7F;
-        double d0 = this.worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5D;
-        double d1 = this.worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5D;
-        double d2 = this.worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5D;
-        EntityItem entityitem = new EntityItem(this.worldObj, x + d0, y + d1, z + d2, drops);
+        final float f = 0.7F;
+        final double d0 = this.worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+        final double d1 = this.worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+        final double d2 = this.worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+        final EntityItem entityitem = new EntityItem(this.worldObj, x + d0, y + d1, z + d2, drops);
         entityitem.delayBeforeCanPickup = 10;
         this.worldObj.spawnEntityInWorld(entityitem);
         this.inventoryDrops++;
     }
 
     private boolean gregTechCheck(Block b) {
-        Class clazz = CompatibilityManager.classGTOre;
+        final Class clazz = CompatibilityManager.classGTOre;
         return clazz != null && clazz.isInstance(b);
     }
 
     private ItemStack getGTDrops(World w, int x, int y, int z, Block b) {
-        ArrayList<ItemStack> array = b.getDrops(w, x, y, z, 0, 1);
-        if (array != null && array.size() > 0) return array.get(0);
+        final ArrayList<ItemStack> array = b.getDrops(w, x, y, z, 0, 1);
+        if (array != null && array.size() > 0) {
+            return array.get(0);
+        }
         return null;
     }
 
     private boolean tryBlockClient(int x, int y, int z) {
-        BlockVec3 bv = new BlockVec3(x, y, z);
-        if (this.laserBlocks.contains(bv)) return false;
+        final BlockVec3 bv = new BlockVec3(x, y, z);
+        if (this.laserBlocks.contains(bv)) {
+            return false;
+        }
 
         // Add minable blocks to the laser fx list
-        Block b = this.worldObj.getBlock(x, y, z);
-        if (b.getMaterial() == Material.air) return false;
-        if (noMineList.contains(b)) return true;
-        if (b instanceof BlockLiquid) return false;
-        if (b instanceof IFluidBlock) return false;
-        if (b instanceof IPlantable) return true;
-        int meta = this.worldObj.getBlockMetadata(x, y, z);
-        if (b.hasTileEntity(meta) || b.getBlockHardness(this.worldObj, x, y, z) < 0) return true;
-        if (this.tryBlockLimit == 0) return false;
+        final Block b = this.worldObj.getBlock(x, y, z);
+        if (b.getMaterial() == Material.air) {
+            return false;
+        }
+        if (noMineList.contains(b)) {
+            return true;
+        }
+        if (b instanceof BlockLiquid) {
+            return false;
+        }
+        if (b instanceof IFluidBlock) {
+            return false;
+        }
+        if (b instanceof IPlantable) {
+            return true;
+        }
+        final int meta = this.worldObj.getBlockMetadata(x, y, z);
+        if (b.hasTileEntity(meta) || b.getBlockHardness(this.worldObj, x, y, z) < 0) {
+            return true;
+        }
+        if (this.tryBlockLimit == 0) {
+            return false;
+        }
 
         this.tryBlockLimit--;
 
@@ -1147,7 +1380,9 @@ public class EntityAstroMiner extends Entity
     }
 
     private ItemStack getPickBlock(World world, int x, int y, int z, Block b) {
-        if (b == GCBlocks.fallenMeteor) return new ItemStack(GCItems.meteoricIronRaw);
+        if (b == GCBlocks.fallenMeteor) {
+            return new ItemStack(GCItems.meteoricIronRaw);
+        }
 
         return VersionUtil.createStack(b, world.getBlockMetadata(x, y, z));
     }
@@ -1155,7 +1390,7 @@ public class EntityAstroMiner extends Entity
     private boolean addToInventory(ItemStack itemstack) {
         boolean flag1 = false;
         int k = 0;
-        int invSize = this.getSizeInventory();
+        final int invSize = this.getSizeInventory();
 
         ItemStack itemstack1;
 
@@ -1167,7 +1402,7 @@ public class EntityAstroMiner extends Entity
                         && itemstack1.getItem() == itemstack.getItem()
                         && (!itemstack.getHasSubtypes() || itemstack.getItemDamage() == itemstack1.getItemDamage())
                         && ItemStack.areItemStackTagsEqual(itemstack, itemstack1)) {
-                    int l = itemstack1.stackSize + itemstack.stackSize;
+                    final int l = itemstack1.stackSize + itemstack.stackSize;
 
                     if (l <= itemstack.getMaxStackSize()) {
                         itemstack.stackSize = 0;
@@ -1212,66 +1447,76 @@ public class EntityAstroMiner extends Entity
      * Logic to move the miner to a given position
      *
      * @param pos
-     * @param reverse   True if returning home (re-use same tunnels)
-     * @return   False while the miner is en route, True when the position is reached
+     * @param reverse True if returning home (re-use same tunnels)
+     * @return False while the miner is en route, True when the position is reached
      */
     private boolean moveToPos(BlockVec3 pos, boolean reverse) {
         this.noSpeedup = false;
 
-        if (reverse != (this.baseFacing < 4)) {
+        if (reverse != this.baseFacing < 4) {
             if (this.posZ > pos.z + 0.0001D || this.posZ < pos.z - 0.0001D) {
-                this.moveToPosZ(pos.z, stopForTurn);
-                if (TEMPDEBUG)
-                    GCLog.debug("At " + posX + "," + posY + "," + posZ + "Moving Z to " + pos.toString()
-                            + (stopForTurn
+                this.moveToPosZ(pos.z, this.stopForTurn);
+                if (this.TEMPDEBUG) {
+                    GCLog.debug("At " + this.posX + "," + this.posY + "," + this.posZ + "Moving Z to " + pos.toString()
+                            + (this.stopForTurn
                                     ? " : Stop for turn " + this.rotationPitch + "," + this.rotationYaw + " | "
                                             + this.targetPitch + "," + this.targetYaw
                                     : ""));
+                }
             } else if (this.posY > pos.y - 0.9999D || this.posY < pos.y - 1.0001D) {
-                this.moveToPosY(pos.y - 1, stopForTurn);
-                if (TEMPDEBUG)
-                    GCLog.debug("At " + posX + "," + posY + "," + posZ + "Moving Y to " + pos.toString()
-                            + (stopForTurn
+                this.moveToPosY(pos.y - 1, this.stopForTurn);
+                if (this.TEMPDEBUG) {
+                    GCLog.debug("At " + this.posX + "," + this.posY + "," + this.posZ + "Moving Y to " + pos.toString()
+                            + (this.stopForTurn
                                     ? " : Stop for turn " + this.rotationPitch + "," + this.rotationYaw + " | "
                                             + this.targetPitch + "," + this.targetYaw
                                     : ""));
+                }
             } else if (this.posX > pos.x + 0.0001D || this.posX < pos.x - 0.0001D) {
-                this.moveToPosX(pos.x, stopForTurn);
-                if (TEMPDEBUG)
-                    GCLog.debug("At " + posX + "," + posY + "," + posZ + "Moving X to " + pos.toString()
-                            + (stopForTurn
+                this.moveToPosX(pos.x, this.stopForTurn);
+                if (this.TEMPDEBUG) {
+                    GCLog.debug("At " + this.posX + "," + this.posY + "," + this.posZ + "Moving X to " + pos.toString()
+                            + (this.stopForTurn
                                     ? " : Stop for turn " + this.rotationPitch + "," + this.rotationYaw + " | "
                                             + this.targetPitch + "," + this.targetYaw
                                     : ""));
-            } else return true;
-            // got there
+                }
+            } else {
+                return true;
+                // got there
+            }
         } else {
             if (this.posX > pos.x + 0.0001D || this.posX < pos.x - 0.0001D) {
-                this.moveToPosX(pos.x, stopForTurn);
-                if (TEMPDEBUG)
-                    GCLog.debug("At " + posX + "," + posY + "," + posZ + "Moving X to " + pos.toString()
-                            + (stopForTurn
+                this.moveToPosX(pos.x, this.stopForTurn);
+                if (this.TEMPDEBUG) {
+                    GCLog.debug("At " + this.posX + "," + this.posY + "," + this.posZ + "Moving X to " + pos.toString()
+                            + (this.stopForTurn
                                     ? " : Stop for turn " + this.rotationPitch + "," + this.rotationYaw + " | "
                                             + this.targetPitch + "," + this.targetYaw
                                     : ""));
+                }
             } else if (this.posY > pos.y - 0.9999D || this.posY < pos.y - 1.0001D) {
-                this.moveToPosY(pos.y - 1, stopForTurn);
-                if (TEMPDEBUG)
-                    GCLog.debug("At " + posX + "," + posY + "," + posZ + "Moving Y to " + pos.toString()
-                            + (stopForTurn
+                this.moveToPosY(pos.y - 1, this.stopForTurn);
+                if (this.TEMPDEBUG) {
+                    GCLog.debug("At " + this.posX + "," + this.posY + "," + this.posZ + "Moving Y to " + pos.toString()
+                            + (this.stopForTurn
                                     ? " : Stop for turn " + this.rotationPitch + "," + this.rotationYaw + " | "
                                             + this.targetPitch + "," + this.targetYaw
                                     : ""));
+                }
             } else if (this.posZ > pos.z + 0.0001D || this.posZ < pos.z - 0.0001D) {
-                this.moveToPosZ(pos.z, stopForTurn);
-                if (TEMPDEBUG)
-                    GCLog.debug("At " + posX + "," + posY + "," + posZ + "Moving Z to " + pos.toString()
-                            + (stopForTurn
+                this.moveToPosZ(pos.z, this.stopForTurn);
+                if (this.TEMPDEBUG) {
+                    GCLog.debug("At " + this.posX + "," + this.posY + "," + this.posZ + "Moving Z to " + pos.toString()
+                            + (this.stopForTurn
                                     ? " : Stop for turn " + this.rotationPitch + "," + this.rotationYaw + " | "
                                             + this.targetPitch + "," + this.targetYaw
                                     : ""));
-            } else return true;
-            // got there
+                }
+            } else {
+                return true;
+                // got there
+            }
         }
 
         return false;
@@ -1281,25 +1526,31 @@ public class EntityAstroMiner extends Entity
         this.targetPitch = 0;
 
         if (this.posX > x) {
-            if (this.AIstate != AISTATE_DOCKING) this.targetYaw = 270;
+            if (this.AIstate != AISTATE_DOCKING) {
+                this.targetYaw = 270;
+            }
             this.motionX = -this.speed;
             // TODO some acceleration and deceleration
-            if (this.motionX * speedup <= x - this.posX) {
+            if (this.motionX * this.speedup <= x - this.posX) {
                 this.motionX = x - this.posX;
                 this.noSpeedup = true;
             }
             this.facingAI = 4;
         } else {
-            if (this.AIstate != AISTATE_DOCKING) this.targetYaw = 90;
+            if (this.AIstate != AISTATE_DOCKING) {
+                this.targetYaw = 90;
+            }
             this.motionX = this.speed;
-            if (this.motionX * speedup >= x - this.posX) {
+            if (this.motionX * this.speedup >= x - this.posX) {
                 this.motionX = x - this.posX;
                 this.noSpeedup = true;
             }
             this.facingAI = 5;
         }
 
-        if (stopForTurn) this.motionX = 0;
+        if (stopForTurn) {
+            this.motionX = 0;
+        }
 
         this.motionY = 0;
         this.motionZ = 0;
@@ -1309,7 +1560,7 @@ public class EntityAstroMiner extends Entity
         if (this.posY > y) {
             this.targetPitch = -90;
             this.motionY = -this.speed;
-            if (this.motionY * speedup <= y - this.posY) {
+            if (this.motionY * this.speedup <= y - this.posY) {
                 this.motionY = y - this.posY;
                 this.noSpeedup = true;
             }
@@ -1317,7 +1568,7 @@ public class EntityAstroMiner extends Entity
         } else {
             this.targetPitch = 90;
             this.motionY = this.speed;
-            if (this.motionY * speedup >= y - this.posY) {
+            if (this.motionY * this.speedup >= y - this.posY) {
                 this.motionY = y - this.posY;
                 this.noSpeedup = true;
             }
@@ -1336,25 +1587,31 @@ public class EntityAstroMiner extends Entity
         this.targetPitch = 0;
 
         if (this.posZ > z) {
-            if (this.AIstate != AISTATE_DOCKING) this.targetYaw = 180;
+            if (this.AIstate != AISTATE_DOCKING) {
+                this.targetYaw = 180;
+            }
             this.motionZ = -this.speed;
             // TODO some acceleration and deceleration
-            if (this.motionZ * speedup <= z - this.posZ) {
+            if (this.motionZ * this.speedup <= z - this.posZ) {
                 this.motionZ = z - this.posZ;
                 this.noSpeedup = true;
             }
             this.facingAI = 2;
         } else {
-            if (this.AIstate != AISTATE_DOCKING) this.targetYaw = 0;
+            if (this.AIstate != AISTATE_DOCKING) {
+                this.targetYaw = 0;
+            }
             this.motionZ = this.speed;
-            if (this.motionZ * speedup >= z - this.posZ) {
+            if (this.motionZ * this.speedup >= z - this.posZ) {
                 this.motionZ = z - this.posZ;
                 this.noSpeedup = true;
             }
             this.facingAI = 3;
         }
 
-        if (stopForTurn) this.motionZ = 0;
+        if (stopForTurn) {
+            this.motionZ = 0;
+        }
 
         this.motionY = 0;
         this.motionX = 0;
@@ -1364,28 +1621,42 @@ public class EntityAstroMiner extends Entity
         boolean flag = true;
         // Handle the turns when it changes direction
         if (this.rotationPitch > this.targetPitch + 0.001F || this.rotationPitch < this.targetPitch - 0.001F) {
-            if (this.rotationPitch > this.targetPitch + 180) this.rotationPitch -= 360;
-            else if (this.rotationPitch < this.targetPitch - 180) this.rotationPitch += 360;
+            if (this.rotationPitch > this.targetPitch + 180) {
+                this.rotationPitch -= 360;
+            } else if (this.rotationPitch < this.targetPitch - 180) {
+                this.rotationPitch += 360;
+            }
 
             if (this.rotationPitch > this.targetPitch) {
                 this.rotationPitch -= this.rotSpeed;
-                if (this.rotationPitch < this.targetPitch) this.rotationPitch = this.targetPitch;
+                if (this.rotationPitch < this.targetPitch) {
+                    this.rotationPitch = this.targetPitch;
+                }
             } else {
                 this.rotationPitch += this.rotSpeed;
-                if (this.rotationPitch > this.targetPitch) this.rotationPitch = this.targetPitch;
+                if (this.rotationPitch > this.targetPitch) {
+                    this.rotationPitch = this.targetPitch;
+                }
             }
         }
 
         if (this.rotationYaw > this.targetYaw + 0.001F || this.rotationYaw < this.targetYaw - 0.001F) {
-            if (this.rotationYaw > this.targetYaw + 180) this.rotationYaw -= 360;
-            else if (this.rotationYaw < this.targetYaw - 180) this.rotationYaw += 360;
+            if (this.rotationYaw > this.targetYaw + 180) {
+                this.rotationYaw -= 360;
+            } else if (this.rotationYaw < this.targetYaw - 180) {
+                this.rotationYaw += 360;
+            }
 
             if (this.rotationYaw > this.targetYaw) {
                 this.rotationYaw -= this.rotSpeed;
-                if (this.rotationYaw < this.targetYaw) this.rotationYaw = this.targetYaw;
+                if (this.rotationYaw < this.targetYaw) {
+                    this.rotationYaw = this.targetYaw;
+                }
             } else {
                 this.rotationYaw += this.rotSpeed;
-                if (this.rotationYaw > this.targetYaw) this.rotationYaw = this.targetYaw;
+                if (this.rotationYaw > this.targetYaw) {
+                    this.rotationYaw = this.targetYaw;
+                }
             }
             flag = false;
         }
@@ -1393,7 +1664,8 @@ public class EntityAstroMiner extends Entity
         return flag;
     }
 
-    /** x y z should be the mid-point of the 4 base blocks
+    /**
+     * x y z should be the mid-point of the 4 base blocks
      *
      * @param world
      * @param x
@@ -1405,10 +1677,14 @@ public class EntityAstroMiner extends Entity
      */
     public static boolean spawnMinerAtBase(
             World world, int x, int y, int z, int facing, BlockVec3 base, EntityPlayerMP player) {
-        if (world.isRemote) return true;
+        if (world.isRemote) {
+            return true;
+        }
         final EntityAstroMiner miner = new EntityAstroMiner(world, new ItemStack[EntityAstroMiner.INV_SIZE], 0);
         miner.setPlayer(player);
-        if (player.capabilities.isCreativeMode) miner.spawnedInCreative = true;
+        if (player.capabilities.isCreativeMode) {
+            miner.spawnedInCreative = true;
+        }
         miner.waypointBase = new BlockVec3(x, y, z).modifyPositionFromSide(ForgeDirection.getOrientation(facing), 1);
         miner.setPosition(miner.waypointBase.x, miner.waypointBase.y - 1, miner.waypointBase.z);
         miner.baseFacing = facing;
@@ -1439,9 +1715,10 @@ public class EntityAstroMiner extends Entity
         miner.posBase = base;
 
         // Increase motion speed when moving in empty space between asteroids
-        miner.speedup = (world.provider instanceof WorldProviderAsteroids) ? SPEEDUP * 1.6D : SPEEDUP;
+        miner.speedup = world.provider instanceof WorldProviderAsteroids ? SPEEDUP * 1.6D : SPEEDUP;
 
-        // Clear blocks, and test to see if its movement area in front of the base is blocked
+        // Clear blocks, and test to see if its movement area in front of the base is
+        // blocked
         if (miner.prepareMove(12, 0)) {
             miner.isDead = true;
             return false;
@@ -1502,32 +1779,34 @@ public class EntityAstroMiner extends Entity
         }
 
         if (!this.worldObj.isRemote) {
-            Entity e = par1DamageSource.getEntity();
+            final Entity e = par1DamageSource.getEntity();
 
-            // If creative mode player, kill the entity (even if player owner is offline) and drop nothing
+            // If creative mode player, kill the entity (even if player owner is offline)
+            // and drop nothing
             if (e instanceof EntityPlayer && ((EntityPlayer) e).capabilities.isCreativeMode) {
-                if (this.playerMP == null && !this.spawnedInCreative)
+                if (this.playerMP == null && !this.spawnedInCreative) {
                     ((EntityPlayer) e)
                             .addChatMessage(
                                     new ChatComponentText(
                                             "WARNING: that Astro Miner belonged to an offline player, cannot reset player's Astro Miner count."));
+                }
                 this.kill();
                 return true;
             }
 
             // Invulnerable to mobs
-            if (this.isEntityInvulnerable() || (e instanceof EntityLivingBase && !(e instanceof EntityPlayer))) {
+            if (this.isEntityInvulnerable() || e instanceof EntityLivingBase && !(e instanceof EntityPlayer)) {
                 return false;
             } else {
                 this.setBeenAttacked();
-                //                this.dataWatcher.updateObject(this.timeSinceHit, Integer.valueOf(10));
-                //                this.dataWatcher.updateObject(this.currentDamage, Integer.valueOf((int)
+                // this.dataWatcher.updateObject(this.timeSinceHit, Integer.valueOf(10));
+                // this.dataWatcher.updateObject(this.currentDamage, Integer.valueOf((int)
                 // (this.dataWatcher.getWatchableObjectInt(this.currentDamage) + par2 * 10)));
                 this.shipDamage += par2 * 10;
 
                 if (e instanceof EntityPlayer) {
                     this.shipDamage += par2 * 21;
-                    //                    this.dataWatcher.updateObject(this.currentDamage, 100);
+                    // this.dataWatcher.updateObject(this.currentDamage, 100);
                 }
 
                 if (this.shipDamage > 90) {
@@ -1565,9 +1844,10 @@ public class EntityAstroMiner extends Entity
 
     @Override
     public void performHurtAnimation() {
-        //	    this.dataWatcher.updateObject(this.timeSinceHit, Integer.valueOf(10));
-        //	    this.dataWatcher.updateObject(this.currentDamage,
-        // Integer.valueOf(this.dataWatcher.getWatchableObjectInt(this.currentDamage) * 5));
+        // this.dataWatcher.updateObject(this.timeSinceHit, Integer.valueOf(10));
+        // this.dataWatcher.updateObject(this.currentDamage,
+        // Integer.valueOf(this.dataWatcher.getWatchableObjectInt(this.currentDamage) *
+        // 5));
     }
 
     public float getDamage() {
@@ -1586,56 +1866,52 @@ public class EntityAstroMiner extends Entity
         super.setLocationAndAngles(x, y, z, rotYaw, rotPitch);
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
-    public void setPositionAndRotation2(
-            double p_70056_1_,
-            double p_70056_3_,
-            double p_70056_5_,
-            float p_70056_7_,
-            float p_70056_8_,
-            int p_70056_9_) {
-        this.minecartX = p_70056_1_;
-        this.minecartY = p_70056_3_;
-        this.minecartZ = p_70056_5_;
-        this.minecartYaw = p_70056_7_;
-        this.minecartPitch = p_70056_8_;
+    public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int rotationIncrements) {
+        this.minecartX = x;
+        this.minecartY = y;
+        this.minecartZ = z;
         this.turnProgress = 0;
         this.motionX = this.velocityX;
         this.motionY = this.velocityY;
         this.motionZ = this.velocityZ;
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
-    public void setVelocity(double p_70016_1_, double p_70016_3_, double p_70016_5_) {
-        this.velocityX = this.motionX = p_70016_1_;
-        this.velocityY = this.motionY = p_70016_3_;
-        this.velocityZ = this.motionZ = p_70016_5_;
+    public void setVelocity(double x, double y, double z) {
+        this.velocityX = this.motionX = x;
+        this.velocityY = this.motionY = y;
+        this.velocityZ = this.motionZ = z;
         this.turnProgress = 0;
     }
 
     @Override
-    protected void setSize(float p_70105_1_, float p_70105_2_) {
+    protected void setSize(float width, float height) {
         this.setBoundingBoxForFacing();
     }
 
     @Override
-    public void setPosition(double p_70107_1_, double p_70107_3_, double p_70107_5_) {
-        this.boundingBox.offset(p_70107_1_ - this.posX, p_70107_3_ - this.posY, p_70107_5_ - this.posZ);
-        this.posX = p_70107_1_;
-        this.posY = p_70107_3_;
-        this.posZ = p_70107_5_;
+    public void setPosition(double x, double y, double z) {
+        this.boundingBox.offset(x - this.posX, y - this.posY, z - this.posZ);
+        this.posX = x;
+        this.posY = y;
+        this.posZ = z;
     }
 
     @Override
     public void setDead() {
         if (!this.worldObj.isRemote && this.playerMP != null && !this.spawnedInCreative) {
-            int astroCount = GCPlayerStats.get(this.playerMP).astroMinerCount;
-            if (astroCount > 0) GCPlayerStats.get(this.playerMP).astroMinerCount--;
+            final int astroCount = GCPlayerStats.get(this.playerMP).astroMinerCount;
+            if (astroCount > 0) {
+                GCPlayerStats.get(this.playerMP).astroMinerCount--;
+            }
         }
 
         super.setDead();
-        if (posBase != null) {
-            TileEntity tileEntity = posBase.getTileEntity(this.worldObj);
+        if (this.posBase != null) {
+            final TileEntity tileEntity = this.posBase.getTileEntity(this.worldObj);
             if (tileEntity instanceof TileEntityMinerBase) {
                 ((TileEntityMinerBase) tileEntity).unlinkMiner();
             }
@@ -1646,16 +1922,19 @@ public class EntityAstroMiner extends Entity
         }
     }
 
+    @Override
     public boolean isEntityInvulnerable() {
         // Can't be damaged if its player is offline - it's in a fully dormant state
         return this.playerMP == null;
     }
 
     public List<ItemStack> getItemsDropped(List<ItemStack> droppedItems) {
-        ItemStack rocket = new ItemStack(AsteroidsItems.astroMiner, 1, 0);
+        final ItemStack rocket = new ItemStack(AsteroidsItems.astroMiner, 1, 0);
         droppedItems.add(rocket);
         for (int i = 0; i < this.cargoItems.length; i++) {
-            if (this.cargoItems[i] != null) droppedItems.add(this.cargoItems[i]);
+            if (this.cargoItems[i] != null) {
+                droppedItems.add(this.cargoItems[i]);
+            }
             this.cargoItems[i] = null;
         }
         return droppedItems;
@@ -1667,7 +1946,7 @@ public class EntityAstroMiner extends Entity
         }
 
         for (final ItemStack item : this.getItemsDropped(new ArrayList<ItemStack>())) {
-            EntityItem entityItem = this.entityDropItem(item, 0);
+            final EntityItem entityItem = this.entityDropItem(item, 0);
 
             if (item.hasTagCompound()) {
                 entityItem.getEntityItem().setTagCompound((NBTTagCompound)
@@ -1676,11 +1955,13 @@ public class EntityAstroMiner extends Entity
         }
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public IUpdatePlayerListBox getSoundUpdater() {
         return this.soundUpdater;
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public ISound setSoundUpdater(EntityPlayerSP player) {
         this.soundUpdater = new SoundUpdaterMiner(player, this);
@@ -1691,23 +1972,24 @@ public class EntityAstroMiner extends Entity
         if (this.soundUpdater != null) {
             ((SoundUpdaterMiner) this.soundUpdater).stopRocketSound();
         }
-        this.soundToStop = false;
     }
 
+    @Override
     public void transmitData(int[] data) {
-        data[0] = (int) (this.posX);
-        data[1] = (int) (this.posY);
-        data[2] = (int) (this.posZ);
+        data[0] = (int) this.posX;
+        data[1] = (int) this.posY;
+        data[2] = (int) this.posZ;
         data[3] = this.energyLevel;
         data[4] = this.AIstate;
     }
 
+    @Override
     public void receiveData(int[] data, String[] str) {
         str[0] = "";
         str[1] = "x: " + data[0];
         str[2] = "y: " + data[1];
         str[3] = "z: " + data[2];
-        int energyPerCent = data[3] / 120;
+        final int energyPerCent = data[3] / 120;
         str[4] = GCCoreUtil.translate("gui.energyStorage.desc.1") + ": " + energyPerCent + "%";
         switch (data[4]) {
             case EntityAstroMiner.AISTATE_STUCK:
@@ -1734,6 +2016,7 @@ public class EntityAstroMiner extends Entity
         }
     }
 
+    @Override
     public void adjustDisplay(int[] data) {
         GL11.glScalef(0.9F, 0.9F, 0.9F);
     }
@@ -1741,7 +2024,7 @@ public class EntityAstroMiner extends Entity
     @Override
     protected void readEntityFromNBT(NBTTagCompound nbt) {
         final NBTTagList var2 = nbt.getTagList("Items", 10);
-        this.cargoItems = new ItemStack[this.INV_SIZE];
+        this.cargoItems = new ItemStack[EntityAstroMiner.INV_SIZE];
 
         if (var2 != null) {
             for (int var3 = 0; var3 < var2.tagCount(); ++var3) {
@@ -1754,26 +2037,36 @@ public class EntityAstroMiner extends Entity
             }
         }
 
-        if (nbt.hasKey("Energy")) this.energyLevel = nbt.getInteger("Energy");
+        if (nbt.hasKey("Energy")) {
+            this.energyLevel = nbt.getInteger("Energy");
+        }
         if (nbt.hasKey("BaseX")) {
             this.posBase = new BlockVec3(nbt.getInteger("BaseX"), nbt.getInteger("BaseY"), nbt.getInteger("BaseZ"));
             this.flagLink = true;
         }
-        if (nbt.hasKey("TargetX"))
+        if (nbt.hasKey("TargetX")) {
             this.posTarget =
                     new BlockVec3(nbt.getInteger("TargetX"), nbt.getInteger("TargetY"), nbt.getInteger("TargetZ"));
-        if (nbt.hasKey("WBaseX"))
+        }
+        if (nbt.hasKey("WBaseX")) {
             this.waypointBase =
                     new BlockVec3(nbt.getInteger("WBaseX"), nbt.getInteger("WBaseY"), nbt.getInteger("WBaseZ"));
-        if (nbt.hasKey("BaseFacing")) this.baseFacing = nbt.getInteger("BaseFacing");
-        if (nbt.hasKey("AIState")) this.AIstate = nbt.getInteger("AIState");
-        if (nbt.hasKey("Facing")) this.facingAI = nbt.getInteger("Facing");
+        }
+        if (nbt.hasKey("BaseFacing")) {
+            this.baseFacing = nbt.getInteger("BaseFacing");
+        }
+        if (nbt.hasKey("AIState")) {
+            this.AIstate = nbt.getInteger("AIState");
+        }
+        if (nbt.hasKey("Facing")) {
+            this.facingAI = nbt.getInteger("Facing");
+        }
         this.lastFacing = -1;
         if (nbt.hasKey("WayPoints")) {
             this.wayPoints.clear();
             final NBTTagList wpList = nbt.getTagList("WayPoints", 10);
             for (int j = 0; j < wpList.tagCount(); j++) {
-                NBTTagCompound bvTag = wpList.getCompoundTagAt(j);
+                final NBTTagCompound bvTag = wpList.getCompoundTagAt(j);
                 this.wayPoints.add(BlockVec3.readFromNBT(bvTag));
             }
         }
@@ -1781,13 +2074,15 @@ public class EntityAstroMiner extends Entity
             this.minePoints.clear();
             final NBTTagList mpList = nbt.getTagList("MinePoints", 10);
             for (int j = 0; j < mpList.tagCount(); j++) {
-                NBTTagCompound bvTag = mpList.getCompoundTagAt(j);
+                final NBTTagCompound bvTag = mpList.getCompoundTagAt(j);
                 this.minePoints.add(BlockVec3.readFromNBT(bvTag));
             }
         }
-        if (nbt.hasKey("MinePointCurrent"))
+        if (nbt.hasKey("MinePointCurrent")) {
             this.minePointCurrent = BlockVec3.readFromNBT(nbt.getCompoundTag("MinePointCurrent"));
-        else this.minePointCurrent = null;
+        } else {
+            this.minePointCurrent = null;
+        }
         if (nbt.hasKey("playerUUIDMost", 4) && nbt.hasKey("playerUUIDLeast", 4)) {
             this.playerUUID = new UUID(nbt.getLong("playerUUIDMost"), nbt.getLong("playerUUIDLeast"));
         } else {
@@ -1797,10 +2092,11 @@ public class EntityAstroMiner extends Entity
         }
         if (nbt.hasKey("speedup")) {
             this.speedup = nbt.getDouble("speedup");
-        } else
-            this.speedup = (WorldUtil.getProviderForDimensionServer(this.dimension) instanceof WorldProviderAsteroids)
+        } else {
+            this.speedup = WorldUtil.getProviderForDimensionServer(this.dimension) instanceof WorldProviderAsteroids
                     ? SPEEDUP * 1.6D
                     : SPEEDUP;
+        }
 
         this.pathBlockedCount = nbt.getInteger("pathBlockedCount");
         this.spawnedInCreative = nbt.getBoolean("spawnedInCreative");
@@ -1843,16 +2139,16 @@ public class EntityAstroMiner extends Entity
         nbt.setInteger("AIState", this.AIstate);
         nbt.setInteger("Facing", this.facingAI);
         if (this.wayPoints.size() > 0) {
-            NBTTagList wpList = new NBTTagList();
-            for (int j = 0; j < this.wayPoints.size(); j++) {
-                wpList.appendTag(this.wayPoints.get(j).writeToNBT(new NBTTagCompound()));
+            final NBTTagList wpList = new NBTTagList();
+            for (final BlockVec3 element : this.wayPoints) {
+                wpList.appendTag(element.writeToNBT(new NBTTagCompound()));
             }
             nbt.setTag("WayPoints", wpList);
         }
         if (this.minePoints.size() > 0) {
-            NBTTagList mpList = new NBTTagList();
-            for (int j = 0; j < this.minePoints.size(); j++) {
-                mpList.appendTag(this.minePoints.get(j).writeToNBT(new NBTTagCompound()));
+            final NBTTagList mpList = new NBTTagList();
+            for (final BlockVec3 element : this.minePoints) {
+                mpList.appendTag(element.writeToNBT(new NBTTagCompound()));
             }
             nbt.setTag("MinePoints", mpList);
         }

@@ -25,13 +25,13 @@ public class SpaceRace {
     private FlagData flagData;
     private Vector3 teamColor;
     private int ticksSpent;
-    private Map<CelestialBody, Integer> celestialBodyStatusList = new HashMap<CelestialBody, Integer>();
+    private final Map<CelestialBody, Integer> celestialBodyStatusList = new HashMap<>();
 
     public SpaceRace() {}
 
     public SpaceRace(List<String> playerNames, String teamName, FlagData flagData, Vector3 teamColor) {
         this.playerNames = playerNames;
-        this.teamName = new String(teamName);
+        this.teamName = teamName;
         this.ticksSpent = 0;
         this.flagData = flagData;
         this.teamColor = teamColor;
@@ -40,7 +40,9 @@ public class SpaceRace {
 
     public void loadFromNBT(NBTTagCompound nbt) {
         this.teamName = nbt.getString("TeamName");
-        if (ConfigManagerCore.enableDebug) GCLog.info("Loading spacerace data for team " + this.teamName);
+        if (ConfigManagerCore.enableDebug) {
+            GCLog.info("Loading spacerace data for team " + this.teamName);
+        }
         this.spaceRaceID = nbt.getInteger("SpaceRaceID");
         this.ticksSpent = (int) nbt.getLong("TicksSpent"); // Deal with legacy error
         this.flagData = FlagData.readFlagData(nbt);
@@ -49,26 +51,30 @@ public class SpaceRace {
 
         NBTTagList tagList = nbt.getTagList("PlayerList", 10);
         for (int i = 0; i < tagList.tagCount(); i++) {
-            NBTTagCompound tagAt = tagList.getCompoundTagAt(i);
+            final NBTTagCompound tagAt = tagList.getCompoundTagAt(i);
             this.playerNames.add(tagAt.getString("PlayerName"));
         }
 
         tagList = nbt.getTagList("CelestialBodyList", 10);
         for (int i = 0; i < tagList.tagCount(); i++) {
-            NBTTagCompound tagAt = tagList.getCompoundTagAt(i);
+            final NBTTagCompound tagAt = tagList.getCompoundTagAt(i);
 
-            CelestialBody body =
+            final CelestialBody body =
                     GalaxyRegistry.getCelestialBodyFromUnlocalizedName(tagAt.getString("CelestialBodyName"));
 
             if (body != null) {
                 this.celestialBodyStatusList.put(body, tagAt.getInteger("TimeTaken"));
             }
         }
-        if (ConfigManagerCore.enableDebug) GCLog.info("Loaded spacerace team data OK.");
+        if (ConfigManagerCore.enableDebug) {
+            GCLog.info("Loaded spacerace team data OK.");
+        }
     }
 
     public void saveToNBT(NBTTagCompound nbt) {
-        if (ConfigManagerCore.enableDebug) GCLog.info("Saving spacerace data for team " + this.teamName);
+        if (ConfigManagerCore.enableDebug) {
+            GCLog.info("Saving spacerace data for team " + this.teamName);
+        }
         nbt.setString("TeamName", this.teamName);
         nbt.setInteger("SpaceRaceID", this.spaceRaceID);
         nbt.setLong("TicksSpent", this.ticksSpent);
@@ -78,8 +84,8 @@ public class SpaceRace {
         nbt.setDouble("teamColorB", this.teamColor.z);
 
         NBTTagList tagList = new NBTTagList();
-        for (String player : this.playerNames) {
-            NBTTagCompound tagComp = new NBTTagCompound();
+        for (final String player : this.playerNames) {
+            final NBTTagCompound tagComp = new NBTTagCompound();
             tagComp.setString("PlayerName", player);
             tagList.appendTag(tagComp);
         }
@@ -87,15 +93,17 @@ public class SpaceRace {
         nbt.setTag("PlayerList", tagList);
 
         tagList = new NBTTagList();
-        for (Entry<CelestialBody, Integer> celestialBody : this.celestialBodyStatusList.entrySet()) {
-            NBTTagCompound tagComp = new NBTTagCompound();
+        for (final Entry<CelestialBody, Integer> celestialBody : this.celestialBodyStatusList.entrySet()) {
+            final NBTTagCompound tagComp = new NBTTagCompound();
             tagComp.setString("CelestialBodyName", celestialBody.getKey().getUnlocalizedName());
             tagComp.setInteger("TimeTaken", celestialBody.getValue());
             tagList.appendTag(tagComp);
         }
 
         nbt.setTag("CelestialBodyList", tagList);
-        if (ConfigManagerCore.enableDebug) GCLog.info("Saved spacerace team data OK.");
+        if (ConfigManagerCore.enableDebug) {
+            GCLog.info("Saved spacerace team data OK.");
+        }
     }
 
     public void tick() {
@@ -104,7 +112,9 @@ public class SpaceRace {
 
     public String getTeamName() {
         String ret = this.teamName;
-        if (SpaceRace.DEFAULT_NAME.equals(ret)) ret = GCCoreUtil.translate(SpaceRace.DEFAULT_NAME);
+        if (SpaceRace.DEFAULT_NAME.equals(ret)) {
+            ret = GCCoreUtil.translate(SpaceRace.DEFAULT_NAME);
+        }
         return ret;
     }
 

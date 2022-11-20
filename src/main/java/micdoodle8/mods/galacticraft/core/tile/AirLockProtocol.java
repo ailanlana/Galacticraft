@@ -24,7 +24,7 @@ class AirLockProtocol {
     public int maxZ = -6000000;
 
     public AirLockProtocol(TileEntity head) {
-        this.adjacentAirLocks = new ArrayList<TileEntityAirLock>();
+        this.adjacentAirLocks = new ArrayList<>();
         this.worldObj = head.getWorldObj();
         this.head = head;
         this.maxLoops = 26;
@@ -35,7 +35,7 @@ class AirLockProtocol {
             for (int y = -1; y <= 1; y++) {
                 for (int x = -1; x <= 1; x++) {
                     for (int z = -1; z <= 1; z++) {
-                        if (!(x == 0 && y == 0 && z == 0)) {
+                        if (x != 0 || y != 0 || z != 0) {
                             if (tile2.xCoord + x == this.head.xCoord || tile2.zCoord + z == this.head.zCoord) {
                                 final TileEntity tile = this.worldObj.getTileEntity(
                                         tile2.xCoord + x, tile2.yCoord + y, tile2.zCoord + z);
@@ -56,7 +56,7 @@ class AirLockProtocol {
             for (int y = -1; y <= 1; y++) {
                 for (int x = -1; x <= 1; x++) {
                     for (int z = -1; z <= 1; z++) {
-                        if (!(x == 0 && y == 0 && z == 0)) {
+                        if (x != 0 || y != 0 || z != 0) {
                             if (tile2.yCoord + y == this.head.yCoord) {
                                 final TileEntity tile = this.worldObj.getTileEntity(
                                         tile2.xCoord + x, tile2.yCoord + y, tile2.zCoord + z);
@@ -82,7 +82,7 @@ class AirLockProtocol {
             return null;
         }
 
-        this.adjacentAirLocks = new ArrayList<TileEntityAirLock>();
+        this.adjacentAirLocks = new ArrayList<>();
 
         this.horizontal = horizontal;
 
@@ -187,7 +187,7 @@ class AirLockProtocol {
 
         if (this.airLocksHorizontalMax == 0
                 || this.airLocksHorizontalMin == 0
-                || (!this.horizontal && (this.airLocksVerticalMin == 0 || this.airLocksVerticalMax == 0))
+                || !this.horizontal && (this.airLocksVerticalMin == 0 || this.airLocksVerticalMax == 0)
                 || this.airLocksHorizontalMax != this.airLocksHorizontalMin
                 || this.airLocksVerticalMax != this.airLocksVerticalMin) {
             return null;

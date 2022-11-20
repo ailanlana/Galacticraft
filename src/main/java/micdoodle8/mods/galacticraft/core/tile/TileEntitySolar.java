@@ -56,7 +56,7 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
     }
 
     /*
-     * @param tier: 1 = Basic Solar  2 = Advanced Solar
+     * @param tier: 1 = Basic Solar 2 = Advanced Solar
      */
     public TileEntitySolar(int tier) {
         this.storage.setMaxExtract(TileEntitySolar.MAX_GENERATE_WATTS);
@@ -71,7 +71,7 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
     @Override
     public void updateEntity() {
         if (!this.initialised) {
-            int metadata = this.getBlockMetadata();
+            final int metadata = this.getBlockMetadata();
             if (metadata >= BlockSolar.ADVANCED_METADATA) {
                 this.storage.setCapacity(30000);
                 this.setTierGC(2);
@@ -98,9 +98,9 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
                 if (this.worldObj.isDaytime()
                         && (this.worldObj.provider instanceof IGalacticraftWorldProvider
                                 || !this.worldObj.isRaining() && !this.worldObj.isThundering())) {
-                    double distance = 100.0D;
-                    double sinA = -Math.sin((this.currentAngle - 77.5D) * Math.PI / 180.0D);
-                    double cosA = Math.abs(Math.cos((this.currentAngle - 77.5D) * Math.PI / 180.0D));
+                    final double distance = 100.0D;
+                    final double sinA = -Math.sin((this.currentAngle - 77.5D) * Math.PI / 180.0D);
+                    final double cosA = Math.abs(Math.cos((this.currentAngle - 77.5D) * Math.PI / 180.0D));
 
                     for (int x = -1; x <= 1; x++) {
                         for (int z = -1; z <= 1; z++) {
@@ -110,7 +110,7 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
                                     boolean valid = true;
 
                                     for (int y = this.yCoord + 3; y < 256; y++) {
-                                        Block block = this.worldObj.getBlock(this.xCoord + x, y, this.zCoord + z);
+                                        final Block block = this.worldObj.getBlock(this.xCoord + x, y, this.zCoord + z);
 
                                         if (block.isOpaqueCube()) {
                                             valid = false;
@@ -125,11 +125,11 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
                             } else {
                                 boolean valid = true;
 
-                                BlockVec3 blockVec = new BlockVec3(this).translate(x, 3, z);
+                                final BlockVec3 blockVec = new BlockVec3(this).translate(x, 3, z);
                                 for (double d = 0.0D; d < distance; d++) {
-                                    BlockVec3 blockAt =
+                                    final BlockVec3 blockAt =
                                             blockVec.clone().translate((int) (d * sinA), (int) (d * cosA), 0);
-                                    Block block = blockAt.getBlock(this.worldObj);
+                                    final Block block = blockAt.getBlock(this.worldObj);
 
                                     if (block.isOpaqueCube()) {
                                         valid = false;
@@ -147,7 +147,7 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
             }
         }
 
-        float angle = this.worldObj.getCelestialAngle(1.0F) - 0.7845194F < 0 ? 1.0F - 0.7845194F : -0.7845194F;
+        final float angle = this.worldObj.getCelestialAngle(1.0F) - 0.7845194F < 0 ? 1.0F - 0.7845194F : -0.7845194F;
         float celestialAngle = (this.worldObj.getCelestialAngle(1.0F) + angle) * 360.0F;
 
         celestialAngle %= 360;
@@ -160,7 +160,7 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
             }
         } else {
             if (celestialAngle > 30 && celestialAngle < 150) {
-                float difference = this.targetAngle - celestialAngle;
+                final float difference = this.targetAngle - celestialAngle;
 
                 this.targetAngle -= difference / 20.0F;
             } else if (!this.worldObj.isDaytime() || this.worldObj.isRaining() || this.worldObj.isThundering()) {
@@ -172,7 +172,7 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
             }
         }
 
-        float difference = this.targetAngle - this.currentAngle;
+        final float difference = this.targetAngle - this.currentAngle;
 
         this.currentAngle += difference / 20.0F;
 
@@ -192,12 +192,13 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
             return 0;
         }
 
-        float angle = this.worldObj.getCelestialAngle(1.0F) - 0.784690560F < 0 ? 1.0F - 0.784690560F : -0.784690560F;
+        final float angle =
+                this.worldObj.getCelestialAngle(1.0F) - 0.784690560F < 0 ? 1.0F - 0.784690560F : -0.784690560F;
         float celestialAngle = (this.worldObj.getCelestialAngle(1.0F) + angle) * 360.0F;
 
         celestialAngle %= 360;
 
-        float difference = (180.0F - Math.abs(this.currentAngle % 180 - celestialAngle)) / 180.0F;
+        final float difference = (180.0F - Math.abs(this.currentAngle % 180 - celestialAngle)) / 180.0F;
 
         return MathHelper.floor_float(0.01F
                 * difference
@@ -235,20 +236,24 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
 
     @Override
     public void onCreate(BlockVec3 placedPosition) {
-        int buildHeight = this.worldObj.getHeight() - 1;
+        final int buildHeight = this.worldObj.getHeight() - 1;
 
-        if (placedPosition.y + 1 > buildHeight) return;
+        if (placedPosition.y + 1 > buildHeight) {
+            return;
+        }
         final BlockVec3 vecStrut = new BlockVec3(placedPosition.x, placedPosition.y + 1, placedPosition.z);
         ((BlockMulti) GCBlocks.fakeBlock).makeFakeBlock(this.worldObj, vecStrut, placedPosition, 0);
 
-        if (placedPosition.y + 2 > buildHeight) return;
+        if (placedPosition.y + 2 > buildHeight) {
+            return;
+        }
         for (int x = -1; x < 2; x++) {
             for (int z = -1; z < 2; z++) {
                 final BlockVec3 vecToAdd =
                         new BlockVec3(placedPosition.x + x, placedPosition.y + 2, placedPosition.z + z);
 
                 ((BlockMulti) GCBlocks.fakeBlock)
-                        .makeFakeBlock(this.worldObj, vecToAdd, placedPosition, (this.getTierGC() == 1) ? 4 : 0);
+                        .makeFakeBlock(this.worldObj, vecToAdd, placedPosition, this.getTierGC() == 1 ? 4 : 0);
             }
         }
     }
@@ -328,12 +333,9 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
         nbt.setTag("Items", list);
     }
 
-    /*@Override
-       public float getRequest(ForgeDirection direction)
-    {
-    	return 0;
-    }
-    */
+    /*
+     * @Override public float getRequest(ForgeDirection direction) { return 0; }
+     */
 
     @Override
     public EnumSet<ForgeDirection> getElectricalInputDirections() {
@@ -342,22 +344,23 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
 
     @Override
     public EnumSet<ForgeDirection> getElectricalOutputDirections() {
-        int metadata = this.getBlockMetadata() & 3;
+        final int metadata = this.getBlockMetadata() & 3;
 
-        return EnumSet.of(ForgeDirection.getOrientation((metadata + 2) ^ 1), ForgeDirection.UNKNOWN);
+        return EnumSet.of(ForgeDirection.getOrientation(metadata + 2 ^ 1), ForgeDirection.UNKNOWN);
     }
 
     @Override
     public ForgeDirection getElectricalOutputDirectionMain() {
-        int metadata = this.getBlockMetadata() & 3;
+        final int metadata = this.getBlockMetadata() & 3;
 
-        return ForgeDirection.getOrientation((metadata + 2) ^ 1);
+        return ForgeDirection.getOrientation(metadata + 2 ^ 1);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
-        return AxisAlignedBB.getBoundingBox(xCoord - 1, yCoord, zCoord - 1, xCoord + 2, yCoord + 4, zCoord + 2);
+        return AxisAlignedBB.getBoundingBox(
+                this.xCoord - 1, this.yCoord, this.zCoord - 1, this.xCoord + 2, this.yCoord + 4, this.zCoord + 2);
     }
 
     @Override

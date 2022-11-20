@@ -23,8 +23,10 @@ class TransformerFactory {
     }
 
     /**
-     * @param factory      the constructor of actual ClassVisitor. First argument is api level. Second argument is downstream ClassVisitor
-     * @param activeSide   the side this transformer will be active on. null for both side.
+     * @param factory      the constructor of actual ClassVisitor. First argument is
+     *                     api level. Second argument is downstream ClassVisitor
+     * @param activeSide   the side this transformer will be active on. null for
+     *                     both side.
      * @param expandFrames whether the frames need to be recalculated
      */
     public TransformerFactory(
@@ -35,14 +37,14 @@ class TransformerFactory {
     }
 
     public boolean isInactive() {
-        return activeSide != null && activeSide != FMLLaunchHandler.side();
+        return this.activeSide != null && this.activeSide != FMLLaunchHandler.side();
     }
 
     public final ClassVisitor apply(int api, ClassVisitor downstream) {
-        return factory.apply(api, downstream);
+        return this.factory.apply(api, downstream);
     }
 
     public boolean isExpandFrames() {
-        return expandFrames;
+        return this.expandFrames;
     }
 }

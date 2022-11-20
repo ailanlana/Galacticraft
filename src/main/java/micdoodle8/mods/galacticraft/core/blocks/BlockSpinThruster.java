@@ -39,27 +39,29 @@ public class BlockSpinThruster extends BlockAdvanced implements ItemBlockDesc.IB
         return world.getBlock(x, y, z).isSideSolid(world, x, y, z, direction);
     }
 
-    //	@Override
-    //	@SideOnly(Side.CLIENT)
-    //	public IIcon getIcon(IBlockAccess par1IBlockAccess, int x, int y, int z, int par5)
-    //	{
-    //		return BlockSpinThruster.thrusterIcon;
-    //	}
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // public IIcon getIcon(IBlockAccess par1IBlockAccess, int x, int y, int z, int
+    // par5)
+    // {
+    // return BlockSpinThruster.thrusterIcon;
+    // }
     //
-    //	@Override
-    //	@SideOnly(Side.CLIENT)
-    //	public IIcon getIcon(int par1, int x)
-    //	{
-    //		return BlockSpinThruster.thrusterIcon;
-    //	}
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // public IIcon getIcon(int par1, int x)
+    // {
+    // return BlockSpinThruster.thrusterIcon;
+    // }
     //
-    //	@Override
-    //	@SideOnly(Side.CLIENT)
-    //	public void registerBlockIcons(IIconRegister par1IconRegister)
-    //	{
-    //		BlockSpinThruster.thrusterIcon = par1IconRegister.registerIcon(GalacticraftCore.TEXTURE_PREFIX +
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // public void registerBlockIcons(IIconRegister par1IconRegister)
+    // {
+    // BlockSpinThruster.thrusterIcon =
+    // par1IconRegister.registerIcon(GalacticraftCore.TEXTURE_PREFIX +
     // "spinThruster");
-    //	}
+    // }
 
     @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int x, int y, int z) {
@@ -92,23 +94,13 @@ public class BlockSpinThruster extends BlockAdvanced implements ItemBlockDesc.IB
     @Override
     public int onBlockPlaced(
             World par1World, int x, int y, int z, int par5, float par6, float par7, float par8, int par9) {
-        int var10 = par9;
+        if (par5 == 2 && BlockSpinThruster.isBlockSolidOnSide(par1World, x, y, z + 1, ForgeDirection.NORTH, true)) {}
 
-        if (par5 == 2 && BlockSpinThruster.isBlockSolidOnSide(par1World, x, y, z + 1, ForgeDirection.NORTH, true)) {
-            var10 = 4;
-        }
+        if (par5 == 3 && BlockSpinThruster.isBlockSolidOnSide(par1World, x, y, z - 1, ForgeDirection.SOUTH, true)) {}
 
-        if (par5 == 3 && BlockSpinThruster.isBlockSolidOnSide(par1World, x, y, z - 1, ForgeDirection.SOUTH, true)) {
-            var10 = 3;
-        }
+        if (par5 == 4 && BlockSpinThruster.isBlockSolidOnSide(par1World, x + 1, y, z, ForgeDirection.WEST, true)) {}
 
-        if (par5 == 4 && BlockSpinThruster.isBlockSolidOnSide(par1World, x + 1, y, z, ForgeDirection.WEST, true)) {
-            var10 = 2;
-        }
-
-        if (par5 == 5 && BlockSpinThruster.isBlockSolidOnSide(par1World, x - 1, y, z, ForgeDirection.EAST, true)) {
-            var10 = 1;
-        }
+        if (par5 == 5 && BlockSpinThruster.isBlockSolidOnSide(par1World, x - 1, y, z, ForgeDirection.EAST, true)) {}
 
         return 0;
     }
@@ -125,7 +117,6 @@ public class BlockSpinThruster extends BlockAdvanced implements ItemBlockDesc.IB
     @Override
     public void onBlockAdded(World par1World, int x, int y, int z) {
         int metadata = par1World.getBlockMetadata(x, y, z);
-        TileEntityThruster tile = (TileEntityThruster) par1World.getTileEntity(x, y, z);
 
         if (metadata == 0) {
             if (BlockSpinThruster.isBlockSolidOnSide(par1World, x - 1, y, z, ForgeDirection.EAST, true)) {
@@ -173,8 +164,8 @@ public class BlockSpinThruster extends BlockAdvanced implements ItemBlockDesc.IB
 
     /**
      * Lets the block know when one of its neighbor changes. Doesn't know which
-     * neighbor changed (coordinates passed are their own) Args: x, y, z,
-     * neighbor blockID
+     * neighbor changed (coordinates passed are their own) Args: x, y, z, neighbor
+     * blockID
      */
     @Override
     public void onNeighborBlockChange(World par1World, int x, int y, int z, Block par5) {
@@ -240,7 +231,7 @@ public class BlockSpinThruster extends BlockAdvanced implements ItemBlockDesc.IB
     @Override
     public MovingObjectPosition collisionRayTrace(World par1World, int x, int y, int z, Vec3 par5Vec3, Vec3 par6Vec3) {
         final int var7 = par1World.getBlockMetadata(x, y, z) & 7;
-        float var8 = 0.3F;
+        final float var8 = 0.3F;
 
         if (var7 == 1) {
             this.setBlockBounds(0.0F, 0.2F, 0.5F - var8, var8 * 2.0F, 0.8F, 0.5F + var8);
@@ -258,10 +249,12 @@ public class BlockSpinThruster extends BlockAdvanced implements ItemBlockDesc.IB
     @Override
     @SideOnly(Side.CLIENT)
     /**
-     * A randomly called display update to be able to add particles or other items for display
+     * A randomly called display update to be able to add particles or other items
+     * for display
      */
     public void randomDisplayTick(World par1World, int x, int y, int z, Random par5Random) {
-        // TODO this is torch code as a placeholder, still need to adjust positioning and particle type
+        // TODO this is torch code as a placeholder, still need to adjust positioning
+        // and particle type
         // Also make small thrust sounds
         if (par1World.provider instanceof WorldProviderSpaceStation) {
             if (((WorldProviderSpaceStation) par1World.provider).getSpinManager().thrustersFiring
@@ -290,12 +283,11 @@ public class BlockSpinThruster extends BlockAdvanced implements ItemBlockDesc.IB
     public boolean onUseWrench(
             World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
         final int metadata = world.getBlockMetadata(x, y, z);
-        final int facing = metadata & 8;
-        final int change = (8 + metadata) & 15;
+        final int change = 8 + metadata & 15;
         world.setBlockMetadataWithNotify(x, y, z, change, 2);
 
         if (world.provider instanceof WorldProviderSpaceStation && !world.isRemote) {
-            SpinManager worldOrbital = ((WorldProviderSpaceStation) world.provider).getSpinManager();
+            final SpinManager worldOrbital = ((WorldProviderSpaceStation) world.provider).getSpinManager();
             worldOrbital.checkSS(new BlockVec3(x, y, z), true);
         }
         return true;
@@ -311,8 +303,8 @@ public class BlockSpinThruster extends BlockAdvanced implements ItemBlockDesc.IB
         if (!world.isRemote) {
             final int facing = metadata & 8;
             if (world.provider instanceof WorldProviderSpaceStation) {
-                SpinManager worldOrbital = ((WorldProviderSpaceStation) world.provider).getSpinManager();
-                BlockVec3 baseBlock = new BlockVec3(x, y, z);
+                final SpinManager worldOrbital = ((WorldProviderSpaceStation) world.provider).getSpinManager();
+                final BlockVec3 baseBlock = new BlockVec3(x, y, z);
                 worldOrbital.removeThruster(baseBlock, facing == 0);
                 worldOrbital.updateSpinSpeed();
             }

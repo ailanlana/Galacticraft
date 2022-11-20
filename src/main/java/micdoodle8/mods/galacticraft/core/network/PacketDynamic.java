@@ -28,7 +28,7 @@ public class PacketDynamic implements IPacket {
         this.type = 0;
         this.dimID = entity.worldObj.provider.dimensionId;
         this.data = new Object[] {entity.getEntityId()};
-        this.sendData = new ArrayList<Object>();
+        this.sendData = new ArrayList<>();
         ((IPacketReceiver) entity).getNetworkedData(this.sendData);
     }
 
@@ -38,7 +38,7 @@ public class PacketDynamic implements IPacket {
         this.type = 1;
         this.dimID = tile.getWorldObj().provider.dimensionId;
         this.data = new Object[] {tile.xCoord, tile.yCoord, tile.zCoord};
-        this.sendData = new ArrayList<Object>();
+        this.sendData = new ArrayList<>();
         ((IPacketReceiver) tile).getNetworkedData(this.sendData);
     }
 
@@ -60,7 +60,7 @@ public class PacketDynamic implements IPacket {
 
         try {
             NetworkUtil.encodeData(buffer, this.sendData);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }
@@ -86,7 +86,7 @@ public class PacketDynamic implements IPacket {
                 this.data[0] = buffer.readInt();
 
                 if (world != null) {
-                    Entity entity = world.getEntityByID((Integer) this.data[0]);
+                    final Entity entity = world.getEntityByID((Integer) this.data[0]);
 
                     if (entity instanceof IPacketReceiver && buffer.readableBytes() > 0) {
                         ((IPacketReceiver) entity).decodePacketdata(buffer);
@@ -101,7 +101,7 @@ public class PacketDynamic implements IPacket {
                 this.data[2] = buffer.readInt();
 
                 if (world != null) {
-                    TileEntity tile =
+                    final TileEntity tile =
                             world.getTileEntity((Integer) this.data[0], (Integer) this.data[1], (Integer) this.data[2]);
 
                     if (tile instanceof IPacketReceiver) {
@@ -126,12 +126,13 @@ public class PacketDynamic implements IPacket {
     private void handleData(Side side, EntityPlayer player) {
         switch (this.type) {
             case 0:
-                Entity entity = player.worldObj.getEntityByID((Integer) this.data[0]);
+                final Entity entity = player.worldObj.getEntityByID((Integer) this.data[0]);
 
                 if (entity instanceof IPacketReceiver) {
                     ((IPacketReceiver) entity).handlePacketData(side, player);
 
-                    // Treat any packet received by a server from a client as an update request specifically to that
+                    // Treat any packet received by a server from a client as an update request
+                    // specifically to that
                     // client
                     if (side == Side.SERVER && player instanceof EntityPlayerMP) {
                         GalacticraftCore.packetPipeline.sendTo(new PacketDynamic(entity), (EntityPlayerMP) player);
@@ -140,13 +141,14 @@ public class PacketDynamic implements IPacket {
 
                 break;
             case 1:
-                TileEntity tile = player.worldObj.getTileEntity(
+                final TileEntity tile = player.worldObj.getTileEntity(
                         (Integer) this.data[0], (Integer) this.data[1], (Integer) this.data[2]);
 
                 if (tile instanceof IPacketReceiver) {
                     ((IPacketReceiver) tile).handlePacketData(side, player);
 
-                    // Treat any packet received by a server from a client as an update request specifically to that
+                    // Treat any packet received by a server from a client as an update request
+                    // specifically to that
                     // client
                     if (side == Side.SERVER && player instanceof EntityPlayerMP) {
                         GalacticraftCore.packetPipeline.sendTo(new PacketDynamic(tile), (EntityPlayerMP) player);

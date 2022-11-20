@@ -75,13 +75,13 @@ public class BlockBasicAsteroids extends Block implements IDetectableResource, I
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
         switch (metadata) {
             case 4:
-                ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+                final ArrayList<ItemStack> ret = new ArrayList<>();
 
-                int count = quantityDropped(metadata, fortune, world.rand);
+                int count = this.quantityDropped(metadata, fortune, world.rand);
                 for (int i = 0; i < count; i++) {
                     ret.add(new ItemStack(AsteroidsItems.basicItem, 1, 3));
                 }
-                count = quantityDropped(metadata, fortune, world.rand);
+                count = this.quantityDropped(metadata, fortune, world.rand);
                 for (int i = 0; i < count; i++) {
                     ret.add(new ItemStack(AsteroidsItems.basicItem, 1, 4));
                 }
@@ -102,8 +102,8 @@ public class BlockBasicAsteroids extends Block implements IDetectableResource, I
     }
 
     @Override
-    public int getDamageValue(World p_149643_1_, int p_149643_2_, int p_149643_3_, int p_149643_4_) {
-        return p_149643_1_.getBlockMetadata(p_149643_2_, p_149643_3_, p_149643_4_);
+    public int getDamageValue(World worldIn, int x, int y, int z) {
+        return worldIn.getBlockMetadata(x, y, z);
     }
 
     @Override
@@ -111,7 +111,7 @@ public class BlockBasicAsteroids extends Block implements IDetectableResource, I
         switch (meta) {
             case 4:
                 if (fortune >= 1) {
-                    return (random.nextFloat() < fortune * 0.29F - 0.25F) ? 2 : 1;
+                    return random.nextFloat() < fortune * 0.29F - 0.25F ? 2 : 1;
                 }
             default:
                 return 1;
@@ -164,7 +164,7 @@ public class BlockBasicAsteroids extends Block implements IDetectableResource, I
 
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-        int metadata = world.getBlockMetadata(x, y, z);
+        final int metadata = world.getBlockMetadata(x, y, z);
         if (metadata == 4) {
             return new ItemStack(Item.getItemFromBlock(this), 1, metadata);
         }

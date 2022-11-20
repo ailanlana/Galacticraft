@@ -4,7 +4,6 @@ import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
 import micdoodle8.mods.galacticraft.planets.mars.blocks.BlockMachineMars;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
@@ -17,7 +16,7 @@ public class ItemRendererMachine implements IItemRenderer {
     private static final ResourceLocation chamberTexture1 =
             new ResourceLocation(MarsModule.ASSET_PREFIX, "textures/model/chamber2_dark.png");
 
-    private IModelCustom model;
+    private final IModelCustom model;
 
     public ItemRendererMachine(IModelCustom model) {
         this.model = model;
@@ -49,8 +48,6 @@ public class ItemRendererMachine implements IItemRenderer {
     }
 
     public void transform(ItemRenderType type) {
-        final EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
-
         if (type == ItemRenderType.EQUIPPED) {
             GL11.glRotatef(70, 1.0F, 0, 0);
             GL11.glRotatef(-10, 0.0F, 1, 0);

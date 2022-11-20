@@ -13,9 +13,12 @@ public class BlockTuple {
         this.meta = m;
     }
 
+    @Override
     public String toString() {
-        Item item = Item.getItemFromBlock(this.block);
-        if (item == null) return "unknown";
+        final Item item = Item.getItemFromBlock(this.block);
+        if (item == null) {
+            return "unknown";
+        }
         return new ItemStack(item, 1, this.meta).getUnlocalizedName() + ".name";
     }
 }

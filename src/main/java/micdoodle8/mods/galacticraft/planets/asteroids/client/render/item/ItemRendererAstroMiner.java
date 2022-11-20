@@ -36,7 +36,7 @@ public class ItemRendererAstroMiner implements IItemRenderer {
             float translateX,
             float translateY,
             float translateZ) {
-        boolean saveCullState = GL11.glIsEnabled(GL11.GL_CULL_FACE);
+        final boolean saveCullState = GL11.glIsEnabled(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glPushMatrix();
 
@@ -50,14 +50,17 @@ public class ItemRendererAstroMiner implements IItemRenderer {
         GL11.glTranslatef(-3.75F, 0F, 0F);
         this.modellasergr.renderAll();
         GL11.glPopMatrix();
-        if (!saveCullState) GL11.glDisable(GL11.GL_CULL_FACE);
+        if (!saveCullState) {
+            GL11.glDisable(GL11.GL_CULL_FACE);
+        }
     }
 
     public void transform(ItemStack itemstack, ItemRenderType type) {
         final EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
 
         if (type == ItemRenderType.EQUIPPED) {
-            // The additional offsets cause this to be held one-handed overhead (avoids clipping)
+            // The additional offsets cause this to be held one-handed overhead (avoids
+            // clipping)
             GL11.glRotatef(20F + 5F, 0F, 0F, -1.0F);
             GL11.glRotatef(-30F - 1.6F, 0F, 1.0F, 0F);
             GL11.glRotatef(-14F + 29.4F, 1.0F, 0F, 0F);

@@ -8,23 +8,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 /**
- *
  * This file is part of the Galacticraft project
  *
  * @author micdoodle8, radfast
- *
  */
 public class SoundUpdaterMiner extends MovingSound {
-    private final EntityPlayerSP thePlayer;
     private final EntityAstroMiner theRocket;
-    private boolean soundStopped;
     private float targetVolume;
     private float targetPitch;
 
     public SoundUpdaterMiner(EntityPlayerSP par1EntityPlayerSP, EntityAstroMiner par2Entity) {
         super(new ResourceLocation(GalacticraftCore.TEXTURE_PREFIX + "entity.astrominer"));
         this.theRocket = par2Entity;
-        this.thePlayer = par1EntityPlayerSP;
         this.volume = 0.00001F; // If it's zero it won't start playing
         this.targetVolume = 0.6F;
         this.targetPitch = 1.0F;
@@ -50,17 +45,25 @@ public class SoundUpdaterMiner extends MovingSound {
             }
             if (this.volume < this.targetVolume) {
                 this.volume += 0.1F;
-                if (this.volume > this.targetVolume) this.volume = this.targetVolume;
+                if (this.volume > this.targetVolume) {
+                    this.volume = this.targetVolume;
+                }
             } else if (this.volume > this.targetVolume) {
                 this.volume -= 0.1F;
-                if (this.volume < this.targetVolume) this.volume = this.targetVolume;
+                if (this.volume < this.targetVolume) {
+                    this.volume = this.targetVolume;
+                }
             }
             if (this.field_147663_c < this.targetPitch) {
                 this.field_147663_c += 0.05F;
-                if (this.field_147663_c > this.targetPitch) this.field_147663_c = this.targetPitch;
+                if (this.field_147663_c > this.targetPitch) {
+                    this.field_147663_c = this.targetPitch;
+                }
             } else if (this.field_147663_c > this.targetPitch) {
                 this.field_147663_c -= 0.05F;
-                if (this.field_147663_c < this.targetPitch) this.field_147663_c = this.targetPitch;
+                if (this.field_147663_c < this.targetPitch) {
+                    this.field_147663_c = this.targetPitch;
+                }
             }
             this.updateSoundLocation(this.theRocket);
         } else {
@@ -70,7 +73,6 @@ public class SoundUpdaterMiner extends MovingSound {
 
     public void stopRocketSound() {
         this.donePlaying = true;
-        this.soundStopped = true;
     }
 
     public void updateSoundLocation(Entity e) {

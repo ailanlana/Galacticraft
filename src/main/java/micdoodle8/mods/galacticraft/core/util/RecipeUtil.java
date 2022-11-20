@@ -18,7 +18,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class RecipeUtil {
     public static ItemStack findMatchingBuggy(InventoryBuggyBench benchStacks) {
-        for (INasaWorkbenchRecipe recipe : GalacticraftRegistry.getBuggyBenchRecipes()) {
+        for (final INasaWorkbenchRecipe recipe : GalacticraftRegistry.getBuggyBenchRecipes()) {
             if (recipe.matches(benchStacks)) {
                 return recipe.getRecipeOutput();
             }
@@ -28,7 +28,7 @@ public class RecipeUtil {
     }
 
     public static ItemStack findMatchingSpaceshipRecipe(InventoryRocketBench inventoryRocketBench) {
-        for (INasaWorkbenchRecipe recipe : GalacticraftRegistry.getRocketT1Recipes()) {
+        for (final INasaWorkbenchRecipe recipe : GalacticraftRegistry.getRocketT1Recipes()) {
             if (recipe.matches(inventoryRocketBench)) {
                 return recipe.getRecipeOutput();
             }
@@ -44,18 +44,22 @@ public class RecipeUtil {
 
     public static void addBlockRecipe(ItemStack result, String oreDictIngot, ItemStack gcIngot) {
         if (OreDictionary.getOres(oreDictIngot).size() > 1) {
-            CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(result, new Object[] {
-                gcIngot,
-                oreDictIngot,
-                oreDictIngot,
-                oreDictIngot,
-                oreDictIngot,
-                oreDictIngot,
-                oreDictIngot,
-                oreDictIngot,
-                oreDictIngot
-            }));
-        } else RecipeUtil.addRecipe(result, new Object[] {"XXX", "XXX", "XXX", 'X', gcIngot});
+            CraftingManager.getInstance()
+                    .getRecipeList()
+                    .add(new ShapelessOreRecipe(
+                            result,
+                            gcIngot,
+                            oreDictIngot,
+                            oreDictIngot,
+                            oreDictIngot,
+                            oreDictIngot,
+                            oreDictIngot,
+                            oreDictIngot,
+                            oreDictIngot,
+                            oreDictIngot));
+        } else {
+            RecipeUtil.addRecipe(result, new Object[] {"XXX", "XXX", "XXX", 'X', gcIngot});
+        }
     }
 
     public static void addRocketBenchRecipe(ItemStack result, HashMap<Integer, ItemStack> input) {
@@ -72,12 +76,14 @@ public class RecipeUtil {
 
     public static Block getChestBlock() {
         Block block = GameRegistry.findBlock("IronChest", "BlockIronChest");
-        if (block == null) block = Blocks.chest;
+        if (block == null) {
+            block = Blocks.chest;
+        }
         return block;
     }
 
     public static ItemStack getChestItemStack(int size, int meta) {
-        Block block = getChestBlock();
+        final Block block = getChestBlock();
         return new ItemStack(block, size, meta);
     }
 }

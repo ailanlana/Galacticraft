@@ -43,8 +43,8 @@ public class BlockBeamReceiver extends BlockTileGC implements ItemBlockDesc.IBlo
 
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-        int oldMeta = world.getBlockMetadata(x, y, z);
-        int meta = this.getMetadataFromAngle(
+        final int oldMeta = world.getBlockMetadata(x, y, z);
+        final int meta = this.getMetadataFromAngle(
                 world,
                 x,
                 y,
@@ -57,9 +57,9 @@ public class BlockBeamReceiver extends BlockTileGC implements ItemBlockDesc.IBlo
 
         if (meta != oldMeta) {
             world.setBlockMetadataWithNotify(x, y, z, meta, 3);
-            TileEntity thisTile = world.getTileEntity(x, y, z);
+            final TileEntity thisTile = world.getTileEntity(x, y, z);
             if (thisTile instanceof TileEntityBeamReceiver) {
-                TileEntityBeamReceiver thisReceiver = (TileEntityBeamReceiver) thisTile;
+                final TileEntityBeamReceiver thisReceiver = (TileEntityBeamReceiver) thisTile;
                 thisReceiver.setFacing(ForgeDirection.getOrientation(meta));
                 thisReceiver.invalidateReflector();
                 thisReceiver.initiateReflector();
@@ -71,18 +71,19 @@ public class BlockBeamReceiver extends BlockTileGC implements ItemBlockDesc.IBlo
 
     @Override
     public void onBlockAdded(World world, int x, int y, int z) {
-        TileEntity thisTile = world.getTileEntity(x, y, z);
-        if (thisTile instanceof TileEntityBeamReceiver)
+        final TileEntity thisTile = world.getTileEntity(x, y, z);
+        if (thisTile instanceof TileEntityBeamReceiver) {
             ((TileEntityBeamReceiver) thisTile)
                     .setFacing(ForgeDirection.getOrientation(world.getBlockMetadata(x, y, z)));
+        }
     }
 
     @Override
     public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-        int meta = world.getBlockMetadata(x, y, z);
+        final int meta = world.getBlockMetadata(x, y, z);
 
         if (meta != -1) {
-            ForgeDirection dir = ForgeDirection.getOrientation(meta);
+            final ForgeDirection dir = ForgeDirection.getOrientation(meta);
 
             switch (dir) {
                 case UP:
@@ -118,7 +119,7 @@ public class BlockBeamReceiver extends BlockTileGC implements ItemBlockDesc.IBlo
     }
 
     private int getMetadataFromAngle(World world, int x, int y, int z, int side) {
-        ForgeDirection direction = ForgeDirection.getOrientation(side).getOpposite();
+        final ForgeDirection direction = ForgeDirection.getOrientation(side).getOpposite();
 
         TileEntity tileAt = world.getTileEntity(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ);
 
@@ -130,10 +131,14 @@ public class BlockBeamReceiver extends BlockTileGC implements ItemBlockDesc.IBlo
             }
         }
 
-        if (EnergyUtil.otherModCanReceive(tileAt, direction.getOpposite())) return direction.ordinal();
+        if (EnergyUtil.otherModCanReceive(tileAt, direction.getOpposite())) {
+            return direction.ordinal();
+        }
 
-        for (ForgeDirection adjacentDir : ForgeDirection.VALID_DIRECTIONS) {
-            if (adjacentDir == direction) continue;
+        for (final ForgeDirection adjacentDir : ForgeDirection.VALID_DIRECTIONS) {
+            if (adjacentDir == direction) {
+                continue;
+            }
             tileAt = world.getTileEntity(x + adjacentDir.offsetX, y + adjacentDir.offsetY, z + adjacentDir.offsetZ);
 
             if (tileAt instanceof IConductor) {
@@ -145,7 +150,9 @@ public class BlockBeamReceiver extends BlockTileGC implements ItemBlockDesc.IBlo
                 return adjacentDir.ordinal();
             }
 
-            if (EnergyUtil.otherModCanReceive(tileAt, adjacentDir.getOpposite())) return adjacentDir.ordinal();
+            if (EnergyUtil.otherModCanReceive(tileAt, adjacentDir.getOpposite())) {
+                return adjacentDir.ordinal();
+            }
         }
 
         return -1;
@@ -213,7 +220,7 @@ public class BlockBeamReceiver extends BlockTileGC implements ItemBlockDesc.IBlo
     @Override
     public boolean onMachineActivated(
             World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+        final TileEntity tile = world.getTileEntity(x, y, z);
 
         if (tile instanceof TileEntityBeamReceiver) {
             return ((TileEntityBeamReceiver) tile)

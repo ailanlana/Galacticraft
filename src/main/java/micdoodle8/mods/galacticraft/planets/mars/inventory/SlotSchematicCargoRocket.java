@@ -33,10 +33,8 @@ public class SlotSchematicCargoRocket extends Slot {
     @Override
     public void onSlotChanged() {
         if (this.player instanceof EntityPlayerMP) {
-            final Object[] toSend = {this.x, this.y, this.z};
-
-            for (int var12 = 0; var12 < this.player.worldObj.playerEntities.size(); ++var12) {
-                final EntityPlayerMP var13 = (EntityPlayerMP) this.player.worldObj.playerEntities.get(var12);
+            for (final Object element : this.player.worldObj.playerEntities) {
+                final EntityPlayerMP var13 = (EntityPlayerMP) element;
 
                 if (var13.dimension == this.player.worldObj.provider.dimensionId) {
                     final double var14 = this.x - var13.posX;
@@ -57,24 +55,24 @@ public class SlotSchematicCargoRocket extends Slot {
 
     @Override
     public boolean isItemValid(ItemStack itemStack) {
-        if (index == 1) {
+        if (this.index == 1) {
             return itemStack.getItem() == GCItems.basicItem && itemStack.getItemDamage() == 14;
-        } else if (index == 2 && GalacticraftCore.isGalaxySpaceLoaded) {
+        } else if (this.index == 2 && GalacticraftCore.isGalaxySpaceLoaded) {
             return itemStack.getItem()
                             == GameRegistry.findItem(Constants.MOD_ID_GALAXYSPACE, "item.RocketControlComputer")
                     && itemStack.getItemDamage() == 101;
-        } else if (index >= 3 && index <= 5 && GalacticraftCore.isGalaxySpaceLoaded) {
+        } else if (this.index >= 3 && this.index <= 5 && GalacticraftCore.isGalaxySpaceLoaded) {
             return itemStack.getItem()
                     == GameRegistry.findItem(Constants.MOD_ID_GALAXYSPACE, "item.ModuleSmallFuelCanister");
-        } else if (index == 7) {
+        } else if (this.index == 7) {
             return itemStack.getItem() == GCItems.partNoseCone;
-        } else if (index >= 8 && index <= 15) {
+        } else if (this.index >= 8 && this.index <= 15) {
             return itemStack.getItem() == MarsItems.marsItemBasic && itemStack.getItemDamage() == 3;
-        } else if (index == 16) {
+        } else if (this.index == 16) {
             return itemStack.getItem() == GCItems.rocketEngine && itemStack.getItemDamage() == 0;
-        } else if (index >= 17 && index <= 20) {
+        } else if (this.index >= 17 && this.index <= 20) {
             return itemStack.getItem() == GCItems.partFins;
-        } else if (index == 21) {
+        } else if (this.index == 21) {
             return itemStack.getItem() == Item.getItemFromBlock(RecipeUtil.getChestBlock())
                     && (itemStack.getItemDamage() == 0
                             || itemStack.getItemDamage() == 1

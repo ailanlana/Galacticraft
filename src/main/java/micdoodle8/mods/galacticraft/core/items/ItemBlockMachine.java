@@ -35,7 +35,7 @@ public class ItemBlockMachine extends ItemBlockDesc {
     @Override
     public String getUnlocalizedName(ItemStack itemstack) {
         int index = 0;
-        int typenum = itemstack.getItemDamage() & 12;
+        final int typenum = itemstack.getItemDamage() & 12;
 
         if (this.field_150939_a == GCBlocks.machineBase) {
             index = typenum / 4;
@@ -67,9 +67,11 @@ public class ItemBlockMachine extends ItemBlockDesc {
 
     @Override
     public void onCreated(ItemStack stack, World world, EntityPlayer player) {
-        if (!world.isRemote) return;
+        if (!world.isRemote) {
+            return;
+        }
 
-        int typenum = stack.getItemDamage() & 12;
+        final int typenum = stack.getItemDamage() & 12;
 
         // The player could be a FakePlayer made by another mod e.g. LogisticsPipes
         if (player instanceof EntityPlayerSP) {

@@ -37,7 +37,7 @@ public class CommandSpaceStationChangeOwner extends CommandBase {
         String oldOwner = null;
         String newOwner = "ERROR";
         int stationID = -1;
-        EntityPlayerMP playerAdmin =
+        final EntityPlayerMP playerAdmin =
                 PlayerUtil.getPlayerBaseServerFromPlayerUsername(icommandsender.getCommandSenderName(), true);
 
         if (astring.length > 1) {
@@ -46,31 +46,28 @@ public class CommandSpaceStationChangeOwner extends CommandBase {
             try {
                 stationID = Integer.parseInt(astring[0]);
             } catch (final Exception var6) {
-                throw new WrongUsageException(
-                        GCCoreUtil.translateWithFormat(
-                                "commands.ssnewowner.wrongUsage", this.getCommandUsage(icommandsender)),
-                        new Object[0]);
+                throw new WrongUsageException(GCCoreUtil.translateWithFormat(
+                        "commands.ssnewowner.wrongUsage", this.getCommandUsage(icommandsender)));
             }
 
-            if (stationID < 2)
-                throw new WrongUsageException(
-                        GCCoreUtil.translateWithFormat(
-                                "commands.ssnewowner.wrongUsage", this.getCommandUsage(icommandsender)),
-                        new Object[0]);
+            if (stationID < 2) {
+                throw new WrongUsageException(GCCoreUtil.translateWithFormat(
+                        "commands.ssnewowner.wrongUsage", this.getCommandUsage(icommandsender)));
+            }
 
             try {
-                SpaceStationWorldData stationData = SpaceStationWorldData.getMPSpaceStationData(null, stationID, null);
+                final SpaceStationWorldData stationData =
+                        SpaceStationWorldData.getMPSpaceStationData(null, stationID, null);
                 if (stationData == null) {
-                    throw new WrongUsageException(
-                            GCCoreUtil.translateWithFormat(
-                                    "commands.ssnewowner.wrongUsage", this.getCommandUsage(icommandsender)),
-                            new Object[0]);
+                    throw new WrongUsageException(GCCoreUtil.translateWithFormat(
+                            "commands.ssnewowner.wrongUsage", this.getCommandUsage(icommandsender)));
                 }
 
                 oldOwner = stationData.getOwner();
                 stationData.getAllowedPlayers().remove(oldOwner);
-                if (stationData.getSpaceStationName().equals("Station: " + oldOwner))
+                if (stationData.getSpaceStationName().equals("Station: " + oldOwner)) {
                     stationData.setSpaceStationName("Station: " + newOwner);
+                }
                 stationData.getAllowedPlayers().add(newOwner);
                 stationData.setOwner(newOwner);
 
@@ -96,21 +93,20 @@ public class CommandSpaceStationChangeOwner extends CommandBase {
                             newPlayer);
                 }
             } catch (final Exception var6) {
-                throw new CommandException(var6.getMessage(), new Object[0]);
+                throw new CommandException(var6.getMessage());
             }
         } else {
-            throw new WrongUsageException(
-                    GCCoreUtil.translateWithFormat(
-                            "commands.ssinvite.wrongUsage", this.getCommandUsage(icommandsender)),
-                    new Object[0]);
+            throw new WrongUsageException(GCCoreUtil.translateWithFormat(
+                    "commands.ssinvite.wrongUsage", this.getCommandUsage(icommandsender)));
         }
 
         if (playerAdmin != null) {
             playerAdmin.addChatMessage(new ChatComponentText(
                     GCCoreUtil.translateWithFormat("gui.spacestation.changesuccess", oldOwner, newOwner)));
-        } else
+        } else {
             // Console
             System.out.println(GCCoreUtil.translateWithFormat("gui.spacestation.changesuccess", oldOwner, newOwner));
+        }
     }
 
     protected String[] getPlayers() {

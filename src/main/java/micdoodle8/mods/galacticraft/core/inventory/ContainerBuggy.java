@@ -45,8 +45,8 @@ public class ContainerBuggy extends Container {
     }
 
     /**
-     * Called when a player shift-clicks on a slot. You must override this or
-     * you will crash when someone does that.
+     * Called when a player shift-clicks on a slot. You must override this or you
+     * will crash when someone does that.
      */
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
@@ -67,7 +67,7 @@ public class ContainerBuggy extends Container {
             }
 
             if (var5.stackSize == 0) {
-                var4.putStack((ItemStack) null);
+                var4.putStack(null);
             } else {
                 var4.onSlotChanged();
             }

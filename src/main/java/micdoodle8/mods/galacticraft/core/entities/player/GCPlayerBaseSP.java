@@ -19,14 +19,14 @@ public class GCPlayerBaseSP extends ClientPlayerBase {
         return ClientProxyCore.playerClientHandler;
     }
 
-    //    @Override
-    //    public void wakeUpPlayer(boolean par1, boolean par2, boolean par3)
-    //    {
-    //        if (!this.getClientHandler().wakeUpPlayer(this, par1, par2, par3))
-    //        {
-    //            super.wakeUpPlayer(par1, par2, par3);
-    //        }
-    //    }
+    // @Override
+    // public void wakeUpPlayer(boolean par1, boolean par2, boolean par3)
+    // {
+    // if (!this.getClientHandler().wakeUpPlayer(this, par1, par2, par3))
+    // {
+    // super.wakeUpPlayer(par1, par2, par3);
+    // }
+    // }
 
     @Override
     public boolean isEntityInsideOpaqueBlock() {
@@ -43,7 +43,7 @@ public class GCPlayerBaseSP extends ClientPlayerBase {
     @Override
     public void beforeUpdateEntityActionState() {
         if (this.player.worldObj.provider instanceof IZeroGDimension) {
-            GCPlayerStatsClient stats = GCPlayerStatsClient.get(this.player);
+            final GCPlayerStatsClient stats = GCPlayerStatsClient.get(this.player);
             if (stats.landingTicks > 0) {
                 this.player.ySize = stats.landingYOffset[stats.landingTicks];
                 this.player.movementInput.moveStrafe *= 0.5F;
@@ -65,7 +65,9 @@ public class GCPlayerBaseSP extends ClientPlayerBase {
     public void afterUpdateEntityActionState() {
         if (this.player.worldObj.provider instanceof IZeroGDimension) {
             this.player.setJumping(false);
-            if ((this.player.boundingBox.minY % 1F) == 0.5F) this.player.boundingBox.minY += 0.00001F;
+            if (this.player.boundingBox.minY % 1F == 0.5F) {
+                this.player.boundingBox.minY += 0.00001F;
+            }
         }
     }
 
@@ -94,25 +96,36 @@ public class GCPlayerBaseSP extends ClientPlayerBase {
     @Override
     public boolean isSneaking() {
         if (this.player.worldObj.provider instanceof IZeroGDimension) {
-            GCPlayerStatsClient stats = GCPlayerStatsClient.get(this.player);
+            final GCPlayerStatsClient stats = GCPlayerStatsClient.get(this.player);
             if (stats.landingTicks > 0) {
-                if (this.lastLandingTicks == 0) this.lastLandingTicks = stats.landingTicks;
+                if (this.lastLandingTicks == 0) {
+                    this.lastLandingTicks = stats.landingTicks;
+                }
 
                 return stats.landingTicks < this.lastLandingTicks;
-            } else this.lastLandingTicks = 0;
-            if (stats.pjumpticks > 0) return true;
+            } else {
+                this.lastLandingTicks = 0;
+            }
+            if (stats.pjumpticks > 0) {
+                return true;
+            }
             if (ClientProxyCore.sneakRenderOverride) {
-                if (FreefallHandler.testFreefall(this.player)) return false;
-                if (stats.inFreefall) return false;
+                if (FreefallHandler.testFreefall(this.player)) {
+                    return false;
+                }
+                if (stats.inFreefall) {
+                    return false;
+                }
             }
         }
         return super.isSneaking();
     }
 
-    //    @Override
-    //    @SideOnly(Side.CLIENT)
-    //    public float getBedOrientationInDegrees()
-    //    {
-    //        return this.getClientHandler().getBedOrientationInDegrees(this, super.getBedOrientationInDegrees());
-    //    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // public float getBedOrientationInDegrees()
+    // {
+    // return this.getClientHandler().getBedOrientationInDegrees(this,
+    // super.getBedOrientationInDegrees());
+    // }
 }

@@ -51,16 +51,17 @@ public class ContainerSlimeling extends Container {
     @SuppressWarnings("unchecked")
     public static void addAdditionalSlots(ContainerSlimeling container, EntitySlimeling slimeling, ItemStack stack) {
         if (stack != null && stack.getItem() == MarsItems.marsItemBasic && stack.getItemDamage() == 4) {
-            // Note that if NEI is installed, this can be called by InventorySlimeling.setInventorySlotContents even if
+            // Note that if NEI is installed, this can be called by
+            // InventorySlimeling.setInventorySlotContents even if
             // the container already has the slots
             if (container.inventorySlots.size() < 63) {
                 for (int var3 = 0; var3 < 3; ++var3) {
                     for (int var4 = 0; var4 < 9; ++var4) {
-                        Slot slot = new Slot(
+                        final Slot slot = new Slot(
                                 slimeling.slimelingInventory, var4 + var3 * 9 + 2, 8 + var4 * 18, 54 + var3 * 18);
                         slot.slotNumber = container.inventorySlots.size();
                         container.inventorySlots.add(slot);
-                        container.inventoryItemStacks.add((Object) null);
+                        container.inventoryItemStacks.add(null);
                     }
                 }
             }
@@ -109,7 +110,9 @@ public class ContainerSlimeling extends Container {
                 // With inventory bag, slot 0 is a bag slot
                 // Slots 1-36 are regular inventory (27 inventory, 9 hotbar)
                 // Slots 37-63 are the inventory bag slots
-                if (par1 == 0) return null;
+                if (par1 == 0) {
+                    return null;
+                }
 
                 if (par1 > 36) {
                     if (!this.mergeItemStack(var4, 1, 37, true)) {
@@ -131,7 +134,7 @@ public class ContainerSlimeling extends Container {
             }
 
             if (var4.stackSize == 0) {
-                slot.putStack((ItemStack) null);
+                slot.putStack(null);
             } else {
                 slot.onSlotChanged();
             }

@@ -52,25 +52,25 @@ public class MethaneSynthesizerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public void drawBackground(int recipe) {
-        int progress = this.ticksPassed % 144;
+        final int progress = this.ticksPassed % 144;
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         GuiDraw.changeTexture(MethaneSynthesizerRecipeHandler.synthesizerGuiTexture);
         GuiDraw.drawTexturedModalRect(-2, 0, 3, 4, 168, 66);
 
         if (progress <= 40) {
-            int level = progress * 38 / 40;
+            final int level = progress * 38 / 40;
             GuiDraw.changeTexture(MethaneSynthesizerRecipeHandler.synthesizerGasesTexture);
             GuiDraw.drawTexturedModalRect(2, 62 - level, 35, 38 - level, 16, level);
 
             if (this.fillAtmos) {
-                int yoffset = progress / 2;
+                final int yoffset = progress / 2;
                 GuiDraw.drawTexturedModalRect(23, 44 - yoffset, 35, 26 - yoffset, 16, yoffset);
             }
         } else if (progress < 104) {
-            int level = (progress - 41) / 3;
+            final int level = (progress - 41) / 3;
 
-            int yoffset = 20 - level;
+            final int yoffset = 20 - level;
             GuiDraw.changeTexture(MethaneSynthesizerRecipeHandler.synthesizerGasesTexture);
             GuiDraw.drawTexturedModalRect(2, 62 - yoffset, 35, 26 - yoffset, 16, yoffset);
             if (this.fillAtmos) {
@@ -78,18 +78,18 @@ public class MethaneSynthesizerRecipeHandler extends TemplateRecipeHandler {
             }
             GuiDraw.drawTexturedModalRect(148, 62 - level, 1, 26 - level, 16, level);
 
-            // Offsets from GUI: x - 5,  y - 4
-            int powerlevel = 53 - (progress - 41) / 6;
+            // Offsets from GUI: x - 5, y - 4
+            final int powerlevel = 53 - (progress - 41) / 6;
             GuiDraw.changeTexture(MethaneSynthesizerRecipeHandler.synthesizerGuiTexture);
             GuiDraw.drawTexturedModalRect(61, 13, 176, 38, powerlevel, 7);
             GuiDraw.drawTexturedModalRect(47, 12, 208, 0, 11, 10);
         }
 
         if (this.fillAtmos) {
-            String gasname = GCCoreUtil.translate("gas.carbondioxide.name");
-            String text1 = " * " + GCCoreUtil.translate("gui.message.withAtmosphere0.name");
-            String text2 = " " + GCCoreUtil.lowerCaseNoun(gasname);
-            String text3 = GCCoreUtil.translate("gui.message.withAtmosphere1.name");
+            final String gasname = GCCoreUtil.translate("gas.carbondioxide.name");
+            final String text1 = " * " + GCCoreUtil.translate("gui.message.withAtmosphere0.name");
+            final String text2 = " " + GCCoreUtil.lowerCaseNoun(gasname);
+            final String text3 = GCCoreUtil.translate("gui.message.withAtmosphere1.name");
             this.fontRendererObj.drawString(text1, 4, 85, 4210752);
             this.fontRendererObj.drawString(text2, 18, 95, 4210752);
             this.fontRendererObj.drawString(text3, 18, 105, 4210752);
@@ -138,22 +138,18 @@ public class MethaneSynthesizerRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public ArrayList<PositionedStack> getIngredientStacks(int recipe) {
-        PositionedStack input = this.arecipes.get(recipe).getIngredients().get(0);
-        Item inputItem = input.item.getItem();
+        final PositionedStack input = this.arecipes.get(recipe).getIngredients().get(0);
+        final Item inputItem = input.item.getItem();
 
-        if (inputItem == AsteroidsItems.atmosphericValve) {
-            this.fillAtmos = true;
-        } else {
-            this.fillAtmos = false;
-        }
+        this.fillAtmos = inputItem == AsteroidsItems.atmosphericValve;
 
         if (this.ticksPassed % 144 > 40) {
-            ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
+            final ArrayList<PositionedStack> stacks = new ArrayList<>();
             if (inputItem != MarsItems.carbonFragments) {
                 stacks.add(new PositionedStack(
                         new ItemStack(inputItem, 1, inputItem.getMaxDamage()), input.relx, input.rely));
-            } else if ((this.ticksPassed % 144) < 104) {
-                int number = 24 - ((this.ticksPassed % 144) - 40) * 3 / 8;
+            } else if (this.ticksPassed % 144 < 104) {
+                final int number = 24 - (this.ticksPassed % 144 - 40) * 3 / 8;
                 stacks.add(new PositionedStack(new ItemStack(inputItem, number, 0), input.relx, input.rely));
             }
             return stacks;
@@ -165,8 +161,8 @@ public class MethaneSynthesizerRecipeHandler extends TemplateRecipeHandler {
     @Override
     public PositionedStack getResultStack(int recipe) {
         if (this.ticksPassed % 144 < 104) {
-            PositionedStack output = this.arecipes.get(recipe).getResult();
-            Item outputItem = output.item.getItem();
+            final PositionedStack output = this.arecipes.get(recipe).getResult();
+            final Item outputItem = output.item.getItem();
             return new PositionedStack(
                     new ItemStack(outputItem, 1, outputItem.getMaxDamage()), output.relx, output.rely);
         } else {
@@ -213,20 +209,21 @@ public class MethaneSynthesizerRecipeHandler extends TemplateRecipeHandler {
     public void drawForeground(int recipe) {}
 
     @Override
-    public List<String> handleTooltip(GuiRecipe gui, List<String> currenttip, int recipe) {
-        Point mousePos = getMousePosition();
+    public List<String> handleTooltip(GuiRecipe<?> gui, List<String> currenttip, int recipe) {
+        final Point mousePos = getMousePosition();
         try {
-            Class<GuiContainer> clazz = GuiContainer.class;
+            final Class<GuiContainer> clazz = GuiContainer.class;
             mousePos.x -= (Integer) clazz.getField("field_147003_i").get(gui);
             mousePos.y -= (Integer) clazz.getField("field_147009_r").get(gui);
-        } catch (Exception ee) {
+        } catch (final Exception ee) {
             ee.printStackTrace();
         }
 
-        if (mousePos.x < 23 && mousePos.x > 6 && mousePos.y < 78 && mousePos.y > 39)
+        if (mousePos.x < 23 && mousePos.x > 6 && mousePos.y < 78 && mousePos.y > 39) {
             currenttip.add(GCCoreUtil.translate("fluid.hydrogen"));
-        else if (mousePos.x < 44 && mousePos.x > 27 && mousePos.y < 60 && mousePos.y > 39)
+        } else if (mousePos.x < 44 && mousePos.x > 27 && mousePos.y < 60 && mousePos.y > 39) {
             currenttip.add(GCCoreUtil.translate("gas.carbondioxide.name"));
+        }
 
         return currenttip;
     }

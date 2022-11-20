@@ -33,12 +33,12 @@ public class RenderEvolvedSkeleton extends RenderBiped {
 
         // Compatibility with BattleGear2
         try {
-            Class<?> clazz = Class.forName("mods.battlegear2.MobHookContainerClass");
+            final Class<?> clazz = Class.forName("mods.battlegear2.MobHookContainerClass");
 
             // accessing this: public static final int Skell_Arrow_Datawatcher = 25;
             RenderEvolvedSkeleton.isBG2Loaded =
                     clazz.getField("Skell_Arrow_Datawatcher").getInt(null);
-        } catch (Exception e) {
+        } catch (final Exception e) {
         }
     }
 
@@ -139,8 +139,9 @@ public class RenderEvolvedSkeleton extends RenderBiped {
         return super.shouldRenderPass(par1EntityLiving, par2, par3);
     }
 
+    @Override
     protected void renderEquippedItems(EntityLiving par1EntityLiving, float par2) {
-        ItemStack stack = par1EntityLiving.getLastActiveItems()[0];
+        final ItemStack stack = par1EntityLiving.getLastActiveItems()[0];
         par1EntityLiving.getLastActiveItems()[0] = null;
         super.renderEquippedItems(par1EntityLiving, par2);
         par1EntityLiving.getLastActiveItems()[0] = stack;

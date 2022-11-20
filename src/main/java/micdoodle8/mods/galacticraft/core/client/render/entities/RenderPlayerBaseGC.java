@@ -36,7 +36,8 @@ public class RenderPlayerBaseGC extends RenderPlayerBase {
 
     /**
      * This is used in place of RenderPlayerGC only if RenderPlayerAPI is installed
-     * It renders the thermal armor (also does something connected with rotating a sleeping player)
+     * It renders the thermal armor (also does something connected with rotating a
+     * sleeping player)
      *
      * @param renderPlayerAPI
      */
@@ -47,12 +48,13 @@ public class RenderPlayerBaseGC extends RenderPlayerBase {
 
         if (GalacticraftCore.isPlanetsLoaded) {
             try {
-                String prefix = (String) Class.forName("micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule")
-                        .getField("ASSET_PREFIX")
-                        .get(null);
+                final String prefix =
+                        (String) Class.forName("micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule")
+                                .getField("ASSET_PREFIX")
+                                .get(null);
                 thermalPaddingTexture0 = new ResourceLocation(prefix, "textures/misc/thermalPadding_0.png");
                 thermalPaddingTexture1 = new ResourceLocation(prefix, "textures/misc/thermalPadding_1.png");
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
@@ -70,7 +72,8 @@ public class RenderPlayerBaseGC extends RenderPlayerBase {
         super.renderModel(par1EntityLivingBase, par2, par3, par4, par5, par6, par7);
 
         if (thermalPaddingTexture0 != null) {
-            PlayerGearData gearData = ClientProxyCore.playerItemData.get(par1EntityLivingBase.getCommandSenderName());
+            final PlayerGearData gearData =
+                    ClientProxyCore.playerItemData.get(par1EntityLivingBase.getCommandSenderName());
 
             if (gearData != null && !RenderPlayerGC.flagThermalOverride) {
                 ModelBiped modelBiped;
@@ -82,9 +85,10 @@ public class RenderPlayerBaseGC extends RenderPlayerBase {
                         modelBiped = this.modelThermalPadding;
                     }
 
-                    int padding = gearData.getThermalPadding(i);
+                    final int padding = gearData.getThermalPadding(i);
 
-                    // Padding sub-type 0 is standard Thermal Armor.  See PacketSimple handling of C_UPDATE_GEAR_SLOT
+                    // Padding sub-type 0 is standard Thermal Armor. See PacketSimple handling of
+                    // C_UPDATE_GEAR_SLOT
                     // for how the sub-type gets set
                     if (padding == 0 && !par1EntityLivingBase.isInvisible()) {
                         // First draw the thermal armor without any color tinting
@@ -123,15 +127,15 @@ public class RenderPlayerBaseGC extends RenderPlayerBase {
                         GL11.glEnable(GL11.GL_BLEND);
                         GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
                         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-                        float time = par1EntityLivingBase.ticksExisted / 10.0F;
-                        float sTime = (float) Math.sin(time) * 0.5F + 0.5F;
+                        final float time = par1EntityLivingBase.ticksExisted / 10.0F;
+                        final float sTime = (float) Math.sin(time) * 0.5F + 0.5F;
 
                         float r = 0.2F * sTime;
                         float g = 1.0F * sTime;
                         float b = 0.2F * sTime;
 
                         if (par1EntityLivingBase.worldObj.provider instanceof IGalacticraftWorldProvider) {
-                            float modifier = ((IGalacticraftWorldProvider) par1EntityLivingBase.worldObj.provider)
+                            final float modifier = ((IGalacticraftWorldProvider) par1EntityLivingBase.worldObj.provider)
                                     .getThermalLevelModifier();
 
                             if (modifier > 0) {
@@ -158,7 +162,7 @@ public class RenderPlayerBaseGC extends RenderPlayerBase {
     @Override
     public void rotatePlayer(AbstractClientPlayer par1AbstractClientPlayer, float par2, float par3, float par4) {
         if (par1AbstractClientPlayer.isEntityAlive() && par1AbstractClientPlayer.isPlayerSleeping()) {
-            RotatePlayerEvent event = new RotatePlayerEvent(par1AbstractClientPlayer);
+            final RotatePlayerEvent event = new RotatePlayerEvent(par1AbstractClientPlayer);
             MinecraftForge.EVENT_BUS.post(event);
 
             if (!event.vanillaOverride) {
@@ -171,7 +175,7 @@ public class RenderPlayerBaseGC extends RenderPlayerBase {
             } else if (event.shouldRotate) {
                 float rotation = 0.0F;
 
-                ChunkCoordinates pos = par1AbstractClientPlayer.playerLocation;
+                final ChunkCoordinates pos = par1AbstractClientPlayer.playerLocation;
                 if (pos != null) {
                     Block bed = par1AbstractClientPlayer.worldObj.getBlock(pos.posX, pos.posY, pos.posZ);
                     int meta = par1AbstractClientPlayer.worldObj.getBlockMetadata(pos.posX, pos.posY, pos.posZ);
@@ -183,7 +187,8 @@ public class RenderPlayerBaseGC extends RenderPlayerBase {
                             pos.posZ,
                             par1AbstractClientPlayer)) {
                         if (bed == GCBlocks.fakeBlock && meta == 5) {
-                            TileEntity tile = event.entityPlayer.worldObj.getTileEntity(pos.posX, pos.posY, pos.posZ);
+                            final TileEntity tile =
+                                    event.entityPlayer.worldObj.getTileEntity(pos.posX, pos.posY, pos.posZ);
                             if (tile instanceof TileEntityMulti) {
                                 bed = ((TileEntityMulti) tile).mainBlockPosition.getBlock(event.entityPlayer.worldObj);
                                 meta = ((TileEntityMulti) tile)
@@ -215,15 +220,15 @@ public class RenderPlayerBaseGC extends RenderPlayerBase {
         } else {
             if (par1AbstractClientPlayer instanceof EntityPlayer
                     && Minecraft.getMinecraft().gameSettings.thirdPersonView != 0) {
-                final EntityPlayer player = (EntityPlayer) par1AbstractClientPlayer;
+                final EntityPlayer player = par1AbstractClientPlayer;
 
                 if (player.ridingEntity instanceof ICameraZoomEntity) {
-                    Entity rocket = player.ridingEntity;
-                    float rotateOffset = ((ICameraZoomEntity) rocket).getRotateOffset();
+                    final Entity rocket = player.ridingEntity;
+                    final float rotateOffset = ((ICameraZoomEntity) rocket).getRotateOffset();
                     if (rotateOffset > -10F) {
                         GL11.glTranslatef(0, -rotateOffset, 0);
-                        float anglePitch = rocket.prevRotationPitch;
-                        float angleYaw = rocket.prevRotationYaw;
+                        final float anglePitch = rocket.prevRotationPitch;
+                        final float angleYaw = rocket.prevRotationYaw;
                         GL11.glRotatef(-angleYaw, 0.0F, 1.0F, 0.0F);
                         GL11.glRotatef(anglePitch, 0.0F, 0.0F, 1.0F);
                         GL11.glTranslatef(0, rotateOffset, 0);

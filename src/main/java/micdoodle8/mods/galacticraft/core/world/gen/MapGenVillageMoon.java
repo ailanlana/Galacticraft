@@ -10,14 +10,14 @@ import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureStart;
 
 public class MapGenVillageMoon extends MapGenStructure {
-    public static List<BiomeGenBase> villageSpawnBiomes = Arrays.asList(new BiomeGenBase[] {BiomeGenBaseMoon.moonFlat});
+    public static List<BiomeGenBase> villageSpawnBiomes = Arrays.asList(BiomeGenBaseMoon.moonFlat);
     private final int terrainType;
     private static boolean initialized;
 
     static {
         try {
             MapGenVillageMoon.initiateStructures();
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
 
         }
     }

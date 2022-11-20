@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class GuiRocketInventory extends GuiContainerGC {
-    private static ResourceLocation[] rocketTextures = new ResourceLocation[4];
+    private static final ResourceLocation[] rocketTextures = new ResourceLocation[4];
 
     static {
         for (int i = 0; i < 4; i++) {
@@ -41,7 +41,7 @@ public class GuiRocketInventory extends GuiContainerGC {
     @Override
     public void initGui() {
         super.initGui();
-        List<String> fuelTankDesc = new ArrayList<String>();
+        final List<String> fuelTankDesc = new ArrayList<>();
         fuelTankDesc.add(GCCoreUtil.translate("gui.fuelTank.desc.0"));
         fuelTankDesc.add(GCCoreUtil.translate("gui.fuelTank.desc.1"));
         this.infoRegions.add(new GuiElementInfoRegion(
@@ -69,12 +69,13 @@ public class GuiRocketInventory extends GuiContainerGC {
                 && this.mc.thePlayer.ridingEntity != null
                 && this.mc.thePlayer.ridingEntity instanceof EntitySpaceshipBase) {
             this.fontRendererObj.drawString(GCCoreUtil.translate("gui.message.fuel.name") + ":", 125, 15, 4210752);
-            final EntitySpaceshipBase spaceship = ((EntitySpaceshipBase) this.mc.thePlayer.ridingEntity);
+            final EntitySpaceshipBase spaceship = (EntitySpaceshipBase) this.mc.thePlayer.ridingEntity;
             final double percentage = spaceship.getScaledFuelLevel(100);
             final String color = percentage > 80.0D
                     ? EnumColor.BRIGHT_GREEN.getCode()
                     : percentage > 40.0D ? EnumColor.ORANGE.getCode() : EnumColor.RED.getCode();
-            // final String str = percentage + "% " + GCCoreUtil.translate("gui.message.full.name");
+            // final String str = percentage + "% " +
+            // GCCoreUtil.translate("gui.message.full.name");
             final String str1 = String.format("%.1f%% %s", percentage, GCCoreUtil.translate("gui.message.full.name"));
             final String str2 = String.format(
                     "%.1f/%.1f B",

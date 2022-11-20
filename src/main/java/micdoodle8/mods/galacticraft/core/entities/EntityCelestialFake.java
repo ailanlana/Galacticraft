@@ -2,7 +2,11 @@ package micdoodle8.mods.galacticraft.core.entities;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import io.netty.buffer.ByteBuf;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 import micdoodle8.mods.galacticraft.api.entity.IIgnoreShift;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import net.minecraft.client.particle.EntityFX;
@@ -11,18 +15,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityCelestialFake extends EntityAdvancedMotion implements IIgnoreShift {
-    private boolean lastShouldMove;
     private UUID persistantRiderUUID;
     private Boolean shouldMoveClient;
     private Boolean shouldMoveServer;
-    private boolean hasReceivedPacket;
     private ArrayList prevData;
     private boolean networkDataChanged;
 
@@ -81,12 +82,12 @@ public class EntityCelestialFake extends EntityAdvancedMotion implements IIgnore
             }
         }
 
-        AxisAlignedBB box = this.boundingBox.expand(0.2D, 0.4D, 0.2D);
+        final AxisAlignedBB box = this.boundingBox.expand(0.2D, 0.4D, 0.2D);
 
         final List<Entity> var15 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, box);
 
         if (var15 != null && !var15.isEmpty()) {
-            for (Entity entity : var15) {
+            for (final Entity entity : var15) {
                 if (entity != this.riddenByEntity) {
                     this.pushEntityAway(entity);
                 }
@@ -130,9 +131,7 @@ public class EntityCelestialFake extends EntityAdvancedMotion implements IIgnore
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound nbt) {
-        final NBTTagList nbttaglist = new NBTTagList();
-
-        UUID id = this.getOwnerUUID();
+        final UUID id = this.getOwnerUUID();
 
         if (id != null) {
             nbt.setLong("RiderUUID_LSB", id.getLeastSignificantBits());
@@ -149,14 +148,12 @@ public class EntityCelestialFake extends EntityAdvancedMotion implements IIgnore
     public void tickInAir() {
         if (this.worldObj.isRemote) {
             this.motionY = this.motionX = this.motionZ = 0.0F;
-
-            this.lastShouldMove = false;
         }
     }
 
     @Override
     public ArrayList<Object> getNetworkedData() {
-        final ArrayList<Object> objList = new ArrayList<Object>();
+        final ArrayList<Object> objList = new ArrayList<>();
 
         if (this.worldObj.isRemote) {
             this.shouldMoveClient = this.shouldMove();
@@ -197,22 +194,27 @@ public class EntityCelestialFake extends EntityAdvancedMotion implements IIgnore
     public void readNetworkedData(ByteBuf buffer) {
         try {
             if (this.worldObj.isRemote) {
-                this.hasReceivedPacket = true;
                 this.shouldMoveServer = buffer.readBoolean();
 
                 // Check has correct rider on client
-                int shouldBeMountedId = buffer.readInt();
+                final int shouldBeMountedId = buffer.readInt();
                 if (this.riddenByEntity == null) {
                     if (shouldBeMountedId > -1) {
-                        Entity e = FMLClientHandler.instance().getWorldClient().getEntityByID(shouldBeMountedId);
-                        if (e != null) e.mountEntity(this);
+                        final Entity e =
+                                FMLClientHandler.instance().getWorldClient().getEntityByID(shouldBeMountedId);
+                        if (e != null) {
+                            e.mountEntity(this);
+                        }
                     }
                 } else if (this.riddenByEntity.getEntityId() != shouldBeMountedId) {
                     if (shouldBeMountedId == -1) {
                         this.riddenByEntity.mountEntity(null);
                     } else {
-                        Entity e = FMLClientHandler.instance().getWorldClient().getEntityByID(shouldBeMountedId);
-                        if (e != null) e.mountEntity(this);
+                        final Entity e =
+                                FMLClientHandler.instance().getWorldClient().getEntityByID(shouldBeMountedId);
+                        if (e != null) {
+                            e.mountEntity(this);
+                        }
                     }
                 }
             } else {
@@ -251,8 +253,8 @@ public class EntityCelestialFake extends EntityAdvancedMotion implements IIgnore
 
         UUID id;
 
-        if (riddenByEntity != null) {
-            id = ((EntityPlayer) this.riddenByEntity).getPersistentID();
+        if (this.riddenByEntity != null) {
+            id = this.riddenByEntity.getPersistentID();
 
             if (id != null) {
                 this.persistantRiderUUID = id;

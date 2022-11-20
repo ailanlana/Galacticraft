@@ -28,11 +28,12 @@ import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 
 /**
- * This renders the Galacticraft equipment, if RenderPlayerAPI / Smart Moving are not installed.
- *
- * This also adjusts player limb positions (etc) of the vanilla player prior to rendering the player.
- * for example holding both hands overhead when holding a rocket.
- *
+ * This renders the Galacticraft equipment, if RenderPlayerAPI / Smart Moving
+ * are not installed.
+ * <p>
+ * This also adjusts player limb positions (etc) of the vanilla player prior to
+ * rendering the player. for example holding both hands overhead when holding a
+ * rocket.
  */
 public class ModelPlayerGC extends ModelBiped {
     public static final ResourceLocation oxygenMaskTexture =
@@ -55,7 +56,7 @@ public class ModelPlayerGC extends ModelBiped {
 
     private boolean usingParachute;
 
-    private IModelCustom frequencyModule;
+    private final IModelCustom frequencyModule;
 
     private static boolean crossbowModLoaded = false;
 
@@ -247,10 +248,10 @@ public class ModelPlayerGC extends ModelBiped {
         boolean wearingFrequencyModule = false;
 
         final EntityPlayer player = (EntityPlayer) var1;
-        PlayerGearData gearData = ClientProxyCore.playerItemData.get(player.getCommandSenderName());
+        final PlayerGearData gearData = ClientProxyCore.playerItemData.get(player.getCommandSenderName());
 
         if (gearData != null) {
-            usingParachute = gearData.getParachute() != null;
+            this.usingParachute = gearData.getParachute() != null;
             wearingMask = gearData.getMask() > -1;
             wearingGear = gearData.getGear() > -1;
             wearingLeftTankGreen = gearData.getLeftTank() == 0;
@@ -267,7 +268,7 @@ public class ModelPlayerGC extends ModelBiped {
             wearingRightTankGray = gearData.getRightTank() == Integer.MAX_VALUE;
             wearingFrequencyModule = gearData.getFrequencyModule() > -1;
         } else {
-            String id = player.getGameProfile().getName();
+            final String id = player.getGameProfile().getName();
 
             if (!ClientProxyCore.gearDataRequests.contains(id)) {
                 GalacticraftCore.packetPipeline.sendToServer(
@@ -400,7 +401,7 @@ public class ModelPlayerGC extends ModelBiped {
 
                 //
 
-                if (usingParachute) {
+                if (this.usingParachute) {
                     FMLClientHandler.instance().getClient().renderEngine.bindTexture(gearData.getParachute());
 
                     this.parachute[0].render(var7);
@@ -433,11 +434,11 @@ public class ModelPlayerGC extends ModelBiped {
         if (!par7Entity.onGround
                 && par7Entity.worldObj.provider instanceof IGalacticraftWorldProvider
                 && par7Entity.ridingEntity == null
-                && !(currentItemStack != null && currentItemStack.getItem() instanceof IHoldableItem)) {
-            float speedModifier = 0.1162F * 2;
+                && (currentItemStack == null || !(currentItemStack.getItem() instanceof IHoldableItem))) {
+            final float speedModifier = 0.1162F * 2;
 
-            float angularSwingArm = MathHelper.cos(par1 * (speedModifier / 2));
-            float rightMod = this.heldItemRight != 0 ? 1 : 2;
+            final float angularSwingArm = MathHelper.cos(par1 * (speedModifier / 2));
+            final float rightMod = this.heldItemRight != 0 ? 1 : 2;
             this.bipedRightArm.rotateAngleX -=
                     MathHelper.cos(par1 * 0.6662F + (float) Math.PI) * rightMod * par2 * 0.5F;
             this.bipedLeftArm.rotateAngleX -= MathHelper.cos(par1 * 0.6662F) * 2.0F * par2 * 0.5F;
@@ -449,7 +450,7 @@ public class ModelPlayerGC extends ModelBiped {
             this.bipedRightLeg.rotateAngleX += MathHelper.cos(par1 * 0.1162F * 2) * 1.4F * par2;
         }
 
-        if (usingParachute) {
+        if (this.usingParachute) {
             this.parachute[0].rotateAngleZ = (float) (30F * (Math.PI / 180F));
             this.parachute[2].rotateAngleZ = (float) -(30F * (Math.PI / 180F));
             this.parachuteStrings[0].rotateAngleZ = (float) (155F * (Math.PI / 180F));
@@ -472,7 +473,7 @@ public class ModelPlayerGC extends ModelBiped {
 
         if (player.inventory.getCurrentItem() != null
                 && player.inventory.getCurrentItem().getItem() instanceof IHoldableItem) {
-            IHoldableItem holdableItem =
+            final IHoldableItem holdableItem =
                     (IHoldableItem) player.inventory.getCurrentItem().getItem();
 
             if (holdableItem.shouldHoldLeftHandUp(player)) {
@@ -551,7 +552,7 @@ public class ModelPlayerGC extends ModelBiped {
                 final EntityTieredRocket ship = (EntityTieredRocket) e;
 
                 if (ship.riddenByEntity != null
-                        && !(ship.riddenByEntity).equals(player)
+                        && !ship.riddenByEntity.equals(player)
                         && (ship.getLaunched() || ship.timeUntilLaunch < 390)) {
                     this.bipedRightArm.rotateAngleZ -= (float) (Math.PI / 8) + MathHelper.sin(par3 * 0.9F) * 0.2F;
                     this.bipedRightArm.rotateAngleX = (float) Math.PI;

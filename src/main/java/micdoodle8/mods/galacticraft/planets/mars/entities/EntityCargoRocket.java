@@ -50,7 +50,7 @@ public class EntityCargoRocket extends EntityAutoRocket implements IRocketType, 
     public float getCargoFilledAmount() {
         float weight = 1;
 
-        for (ItemStack stack : this.cargoItems) {
+        for (final ItemStack stack : this.cargoItems) {
             if (stack != null) {
                 weight += 0.1D;
             }
@@ -71,7 +71,7 @@ public class EntityCargoRocket extends EntityAutoRocket implements IRocketType, 
 
             motionScalar = Math.min(motionScalar, 1);
 
-            double modifier = this.getCargoFilledAmount();
+            final double modifier = this.getCargoFilledAmount();
             motionScalar *= 5.0D / modifier;
 
             if (!this.landing) {
@@ -92,7 +92,9 @@ public class EntityCargoRocket extends EntityAutoRocket implements IRocketType, 
 
             if (this.timeSinceLaunch % MathHelper.floor_double(3 * (1 / multiplier)) == 0) {
                 this.removeFuel(1);
-                if (!this.hasValidFuel()) this.stopRocketSound();
+                if (!this.hasValidFuel()) {
+                    this.stopRocketSound();
+                }
             }
         } else if (!this.hasValidFuel() && this.getLaunched()) {
             if (Math.abs(Math.sin(this.timeSinceLaunch / 1000)) / 10 != 0.0) {
@@ -162,7 +164,7 @@ public class EntityCargoRocket extends EntityAutoRocket implements IRocketType, 
                             y,
                             this.posZ + 0.2 - this.rand.nextDouble() / 10 + z1),
                     new Vector3(x1, y1, z1),
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(
@@ -170,7 +172,7 @@ public class EntityCargoRocket extends EntityAutoRocket implements IRocketType, 
                             y,
                             this.posZ + 0.2 - this.rand.nextDouble() / 10 + z1),
                     new Vector3(x1, y1, z1),
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(
@@ -178,7 +180,7 @@ public class EntityCargoRocket extends EntityAutoRocket implements IRocketType, 
                             y,
                             this.posZ - 0.2 + this.rand.nextDouble() / 10 + z1),
                     new Vector3(x1, y1, z1),
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(
@@ -186,32 +188,32 @@ public class EntityCargoRocket extends EntityAutoRocket implements IRocketType, 
                             y,
                             this.posZ - 0.2 + this.rand.nextDouble() / 10 + z1),
                     new Vector3(x1, y1, z1),
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(this.posX + x1, y, this.posZ + z1),
                     new Vector3(x1, y1, z1),
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(this.posX + 0.2 + x1, y, this.posZ + z1),
                     new Vector3(x1, y1, z1),
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(this.posX - 0.2 + x1, y, this.posZ + z1),
                     new Vector3(x1, y1, z1),
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(this.posX + x1, y, this.posZ + 0.2D + z1),
                     new Vector3(x1, y1, z1),
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
             GalacticraftCore.proxy.spawnParticle(
                     this.getLaunched() ? "launchFlameLaunched" : "launchFlameIdle",
                     new Vector3(this.posX + x1, y, this.posZ - 0.2D + z1),
                     new Vector3(x1, y1, z1),
-                    new Object[] {riddenByEntity});
+                    new Object[] {this.riddenByEntity});
         }
     }
 
@@ -251,18 +253,19 @@ public class EntityCargoRocket extends EntityAutoRocket implements IRocketType, 
             GCLog.debug("Destination location = " + this.targetVec.toString());
             if (this.targetDimension != this.worldObj.provider.dimensionId) {
                 GCLog.debug("Destination is in different dimension: " + this.targetDimension);
-                WorldProvider targetDim = WorldUtil.getProviderForDimensionServer(this.targetDimension);
+                final WorldProvider targetDim = WorldUtil.getProviderForDimensionServer(this.targetDimension);
                 if (targetDim != null && targetDim.worldObj instanceof WorldServer) {
                     GCLog.debug("Loaded destination dimension " + this.targetDimension);
                     this.setPosition(this.targetVec.x + 0.5F, this.targetVec.y + 800, this.targetVec.z + 0.5F);
-                    Entity e = WorldUtil.transferEntityToDimension(
+                    final Entity e = WorldUtil.transferEntityToDimension(
                             this, this.targetDimension, (WorldServer) targetDim.worldObj, false, null);
 
                     if (e instanceof EntityCargoRocket) {
                         GCLog.debug("Cargo rocket arrived at destination dimension, going into landing mode.");
                         e.setPosition(this.targetVec.x + 0.5F, this.targetVec.y + 800, this.targetVec.z + 0.5F);
                         ((EntityCargoRocket) e).landing = true;
-                        // No setDead() following successful transferEntityToDimension() - see javadoc on that
+                        // No setDead() following successful transferEntityToDimension() - see javadoc
+                        // on that
                     } else {
                         GCLog.info("Error: failed to recreate the cargo rocket in landing mode on target planet.");
                         e.setDead();
@@ -316,7 +319,9 @@ public class EntityCargoRocket extends EntityAutoRocket implements IRocketType, 
 
     @Override
     public int getSizeInventory() {
-        if (this.rocketType == null) return 0;
+        if (this.rocketType == null) {
+            return 0;
+        }
         return this.rocketType.getInventorySpace();
     }
 
@@ -351,48 +356,55 @@ public class EntityCargoRocket extends EntityAutoRocket implements IRocketType, 
     @Override
     public List<ItemStack> getItemsDropped(List<ItemStack> droppedItemList) {
         super.getItemsDropped(droppedItemList);
-        ItemStack rocket = new ItemStack(MarsItems.spaceship, 1, this.rocketType.getIndex() + 10);
+        final ItemStack rocket = new ItemStack(MarsItems.spaceship, 1, this.rocketType.getIndex() + 10);
         rocket.setTagCompound(new NBTTagCompound());
         rocket.getTagCompound().setInteger("RocketFuel", this.fuelTank.getFluidAmount());
         droppedItemList.add(rocket);
         return droppedItemList;
     }
 
-    //	@RuntimeInterface(clazz = "icbm.api.IMissileLockable", modID = "ICBM|Explosion")
-    //	public boolean canLock(IMissile missile)
-    //	{
-    //		return true;
-    //	}
+    // @RuntimeInterface(clazz = "icbm.api.IMissileLockable", modID =
+    // "ICBM|Explosion")
+    // public boolean canLock(IMissile missile)
+    // {
+    // return true;
+    // }
     //
-    //	@RuntimeInterface(clazz = "icbm.api.IMissileLockable", modID = "ICBM|Explosion")
-    //	public Vector3 getPredictedPosition(int ticks)
-    //	{
-    //		return new Vector3(this);
-    //	}
+    // @RuntimeInterface(clazz = "icbm.api.IMissileLockable", modID =
+    // "ICBM|Explosion")
+    // public Vector3 getPredictedPosition(int ticks)
+    // {
+    // return new Vector3(this);
+    // }
     //
-    //	@RuntimeInterface(clazz = "icbm.api.sentry.IAATarget", modID = "ICBM|Explosion")
-    //	public void destroyCraft()
-    //	{
-    //		this.setDead();
-    //	}
+    // @RuntimeInterface(clazz = "icbm.api.sentry.IAATarget", modID =
+    // "ICBM|Explosion")
+    // public void destroyCraft()
+    // {
+    // this.setDead();
+    // }
     //
-    //	@RuntimeInterface(clazz = "icbm.api.sentry.IAATarget", modID = "ICBM|Explosion")
-    //	public int doDamage(int damage)
-    //	{
-    //		return (int) (this.shipDamage += damage);
-    //	}
+    // @RuntimeInterface(clazz = "icbm.api.sentry.IAATarget", modID =
+    // "ICBM|Explosion")
+    // public int doDamage(int damage)
+    // {
+    // return (int) (this.shipDamage += damage);
+    // }
     //
-    //	@RuntimeInterface(clazz = "icbm.api.sentry.IAATarget", modID = "ICBM|Explosion")
-    //	public boolean canBeTargeted(Object entity)
-    //	{
-    //		return this.launchPhase == EnumLaunchPhase.LAUNCHED.getPhase() && this.timeSinceLaunch > 50;
-    //	} TODO Fix ICBM integration
+    // @RuntimeInterface(clazz = "icbm.api.sentry.IAATarget", modID =
+    // "ICBM|Explosion")
+    // public boolean canBeTargeted(Object entity)
+    // {
+    // return this.launchPhase == EnumLaunchPhase.LAUNCHED.getPhase() &&
+    // this.timeSinceLaunch > 50;
+    // } TODO Fix ICBM integration
 
     @Override
     public boolean isPlayerRocket() {
         return false;
     }
 
+    @Override
     public double getOnPadYOffset() {
         return 0D; // -0.25D;
     }

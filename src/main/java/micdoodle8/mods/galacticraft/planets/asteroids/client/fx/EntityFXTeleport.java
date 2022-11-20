@@ -11,12 +11,12 @@ import net.minecraft.world.World;
 
 @SideOnly(Side.CLIENT)
 public class EntityFXTeleport extends EntityFX {
-    private float portalParticleScale;
-    private double portalPosX;
-    private double portalPosY;
-    private double portalPosZ;
-    private WeakReference<TileEntityShortRangeTelepad> telepad;
-    private boolean direction;
+    private final float portalParticleScale;
+    private final double portalPosX;
+    private final double portalPosY;
+    private final double portalPosZ;
+    private final WeakReference<TileEntityShortRangeTelepad> telepad;
+    private final boolean direction;
 
     public EntityFXTeleport(
             World par1World, Vector3 position, Vector3 motion, TileEntityShortRangeTelepad telepad, boolean direction) {
@@ -31,10 +31,11 @@ public class EntityFXTeleport extends EntityFX {
         this.particleMaxAge = (int) (Math.random() * 10.0D) + 40;
         this.noClip = true;
         this.setParticleTextureIndex((int) (Math.random() * 8.0D));
-        this.telepad = new WeakReference<TileEntityShortRangeTelepad>(telepad);
+        this.telepad = new WeakReference<>(telepad);
         this.direction = direction;
     }
 
+    @Override
     public void renderParticle(
             Tessellator par1Tessellator, float par2, float par3, float par4, float par5, float par6, float par7) {
         float f6 = (this.particleAge + par2) / this.particleMaxAge;
@@ -45,12 +46,13 @@ public class EntityFXTeleport extends EntityFX {
         super.renderParticle(par1Tessellator, par2, par3, par4, par5, par6, par7);
     }
 
+    @Override
     public int getBrightnessForRender(float par1) {
-        int i = super.getBrightnessForRender(par1);
+        final int i = super.getBrightnessForRender(par1);
         float f1 = (float) this.particleAge / (float) this.particleMaxAge;
         f1 *= f1;
         f1 *= f1;
-        int j = i & 255;
+        final int j = i & 255;
         int k = i >> 16 & 255;
         k += (int) (f1 * 15.0F * 16.0F);
 
@@ -61,18 +63,20 @@ public class EntityFXTeleport extends EntityFX {
         return j | k << 16;
     }
 
+    @Override
     public float getBrightness(float par1) {
-        float f1 = super.getBrightness(par1);
+        final float f1 = super.getBrightness(par1);
         float f2 = (float) this.particleAge / (float) this.particleMaxAge;
         f2 = f2 * f2 * f2 * f2;
         return f1 * (1.0F - f2) + f2;
     }
 
+    @Override
     public void onUpdate() {
-        TileEntityShortRangeTelepad telepad1 = this.telepad.get();
+        final TileEntityShortRangeTelepad telepad1 = this.telepad.get();
 
         if (telepad1 != null) {
-            Vector3 color = telepad1.getParticleColor(this.rand, this.direction);
+            final Vector3 color = telepad1.getParticleColor(this.rand, this.direction);
             this.particleRed = color.floatX();
             this.particleGreen = color.floatY();
             this.particleBlue = color.floatZ();
@@ -82,7 +86,7 @@ public class EntityFXTeleport extends EntityFX {
         this.prevPosY = this.posY;
         this.prevPosZ = this.posZ;
         float f = (float) this.particleAge / (float) this.particleMaxAge;
-        float f1 = f;
+        final float f1 = f;
         f = -f + f * f * 2.0F;
         f = 1.0F - f;
         this.posX = this.portalPosX + this.motionX * f;

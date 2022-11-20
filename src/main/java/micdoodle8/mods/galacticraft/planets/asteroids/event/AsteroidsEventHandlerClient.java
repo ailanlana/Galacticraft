@@ -23,8 +23,8 @@ public class AsteroidsEventHandlerClient {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onClientTick(ClientTickEvent event) {
-        Minecraft minecraft = Minecraft.getMinecraft();
-        WorldClient world = minecraft.theWorld;
+        final Minecraft minecraft = Minecraft.getMinecraft();
+        final WorldClient world = minecraft.theWorld;
 
         if (world != null) {
             if (world.provider instanceof WorldProviderAsteroids) {
@@ -44,9 +44,11 @@ public class AsteroidsEventHandlerClient {
     @SubscribeEvent
     public void onRingRender(CelestialBodyRenderEvent.CelestialRingRenderEvent.Pre renderEvent) {
         if (renderEvent.celestialBody.equals(AsteroidsModule.planetAsteroids)) {
-            if (FMLClientHandler.instance().getClient().currentScreen instanceof GuiCelestialSelection)
+            if (FMLClientHandler.instance().getClient().currentScreen instanceof GuiCelestialSelection) {
                 GL11.glColor4f(0.7F, 0.0F, 0.0F, 0.5F);
-            else GL11.glColor4f(0.3F, 0.1F, 0.1F, 1.0F);
+            } else {
+                GL11.glColor4f(0.3F, 0.1F, 0.1F, 1.0F);
+            }
             renderEvent.setCanceled(true);
             GL11.glBegin(GL11.GL_LINE_LOOP);
 
@@ -54,8 +56,8 @@ public class AsteroidsEventHandlerClient {
             final float cos = (float) Math.cos(theta);
             final float sin = (float) Math.sin(theta);
 
-            float min = 72.0F;
-            float max = 78.0F;
+            final float min = 72.0F;
+            final float max = 78.0F;
 
             float x = max * renderEvent.celestialBody.getRelativeDistanceFromCenter().unScaledDistance;
             float y = 0;

@@ -13,7 +13,7 @@ import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 
 public class ItemBucketGC extends ItemBucket {
-    private String texture_prefix;
+    private final String texture_prefix;
 
     public ItemBucketGC(Block block, String texture_prefix) {
         super(block);
@@ -36,6 +36,6 @@ public class ItemBucketGC extends ItemBucket {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister par1IconRegister) {
-        this.itemIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().replace("item.", texture_prefix));
+        this.itemIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().replace("item.", this.texture_prefix));
     }
 }

@@ -13,18 +13,20 @@ public interface IElectricityNetwork extends IGridNetwork<IElectricityNetwork, I
      * Produce energy into the network
      *
      * @param energy      Amount of energy to send into the network
-     * @param doReceive   Whether to put energy into the network (true) or just simulate (false)
+     * @param doReceive   Whether to put energy into the network (true) or just
+     *                    simulate (false)
      * @param tierGC      The tier of the producing tile (must be 1 or 2)
      * @param ignoreTiles TileEntities to ignore for energy transfers.
      * @return Amount of energy REMAINING from the passed energy parameter
      */
-    public float produce(float energy, boolean doReceive, int tierGC, TileEntity... ignoreTiles);
+    float produce(float energy, boolean doReceive, int tierGC, TileEntity... ignoreTiles);
 
     /**
      * Get the total energy request in this network
      *
-     * @param ignoreTiles Tiles to ignore in the request calculations (NOTE: only used in initial (internal) check.
+     * @param ignoreTiles Tiles to ignore in the request calculations (NOTE: only
+     *                    used in initial (internal) check.
      * @return Amount of energy requested in this network
      */
-    public float getRequest(TileEntity... ignoreTiles);
+    float getRequest(TileEntity... ignoreTiles);
 }

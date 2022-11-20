@@ -32,7 +32,8 @@ public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectric
      * The main function to output energy each tick from a source.
      *
      * The source will attempt to produce into its outputDirections whatever energy
-     * it has available, and will reduce its stored energy by the amount which is in fact used.
+     * it has available, and will reduce its stored energy by the amount which is in
+     * fact used.
      *
      * Max output = this.storage.maxExtract.
      *
@@ -40,33 +41,35 @@ public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectric
      */
     public float produce() {
         this.storage.maxExtractRemaining = this.storage.maxExtract;
-        float produced = this.extractEnergyGC(null, this.produce(false), false);
+        final float produced = this.extractEnergyGC(null, this.produce(false), false);
         this.storage.maxExtractRemaining -= produced;
-        if (this.storage.maxExtractRemaining < 0) this.storage.maxExtractRemaining = 0;
+        if (this.storage.maxExtractRemaining < 0) {
+            this.storage.maxExtractRemaining = 0;
+        }
         return produced;
     }
 
     /*
-     * Function to produce energy each tick into the outputs of a source.
-     * If simulate is true, no energy is in fact transferred.
+     * Function to produce energy each tick into the outputs of a source. If
+     * simulate is true, no energy is in fact transferred.
      *
-     * Note: even if simulate is false this does NOT reduce the source's own
-     * energy storage by the amount produced, that needs to be done elsewhere
-     * See this.produce() for an example.
+     * Note: even if simulate is false this does NOT reduce the source's own energy
+     * storage by the amount produced, that needs to be done elsewhere See
+     * this.produce() for an example.
      */
     public float produce(boolean simulate) {
         float amountProduced = 0;
 
         if (!this.worldObj.isRemote) {
-            EnumSet<ForgeDirection> outputDirections = this.getElectricalOutputDirections();
+            final EnumSet<ForgeDirection> outputDirections = this.getElectricalOutputDirections();
             outputDirections.remove(ForgeDirection.UNKNOWN);
 
-            BlockVec3 thisVec = new BlockVec3(this);
-            for (ForgeDirection direction : outputDirections) {
-                TileEntity tileAdj = thisVec.getTileEntityOnSide(this.worldObj, direction);
+            final BlockVec3 thisVec = new BlockVec3(this);
+            for (final ForgeDirection direction : outputDirections) {
+                final TileEntity tileAdj = thisVec.getTileEntityOnSide(this.worldObj, direction);
 
                 if (tileAdj != null) {
-                    float toSend = this.extractEnergyGC(
+                    final float toSend = this.extractEnergyGC(
                             null,
                             Math.min(
                                     this.getEnergyStoredGC() - amountProduced,
@@ -77,9 +80,9 @@ public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectric
                     }
 
                     if (tileAdj instanceof TileBaseConductor) {
-                        IElectricityNetwork network = ((IConductor) tileAdj).getNetwork();
+                        final IElectricityNetwork network = ((IConductor) tileAdj).getNetwork();
                         if (network != null) {
-                            amountProduced += (toSend - network.produce(toSend, !simulate, this.tierGC, this));
+                            amountProduced += toSend - network.produce(toSend, !simulate, this.tierGC, this);
                         }
                     } else if (tileAdj instanceof TileBaseUniversalElectrical) {
                         amountProduced += ((TileBaseUniversalElectrical) tileAdj)
@@ -100,12 +103,12 @@ public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectric
      */
     public void recharge(ItemStack itemStack) {
         if (itemStack != null) {
-            Item item = itemStack.getItem();
-            float maxExtractSave = this.storage.getMaxExtract();
+            final Item item = itemStack.getItem();
+            final float maxExtractSave = this.storage.getMaxExtract();
             if (this.tierGC > 1) {
                 this.storage.setMaxExtract(maxExtractSave * 2.5F);
             }
-            float energyToCharge = this.storage.extractEnergyGC(this.storage.getMaxExtract(), true);
+            final float energyToCharge = this.storage.extractEnergyGC(this.storage.getMaxExtract(), true);
 
             if (item instanceof IItemElectric) {
                 this.storage.extractEnergyGC(ElectricItemHelper.chargeItem(itemStack, energyToCharge), false);
@@ -120,20 +123,21 @@ public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectric
                         false);
             } else if (EnergyConfigHandler.isIndustrialCraft2Loaded()) {
                 try {
-                    Class<?> itemElectricIC2 = Class.forName("ic2.api.item.ISpecialElectricItem");
-                    Class<?> itemElectricIC2B = Class.forName("ic2.api.item.IElectricItem");
-                    Class<?> itemManagerIC2 = Class.forName("ic2.api.item.IElectricItemManager");
+                    final Class<?> itemElectricIC2 = Class.forName("ic2.api.item.ISpecialElectricItem");
+                    final Class<?> itemElectricIC2B = Class.forName("ic2.api.item.IElectricItem");
+                    final Class<?> itemManagerIC2 = Class.forName("ic2.api.item.IElectricItemManager");
                     if (itemElectricIC2.isInstance(item)) {
                         // Implement by reflection:
-                        // float energy = (float) ((ISpecialElectricItem)item).getManager(itemStack).charge(itemStack,
+                        // float energy = (float)
+                        // ((ISpecialElectricItem)item).getManager(itemStack).charge(itemStack,
                         // energyToCharge * EnergyConfigHandler.TO_IC2_RATIO, 4, false, false) *
                         // EnergyConfigHandler.IC2_RATIO;
-                        Object IC2item = itemElectricIC2.cast(item);
-                        Method getMan = itemElectricIC2.getMethod("getManager", ItemStack.class);
-                        Object IC2manager = getMan.invoke(IC2item, itemStack);
+                        final Object IC2item = itemElectricIC2.cast(item);
+                        final Method getMan = itemElectricIC2.getMethod("getManager", ItemStack.class);
+                        final Object IC2manager = getMan.invoke(IC2item, itemStack);
                         double result;
                         if (VersionUtil.mcVersion1_7_2) {
-                            Method methodCharge = itemManagerIC2.getMethod(
+                            final Method methodCharge = itemManagerIC2.getMethod(
                                     "charge", ItemStack.class, int.class, int.class, boolean.class, boolean.class);
                             result = (Integer) methodCharge.invoke(
                                     IC2manager,
@@ -143,7 +147,7 @@ public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectric
                                     false,
                                     false);
                         } else {
-                            Method methodCharge = itemManagerIC2.getMethod(
+                            final Method methodCharge = itemManagerIC2.getMethod(
                                     "charge", ItemStack.class, double.class, int.class, boolean.class, boolean.class);
                             result = (Double) methodCharge.invoke(
                                     IC2manager,
@@ -153,14 +157,15 @@ public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectric
                                     false,
                                     false);
                         }
-                        float energy = (float) result / EnergyConfigHandler.TO_IC2_RATIO;
+                        final float energy = (float) result / EnergyConfigHandler.TO_IC2_RATIO;
                         this.storage.extractEnergyGC(energy, false);
                     } else if (itemElectricIC2B.isInstance(item)) {
-                        Class<?> electricItemIC2 = Class.forName("ic2.api.item.ElectricItem");
-                        Object IC2manager = electricItemIC2.getField("manager").get(null);
+                        final Class<?> electricItemIC2 = Class.forName("ic2.api.item.ElectricItem");
+                        final Object IC2manager =
+                                electricItemIC2.getField("manager").get(null);
                         double result;
                         if (VersionUtil.mcVersion1_7_2) {
-                            Method methodCharge = itemManagerIC2.getMethod(
+                            final Method methodCharge = itemManagerIC2.getMethod(
                                     "charge", ItemStack.class, int.class, int.class, boolean.class, boolean.class);
                             result = (Integer) methodCharge.invoke(
                                     IC2manager,
@@ -170,7 +175,7 @@ public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectric
                                     false,
                                     false);
                         } else {
-                            Method methodCharge = itemManagerIC2.getMethod(
+                            final Method methodCharge = itemManagerIC2.getMethod(
                                     "charge", ItemStack.class, double.class, int.class, boolean.class, boolean.class);
                             result = (Double) methodCharge.invoke(
                                     IC2manager,
@@ -180,20 +185,23 @@ public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectric
                                     false,
                                     false);
                         }
-                        float energy = (float) result / EnergyConfigHandler.TO_IC2_RATIO;
+                        final float energy = (float) result / EnergyConfigHandler.TO_IC2_RATIO;
                         this.storage.extractEnergyGC(energy, false);
                     }
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     e.printStackTrace();
                 }
             }
-            //			else if (GCCoreCompatibilityManager.isTELoaded() && itemStack.getItem() instanceof
+            // else if (GCCoreCompatibilityManager.isTELoaded() && itemStack.getItem()
+            // instanceof
             // IEnergyContainerItem)
-            //			{
-            //				int accepted = ((IEnergyContainerItem) itemStack.getItem()).receiveEnergy(itemStack, (int)
-            // Math.floor(this.getProvide(ForgeDirection.UNKNOWN) * EnergyConfigHandler.TO_TE_RATIO), false);
-            //				this.provideElectricity(accepted * EnergyConfigHandler.TE_RATIO, true);
-            //			}
+            // {
+            // int accepted = ((IEnergyContainerItem)
+            // itemStack.getItem()).receiveEnergy(itemStack, (int)
+            // Math.floor(this.getProvide(ForgeDirection.UNKNOWN) *
+            // EnergyConfigHandler.TO_TE_RATIO), false);
+            // this.provideElectricity(accepted * EnergyConfigHandler.TE_RATIO, true);
+            // }
 
             if (this.tierGC > 1) {
                 this.storage.setMaxExtract(maxExtractSave);
@@ -209,11 +217,11 @@ public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectric
         }
 
         try {
-            Class<?> energyTile = Class.forName("ic2.api.energy.tile.IEnergyTile");
+            final Class<?> energyTile = Class.forName("ic2.api.energy.tile.IEnergyTile");
             if (!energyTile.isInstance(receiver)) {
                 return false;
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
         return this.getElectricalOutputDirections().contains(direction);
@@ -250,10 +258,11 @@ public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectric
     @Override
     public float getProvide(ForgeDirection direction) {
         if (direction == ForgeDirection.UNKNOWN && EnergyConfigHandler.isIndustrialCraft2Loaded()) {
-            TileEntity tile =
+            final TileEntity tile =
                     new BlockVec3(this).getTileEntityOnSide(this.worldObj, this.getElectricalOutputDirectionMain());
             if (tile instanceof IConductor) {
-                // No power provide to IC2 mod if it's a Galacticraft wire on the output.  Galacticraft network will
+                // No power provide to IC2 mod if it's a Galacticraft wire on the output.
+                // Galacticraft network will
                 // provide the power.
                 return 0.0F;
             }

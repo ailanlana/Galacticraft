@@ -118,7 +118,6 @@ public class ContainerSchematicTier3Rocket extends Container {
             final ItemStack var4 = var3.getStack();
             var2 = var4.copy();
 
-            boolean done = false;
             if (par1 <= 21) {
                 if (!this.mergeItemStack(var4, 22, 58, false)) {
                     return null;
@@ -128,7 +127,7 @@ public class ContainerSchematicTier3Rocket extends Container {
             } else {
                 boolean valid = false;
                 for (int i = 1; i < 19; i++) {
-                    Slot testSlot = (Slot) this.inventorySlots.get(i);
+                    final Slot testSlot = (Slot) this.inventorySlots.get(i);
                     if (!testSlot.getHasStack() && testSlot.isItemValid(var2)) {
                         valid = true;
                         break;
@@ -158,7 +157,7 @@ public class ContainerSchematicTier3Rocket extends Container {
             }
 
             if (var4.stackSize == 0) {
-                var3.putStack((ItemStack) null);
+                var3.putStack(null);
             } else {
                 var3.onSlotChanged();
             }
@@ -184,7 +183,7 @@ public class ContainerSchematicTier3Rocket extends Container {
                 slotStack = slot.getStack();
 
                 if (slotStack == null && slot.isItemValid(par1ItemStack)) {
-                    ItemStack stackOneItem = par1ItemStack.copy();
+                    final ItemStack stackOneItem = par1ItemStack.copy();
                     stackOneItem.stackSize = 1;
                     par1ItemStack.stackSize--;
                     slot.putStack(stackOneItem);

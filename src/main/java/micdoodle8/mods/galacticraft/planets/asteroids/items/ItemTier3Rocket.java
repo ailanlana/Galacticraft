@@ -70,7 +70,7 @@ public class ItemTier3Rocket extends Item implements IHoldableItem {
             for (int i = -1; i < 2; i++) {
                 for (int j = -1; j < 2; j++) {
                     final Block id = par3World.getBlock(par4 + i, par5, par6 + j);
-                    int meta = par3World.getBlockMetadata(par4 + i, par5, par6 + j);
+                    final int meta = par3World.getBlockMetadata(par4 + i, par5, par6 + j);
 
                     if (id == GCBlocks.landingPadFull && meta == 0) {
                         padFound = true;
@@ -84,18 +84,22 @@ public class ItemTier3Rocket extends Item implements IHoldableItem {
                     }
                 }
 
-                if (padFound) break;
+                if (padFound) {
+                    break;
+                }
             }
 
             if (padFound) {
                 // Check whether there is already a rocket on the pad
                 if (tile instanceof TileEntityLandingPad) {
-                    if (((TileEntityLandingPad) tile).getDockedEntity() != null) return false;
+                    if (((TileEntityLandingPad) tile).getDockedEntity() != null) {
+                        return false;
+                    }
                 } else {
                     return false;
                 }
 
-                EntityTier3Rocket rocket = new EntityTier3Rocket(
+                final EntityTier3Rocket rocket = new EntityTier3Rocket(
                         par3World, centerX, centerY, centerZ, EnumRocketType.values()[par1ItemStack.getItemDamage()]);
 
                 rocket.rotationYaw += 45;
@@ -158,7 +162,7 @@ public class ItemTier3Rocket extends Item implements IHoldableItem {
         }
 
         if (par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("RocketFuel")) {
-            EntityTier3Rocket rocket = new EntityTier3Rocket(
+            final EntityTier3Rocket rocket = new EntityTier3Rocket(
                     FMLClientHandler.instance().getWorldClient(),
                     0,
                     0,

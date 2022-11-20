@@ -3,7 +3,6 @@ package micdoodle8.mods.galacticraft.planets.asteroids.client.render.item;
 import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.planets.asteroids.client.render.tile.TileEntityShortRangeTelepadRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
@@ -73,8 +72,6 @@ public class ItemRendererShortRangeTelepad implements IItemRenderer {
     }
 
     public void transform(ItemRenderType type) {
-        final EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
-
         if (type == ItemRenderType.EQUIPPED) {
             GL11.glTranslatef(0.55F, 0.45F, 0.6F);
             GL11.glRotatef(185, 1, 0, 0);
@@ -105,9 +102,9 @@ public class ItemRendererShortRangeTelepad implements IItemRenderer {
             GL11.glScalef(1.3F, 1.3F, 1.3F);
         }
 
-        //		GL11.glRotatef(30, 1, 0, 0);
-        //		GL11.glScalef(-1F, -1F, 1);
-        //		GL11.glTranslatef(-0.4F, 0.0F, 0.0F);
+        // GL11.glRotatef(30, 1, 0, 0);
+        // GL11.glScalef(-1F, -1F, 1);
+        // GL11.glTranslatef(-0.4F, 0.0F, 0.0F);
     }
 
     /**

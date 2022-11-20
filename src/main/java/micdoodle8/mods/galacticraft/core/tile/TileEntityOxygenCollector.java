@@ -48,7 +48,7 @@ public class TileEntityOxygenCollector extends TileEntityOxygen implements IInve
         super.updateEntity();
 
         if (!this.worldObj.isRemote) {
-            producedLastTick = this.storedOxygen < this.maxOxygen;
+            this.producedLastTick = this.storedOxygen < this.maxOxygen;
 
             this.produceOxygen();
 
@@ -98,9 +98,9 @@ public class TileEntityOxygenCollector extends TileEntityOxygen implements IInve
                     float nearbyLeaves = 0;
 
                     if (!this.isInitialised) {
-                        this.noAtmosphericOxygen = (this.worldObj.provider instanceof IGalacticraftWorldProvider
+                        this.noAtmosphericOxygen = this.worldObj.provider instanceof IGalacticraftWorldProvider
                                 && !((IGalacticraftWorldProvider) this.worldObj.provider)
-                                        .isGasPresent(IAtmosphericGas.OXYGEN));
+                                        .isGasPresent(IAtmosphericGas.OXYGEN);
                         this.isInitialised = true;
                     }
 
@@ -127,8 +127,8 @@ public class TileEntityOxygenCollector extends TileEntityOxygen implements IInve
                             // fixed (x,z) coordinates meaning fixed chunk
                             // coordinates
                             for (int x = this.xCoord - 5; x <= this.xCoord + 5; x++) {
-                                int chunkx = x >> 4;
-                                int intrachunkx = x & 15;
+                                final int chunkx = x >> 4;
+                                final int intrachunkx = x & 15;
                                 // Preload the first chunk for the z loop - there
                                 // can be a maximum of 2 chunks in the z loop
                                 int chunkz = this.zCoord - 5 >> 4;
@@ -315,7 +315,7 @@ public class TileEntityOxygenCollector extends TileEntityOxygen implements IInve
 
     @Override
     public boolean shouldUseEnergy() {
-        return this.storedOxygen > 0F && producedLastTick;
+        return this.storedOxygen > 0F && this.producedLastTick;
     }
 
     @Override

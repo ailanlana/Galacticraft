@@ -51,6 +51,7 @@ public class ThreadDownloadImageDataGC extends SimpleTexture {
         }
     }
 
+    @Override
     public int getGlTextureId() {
         this.checkTextureUploaded();
         return super.getGlTextureId();
@@ -60,12 +61,13 @@ public class ThreadDownloadImageDataGC extends SimpleTexture {
         this.bufferedImage = p_147641_1_;
     }
 
+    @Override
     public void loadTexture(IResourceManager p_110551_1_) {
         try {
             if (this.bufferedImage == null && this.textureLocation != null) {
                 super.loadTexture(p_110551_1_);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
 
@@ -79,8 +81,8 @@ public class ThreadDownloadImageDataGC extends SimpleTexture {
                     if (this.imageBuffer != null) {
                         this.setBufferedImage(this.imageBuffer.parseUserSkin(this.bufferedImage));
                     }
-                } catch (IOException ioexception) {
-                    logger.error("Couldn\'t load skin " + this.field_152434_e, ioexception);
+                } catch (final IOException ioexception) {
+                    logger.error("Couldn't load skin " + this.field_152434_e, ioexception);
                     this.func_152433_a();
                 }
             } else {
@@ -91,6 +93,7 @@ public class ThreadDownloadImageDataGC extends SimpleTexture {
 
     protected void func_152433_a() {
         this.imageThread = new Thread("Texture Downloader #" + threadDownloadCounter.incrementAndGet()) {
+            @Override
             public void run() {
                 HttpURLConnection httpurlconnection = null;
                 FMLLog.fine(
@@ -99,7 +102,7 @@ public class ThreadDownloadImageDataGC extends SimpleTexture {
 
                 try {
                     httpurlconnection =
-                            (HttpURLConnection) (new URL(ThreadDownloadImageDataGC.this.imageUrl)).openConnection();
+                            (HttpURLConnection) new URL(ThreadDownloadImageDataGC.this.imageUrl).openConnection();
                     httpurlconnection.setDoInput(true);
                     httpurlconnection.setDoOutput(false);
                     httpurlconnection.connect();
@@ -122,8 +125,8 @@ public class ThreadDownloadImageDataGC extends SimpleTexture {
                         ThreadDownloadImageDataGC.this.setBufferedImage(bufferedimage);
                         return;
                     }
-                } catch (Exception exception) {
-                    ThreadDownloadImageDataGC.logger.error("Couldn\'t download http texture", exception);
+                } catch (final Exception exception) {
+                    ThreadDownloadImageDataGC.logger.error("Couldn't download http texture", exception);
                     return;
                 } finally {
                     if (httpurlconnection != null) {

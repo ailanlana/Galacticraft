@@ -5,9 +5,8 @@ import java.lang.reflect.Method;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 /**
- * A static method for other mods to access the Galacticraft
- * extended inventory.
- *
+ * A static method for other mods to access the Galacticraft extended inventory.
+ * <p>
  * Call: AccessInventoryGC.getGCInventoryForPlayer(player)
  */
 public class AccessInventoryGC {
@@ -23,12 +22,12 @@ public class AccessInventoryGC {
                 extendedInventoryField = playerStatsClass.getField("extendedInventory");
             }
 
-            Object stats = getMethod.invoke(null, player);
+            final Object stats = getMethod.invoke(null, player);
             if (stats == null) {
                 return null;
             }
             return (IInventoryGC) extendedInventoryField.get(stats);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
 

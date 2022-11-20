@@ -38,7 +38,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class BlockBasicMoon extends BlockAdvancedTile
         implements IDetectableResource, IPlantableBlock, ITerraformableBlock {
     // CopperMoon: 0, TinMoon: 1, CheeseStone: 2
-    // Moon dirt: 3;  Moon rock: 4;  Moon topsoil: 5-13 (6-13 have GC2 footprints);  Moon dungeon brick: 14;  Moon boss
+    // Moon dirt: 3; Moon rock: 4; Moon topsoil: 5-13 (6-13 have GC2 footprints);
+    // Moon dungeon brick: 14; Moon boss
     // spawner: 15;
     @SideOnly(Side.CLIENT)
     private IIcon[] moonBlockIcons;
@@ -118,7 +119,7 @@ public class BlockBasicMoon extends BlockAdvancedTile
             double explosionX,
             double explosionY,
             double explosionZ) {
-        int metadata = world.getBlockMetadata(x, y, z);
+        final int metadata = world.getBlockMetadata(x, y, z);
 
         if (metadata == 15) {
             return 10000.0F;
@@ -247,8 +248,8 @@ public class BlockBasicMoon extends BlockAdvancedTile
     }
 
     @Override
-    public int getDamageValue(World p_149643_1_, int p_149643_2_, int p_149643_3_, int p_149643_4_) {
-        return p_149643_1_.getBlockMetadata(p_149643_2_, p_149643_3_, p_149643_4_);
+    public int getDamageValue(World worldIn, int x, int y, int z) {
+        return worldIn.getBlockMetadata(x, y, z);
     }
 
     @Override
@@ -256,7 +257,7 @@ public class BlockBasicMoon extends BlockAdvancedTile
         switch (meta) {
             case 2:
                 if (fortune >= 1) {
-                    return (random.nextFloat() < fortune * 0.29F - 0.25F) ? 2 : 1;
+                    return random.nextFloat() < fortune * 0.29F - 0.25F ? 2 : 1;
                 }
                 return 1;
             case 15:
@@ -335,7 +336,7 @@ public class BlockBasicMoon extends BlockAdvancedTile
 
     @Override
     public boolean isTerraformable(World world, int x, int y, int z) {
-        int meta = world.getBlockMetadata(x, y, z);
+        final int meta = world.getBlockMetadata(x, y, z);
 
         if (meta >= 5 && meta <= 13) {
             return !world.getBlock(x, y + 1, z).isOpaqueCube();
@@ -346,7 +347,7 @@ public class BlockBasicMoon extends BlockAdvancedTile
 
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-        int metadata = world.getBlockMetadata(x, y, z);
+        final int metadata = world.getBlockMetadata(x, y, z);
         if (metadata == 2) {
             return new ItemStack(Item.getItemFromBlock(this), 1, metadata);
         }
@@ -362,17 +363,17 @@ public class BlockBasicMoon extends BlockAdvancedTile
         super.breakBlock(world, x, y, z, block, par6);
 
         if (!world.isRemote && block == this && par6 == 5) {
-            Map<Long, List<Footprint>> footprintChunkMap =
+            final Map<Long, List<Footprint>> footprintChunkMap =
                     TickHandlerServer.serverFootprintMap.get(world.provider.dimensionId);
 
             if (footprintChunkMap != null) {
-                long chunkKey = ChunkCoordIntPair.chunkXZ2Int(x >> 4, z >> 4);
-                List<Footprint> footprintList = footprintChunkMap.get(chunkKey);
+                final long chunkKey = ChunkCoordIntPair.chunkXZ2Int(x >> 4, z >> 4);
+                final List<Footprint> footprintList = footprintChunkMap.get(chunkKey);
 
                 if (footprintList != null && !footprintList.isEmpty()) {
-                    List<Footprint> toRemove = new ArrayList<Footprint>();
+                    final List<Footprint> toRemove = new ArrayList<>();
 
-                    for (Footprint footprint : footprintList) {
+                    for (final Footprint footprint : footprintList) {
                         if (footprint.position.x > x
                                 && footprint.position.x < x + 1
                                 && footprint.position.z > z
@@ -394,8 +395,10 @@ public class BlockBasicMoon extends BlockAdvancedTile
 
     @Override
     public boolean isReplaceableOreGen(World world, int x, int y, int z, Block target) {
-        if (target != Blocks.stone) return false;
-        int meta = world.getBlockMetadata(x, y, z);
-        return (meta == 3 || meta == 4);
+        if (target != Blocks.stone) {
+            return false;
+        }
+        final int meta = world.getBlockMetadata(x, y, z);
+        return meta == 3 || meta == 4;
     }
 }

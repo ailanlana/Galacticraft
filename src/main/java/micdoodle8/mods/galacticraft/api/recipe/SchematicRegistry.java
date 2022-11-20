@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
 public class SchematicRegistry {
-    public static ArrayList<ISchematicPage> schematicRecipes = new ArrayList<ISchematicPage>();
+    public static ArrayList<ISchematicPage> schematicRecipes = new ArrayList<>();
 
     /**
      * Register a new schematic page
@@ -65,7 +65,9 @@ public class SchematicRegistry {
     public static void addUnlockedPage(EntityPlayerMP player, ISchematicPage page) {
         // Used internally to add page to player's list of unlocked schematics.
         // No need to subscribe to this event
-        if (page != null) MinecraftForge.EVENT_BUS.post(new Unlock(player, page));
+        if (page != null) {
+            MinecraftForge.EVENT_BUS.post(new Unlock(player, page));
+        }
     }
 
     /**
@@ -92,7 +94,8 @@ public class SchematicRegistry {
     /**
      * Finds the correct schematic when player presses NEXT
      *
-     * @param currentIndex the current index of unlocked schematics the player is viewing
+     * @param currentIndex the current index of unlocked schematics the player is
+     *                     viewing
      * @return the schematic page that will be shown when the player clicks NEXT
      */
     @SideOnly(Side.CLIENT)
@@ -107,7 +110,8 @@ public class SchematicRegistry {
     /**
      * Finds the correct schematic when player presses BACK
      *
-     * @param currentIndex the current index of unlocked schematics the player is viewing
+     * @param currentIndex the current index of unlocked schematics the player is
+     *                     viewing
      * @return the schematic page that will be shown when the player clicks BACK
      */
     @SideOnly(Side.CLIENT)

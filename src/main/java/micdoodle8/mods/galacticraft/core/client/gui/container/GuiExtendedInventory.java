@@ -46,10 +46,10 @@ public class GuiExtendedInventory extends InventoryEffectRenderer {
 
         this.guiLeft = (this.width - this.xSize) / 2;
         this.guiLeft += this.getPotionOffset();
-        this.potionOffsetLast = getPotionOffsetNEI();
+        this.potionOffsetLast = this.getPotionOffsetNEI();
 
-        int cornerX = this.guiLeft;
-        int cornerY = this.guiTop;
+        final int cornerX = this.guiLeft;
+        final int cornerY = this.guiTop;
 
         TabRegistry.updateTabValues(cornerX, cornerY, InventoryTabGalacticraft.class);
         TabRegistry.addTabsToList(this.buttonList);
@@ -81,14 +81,16 @@ public class GuiExtendedInventory extends InventoryEffectRenderer {
 
     @Override
     public void drawScreen(int par1, int par2, float par3) {
-        int newPotionOffset = this.getPotionOffsetNEI();
+        final int newPotionOffset = this.getPotionOffsetNEI();
         if (newPotionOffset < this.potionOffsetLast) {
-            int diff = newPotionOffset - this.potionOffsetLast;
+            final int diff = newPotionOffset - this.potionOffsetLast;
             this.potionOffsetLast = newPotionOffset;
             this.guiLeft += diff;
-            for (int k = 0; k < this.buttonList.size(); ++k) {
-                GuiButton b = (GuiButton) this.buttonList.get(k);
-                if (!(b instanceof AbstractTab)) b.xPosition += diff;
+            for (final Object element : this.buttonList) {
+                final GuiButton b = (GuiButton) element;
+                if (!(b instanceof AbstractTab)) {
+                    b.xPosition += diff;
+                }
             }
         }
         super.drawScreen(par1, par2, par3);
@@ -101,10 +103,10 @@ public class GuiExtendedInventory extends InventoryEffectRenderer {
         GL11.glTranslatef(par1, par2, 50.0F);
         GL11.glScalef(-par3, par3, par3);
         GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
-        float f2 = par0Minecraft.thePlayer.renderYawOffset;
-        float f3 = par0Minecraft.thePlayer.rotationYaw;
-        float f4 = par0Minecraft.thePlayer.rotationPitch;
-        float f5 = par0Minecraft.thePlayer.rotationYawHead;
+        final float f2 = par0Minecraft.thePlayer.renderYawOffset;
+        final float f3 = par0Minecraft.thePlayer.rotationYaw;
+        final float f4 = par0Minecraft.thePlayer.rotationPitch;
+        final float f5 = par0Minecraft.thePlayer.rotationYawHead;
         par4 -= 19;
         GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
         RenderHelper.enableStandardItemLighting();
@@ -115,7 +117,7 @@ public class GuiExtendedInventory extends InventoryEffectRenderer {
         par0Minecraft.thePlayer.rotationYaw = (float) Math.atan(par4 / 40.0F) * 40.0F;
         par0Minecraft.thePlayer.rotationYaw = GuiExtendedInventory.rotation;
         par0Minecraft.thePlayer.rotationYawHead = par0Minecraft.thePlayer.rotationYaw;
-        par0Minecraft.thePlayer.rotationPitch = (float) Math.sin(par0Minecraft.getSystemTime() / 500.0F) * 3.0F;
+        par0Minecraft.thePlayer.rotationPitch = (float) Math.sin(Minecraft.getSystemTime() / 500.0F) * 3.0F;
         GL11.glTranslatef(0.0F, par0Minecraft.thePlayer.yOffset, 0.0F);
         RenderManager.instance.playerViewY = 180.0F;
         RenderManager.instance.renderEntityWithPosYaw(par0Minecraft.thePlayer, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
@@ -135,7 +137,7 @@ public class GuiExtendedInventory extends InventoryEffectRenderer {
         // If at least one potion is active...
         if (!Minecraft.getMinecraft().thePlayer.getActivePotionEffects().isEmpty()) {
             this.initWithPotion = true;
-            return 60 + getPotionOffsetNEI();
+            return 60 + this.getPotionOffsetNEI();
         }
 
         // No potions, no offset needed
@@ -147,9 +149,9 @@ public class GuiExtendedInventory extends InventoryEffectRenderer {
         if (this.initWithPotion && Loader.isModLoaded("NotEnoughItems")) {
             try {
                 // Check whether NEI is hidden and enabled
-                Class<?> c = Class.forName("codechicken.nei.NEIClientConfig");
-                Object hidden = c.getMethod("isHidden").invoke(null);
-                Object enabled = c.getMethod("isEnabled").invoke(null);
+                final Class<?> c = Class.forName("codechicken.nei.NEIClientConfig");
+                final Object hidden = c.getMethod("isHidden").invoke(null);
+                final Object enabled = c.getMethod("isEnabled").invoke(null);
                 if (hidden instanceof Boolean && enabled instanceof Boolean) {
                     if ((Boolean) hidden || !((Boolean) enabled)) {
                         // If NEI is disabled or hidden, offset the tabs by the standard 60
@@ -158,7 +160,7 @@ public class GuiExtendedInventory extends InventoryEffectRenderer {
                     // Active NEI undoes the standard potion offset
                     return -60;
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
             }
         }
         // No NEI, no change

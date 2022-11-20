@@ -18,9 +18,9 @@ import org.lwjgl.opengl.GL11;
 public class GuiIngotCompressor extends GuiContainerGC {
     private static final ResourceLocation electricFurnaceTexture =
             new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/ingotCompressor.png");
-    private GuiElementInfoRegion processInfoRegion = new GuiElementInfoRegion(0, 0, 52, 25, null, 0, 0, this);
+    private final GuiElementInfoRegion processInfoRegion = new GuiElementInfoRegion(0, 0, 52, 25, null, 0, 0, this);
 
-    private TileEntityIngotCompressor tileEntity;
+    private final TileEntityIngotCompressor tileEntity;
 
     public GuiIngotCompressor(InventoryPlayer par1InventoryPlayer, TileEntityIngotCompressor tileEntity) {
         super(new ContainerIngotCompressor(par1InventoryPlayer, tileEntity));
@@ -31,7 +31,7 @@ public class GuiIngotCompressor extends GuiContainerGC {
     @Override
     public void initGui() {
         super.initGui();
-        this.processInfoRegion.tooltipStrings = new ArrayList<String>();
+        this.processInfoRegion.tooltipStrings = new ArrayList<>();
         this.processInfoRegion.xPosition = (this.width - this.xSize) / 2 + 77;
         this.processInfoRegion.yPosition = (this.height - this.ySize) / 2 + 30;
         this.processInfoRegion.parentWidth = this.width;
@@ -40,8 +40,8 @@ public class GuiIngotCompressor extends GuiContainerGC {
     }
 
     /**
-     * Draw the foreground layer for the GuiContainer (everything in front of
-     * the items)
+     * Draw the foreground layer for the GuiContainer (everything in front of the
+     * items)
      */
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
@@ -68,8 +68,7 @@ public class GuiIngotCompressor extends GuiContainerGC {
     }
 
     /**
-     * Draw the background layer for the GuiContainer (everything behind the
-     * items)
+     * Draw the background layer for the GuiContainer (everything behind the items)
      */
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
@@ -77,31 +76,32 @@ public class GuiIngotCompressor extends GuiContainerGC {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         int process;
-        int containerWidth = (this.width - this.xSize) / 2;
-        int containerHeight = (this.height - this.ySize) / 2;
+        final int containerWidth = (this.width - this.xSize) / 2;
+        final int containerHeight = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);
 
         if (this.tileEntity.processTicks > 0) {
-            process = (int)
-                    ((double) this.tileEntity.processTicks / (double) this.tileEntity.PROCESS_TIME_REQUIRED * 100);
+            process = (int) ((double) this.tileEntity.processTicks
+                    / (double) TileEntityIngotCompressor.PROCESS_TIME_REQUIRED
+                    * 100);
         } else {
             process = 0;
         }
 
-        List<String> processDesc = new ArrayList<String>();
+        final List<String> processDesc = new ArrayList<>();
         processDesc.clear();
         processDesc.add(GCCoreUtil.translate("gui.electricCompressor.desc.0") + ": " + process + "%");
         this.processInfoRegion.tooltipStrings = processDesc;
 
         if (this.tileEntity.processTicks > 0) {
-            int scale = (int) ((double) this.tileEntity.processTicks
+            final int scale = (int) ((double) this.tileEntity.processTicks
                     / (double) TileEntityIngotCompressor.PROCESS_TIME_REQUIRED
                     * 54);
             this.drawTexturedModalRect(containerWidth + 77, containerHeight + 36, 176, 13, scale, 17);
         }
 
         if (this.tileEntity.furnaceBurnTime > 0) {
-            int scale = (int)
+            final int scale = (int)
                     ((double) this.tileEntity.furnaceBurnTime / (double) this.tileEntity.currentItemBurnTime * 14);
             this.drawTexturedModalRect(
                     containerWidth + 81, containerHeight + 27 + 14 - scale, 176, 30 + 14 - scale, 14, scale);

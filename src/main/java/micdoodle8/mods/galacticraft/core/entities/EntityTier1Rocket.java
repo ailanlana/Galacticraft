@@ -99,7 +99,9 @@ public class EntityTier1Rocket extends EntityTieredRocket {
 
             if (this.timeSinceLaunch % MathHelper.floor_double(3 * (1 / multiplier)) == 0) {
                 this.removeFuel(1);
-                if (!this.hasValidFuel()) this.stopRocketSound();
+                if (!this.hasValidFuel()) {
+                    this.stopRocketSound();
+                }
             }
         } else if (!this.worldObj.isRemote && this.getLaunched() && !this.hasValidFuel()) {
             if (Math.abs(Math.sin(this.timeSinceLaunch / 1000)) / 10 != 0.0) {
@@ -113,7 +115,7 @@ public class EntityTier1Rocket extends EntityTieredRocket {
         final EntityPlayerMP playerBase = PlayerUtil.getPlayerBaseServerFromPlayer(player, false);
 
         if (playerBase != null) {
-            GCPlayerStats stats = GCPlayerStats.get(player);
+            final GCPlayerStats stats = GCPlayerStats.get(player);
 
             if (this.cargoItems == null || this.cargoItems.length == 0) {
                 stats.rocketStacks = new ItemStack[2];
@@ -148,11 +150,11 @@ public class EntityTier1Rocket extends EntityTieredRocket {
             final double x2 = this.posX + x1 - this.motionX;
             final double z2 = this.posZ + z1 - this.motionZ;
 
-            EntityLivingBase riddenByEntity =
+            final EntityLivingBase riddenByEntity =
                     this.riddenByEntity instanceof EntityLivingBase ? (EntityLivingBase) this.riddenByEntity : null;
 
             if (this.getLaunched()) {
-                Vector3 motionVec = new Vector3(x1, y1, z1);
+                final Vector3 motionVec = new Vector3(x1, y1, z1);
                 GalacticraftCore.proxy.spawnParticle(
                         "launchFlameLaunched",
                         new Vector3(x2 + 0.4 - this.rand.nextDouble() / 10, y, z2 + 0.4 - this.rand.nextDouble() / 10),
@@ -232,7 +234,7 @@ public class EntityTier1Rocket extends EntityTieredRocket {
     @Override
     public List<ItemStack> getItemsDropped(List<ItemStack> droppedItems) {
         super.getItemsDropped(droppedItems);
-        ItemStack rocket = new ItemStack(GCItems.rocketTier1, 1, this.rocketType.getIndex());
+        final ItemStack rocket = new ItemStack(GCItems.rocketTier1, 1, this.rocketType.getIndex());
         rocket.setTagCompound(new NBTTagCompound());
         rocket.getTagCompound().setInteger("RocketFuel", this.fuelTank.getFluidAmount());
         droppedItems.add(rocket);

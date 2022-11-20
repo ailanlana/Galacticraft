@@ -19,20 +19,18 @@ import net.minecraft.world.WorldProviderSurface;
 import net.minecraftforge.common.DimensionManager;
 
 public class GalacticraftRegistry {
-    private static Map<Class<? extends WorldProvider>, ITeleportType> teleportTypeMap =
-            new HashMap<Class<? extends WorldProvider>, ITeleportType>();
-    private static List<SpaceStationType> spaceStations = new ArrayList<SpaceStationType>();
-    private static List<INasaWorkbenchRecipe> rocketBenchT1Recipes = new ArrayList<INasaWorkbenchRecipe>();
-    private static List<INasaWorkbenchRecipe> buggyBenchRecipes = new ArrayList<INasaWorkbenchRecipe>();
-    private static List<INasaWorkbenchRecipe> rocketBenchT2Recipes = new ArrayList<INasaWorkbenchRecipe>();
-    private static List<INasaWorkbenchRecipe> cargoRocketRecipes = new ArrayList<INasaWorkbenchRecipe>();
-    private static List<INasaWorkbenchRecipe> rocketBenchT3Recipes = new ArrayList<INasaWorkbenchRecipe>();
-    private static List<INasaWorkbenchRecipe> astroMinerRecipes = new ArrayList<INasaWorkbenchRecipe>();
-    private static Map<Class<? extends WorldProvider>, ResourceLocation> rocketGuiMap =
-            new HashMap<Class<? extends WorldProvider>, ResourceLocation>();
-    private static Map<Integer, List<ItemStack>> dungeonLootMap = new HashMap<Integer, List<ItemStack>>();
-    private static List<Integer> worldProviderIDs = new ArrayList<Integer>();
-    private static List<IGameScreen> gameScreens = new ArrayList<IGameScreen>();
+    private static final Map<Class<? extends WorldProvider>, ITeleportType> teleportTypeMap = new HashMap<>();
+    private static final List<SpaceStationType> spaceStations = new ArrayList<>();
+    private static final List<INasaWorkbenchRecipe> rocketBenchT1Recipes = new ArrayList<>();
+    private static final List<INasaWorkbenchRecipe> buggyBenchRecipes = new ArrayList<>();
+    private static final List<INasaWorkbenchRecipe> rocketBenchT2Recipes = new ArrayList<>();
+    private static final List<INasaWorkbenchRecipe> cargoRocketRecipes = new ArrayList<>();
+    private static final List<INasaWorkbenchRecipe> rocketBenchT3Recipes = new ArrayList<>();
+    private static final List<INasaWorkbenchRecipe> astroMinerRecipes = new ArrayList<>();
+    private static final Map<Class<? extends WorldProvider>, ResourceLocation> rocketGuiMap = new HashMap<>();
+    private static final Map<Integer, List<ItemStack>> dungeonLootMap = new HashMap<>();
+    private static final List<Integer> worldProviderIDs = new ArrayList<>();
+    private static final List<IGameScreen> gameScreens = new ArrayList<>();
     private static int maxScreenTypes;
 
     /**
@@ -63,11 +61,11 @@ public class GalacticraftRegistry {
     }
 
     /**
-     * Add loot to the list of items that can possibly spawn in dungeon chests,
-     * but it is guaranteed that one will always spawn
+     * Add loot to the list of items that can possibly spawn in dungeon chests, but
+     * it is guaranteed that one will always spawn
      *
-     * @param tier Tier of dungeon chest to add loot to. For example Moon is 1
-     *             and Mars is 2
+     * @param tier Tier of dungeon chest to add loot to. For example Moon is 1 and
+     *             Mars is 2
      * @param loot The itemstack to add to the possible list of items
      */
     public static void addDungeonLoot(int tier, ItemStack loot) {
@@ -77,7 +75,7 @@ public class GalacticraftRegistry {
             dungeonStacks = GalacticraftRegistry.dungeonLootMap.get(tier);
             dungeonStacks.add(loot);
         } else {
-            dungeonStacks = new ArrayList<ItemStack>();
+            dungeonStacks = new ArrayList<>();
             dungeonStacks.add(loot);
         }
 
@@ -116,7 +114,7 @@ public class GalacticraftRegistry {
     }
 
     public static void registerSpaceStation(SpaceStationType type) {
-        for (SpaceStationType type1 : GalacticraftRegistry.spaceStations) {
+        for (final SpaceStationType type1 : GalacticraftRegistry.spaceStations) {
             if (type1.getWorldToOrbitID() == type.getWorldToOrbitID()) {
                 throw new RuntimeException(
                         "Two space station types registered with the same home planet ID: " + type.getWorldToOrbitID());
@@ -171,8 +169,9 @@ public class GalacticraftRegistry {
     }
 
     /***
-     * Now returns a boolean to indicate whether registration of the WorldProvider type was successful.
-     * (If it failed, you should probably set the CelestialBody as unreachable.)
+     * Now returns a boolean to indicate whether registration of the WorldProvider
+     * type was successful. (If it failed, you should probably set the CelestialBody
+     * as unreachable.)
      *
      * @param id
      * @param provider
@@ -181,13 +180,13 @@ public class GalacticraftRegistry {
      */
     public static boolean registerProvider(
             int id, Class<? extends WorldProvider> provider, boolean keepLoaded, int defaultID) {
-        boolean flag = DimensionManager.registerProviderType(id, provider, keepLoaded);
+        final boolean flag = DimensionManager.registerProviderType(id, provider, keepLoaded);
         if (flag) {
             GalacticraftRegistry.worldProviderIDs.add(id);
             return true;
         } else {
-            GalacticraftRegistry.worldProviderIDs.add(
-                    defaultID); // Adding the 0 here preserves the order, important for network compatibility between GC
+            GalacticraftRegistry.worldProviderIDs.add(defaultID); // Adding the 0 here preserves the order, important
+            // for network compatibility between GC
             // versions
             FMLLog.severe("Could not register dimension " + id
                     + " - does it clash with another mod?  Change the ID in config.");
@@ -196,8 +195,9 @@ public class GalacticraftRegistry {
     }
 
     /**
-     * You should now use GalacticraftRegistry.registerProvider(int id, Class<? extends WorldProvider> provider, boolean keepLoaded, int defaultID)
-     * which returns a boolean indicating if the Provider was registered OK.
+     * You should now use GalacticraftRegistry.registerProvider(int id, Class<?
+     * extends WorldProvider> provider, boolean keepLoaded, int defaultID) which
+     * returns a boolean indicating if the Provider was registered OK.
      *
      * @param id
      * @param provider
@@ -215,8 +215,8 @@ public class GalacticraftRegistry {
     /**
      * Register an IGameScreen so the Display Screen can access it
      *
-     * @param screen  The IGameScreen to be registered
-     * @return   The type ID assigned to this screen type
+     * @param screen The IGameScreen to be registered
+     * @return The type ID assigned to this screen type
      */
     public static int registerScreen(IGameScreen screen) {
         GalacticraftRegistry.gameScreens.add(screen);

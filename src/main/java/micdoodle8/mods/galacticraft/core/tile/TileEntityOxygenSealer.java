@@ -59,27 +59,35 @@ public class TileEntityOxygenSealer extends TileEntityOxygen implements IInvento
         this.noRedstoneControl = true;
         this.storage.setMaxExtract(5.0F); // Half of a standard machine's power draw
         this.storage.setMaxReceive(25.0F);
-        this.storage.setCapacity(EnergyStorageTile.STANDARD_CAPACITY
-                * 2); // Large capacity so it can keep working for a while even if chunk unloads affect its power supply
+        this.storage.setCapacity(EnergyStorageTile.STANDARD_CAPACITY * 2); // Large capacity so it can keep working for
+        // a while even if chunk unloads affect its
+        // power supply
     }
 
     @Override
     public void validate() {
         super.validate();
-        if (!this.worldObj.isRemote)
-            if (!TileEntityOxygenSealer.loadedTiles.contains(this)) TileEntityOxygenSealer.loadedTiles.add(this);
+        if (!this.worldObj.isRemote) {
+            if (!TileEntityOxygenSealer.loadedTiles.contains(this)) {
+                TileEntityOxygenSealer.loadedTiles.add(this);
+            }
+        }
         this.stopSealThreadCooldown = 126 + countEntities;
     }
 
     @Override
     public void invalidate() {
-        if (!this.worldObj.isRemote) TileEntityOxygenSealer.loadedTiles.remove(this);
+        if (!this.worldObj.isRemote) {
+            TileEntityOxygenSealer.loadedTiles.remove(this);
+        }
         super.invalidate();
     }
 
     @Override
     public void onChunkUnload() {
-        if (!this.worldObj.isRemote) TileEntityOxygenSealer.loadedTiles.remove(this);
+        if (!this.worldObj.isRemote) {
+            TileEntityOxygenSealer.loadedTiles.remove(this);
+        }
         super.onChunkUnload();
     }
 
@@ -94,7 +102,7 @@ public class TileEntityOxygenSealer extends TileEntityOxygen implements IInvento
         if (!this.active || this.storedOxygen < this.oxygenPerTick || !this.hasEnoughEnergyToRun) {
             return 0;
         }
-        Block blockAbove = this.worldObj.getBlock(this.xCoord, this.yCoord + 1, this.zCoord);
+        final Block blockAbove = this.worldObj.getBlock(this.xCoord, this.yCoord + 1, this.zCoord);
         if (!(blockAbove instanceof BlockAir)
                 && !OxygenPressureProtocol.canBlockPassAir(
                         this.worldObj, blockAbove, new BlockVec3(this.xCoord, this.yCoord + 1, this.zCoord), 1)) {
@@ -106,7 +114,7 @@ public class TileEntityOxygenSealer extends TileEntityOxygen implements IInvento
     }
 
     public boolean thermalControlEnabled() {
-        ItemStack oxygenItemStack = this.getStackInSlot(2);
+        final ItemStack oxygenItemStack = this.getStackInSlot(2);
         return oxygenItemStack != null
                 && oxygenItemStack.getItem() == GCItems.basicItem
                 && oxygenItemStack.getItemDamage() == 20
@@ -117,12 +125,14 @@ public class TileEntityOxygenSealer extends TileEntityOxygen implements IInvento
     @Override
     public void updateEntity() {
         if (!this.worldObj.isRemote) {
-            ItemStack oxygenItemStack = this.getStackInSlot(1);
+            final ItemStack oxygenItemStack = this.getStackInSlot(1);
             if (oxygenItemStack != null && oxygenItemStack.getItem() instanceof IItemOxygenSupply) {
-                IItemOxygenSupply oxygenItem = (IItemOxygenSupply) oxygenItemStack.getItem();
-                float oxygenDraw = Math.min(UNSEALED_OXYGENPERTICK * 2.5F, this.maxOxygen - this.storedOxygen);
+                final IItemOxygenSupply oxygenItem = (IItemOxygenSupply) oxygenItemStack.getItem();
+                final float oxygenDraw = Math.min(UNSEALED_OXYGENPERTICK * 2.5F, this.maxOxygen - this.storedOxygen);
                 this.storedOxygen += oxygenItem.discharge(oxygenItemStack, oxygenDraw);
-                if (this.storedOxygen > this.maxOxygen) this.storedOxygen = this.maxOxygen;
+                if (this.storedOxygen > this.maxOxygen) {
+                    this.storedOxygen = this.maxOxygen;
+                }
             }
 
             if (this.thermalControlEnabled()) {
@@ -145,7 +155,8 @@ public class TileEntityOxygenSealer extends TileEntityOxygen implements IInvento
 
             this.active = this.storedOxygen >= 1 && this.hasEnoughEnergyToRun && !this.disabled;
 
-            // TODO: if multithreaded, this codeblock should not run if the current threadSeal is flagged looping
+            // TODO: if multithreaded, this codeblock should not run if the current
+            // threadSeal is flagged looping
             if (this.stopSealThreadCooldown > 0) {
                 this.stopSealThreadCooldown--;
             } else if (!TileEntityOxygenSealer.sealerCheckedThisTick) {
@@ -331,10 +342,18 @@ public class TileEntityOxygenSealer extends TileEntityOxygen implements IInvento
 
     @Override
     public boolean isItemValidForSlot(int slotID, ItemStack itemstack) {
-        if (itemstack == null) return false;
-        if (slotID == 0) return ItemElectricBase.isElectricItem(itemstack.getItem());
-        if (slotID == 1) return itemstack.getItem() instanceof IItemOxygenSupply;
-        if (slotID == 2) return itemstack.getItem() == GCItems.basicItem && itemstack.getItemDamage() == 20;
+        if (itemstack == null) {
+            return false;
+        }
+        if (slotID == 0) {
+            return ItemElectricBase.isElectricItem(itemstack.getItem());
+        }
+        if (slotID == 1) {
+            return itemstack.getItem() instanceof IItemOxygenSupply;
+        }
+        if (slotID == 2) {
+            return itemstack.getItem() == GCItems.basicItem && itemstack.getItemDamage() == 20;
+        }
         return false;
     }
 
@@ -370,9 +389,9 @@ public class TileEntityOxygenSealer extends TileEntityOxygen implements IInvento
 
     public static HashMap<BlockVec3, TileEntityOxygenSealer> getSealersAround(
             World world, int x, int y, int z, int rSquared) {
-        HashMap<BlockVec3, TileEntityOxygenSealer> ret = new HashMap<BlockVec3, TileEntityOxygenSealer>();
+        final HashMap<BlockVec3, TileEntityOxygenSealer> ret = new HashMap<>();
 
-        for (TileEntityOxygenSealer tile : new ArrayList<TileEntityOxygenSealer>(TileEntityOxygenSealer.loadedTiles)) {
+        for (final TileEntityOxygenSealer tile : new ArrayList<>(TileEntityOxygenSealer.loadedTiles)) {
             if (tile != null && tile.getWorldObj() == world && tile.getDistanceFrom(x, y, z) < rSquared) {
                 ret.put(new BlockVec3(tile.xCoord, tile.yCoord, tile.zCoord), tile);
             }
@@ -385,9 +404,9 @@ public class TileEntityOxygenSealer extends TileEntityOxygen implements IInvento
         TileEntityOxygenSealer ret = null;
         double dist = 96 * 96D;
 
-        for (Object tile : world.loadedTileEntityList) {
+        for (final Object tile : world.loadedTileEntityList) {
             if (tile instanceof TileEntityOxygenSealer) {
-                double testDist = ((TileEntityOxygenSealer) tile).getDistanceFrom(x, y, z);
+                final double testDist = ((TileEntityOxygenSealer) tile).getDistanceFrom(x, y, z);
                 if (testDist < dist) {
                     dist = testDist;
                     ret = (TileEntityOxygenSealer) tile;

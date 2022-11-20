@@ -25,7 +25,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -115,9 +119,9 @@ public class BlockNasaWorkbench extends BlockContainer
         for (int x = -1; x < 2; x++) {
             for (int y = 0; y < 4; y++) {
                 for (int z = -1; z < 2; z++) {
-                    if (!(x == 0 && y == 0 && z == 0)) {
+                    if (x != 0 || y != 0 || z != 0) {
                         if (Math.abs(x) != 1 || Math.abs(z) != 1) {
-                            Block blockAt = world.getBlock(x0 + x, y0 + y, z0 + z);
+                            final Block blockAt = world.getBlock(x0 + x, y0 + y, z0 + z);
 
                             if ((y == 0 || y == 3) && x == 0 && z == 0) {
                                 if (!blockAt.getMaterial().isReplaceable()) {
@@ -138,7 +142,7 @@ public class BlockNasaWorkbench extends BlockContainer
             world.setBlockToAir(x0, y0, z0);
 
             if (!world.isRemote && entity instanceof EntityPlayerMP) {
-                EntityPlayerMP player = (EntityPlayerMP) entity;
+                final EntityPlayerMP player = (EntityPlayerMP) entity;
                 player.addChatMessage(
                         new ChatComponentText(EnumColor.RED + GCCoreUtil.translate("gui.warning.noroom")));
                 if (!player.capabilities.isCreativeMode) {
@@ -168,7 +172,7 @@ public class BlockNasaWorkbench extends BlockContainer
         for (int x = -1; x < 2; x++) {
             for (int y = 0; y < 4; y++) {
                 for (int z = -1; z < 2; z++) {
-                    if (!(x == 0 && y == 0 && z == 0)) {
+                    if (x != 0 || y != 0 || z != 0) {
                         if (Math.abs(x) != 1 || Math.abs(z) != 1) {
                             if ((y == 0 || y == 3) && x == 0 && z == 0) {
                                 if (world.getBlock(x0 + x, y0 + y, z0 + z) == GCBlocks.fakeBlock) {

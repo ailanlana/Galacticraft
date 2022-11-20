@@ -5,7 +5,11 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.HashSet;
 import java.util.List;
-import micdoodle8.mods.galacticraft.api.entity.*;
+import micdoodle8.mods.galacticraft.api.entity.ICargoEntity;
+import micdoodle8.mods.galacticraft.api.entity.IDockable;
+import micdoodle8.mods.galacticraft.api.entity.IFuelable;
+import micdoodle8.mods.galacticraft.api.entity.IFuelableTiered;
+import micdoodle8.mods.galacticraft.api.entity.ILandable;
 import micdoodle8.mods.galacticraft.api.prefab.entity.EntityTieredRocket;
 import micdoodle8.mods.galacticraft.api.tile.IFuelDock;
 import micdoodle8.mods.galacticraft.api.tile.ILandingPadAttachable;
@@ -154,7 +158,7 @@ public class TileEntityLandingPad extends TileEntityMulti
 
     @Override
     public HashSet<ILandingPadAttachable> getConnectedTiles() {
-        HashSet<ILandingPadAttachable> connectedTiles = new HashSet<ILandingPadAttachable>();
+        final HashSet<ILandingPadAttachable> connectedTiles = new HashSet<>();
 
         for (int x = this.xCoord - 1; x < this.xCoord + 2; x++) {
             this.testConnectedTile(x, this.zCoord - 2, connectedTiles);
@@ -170,7 +174,9 @@ public class TileEntityLandingPad extends TileEntityMulti
     }
 
     private void testConnectedTile(int x, int z, HashSet<ILandingPadAttachable> connectedTiles) {
-        if (!this.worldObj.blockExists(x, this.yCoord, z)) return;
+        if (!this.worldObj.blockExists(x, this.yCoord, z)) {
+            return;
+        }
 
         final TileEntity tile = this.worldObj.getTileEntity(x, this.yCoord, z);
 
@@ -178,8 +184,9 @@ public class TileEntityLandingPad extends TileEntityMulti
                 && ((ILandingPadAttachable) tile)
                         .canAttachToLandingPad(this.worldObj, this.xCoord, this.yCoord, this.zCoord)) {
             connectedTiles.add((ILandingPadAttachable) tile);
-            if (GalacticraftCore.isPlanetsLoaded && tile instanceof TileEntityLaunchController)
+            if (GalacticraftCore.isPlanetsLoaded && tile instanceof TileEntityLaunchController) {
                 ((TileEntityLaunchController) tile).setAttachedPad(this);
+            }
         }
     }
 
@@ -204,12 +211,13 @@ public class TileEntityLandingPad extends TileEntityMulti
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
-        return AxisAlignedBB.getBoundingBox(xCoord - 1, yCoord, zCoord - 1, xCoord + 2, yCoord + 0.4D, zCoord + 2);
+        return AxisAlignedBB.getBoundingBox(
+                this.xCoord - 1, this.yCoord, this.zCoord - 1, this.xCoord + 2, this.yCoord + 0.4D, this.zCoord + 2);
     }
 
     @Override
     public boolean isBlockAttachable(IBlockAccess world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+        final TileEntity tile = world.getTileEntity(x, y, z);
 
         if (tile != null && tile instanceof ILandingPadAttachable) {
             return ((ILandingPadAttachable) tile).canAttachToLandingPad(world, this.xCoord, this.yCoord, this.zCoord);

@@ -45,6 +45,7 @@ public class BlockBasicMars extends Block
     // 9 Mars stone
     // 10 dungeon spawner (invisible)
 
+    @Override
     public MapColor getMapColor(int meta) {
         switch (meta) {
             case 7:
@@ -89,7 +90,7 @@ public class BlockBasicMars extends Block
             double explosionX,
             double explosionY,
             double explosionZ) {
-        int metadata = world.getBlockMetadata(x, y, z);
+        final int metadata = world.getBlockMetadata(x, y, z);
 
         if (metadata == 10) {
             return 10000.0F;
@@ -216,8 +217,8 @@ public class BlockBasicMars extends Block
     }
 
     @Override
-    public int getDamageValue(World p_149643_1_, int p_149643_2_, int p_149643_3_, int p_149643_4_) {
-        return p_149643_1_.getBlockMetadata(p_149643_2_, p_149643_3_, p_149643_4_);
+    public int getDamageValue(World worldIn, int x, int y, int z) {
+        return worldIn.getBlockMetadata(x, y, z);
     }
 
     @Override
@@ -225,7 +226,7 @@ public class BlockBasicMars extends Block
         if (meta == 10) {
             return 0;
         } else if (meta == 2 && fortune >= 1) {
-            return (random.nextFloat() < fortune * 0.29F - 0.25F) ? 2 : 1;
+            return random.nextFloat() < fortune * 0.29F - 0.25F ? 2 : 1;
         }
 
         return 1;
@@ -279,7 +280,7 @@ public class BlockBasicMars extends Block
     @Override
     public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
         if (rand.nextInt(10) == 0) {
-            int metadata = world.getBlockMetadata(x, y, z);
+            final int metadata = world.getBlockMetadata(x, y, z);
 
             if (metadata == 7) {
                 GalacticraftPlanets.spawnParticle(
@@ -314,7 +315,7 @@ public class BlockBasicMars extends Block
 
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-        int metadata = world.getBlockMetadata(x, y, z);
+        final int metadata = world.getBlockMetadata(x, y, z);
         if (metadata == 2) {
             return new ItemStack(Item.getItemFromBlock(this), 1, metadata);
         }
@@ -330,9 +331,11 @@ public class BlockBasicMars extends Block
 
     @Override
     public boolean isReplaceableOreGen(World world, int x, int y, int z, Block target) {
-        if (target != Blocks.stone) return false;
-        int meta = world.getBlockMetadata(x, y, z);
-        return (meta == 6 || meta == 9);
+        if (target != Blocks.stone) {
+            return false;
+        }
+        final int meta = world.getBlockMetadata(x, y, z);
+        return meta == 6 || meta == 9;
     }
 
     @Override

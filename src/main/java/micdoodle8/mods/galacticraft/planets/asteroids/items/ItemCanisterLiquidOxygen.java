@@ -16,7 +16,7 @@ import net.minecraft.util.IIcon;
 
 public class ItemCanisterLiquidOxygen extends ItemCanisterGeneric implements IItemOxygenSupply {
     protected IIcon[] icons = new IIcon[7];
-    private static HashMap<ItemStack, Integer> craftingvalues = new HashMap();
+    private static final HashMap<ItemStack, Integer> craftingvalues = new HashMap();
 
     public ItemCanisterLiquidOxygen(String assetName) {
         super(assetName);
@@ -67,12 +67,12 @@ public class ItemCanisterLiquidOxygen extends ItemCanisterGeneric implements IIt
     }
 
     public static void saveDamage(ItemStack itemstack, int damage) {
-        ItemCanisterLiquidOxygen.craftingvalues.put(itemstack, Integer.valueOf(damage));
+        ItemCanisterLiquidOxygen.craftingvalues.put(itemstack, damage);
     }
 
     @Override
     public ItemStack getContainerItem(ItemStack itemstack) {
-        Integer saved = ItemCanisterLiquidOxygen.craftingvalues.get(itemstack);
+        final Integer saved = ItemCanisterLiquidOxygen.craftingvalues.get(itemstack);
         if (saved != null) {
             if (saved < ItemCanisterGeneric.EMPTY) {
                 ItemCanisterLiquidOxygen.craftingvalues.remove(itemstack);
@@ -86,8 +86,8 @@ public class ItemCanisterLiquidOxygen extends ItemCanisterGeneric implements IIt
 
     @Override
     public float discharge(ItemStack itemStack, float amount) {
-        int damage = itemStack.getItemDamage();
-        int used = Math.min((int) (amount * Constants.LOX_GAS_RATIO), ItemCanisterGeneric.EMPTY - damage);
+        final int damage = itemStack.getItemDamage();
+        final int used = Math.min((int) (amount * Constants.LOX_GAS_RATIO), ItemCanisterGeneric.EMPTY - damage);
         this.setNewDamage(itemStack, damage + used);
         return used / Constants.LOX_GAS_RATIO;
     }

@@ -15,7 +15,6 @@ import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
 import micdoodle8.mods.galacticraft.planets.mars.network.PacketSimpleMars;
 import micdoodle8.mods.galacticraft.planets.mars.network.PacketSimpleMars.EnumSimplePacketMars;
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayer.EnumStatus;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -32,7 +31,8 @@ public class TileEntityCryogenicChamber extends TileEntityMulti implements IMult
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
-        return AxisAlignedBB.getBoundingBox(xCoord - 1, yCoord, zCoord - 1, xCoord + 2, yCoord + 3, zCoord + 2);
+        return AxisAlignedBB.getBoundingBox(
+                this.xCoord - 1, this.yCoord, this.zCoord - 1, this.xCoord + 2, this.yCoord + 3, this.zCoord + 2);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class TileEntityCryogenicChamber extends TileEntityMulti implements IMult
             return false;
         }
 
-        EnumStatus enumstatus = this.sleepInBedAt(entityPlayer, this.xCoord, this.yCoord, this.zCoord);
+        final EnumStatus enumstatus = this.sleepInBedAt(entityPlayer, this.xCoord, this.yCoord, this.zCoord);
 
         switch (enumstatus) {
             case OK:
@@ -84,7 +84,7 @@ public class TileEntityCryogenicChamber extends TileEntityMulti implements IMult
         }
 
         if (entityPlayer.isRiding()) {
-            entityPlayer.mountEntity((Entity) null);
+            entityPlayer.mountEntity(null);
         }
 
         entityPlayer.setPosition(this.xCoord + 0.5F, this.yCoord + 1.9F, this.zCoord + 0.5F);
@@ -115,10 +115,12 @@ public class TileEntityCryogenicChamber extends TileEntityMulti implements IMult
     public void onCreate(BlockVec3 placedPosition) {
         this.mainBlockPosition = placedPosition;
         this.markDirty();
-        int buildHeight = this.worldObj.getHeight() - 1;
+        final int buildHeight = this.worldObj.getHeight() - 1;
 
         for (int y = 0; y < 3; y++) {
-            if (placedPosition.y + y > buildHeight) return;
+            if (placedPosition.y + y > buildHeight) {
+                return;
+            }
             final BlockVec3 vecToAdd = new BlockVec3(placedPosition.x, placedPosition.y + y, placedPosition.z);
 
             if (!vecToAdd.equals(placedPosition)) {

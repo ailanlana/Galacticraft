@@ -82,15 +82,15 @@ public class BlockShortRangeTelepad extends BlockTileGC implements ItemBlockDesc
             World world, int x0, int y0, int z0, EntityLivingBase entityLiving, ItemStack itemStack) {
         super.onBlockPlacedBy(world, x0, y0, z0, entityLiving, itemStack);
 
-        TileEntity tile = world.getTileEntity(x0, y0, z0);
+        final TileEntity tile = world.getTileEntity(x0, y0, z0);
 
         boolean validSpot = true;
 
         for (int x = -1; x <= 1; x++) {
             for (int y = 0; y < 3; y += 2) {
                 for (int z = -1; z <= 1; z++) {
-                    if (!(x == 0 && y == 0 && z == 0)) {
-                        Block blockAt = world.getBlock(x0 + x, y0 + y, z0 + z);
+                    if (x != 0 || y != 0 || z != 0) {
+                        final Block blockAt = world.getBlock(x0 + x, y0 + y, z0 + z);
 
                         if (!blockAt.getMaterial().isReplaceable()) {
                             validSpot = false;
@@ -146,7 +146,7 @@ public class BlockShortRangeTelepad extends BlockTileGC implements ItemBlockDesc
         for (int x = -1; x <= 1; x++) {
             for (int y = 0; y < 3; y += 2) {
                 for (int z = -1; z <= 1; z++) {
-                    if (!(x == 0 && y == 0 && z == 0)) {
+                    if (x != 0 || y != 0 || z != 0) {
                         if (world.getBlock(x0 + x, y0 + y, z0 + z) == AsteroidBlocks.fakeTelepad) {
                             fakeBlockCount++;
                         }
@@ -171,20 +171,10 @@ public class BlockShortRangeTelepad extends BlockTileGC implements ItemBlockDesc
         final TileEntity tileAt = world.getTileEntity(x, y, z);
 
         if (tileAt instanceof TileEntityShortRangeTelepad) {
-            TileEntityShortRangeTelepad telepad = (TileEntityShortRangeTelepad) tileAt;
-            float teleportTimeScaled =
-                    Math.min(1.0F, telepad.teleportTime / (float) TileEntityShortRangeTelepad.MAX_TELEPORT_TIME);
-            float f;
-            float r;
-            float g;
-            float b;
-
+            final TileEntityShortRangeTelepad telepad = (TileEntityShortRangeTelepad) tileAt;
+            Math.min(1.0F, telepad.teleportTime / (float) TileEntityShortRangeTelepad.MAX_TELEPORT_TIME);
             for (int i = 0; i < 6; i++) {
                 for (int j = 0; j < 4; j++) {
-                    f = rand.nextFloat() * 0.6F + 0.4F;
-                    r = f * 0.3F;
-                    g = f * (0.3F + (teleportTimeScaled * 0.7F));
-                    b = f * (1.0F - (teleportTimeScaled * 0.7F));
                     GalacticraftPlanets.spawnParticle(
                             "portalBlue",
                             new Vector3(x + 0.2 + rand.nextDouble() * 0.6, y + 0.1, z + 0.2 + rand.nextDouble() * 0.6),
@@ -193,10 +183,6 @@ public class BlockShortRangeTelepad extends BlockTileGC implements ItemBlockDesc
                             false);
                 }
 
-                f = rand.nextFloat() * 0.6F + 0.4F;
-                r = f * 0.3F;
-                g = f * (0.3F + (teleportTimeScaled * 0.7F));
-                b = f * (1.0F - (teleportTimeScaled * 0.7F));
                 GalacticraftPlanets.spawnParticle(
                         "portalBlue",
                         new Vector3(x + 0.0 + rand.nextDouble() * 0.2, y + 2.9, z + rand.nextDouble()),

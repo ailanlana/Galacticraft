@@ -160,7 +160,7 @@ public class ContainerSchematicTier1Rocket extends Container {
                 if (par1 == 0) {
                     var3.onPickupFromSlot(par1EntityPlayer, var4);
                 }
-                var3.putStack((ItemStack) null);
+                var3.putStack(null);
                 return var2;
             }
 
@@ -188,7 +188,7 @@ public class ContainerSchematicTier1Rocket extends Container {
                 slotStack = slot.getStack();
 
                 if (slotStack == null) {
-                    ItemStack stackOneItem = par1ItemStack.copy();
+                    final ItemStack stackOneItem = par1ItemStack.copy();
                     stackOneItem.stackSize = 1;
                     par1ItemStack.stackSize--;
                     slot.putStack(stackOneItem);

@@ -10,8 +10,8 @@ public class StructureComponentVillageStartPiece extends StructureComponentVilla
     public int terrainType;
     public StructureVillagePieceWeightMoon structVillagePieceWeight;
     public ArrayList<StructureVillagePieceWeightMoon> structureVillageWeightedPieceList;
-    public ArrayList<Object> field_74932_i = new ArrayList<Object>();
-    public ArrayList<Object> field_74930_j = new ArrayList<Object>();
+    public ArrayList<Object> field_74932_i = new ArrayList<>();
+    public ArrayList<Object> field_74930_j = new ArrayList<>();
 
     public StructureComponentVillageStartPiece() {}
 
@@ -23,7 +23,7 @@ public class StructureComponentVillageStartPiece extends StructureComponentVilla
             int par5,
             ArrayList<StructureVillagePieceWeightMoon> par6ArrayList,
             int par7) {
-        super((StructureComponentVillageStartPiece) null, 0, par3Random, par4, par5);
+        super(null, 0, par3Random, par4, par5);
         this.worldChunkMngr = par1WorldChunkManager;
         this.structureVillageWeightedPieceList = par6ArrayList;
         this.terrainType = par7;

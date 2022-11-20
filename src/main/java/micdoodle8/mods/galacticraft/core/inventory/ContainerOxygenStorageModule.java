@@ -9,7 +9,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerOxygenStorageModule extends Container {
-    private TileEntityOxygenStorageModule tileEntity;
+    private final TileEntityOxygenStorageModule tileEntity;
 
     public ContainerOxygenStorageModule(
             InventoryPlayer par1InventoryPlayer, TileEntityOxygenStorageModule storageModule) {
@@ -78,7 +78,7 @@ public class ContainerOxygenStorageModule extends Container {
             }
 
             if (stack.stackSize == 0) {
-                slot.putStack((ItemStack) null);
+                slot.putStack(null);
             } else {
                 slot.onSlotChanged();
             }

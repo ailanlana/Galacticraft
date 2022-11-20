@@ -77,7 +77,7 @@ public class BlockCreeperEgg extends BlockDragonEgg implements ItemBlockDesc.IBl
     @Override
     public void onBlockExploded(World world, int x, int y, int z, Explosion explosion) {
         if (!world.isRemote) {
-            EntityEvolvedCreeper creeper = new EntityEvolvedCreeper(world);
+            final EntityEvolvedCreeper creeper = new EntityEvolvedCreeper(world);
             creeper.setPosition(x + 0.5, y + 3, z + 0.5);
             creeper.setChild(true);
             world.spawnEntityInWorld(creeper);
@@ -87,6 +87,7 @@ public class BlockCreeperEgg extends BlockDragonEgg implements ItemBlockDesc.IBl
         this.onBlockDestroyedByExplosion(world, x, y, z, explosion);
     }
 
+    @Override
     public boolean canDropFromExplosion(Explosion explose) {
         return false;
     }
@@ -94,20 +95,20 @@ public class BlockCreeperEgg extends BlockDragonEgg implements ItemBlockDesc.IBl
     // Can only be harvested with a Sticky Desh Pickaxe
     @Override
     public boolean canHarvestBlock(EntityPlayer player, int metadata) {
-        ItemStack stack = player.inventory.getCurrentItem();
+        final ItemStack stack = player.inventory.getCurrentItem();
         if (stack == null) {
             return player.canHarvestBlock(this);
         }
         return stack.getItem() == MarsItems.deshPickSlime;
     }
 
-    public float getPlayerRelativeBlockHardness(
-            EntityPlayer player, World p_149737_2_, int p_149737_3_, int p_149737_4_, int p_149737_5_) {
-        ItemStack stack = player.inventory.getCurrentItem();
+    @Override
+    public float getPlayerRelativeBlockHardness(EntityPlayer player, World worldIn, int x, int y, int z) {
+        final ItemStack stack = player.inventory.getCurrentItem();
         if (stack != null && stack.getItem() == MarsItems.deshPickSlime) {
             return 0.2F;
         }
-        return ForgeHooks.blockStrength(this, player, p_149737_2_, p_149737_3_, p_149737_4_, p_149737_5_);
+        return ForgeHooks.blockStrength(this, player, worldIn, x, y, z);
     }
 
     @SideOnly(Side.CLIENT)

@@ -171,7 +171,6 @@ public class MapGenCavesMoon extends MapGenBaseMeta {
                         i3 = 16;
                     }
 
-                    final boolean flag2 = false;
                     int j3;
                     for (j3 = l1; j3 < i2; ++j3) {
                         for (int l3 = l2; l3 < i3; ++l3) {
@@ -204,9 +203,9 @@ public class MapGenCavesMoon extends MapGenBaseMeta {
 
                                         if (yfactor > -0.7D && xfactorSq + yfactorSq + zfactorSq < 1.0D) {
                                             if (blockIdArray[coords] == GCBlocks.blockMoon) {
-                                                if (metaArray[coords] == 3 || metaArray[coords] == 4) {
-                                                    blockIdArray[coords] = Blocks.air;
-                                                } else if (metaArray[coords] == 5) {
+                                                if (metaArray[coords] == 3
+                                                        || metaArray[coords] == 4
+                                                        || metaArray[coords] == 5) {
                                                     blockIdArray[coords] = Blocks.air;
                                                 }
                                             }

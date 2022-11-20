@@ -14,7 +14,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 public class EntityArrowGC extends Entity {
@@ -127,8 +132,8 @@ public class EntityArrowGC extends Entity {
     }
 
     /**
-     * Uses the provided coordinates as a heading and determines the velocity
-     * from it with the set force and random variance. Args: x, y, z, force,
+     * Uses the provided coordinates as a heading and determines the velocity from
+     * it with the set force and random variance. Args: x, y, z, force,
      * forceVariation
      */
     public void setArrowHeading(double par1, double par3, double par5, float par7, float par8) {
@@ -154,8 +159,8 @@ public class EntityArrowGC extends Entity {
     @Override
     @SideOnly(Side.CLIENT)
     /**
-     * Sets the position and rotation. Only difference from the other one is no bounding on the rotation. Args: posX,
-     * posY, posZ, yaw, pitch
+     * Sets the position and rotation. Only difference from the other one is no
+     * bounding on the rotation. Args: posX, posY, posZ, yaw, pitch
      */
     public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9) {
         this.setPosition(par1, par3, par5);
@@ -197,11 +202,11 @@ public class EntityArrowGC extends Entity {
             this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(this.motionY, var1) * 180.0D / Math.PI);
         }
 
-        Block block = this.worldObj.getBlock(this.xTile, this.yTile, this.zTile);
+        final Block block = this.worldObj.getBlock(this.xTile, this.yTile, this.zTile);
 
         if (block.getMaterial() != Material.air) {
             block.setBlockBoundsBasedOnState(this.worldObj, this.xTile, this.yTile, this.zTile);
-            AxisAlignedBB axisalignedbb =
+            final AxisAlignedBB axisalignedbb =
                     block.getCollisionBoundingBoxFromPool(this.worldObj, this.xTile, this.yTile, this.zTile);
 
             if (axisalignedbb != null
@@ -215,7 +220,7 @@ public class EntityArrowGC extends Entity {
         }
 
         if (this.inGround) {
-            int j = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
+            final int j = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
 
             if (block == this.inTile && j == this.inData) {
                 ++this.ticksInGround;
@@ -518,8 +523,7 @@ public class EntityArrowGC extends Entity {
     }
 
     /**
-     * Whether the arrow has a stream of critical hit particles flying behind
-     * it.
+     * Whether the arrow has a stream of critical hit particles flying behind it.
      */
     public void setIsCritical(boolean par1) {
         final byte var2 = this.dataWatcher.getWatchableObjectByte(16);
@@ -532,8 +536,7 @@ public class EntityArrowGC extends Entity {
     }
 
     /**
-     * Whether the arrow has a stream of critical hit particles flying behind
-     * it.
+     * Whether the arrow has a stream of critical hit particles flying behind it.
      */
     public boolean getIsCritical() {
         final byte var1 = this.dataWatcher.getWatchableObjectByte(16);

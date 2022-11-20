@@ -1,30 +1,29 @@
 package micdoodle8.mods.galacticraft.core.client.model;
 
 import cpw.mods.fml.client.FMLClientHandler;
-import java.lang.reflect.Method;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.smart.render.ModelRotationRenderer;
 import org.lwjgl.opengl.GL11;
 
 /**
- *  If Smart Moving is installed, this is used by ModelPlayerBaseGC as the ModelRenderer
- *  - see ModelPlayerBaseGC.createModelRenderer()
- *
- *  This renders the player equipment, there is one of these renderers for each type of equipment.
- *  Smart Moving will call this.doRender() when the corresponding player body part is being drawn.
- *  Most GC equipment is rendered when the body is drawn; Oxygen Mask and Frequency Module are rendered when the head is drawn.
- *  Smart Moving handles all relevant transformations so that the position will match the Smart Moving model.
+ * If Smart Moving is installed, this is used by ModelPlayerBaseGC as the
+ * ModelRenderer - see ModelPlayerBaseGC.createModelRenderer()
+ * <p>
+ * This renders the player equipment, there is one of these renderers for each
+ * type of equipment. Smart Moving will call this.doRender() when the
+ * corresponding player body part is being drawn. Most GC equipment is rendered
+ * when the body is drawn; Oxygen Mask and Frequency Module are rendered when
+ * the head is drawn. Smart Moving handles all relevant transformations so that
+ * the position will match the Smart Moving model.
  *
  * @author User
- *
  */
 public class ModelRotationRendererGC extends ModelRotationRenderer {
-    private int type;
+    private final int type;
 
     public ModelRotationRendererGC(ModelBase modelBase, int i, int j, ModelRenderer baseRenderer, int type) {
         super(modelBase, i, j, (ModelRotationRenderer) baseRenderer);
@@ -35,14 +34,14 @@ public class ModelRotationRendererGC extends ModelRotationRenderer {
 
     @Override
     public boolean preRender(float f) {
-        boolean b = super.preRender(f);
+        final boolean b = super.preRender(f);
 
         if (ModelPlayerBaseGC.currentGearData == null) {
             return false;
         }
 
         if (b) {
-            switch (type) {
+            switch (this.type) {
                 case 0:
                     return ModelPlayerBaseGC.currentGearData.getMask() > -1;
                 case 1:
@@ -81,15 +80,12 @@ public class ModelRotationRendererGC extends ModelRotationRenderer {
         return b;
     }
 
-    private static RenderPlayer playerRenderer;
-    private Method getEntityTextureMethod;
-
     @Override
     public void doRender(float f, boolean useParentTransformations) {
         if (this.preRender(f)) {
-            int saveTex = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
+            final int saveTex = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
 
-            switch (type) {
+            switch (this.type) {
                 case 0:
                     FMLClientHandler.instance().getClient().renderEngine.bindTexture(ModelPlayerGC.oxygenMaskTexture);
                     break;
@@ -110,7 +106,7 @@ public class ModelRotationRendererGC extends ModelRotationRenderer {
                     break;
             }
 
-            if (type != 15) {
+            if (this.type != 15) {
                 super.doRender(f, useParentTransformations);
             } else {
                 FMLClientHandler.instance().getClient().renderEngine.bindTexture(ModelPlayerGC.frequencyModuleTexture);

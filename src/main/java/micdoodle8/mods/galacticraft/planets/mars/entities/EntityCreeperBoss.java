@@ -25,7 +25,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -37,7 +42,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ChestGenHooks;
 
@@ -72,10 +81,10 @@ public class EntityCreeperBoss extends EntityMob
     @Override
     public boolean attackEntityFrom(DamageSource damageSource, float damage) {
         if (damageSource.getDamageType().equals("fireball")) {
-            if (this.isEntityInvulnerable()) {
+            if (this.isEntityInvulnerable() || !super.attackEntityFrom(damageSource, damage)) {
                 return false;
-            } else if (super.attackEntityFrom(damageSource, damage)) {
-                Entity entity = damageSource.getEntity();
+            } else {
+                final Entity entity = damageSource.getEntity();
 
                 if (this.riddenByEntity != entity && this.ridingEntity != entity) {
                     if (entity != this) {
@@ -86,8 +95,6 @@ public class EntityCreeperBoss extends EntityMob
                 } else {
                     return true;
                 }
-            } else {
-                return false;
             }
         }
 
@@ -162,8 +169,9 @@ public class EntityCreeperBoss extends EntityMob
                 GalacticraftCore.packetPipeline.sendToAllAround(
                         new PacketSimple(EnumSimplePacket.C_PLAY_SOUND_EXPLODE, new Object[] {}),
                         new TargetPoint(this.worldObj.provider.dimensionId, this.posX, this.posY, this.posZ, 40.0D));
-                //				PacketDispatcher.sendPacketToAllAround(this.posX, this.posY, this.posZ, 40.0,
-                // this.worldObj.provider.dimensionId, PacketUtil.createPacket(GalacticraftCore.CHANNEL,
+                // PacketDispatcher.sendPacketToAllAround(this.posX, this.posY, this.posZ, 40.0,
+                // this.worldObj.provider.dimensionId,
+                // PacketUtil.createPacket(GalacticraftCore.CHANNEL,
                 // EnumPacketClient.PLAY_SOUND_EXPLODE, new Object[] { 0 }));
             }
 
@@ -182,8 +190,9 @@ public class EntityCreeperBoss extends EntityMob
                 GalacticraftCore.packetPipeline.sendToAllAround(
                         new PacketSimple(EnumSimplePacket.C_PLAY_SOUND_BOSS_DEATH, new Object[] {}),
                         new TargetPoint(this.worldObj.provider.dimensionId, this.posX, this.posY, this.posZ, 40.0D));
-                //				PacketDispatcher.sendPacketToAllAround(this.posX, this.posY, this.posZ, 40.0,
-                // this.worldObj.provider.dimensionId, PacketUtil.createPacket(GalacticraftCore.CHANNEL,
+                // PacketDispatcher.sendPacketToAllAround(this.posX, this.posY, this.posZ, 40.0,
+                // this.worldObj.provider.dimensionId,
+                // PacketUtil.createPacket(GalacticraftCore.CHANNEL,
                 // EnumPacketClient.PLAY_SOUND_BOSS_DEATH, new Object[] { 0 }));
             }
         }
@@ -206,7 +215,7 @@ public class EntityCreeperBoss extends EntityMob
                     final double d4 = tile.yCoord + 0.5D - this.posY;
                     final double d5 = tile.zCoord + 0.5D - this.posZ;
                     final double dSq = d3 * d3 + d4 * d4 + d5 * d5;
-                    TileEntityTreasureChestMars chest = (TileEntityTreasureChestMars) tile;
+                    final TileEntityTreasureChestMars chest = (TileEntityTreasureChestMars) tile;
 
                     if (dSq < 10000) {
                         if (!chest.locked) {
@@ -217,7 +226,7 @@ public class EntityCreeperBoss extends EntityMob
                             chest.setInventorySlotContents(k, null);
                         }
 
-                        ChestGenHooks info = ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST);
+                        final ChestGenHooks info = ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST);
 
                         // Generate three times, since it's an extra extra special chest
                         WeightedRandomChestContent.generateChestContents(
@@ -289,7 +298,7 @@ public class EntityCreeperBoss extends EntityMob
 
         if (this.roomCoords != null && this.roomSize != null) {
             @SuppressWarnings("unchecked")
-            List<Entity> entitiesWithin = this.worldObj.getEntitiesWithinAABB(
+            final List<Entity> entitiesWithin = this.worldObj.getEntitiesWithinAABB(
                     EntityPlayer.class,
                     AxisAlignedBB.getBoundingBox(
                             this.roomCoords.intX() - 1,
@@ -303,7 +312,7 @@ public class EntityCreeperBoss extends EntityMob
 
             if (this.entitiesWithin == 0 && this.entitiesWithinLast != 0) {
                 @SuppressWarnings("unchecked")
-                List<EntityPlayer> entitiesWithin2 = this.worldObj.getEntitiesWithinAABB(
+                final List<EntityPlayer> entitiesWithin2 = this.worldObj.getEntitiesWithinAABB(
                         EntityPlayer.class,
                         AxisAlignedBB.getBoundingBox(
                                 this.roomCoords.intX() - 11,
@@ -313,7 +322,7 @@ public class EntityCreeperBoss extends EntityMob
                                 this.roomCoords.intY() + this.roomSize.intY() + 10,
                                 this.roomCoords.intZ() + this.roomSize.intZ() + 10));
 
-                for (EntityPlayer p : entitiesWithin2) {
+                for (final EntityPlayer p : entitiesWithin2) {
                     p.addChatMessage(new ChatComponentText(GCCoreUtil.translate("gui.skeletonBoss.message")));
                 }
 
@@ -371,17 +380,19 @@ public class EntityCreeperBoss extends EntityMob
     }
 
     public ItemStack getGuaranteedLoot(Random rand) {
-        List<ItemStack> stackList = new LinkedList<ItemStack>();
+        final List<ItemStack> stackList = new LinkedList<>();
         stackList.addAll(GalacticraftRegistry.getDungeonLoot(2));
         boolean hasT3Rocket = false;
         boolean hasAstroMiner = false;
-        // Check if player seems to have Tier 3 rocket or Astro Miner already - in that case we don't want more
-        // (we don't really want him giving powerful schematics to his friends who are still on Overworld)
+        // Check if player seems to have Tier 3 rocket or Astro Miner already - in that
+        // case we don't want more
+        // (we don't really want him giving powerful schematics to his friends who are
+        // still on Overworld)
         final EntityPlayer player = this.worldObj.getClosestPlayer(this.posX, this.posY, this.posZ, 20.0);
         if (player != null) {
-            GCPlayerStats stats = GCPlayerStats.get((EntityPlayerMP) player);
+            final GCPlayerStats stats = GCPlayerStats.get((EntityPlayerMP) player);
             if (stats != null) {
-                for (ISchematicPage page : stats.unlockedSchematics) {
+                for (final ISchematicPage page : stats.unlockedSchematics) {
                     if (page.getPageID() == ConfigManagerAsteroids.idSchematicRocketT3) {
                         hasT3Rocket = true;
                     } else if (page.getPageID() == ConfigManagerAsteroids.idSchematicRocketT3 + 1) {
@@ -390,7 +401,8 @@ public class EntityCreeperBoss extends EntityMob
                 }
             }
         }
-        // The following code assumes the list start is hard coded to: Cargo Rocket, T3 Rocket, Astro Miner in that
+        // The following code assumes the list start is hard coded to: Cargo Rocket, T3
+        // Rocket, Astro Miner in that
         // order
         // (see MarsModule.init())
         //
@@ -408,9 +420,11 @@ public class EntityCreeperBoss extends EntityMob
         } else if (hasAstroMiner) {
             stackList.remove(2);
         }
-        // If he does not yet have the T3 rocket, limit the list size to 2 so 50% chance of getting it
-        // otherwise return the full list (note: addons could have added more schematics to the list)
-        int range = (!hasT3Rocket) ? 2 : stackList.size();
+        // If he does not yet have the T3 rocket, limit the list size to 2 so 50% chance
+        // of getting it
+        // otherwise return the full list (note: addons could have added more schematics
+        // to the list)
+        final int range = !hasT3Rocket ? 2 : stackList.size();
         return stackList.get(rand.nextInt(range)).copy();
     }
 
@@ -450,15 +464,14 @@ public class EntityCreeperBoss extends EntityMob
     }
 
     private void func_82209_a(int par1, double par2, double par4, double par6) {
-        this.worldObj.playAuxSFXAtEntity(
-                (EntityPlayer) null, 1014, (int) this.posX, (int) this.posY, (int) this.posZ, 0);
-        double d3 = this.func_82214_u(par1);
-        double d4 = this.func_82208_v(par1);
-        double d5 = this.func_82213_w(par1);
-        double d6 = par2 - d3;
-        double d7 = par4 - d4;
-        double d8 = par6 - d5;
-        EntityProjectileTNT entitywitherskull =
+        this.worldObj.playAuxSFXAtEntity(null, 1014, (int) this.posX, (int) this.posY, (int) this.posZ, 0);
+        final double d3 = this.func_82214_u(par1);
+        final double d4 = this.func_82208_v(par1);
+        final double d5 = this.func_82213_w(par1);
+        final double d6 = par2 - d3;
+        final double d7 = par4 - d4;
+        final double d8 = par6 - d5;
+        final EntityProjectileTNT entitywitherskull =
                 new EntityProjectileTNT(this.worldObj, this, d6 * 0.5D, d7 * 0.5D, d8 * 0.5D);
 
         entitywitherskull.posY = d4;
@@ -471,8 +484,8 @@ public class EntityCreeperBoss extends EntityMob
         if (par1 <= 0) {
             return this.posX;
         } else {
-            float f = (this.renderYawOffset + 180 * (par1 - 1)) / 180.0F * (float) Math.PI;
-            float f1 = MathHelper.cos(f);
+            final float f = (this.renderYawOffset + 180 * (par1 - 1)) / 180.0F * (float) Math.PI;
+            final float f1 = MathHelper.cos(f);
             return this.posX + f1 * 1.3D;
         }
     }
@@ -485,8 +498,8 @@ public class EntityCreeperBoss extends EntityMob
         if (par1 <= 0) {
             return this.posZ;
         } else {
-            float f = (this.renderYawOffset + 180 * (par1 - 1)) / 180.0F * (float) Math.PI;
-            float f1 = MathHelper.sin(f);
+            final float f = (this.renderYawOffset + 180 * (par1 - 1)) / 180.0F * (float) Math.PI;
+            final float f1 = MathHelper.sin(f);
             return this.posZ + f1 * 1.3D;
         }
     }

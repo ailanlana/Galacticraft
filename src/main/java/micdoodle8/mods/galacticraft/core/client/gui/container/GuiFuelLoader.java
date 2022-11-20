@@ -23,7 +23,7 @@ public class GuiFuelLoader extends GuiContainerGC {
     private final TileEntityFuelLoader fuelLoader;
 
     private GuiButton buttonLoadFuel;
-    private GuiElementInfoRegion electricInfoRegion = new GuiElementInfoRegion(
+    private final GuiElementInfoRegion electricInfoRegion = new GuiElementInfoRegion(
             (this.width - this.xSize) / 2 + 112,
             (this.height - this.ySize) / 2 + 65,
             56,
@@ -33,7 +33,7 @@ public class GuiFuelLoader extends GuiContainerGC {
             this.height,
             this);
 
-    private List<String> fuelTankDesc = new ArrayList<String>();
+    private final List<String> fuelTankDesc = new ArrayList<>();
 
     public GuiFuelLoader(InventoryPlayer par1InventoryPlayer, TileEntityFuelLoader par2TileEntityAirDistributor) {
         super(new ContainerFuelLoader(par1InventoryPlayer, par2TileEntityAirDistributor));
@@ -56,20 +56,20 @@ public class GuiFuelLoader extends GuiContainerGC {
     @Override
     public void initGui() {
         super.initGui();
-        fuelTankDesc.clear();
-        fuelTankDesc.add(GCCoreUtil.translate("gui.fuelTank.desc.2"));
-        fuelTankDesc.add(GCCoreUtil.translate("gui.fuelTank.desc.3"));
-        fuelTankDesc.add("0.0/0.0 B");
+        this.fuelTankDesc.clear();
+        this.fuelTankDesc.add(GCCoreUtil.translate("gui.fuelTank.desc.2"));
+        this.fuelTankDesc.add(GCCoreUtil.translate("gui.fuelTank.desc.3"));
+        this.fuelTankDesc.add("0.0/0.0 B");
         this.infoRegions.add(new GuiElementInfoRegion(
                 (this.width - this.xSize) / 2 + 7,
                 (this.height - this.ySize) / 2 + 33,
                 16,
                 38,
-                fuelTankDesc,
+                this.fuelTankDesc,
                 this.width,
                 this.height,
                 this));
-        List<String> batterySlotDesc = new ArrayList<String>();
+        final List<String> batterySlotDesc = new ArrayList<>();
         batterySlotDesc.add(GCCoreUtil.translate("gui.batterySlot.desc.0"));
         batterySlotDesc.add(GCCoreUtil.translate("gui.batterySlot.desc.1"));
         this.infoRegions.add(new GuiElementInfoRegion(
@@ -81,7 +81,7 @@ public class GuiFuelLoader extends GuiContainerGC {
                 this.width,
                 this.height,
                 this));
-        List<String> electricityDesc = new ArrayList<String>();
+        final List<String> electricityDesc = new ArrayList<>();
         electricityDesc.add(GCCoreUtil.translate("gui.energyStorage.desc.0"));
         electricityDesc.add(EnumColor.YELLOW
                 + GCCoreUtil.translate("gui.energyStorage.desc.1")
@@ -107,14 +107,16 @@ public class GuiFuelLoader extends GuiContainerGC {
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         this.fontRendererObj.drawString(this.fuelLoader.getInventoryName(), 60, 10, 4210752);
         this.buttonLoadFuel.enabled = this.fuelLoader.disableCooldown == 0
-                && !(this.fuelLoader.fuelTank.getFluid() == null || this.fuelLoader.fuelTank.getFluid().amount == 0);
+                && this.fuelLoader.fuelTank.getFluid() != null
+                && this.fuelLoader.fuelTank.getFluid().amount != 0;
         this.buttonLoadFuel.displayString = !this.fuelLoader.getDisabled(0)
                 ? GCCoreUtil.translate("gui.button.stoploading.name")
                 : GCCoreUtil.translate("gui.button.loadfuel.name");
         this.fontRendererObj.drawString(
                 GCCoreUtil.translate("gui.message.status.name") + ": " + this.getStatus(), 28, 45 + 23 - 46, 4210752);
-        // this.fontRendererObj.drawString("" + this.fuelLoader.storage.getMaxExtract(), 28, 56 + 23 - 46, 4210752);
-        //		this.fontRendererObj.drawString(ElectricityDisplay.getDisplay(this.fuelLoader.getVoltage(),
+        // this.fontRendererObj.drawString("" + this.fuelLoader.storage.getMaxExtract(),
+        // 28, 56 + 23 - 46, 4210752);
+        // this.fontRendererObj.drawString(ElectricityDisplay.getDisplay(this.fuelLoader.getVoltage(),
         // ElectricUnit.VOLTAGE), 28, 68 + 23 - 46, 4210752);
         this.fontRendererObj.drawString(
                 GCCoreUtil.translate("container.inventory"), 8, this.ySize - 118 + 2 + 11, 4210752);
@@ -147,19 +149,20 @@ public class GuiFuelLoader extends GuiContainerGC {
                 16,
                 fuelLevel);
 
-        List<String> electricityDesc = new ArrayList<String>();
+        final List<String> electricityDesc = new ArrayList<>();
         electricityDesc.add(GCCoreUtil.translate("gui.energyStorage.desc.0"));
         EnergyDisplayHelper.getEnergyDisplayTooltip(
                 this.fuelLoader.getEnergyStoredGC(), this.fuelLoader.getMaxEnergyStoredGC(), electricityDesc);
-        //		electricityDesc.add(EnumColor.YELLOW + GCCoreUtil.translate("gui.energyStorage.desc.1") + ((int)
+        // electricityDesc.add(EnumColor.YELLOW +
+        // GCCoreUtil.translate("gui.energyStorage.desc.1") + ((int)
         // Math.floor(this.fuelLoader.getEnergyStoredGC()) + " / " + (int)
         // Math.floor(this.fuelLoader.getMaxEnergyStoredGC())));
         this.electricInfoRegion.tooltipStrings = electricityDesc;
 
-        String fuelStr = String.format(
+        final String fuelStr = String.format(
                 "%.1f/%.1f B",
                 this.fuelLoader.fuelTank.getFluidAmount() / 1000.0f, this.fuelLoader.fuelTank.getCapacity() / 1000.0f);
-        fuelTankDesc.set(2, fuelStr);
+        this.fuelTankDesc.set(2, fuelStr);
 
         if (this.fuelLoader.getEnergyStoredGC() > 0) {
             this.drawTexturedModalRect(var5 + 99, var6 + 65, 192, 7, 11, 10);

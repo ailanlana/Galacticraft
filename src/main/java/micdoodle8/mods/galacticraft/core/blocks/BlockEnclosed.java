@@ -84,7 +84,7 @@ public class BlockEnclosed extends BlockContainer
     }
 
     public static EnumEnclosedBlock getTypeFromMeta(int metadata) {
-        for (EnumEnclosedBlock type : EnumEnclosedBlock.values()) {
+        for (final EnumEnclosedBlock type : EnumEnclosedBlock.values()) {
             if (type.getMetadata() == metadata) {
                 return type;
             }
@@ -139,11 +139,11 @@ public class BlockEnclosed extends BlockContainer
     public static void initialiseBC() {
         for (int i = 0; i < 6; i++) {
             try {
-                Class<?> clazzBC = Class.forName("buildcraft.BuildCraftTransport");
+                final Class<?> clazzBC = Class.forName("buildcraft.BuildCraftTransport");
                 String pipeName = EnumEnclosedBlock.values()[i + 7].getPipeType();
                 pipeName = pipeName.substring(0, 1).toLowerCase() + pipeName.substring(1);
                 pipeItemsBC[i] = (Item) clazzBC.getField(pipeName).get(null);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
@@ -157,16 +157,23 @@ public class BlockEnclosed extends BlockContainer
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int par1, int meta) {
-        if (meta == 4) meta = 0; // Deal with item rendering for the HV block
+        if (meta == 4) {
+            meta = 0; // Deal with item rendering for the HV block
+        }
         return meta >= this.enclosedIcons.length ? this.blockIcon : this.enclosedIcons[meta];
     }
 
     @Override
     public int damageDropped(int meta) {
-        // TE_CONDUIT and HV_CABLE have had to have swapped metadata in 1.7.10 because IC2's TileCable tile entity
+        // TE_CONDUIT and HV_CABLE have had to have swapped metadata in 1.7.10 because
+        // IC2's TileCable tile entity
         // doesn't like a block with metadata 4
-        if (meta == 0) return 4;
-        if (meta == 4) return 0;
+        if (meta == 0) {
+            return 4;
+        }
+        if (meta == 4) {
+            return 0;
+        }
         return meta;
     }
 
@@ -185,7 +192,7 @@ public class BlockEnclosed extends BlockContainer
 
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-        int metadata = world.getBlockMetadata(x, y, z);
+        final int metadata = world.getBlockMetadata(x, y, z);
         final TileEntity tileEntity = world.getTileEntity(x, y, z);
 
         if (metadata == EnumEnclosedBlock.TE_CONDUIT.getMetadata()) {
@@ -202,7 +209,7 @@ public class BlockEnclosed extends BlockContainer
                 try {
                     onBlockNeighbourChangeIC2.invoke(tileEntity);
                     return;
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -211,7 +218,7 @@ public class BlockEnclosed extends BlockContainer
                 if (blockPipeBC != null) {
                     try {
                         blockPipeBC.onNeighborBlockChange(world, x, y, z, block);
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                         e.printStackTrace();
                     }
                     return;
@@ -224,12 +231,8 @@ public class BlockEnclosed extends BlockContainer
             if (CompatibilityManager.isAppEngLoaded()) {
                 world.markBlockForUpdate(x, y, z);
             }
-        } else if (metadata <= EnumEnclosedBlock.ALUMINUM_WIRE.getMetadata()) {
-            super.onNeighborBlockChange(world, x, y, z, block);
-            if (tileEntity instanceof IConductor) {
-                ((IConductor) tileEntity).refresh();
-            }
-        } else if (metadata <= EnumEnclosedBlock.ALUMINUM_WIRE_HEAVY.getMetadata()) {
+        } else if (metadata <= EnumEnclosedBlock.ALUMINUM_WIRE.getMetadata()
+                || metadata <= EnumEnclosedBlock.ALUMINUM_WIRE_HEAVY.getMetadata()) {
             super.onNeighborBlockChange(world, x, y, z, block);
             if (tileEntity instanceof IConductor) {
                 ((IConductor) tileEntity).refresh();
@@ -246,11 +249,11 @@ public class BlockEnclosed extends BlockContainer
         } else if (metadata <= 6) {
             if (CompatibilityManager.isIc2Loaded()) {
                 try {
-                    Class<?> clazz = Class.forName("ic2.core.block.wiring.TileEntityCable");
-                    Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+                    final Class<?> clazz = Class.forName("ic2.core.block.wiring.TileEntityCable");
+                    final Constructor<?>[] constructors = clazz.getDeclaredConstructors();
                     Constructor<?> constructor = null;
 
-                    for (Constructor<?> constructor2 : constructors) {
+                    for (final Constructor<?> constructor2 : constructors) {
                         constructor = constructor2;
 
                         if (constructor.getGenericParameterTypes().length == 1) {
@@ -262,7 +265,7 @@ public class BlockEnclosed extends BlockContainer
 
                     return (TileEntity) constructor.newInstance(
                             (short) BlockEnclosed.getTypeFromMeta(metadata).getSubMetaValue());
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -270,7 +273,7 @@ public class BlockEnclosed extends BlockContainer
             if (CompatibilityManager.isBCraftTransportLoaded()) {
                 try {
                     return blockPipeBC.createNewTileEntity(world, 0);
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -278,14 +281,14 @@ public class BlockEnclosed extends BlockContainer
             if (CompatibilityManager.isAppEngLoaded()) {
                 // Api.INSTANCE.partHelper().getCombinedInstance( TileCableBus.class.getName() )
                 try {
-                    IPartHelper apiPart = AEApi.instance().partHelper();
-                    Class<?> clazzApiPart = Class.forName("appeng.core.api.ApiPart");
-                    Class clazz = (Class) clazzApiPart
+                    final IPartHelper apiPart = AEApi.instance().partHelper();
+                    final Class<?> clazzApiPart = Class.forName("appeng.core.api.ApiPart");
+                    final Class clazz = (Class) clazzApiPart
                             .getDeclaredMethod("getCombinedInstance", String.class)
                             .invoke(apiPart, "appeng.tile.networking.TileCableBus");
                     // Needs to be: appeng.parts.layers.LayerITileStorageMonitorable_TileCableBus
                     return (TileEntity) clazz.newInstance();
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -317,7 +320,7 @@ public class BlockEnclosed extends BlockContainer
     public void onPostBlockPlaced(World world, int x, int y, int z, int metadata) {
         if (metadata >= EnumEnclosedBlock.BC_ITEM_STONEPIPE.getMetadata()
                 && metadata <= EnumEnclosedBlock.BC_POWER_GOLDPIPE.getMetadata()) {
-            EnumEnclosedBlock type = BlockEnclosed.getTypeFromMeta(metadata);
+            final EnumEnclosedBlock type = BlockEnclosed.getTypeFromMeta(metadata);
             if (CompatibilityManager.isBCraftTransportLoaded() && type != null && type.getPipeType() != null) {
                 BlockEnclosed.initialiseBCPipe(world, x, y, z, metadata);
             }
@@ -328,19 +331,18 @@ public class BlockEnclosed extends BlockContainer
         try {
             // ------
             // This section makes these three calls to initialise the TileEntity:
-            //	Pipe pipe = BlockGenericPipe.createPipe(Item);
-            //  tilePipe.initialize(pipe);
-            //	and optionally: tilePipe.sendUpdateToClient();
+            // Pipe pipe = BlockGenericPipe.createPipe(Item);
+            // tilePipe.initialize(pipe);
+            // and optionally: tilePipe.sendUpdateToClient();
 
-            Item pipeItem = pipeItemsBC[metadata - 7];
-            Class<?> clazzBlockPipe = CompatibilityManager.classBCBlockGenericPipe;
-            TileEntity tilePipe = world.getTileEntity(i, j, k);
-            Class<?> clazzTilePipe = tilePipe.getClass();
+            final Item pipeItem = pipeItemsBC[metadata - 7];
+            final TileEntity tilePipe = world.getTileEntity(i, j, k);
+            final Class<?> clazzTilePipe = tilePipe.getClass();
 
             if (CompatibilityManager.methodBCBlockPipe_createPipe != null) {
-                Object pipe = CompatibilityManager.methodBCBlockPipe_createPipe.invoke(null, pipeItem);
+                final Object pipe = CompatibilityManager.methodBCBlockPipe_createPipe.invoke(null, pipeItem);
                 Method initializePipe = null;
-                for (Method m : clazzTilePipe.getMethods()) {
+                for (final Method m : clazzTilePipe.getMethods()) {
                     if (m.getName().equals("initialize") && m.getParameterTypes().length == 1) {
                         initializePipe = m;
                         break;
@@ -349,16 +351,19 @@ public class BlockEnclosed extends BlockContainer
                 if (initializePipe != null) {
                     initializePipe.invoke(tilePipe, pipe);
 
-                    // Legacy compatibility: TileGenericPipe.sendUpdateToClient() is not in recent BC versions
+                    // Legacy compatibility: TileGenericPipe.sendUpdateToClient() is not in recent
+                    // BC versions
                     Method m = null;
                     try {
                         m = clazzTilePipe.getMethod("sendUpdateToClient");
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                     }
-                    if (m != null) m.invoke(tilePipe);
+                    if (m != null) {
+                        m.invoke(tilePipe);
+                    }
                 }
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }

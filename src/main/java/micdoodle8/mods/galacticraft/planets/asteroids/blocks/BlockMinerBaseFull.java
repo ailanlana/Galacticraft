@@ -11,14 +11,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class BlockMinerBaseFull extends BlockTileGC {
-    // 16 different orientations
-    private IIcon iconInput;
-
     public BlockMinerBaseFull(String assetName) {
         super(Material.rock);
         this.blockHardness = 3.0F;
@@ -63,10 +59,7 @@ public class BlockMinerBaseFull extends BlockTileGC {
     public boolean canPlaceBlockOnSide(World world, int x, int y, int z, int side) {
         // TODO
         /*
-        if (this.getMetadataFromAngle(world, x, y, z, side) != -1)
-           {
-               return true;
-           }
+         * if (this.getMetadataFromAngle(world, x, y, z, side) != -1) { return true; }
          */
 
         return true;
@@ -74,7 +67,7 @@ public class BlockMinerBaseFull extends BlockTileGC {
 
     @Override
     public void breakBlock(World world, int x, int y, int z, Block par5, int par6) {
-        TileEntity tileEntity = world.getTileEntity(x, y, z);
+        final TileEntity tileEntity = world.getTileEntity(x, y, z);
 
         if (tileEntity instanceof TileEntityMinerBase) {
             ((TileEntityMinerBase) tileEntity).onBlockRemoval();
@@ -94,10 +87,12 @@ public class BlockMinerBaseFull extends BlockTileGC {
             float par7,
             float par8,
             float par9) {
-        TileEntity tileEntity = par1World.getTileEntity(x, y, z);
-        if (tileEntity instanceof TileEntityMinerBase)
+        final TileEntity tileEntity = par1World.getTileEntity(x, y, z);
+        if (tileEntity instanceof TileEntityMinerBase) {
             return ((TileEntityMinerBase) tileEntity).onActivated(par5EntityPlayer);
-        else return false;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -107,7 +102,7 @@ public class BlockMinerBaseFull extends BlockTileGC {
 
     @Override
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-        ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+        final ArrayList<ItemStack> ret = new ArrayList<>();
         ret.add(new ItemStack(Item.getItemFromBlock(AsteroidBlocks.blockMinerBase), 8, 0));
         return ret;
     }
@@ -128,7 +123,7 @@ public class BlockMinerBaseFull extends BlockTileGC {
             float hitX,
             float hitY,
             float hitZ) {
-        TileEntity te = par1World.getTileEntity(x, y, z);
+        final TileEntity te = par1World.getTileEntity(x, y, z);
         if (te instanceof TileEntityMinerBase) {
             ((TileEntityMinerBase) te).updateFacing();
         }

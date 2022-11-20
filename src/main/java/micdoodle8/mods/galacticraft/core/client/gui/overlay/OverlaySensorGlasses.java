@@ -28,7 +28,7 @@ public class OverlaySensorGlasses extends Overlay {
     private static final ResourceLocation indicatorTexture =
             new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/indicator.png");
 
-    private static Minecraft minecraft = FMLClientHandler.instance().getClient();
+    private static final Minecraft minecraft = FMLClientHandler.instance().getClient();
 
     private static int zoom = 0;
 
@@ -93,7 +93,7 @@ public class OverlaySensorGlasses extends Overlay {
         float var60;
 
         while (var51.hasNext()) {
-            BlockVec3 coords = var51.next();
+            final BlockVec3 coords = var51.next();
 
             var52 = ClientProxyCore.playerPosX - coords.x - 0.5D;
             var58 = ClientProxyCore.playerPosY - coords.y - 0.5D;
@@ -115,7 +115,7 @@ public class OverlaySensorGlasses extends Overlay {
                     PlayerUtil.getPlayerBaseClientFromPlayer(OverlaySensorGlasses.minecraft.thePlayer, false);
 
             if (client != null) {
-                GCPlayerStatsClient stats = GCPlayerStatsClient.get(client);
+                final GCPlayerStatsClient stats = GCPlayerStatsClient.get(client);
                 var2 = stats.usingAdvancedGoggles;
             }
 

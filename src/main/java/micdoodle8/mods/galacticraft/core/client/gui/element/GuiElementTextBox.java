@@ -14,7 +14,7 @@ public class GuiElementTextBox extends GuiButton {
     public String text;
     public boolean numericOnly;
     public boolean centered;
-    private int maxLength;
+    private final int maxLength;
 
     public long timeBackspacePressed;
     public int cursorPulse;
@@ -22,9 +22,9 @@ public class GuiElementTextBox extends GuiButton {
     public boolean isTextFocused = false;
     public int incorrectUseTimer;
 
-    private ITextBoxCallback parentGui;
+    private final ITextBoxCallback parentGui;
 
-    private Minecraft mc = FMLClientHandler.instance().getClient();
+    private final Minecraft mc = FMLClientHandler.instance().getClient();
 
     public GuiElementTextBox(
             int id,
@@ -52,7 +52,7 @@ public class GuiElementTextBox extends GuiButton {
             if (keyID == Keyboard.KEY_BACK) {
                 if (this.text.length() > 0) {
                     if (this.parentGui.canPlayerEdit(this, this.mc.thePlayer)) {
-                        String toBeParsed = this.text.substring(0, this.text.length() - 1);
+                        final String toBeParsed = this.text.substring(0, this.text.length() - 1);
 
                         if (this.isValid(toBeParsed)) {
                             this.text = toBeParsed;
@@ -75,8 +75,7 @@ public class GuiElementTextBox extends GuiButton {
                 if (this.isValid(this.text + pastestring)) {
                     if (this.parentGui.canPlayerEdit(this, this.mc.thePlayer)) {
                         this.text = this.text + pastestring;
-                        this.text = this.text.substring(
-                                0, Math.min(String.valueOf(this.text).length(), this.maxLength));
+                        this.text = this.text.substring(0, Math.min(this.text.length(), this.maxLength));
                     } else {
                         this.incorrectUseTimer = 10;
                         this.parentGui.onIntruderInteraction(this);
@@ -127,7 +126,7 @@ public class GuiElementTextBox extends GuiButton {
                     if (System.currentTimeMillis() - this.timeBackspacePressed
                                     > 200 / (1 + this.backspacePressed * 0.3F)
                             && this.parentGui.canPlayerEdit(this, this.mc.thePlayer)) {
-                        String toBeParsed = this.text.substring(0, this.text.length() - 1);
+                        final String toBeParsed = this.text.substring(0, this.text.length() - 1);
 
                         if (this.isValid(toBeParsed)) {
                             this.text = toBeParsed;
@@ -172,7 +171,7 @@ public class GuiElementTextBox extends GuiButton {
     public int getIntegerValue() {
         try {
             return Integer.parseInt(this.text.equals("") ? "0" : this.text);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             return -1;
         }
     }
@@ -183,7 +182,7 @@ public class GuiElementTextBox extends GuiButton {
                 try {
                     Integer.parseInt(string);
                     return true;
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     return false;
                 }
             } else {
@@ -218,18 +217,18 @@ public class GuiElementTextBox extends GuiButton {
     }
 
     public int getMaxLength() {
-        return maxLength;
+        return this.maxLength;
     }
 
-    public static interface ITextBoxCallback {
-        public boolean canPlayerEdit(GuiElementTextBox textBox, EntityPlayer player);
+    public interface ITextBoxCallback {
+        boolean canPlayerEdit(GuiElementTextBox textBox, EntityPlayer player);
 
-        public void onTextChanged(GuiElementTextBox textBox, String newText);
+        void onTextChanged(GuiElementTextBox textBox, String newText);
 
-        public String getInitialText(GuiElementTextBox textBox);
+        String getInitialText(GuiElementTextBox textBox);
 
-        public int getTextColor(GuiElementTextBox textBox);
+        int getTextColor(GuiElementTextBox textBox);
 
-        public void onIntruderInteraction(GuiElementTextBox textBox);
+        void onIntruderInteraction(GuiElementTextBox textBox);
     }
 }

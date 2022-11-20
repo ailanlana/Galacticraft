@@ -28,37 +28,20 @@ public class TileEntityArclampRenderer extends TileEntitySpecialRenderer {
             new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "models/arclampLight.obj"));
     public static final IModelCustom lampBase = AdvancedModelLoader.loadModel(
             new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "models/arclampBase.obj"));
-    private TextureManager renderEngine = FMLClientHandler.instance().getClient().renderEngine;
+    private final TextureManager renderEngine = FMLClientHandler.instance().getClient().renderEngine;
 
     public void renderModelAt(TileEntityArclamp tileEntity, double d, double d1, double d2, float f) {
-        int side = tileEntity.getBlockMetadata();
+        final int side = tileEntity.getBlockMetadata();
         int metaFacing = tileEntity.facing;
 
         // int facing;
-        /*switch (side)
-        {
-        case 0:
-        case 1:
-        	facing = metaFacing + 2;
-        	break;
-        case 2:
-        	facing = metaFacing;
-        	if (metaFacing > 1) facing= 7 - metaFacing;
-        	break;
-        case 3:
-        	facing = metaFacing;
-        	if (metaFacing > 1) facing+=2;
-        	break;
-        case 4:
-        	facing = metaFacing;
-        	break;
-        case 5:
-        	facing = metaFacing;
-        	if (metaFacing > 1) facing= 5 - metaFacing;
-        	break;
-        default:
-        	return;
-        }*/
+        /*
+         * switch (side) { case 0: case 1: facing = metaFacing + 2; break; case 2:
+         * facing = metaFacing; if (metaFacing > 1) facing= 7 - metaFacing; break; case
+         * 3: facing = metaFacing; if (metaFacing > 1) facing+=2; break; case 4: facing
+         * = metaFacing; break; case 5: facing = metaFacing; if (metaFacing > 1) facing=
+         * 5 - metaFacing; break; default: return; }
+         */
 
         GL11.glPushMatrix();
         GL11.glTranslatef((float) d + 0.5F, (float) d1 + 0.5F, (float) d2 + 0.5F);
@@ -117,16 +100,16 @@ public class TileEntityArclampRenderer extends TileEntitySpecialRenderer {
         GL11.glScalef(0.048F, 0.048F, 0.048F);
         TileEntityArclampRenderer.lampMetal.renderAll();
 
-        int whiteLevel = tileEntity.getEnabled() ? 255 : 26;
+        final int whiteLevel = tileEntity.getEnabled() ? 255 : 26;
 
         // Save the lighting state
-        float lightMapSaveX = OpenGlHelper.lastBrightnessX;
-        float lightMapSaveY = OpenGlHelper.lastBrightnessY;
+        final float lightMapSaveX = OpenGlHelper.lastBrightnessX;
+        final float lightMapSaveY = OpenGlHelper.lastBrightnessY;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
         GL11.glDisable(GL11.GL_LIGHTING);
 
         this.renderEngine.bindTexture(TileEntityArclampRenderer.lightTexture);
-        Tessellator tessellator = Tessellator.instance;
+        final Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawing(GL11.GL_QUADS);
         tessellator.setColorRGBA(whiteLevel, whiteLevel, whiteLevel, 255);
         ((WavefrontObject) TileEntityArclampRenderer.lampLight).tessellateAll(tessellator);

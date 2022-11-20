@@ -9,7 +9,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
@@ -54,7 +57,7 @@ public class EntityRendererMixin {
             ordinal = 8,
             require = 1)
     private float onUpdateLightmapRed(float value) {
-        return WorldUtil.getColorRed(mc.theWorld) * value;
+        return WorldUtil.getColorRed(this.mc.theWorld) * value;
     }
 
     @ModifyVariable(
@@ -63,7 +66,7 @@ public class EntityRendererMixin {
             ordinal = 9,
             require = 1)
     private float onUpdateLightmapGreen(float value) {
-        return WorldUtil.getColorGreen(mc.theWorld) * value;
+        return WorldUtil.getColorGreen(this.mc.theWorld) * value;
     }
 
     @ModifyVariable(
@@ -72,6 +75,6 @@ public class EntityRendererMixin {
             ordinal = 10,
             require = 1)
     private float onUpdateLightmapBlue(float value) {
-        return WorldUtil.getColorBlue(mc.theWorld) * value;
+        return WorldUtil.getColorBlue(this.mc.theWorld) * value;
     }
 }

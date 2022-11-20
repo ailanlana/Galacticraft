@@ -22,7 +22,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
 public class ItemBlockDesc extends ItemBlockGC {
-    public static interface IBlockShiftDesc {
+    public interface IBlockShiftDesc {
         String getShiftDescription(int meta);
 
         boolean showDescription(int meta);
@@ -34,14 +34,17 @@ public class ItemBlockDesc extends ItemBlockGC {
 
     @Override
     public void onCreated(ItemStack stack, World world, EntityPlayer player) {
-        if (!world.isRemote) return;
+        if (!world.isRemote) {
+            return;
+        }
 
         // The player could be a FakePlayer made by another mod e.g. LogisticsPipes
         if (player instanceof EntityPlayerSP) {
-            if (this.field_150939_a == GCBlocks.fuelLoader)
+            if (this.field_150939_a == GCBlocks.fuelLoader) {
                 ClientProxyCore.playerClientHandler.onBuild(4, (EntityPlayerSP) player);
-            else if (this.field_150939_a == GCBlocks.fuelLoader)
+            } else if (this.field_150939_a == GCBlocks.fuelLoader) {
                 ClientProxyCore.playerClientHandler.onBuild(6, (EntityPlayerSP) player);
+            }
         }
     }
 
@@ -59,10 +62,9 @@ public class ItemBlockDesc extends ItemBlockGC {
                                 150));
             } else {
                 if (this.field_150939_a instanceof BlockTileGC) {
-                    TileEntity te =
-                            ((BlockTileGC) this.field_150939_a).createTileEntity(null, stack.getItemDamage() & 12);
+                    final TileEntity te = this.field_150939_a.createTileEntity(null, stack.getItemDamage() & 12);
                     if (te instanceof TileBaseElectricBlock) {
-                        float powerDrawn = ((TileBaseElectricBlock) te).storage.getMaxExtract();
+                        final float powerDrawn = ((TileBaseElectricBlock) te).storage.getMaxExtract();
                         if (powerDrawn > 0) {
                             info.add(EnumChatFormatting.GREEN
                                     + GCCoreUtil.translateWithFormat(
@@ -71,10 +73,10 @@ public class ItemBlockDesc extends ItemBlockGC {
                         }
                     }
                 } else if (this.field_150939_a instanceof BlockAdvancedTile) {
-                    TileEntity te = ((BlockAdvancedTile) this.field_150939_a)
-                            .createTileEntity(player.worldObj, stack.getItemDamage() & 12);
+                    final TileEntity te =
+                            this.field_150939_a.createTileEntity(player.worldObj, stack.getItemDamage() & 12);
                     if (te instanceof TileBaseElectricBlock) {
-                        float powerDrawn = ((TileBaseElectricBlock) te).storage.getMaxExtract();
+                        final float powerDrawn = ((TileBaseElectricBlock) te).storage.getMaxExtract();
                         if (powerDrawn > 0) {
                             info.add(EnumChatFormatting.GREEN
                                     + GCCoreUtil.translateWithFormat(

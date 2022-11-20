@@ -18,7 +18,7 @@ import net.minecraftforge.common.DimensionManager;
 public class SpaceStationWorldData extends WorldSavedData {
     private String spaceStationName = "NoName";
     private String owner = "NoOwner";
-    private ArrayList<String> allowedPlayers;
+    private final ArrayList<String> allowedPlayers;
     private boolean allowAllPlayers;
     private int homePlanet;
     private int dimensionIdDynamic;
@@ -29,13 +29,16 @@ public class SpaceStationWorldData extends WorldSavedData {
         super(par1Str);
 
         this.allowedPlayers = new ArrayList<String>() {
+
+            private static final long serialVersionUID = 1079079229788066770L;
+
             // Override contains so it ignores case.
             @Override
             public boolean contains(Object o) {
                 if (o instanceof String) {
-                    String paramStr = (String) o;
+                    final String paramStr = (String) o;
 
-                    for (String s : this) {
+                    for (final String s : this) {
                         if (paramStr.equalsIgnoreCase(s)) {
                             return true;
                         }
@@ -74,7 +77,7 @@ public class SpaceStationWorldData extends WorldSavedData {
     }
 
     public int getHomePlanet() {
-        return homePlanet;
+        return this.homePlanet;
     }
 
     public void setSpaceStationName(String string) {
@@ -82,7 +85,7 @@ public class SpaceStationWorldData extends WorldSavedData {
     }
 
     public int getDimensionIdStatic() {
-        return dimensionIdStatic;
+        return this.dimensionIdStatic;
     }
 
     public void setDimensionIdStatic(int dimensionIdStatic) {
@@ -90,7 +93,7 @@ public class SpaceStationWorldData extends WorldSavedData {
     }
 
     public int getDimensionIdDynamic() {
-        return dimensionIdDynamic;
+        return this.dimensionIdDynamic;
     }
 
     public void setDimensionIdDynamic(int dimensionIdDynamic) {
@@ -159,9 +162,7 @@ public class SpaceStationWorldData extends WorldSavedData {
 
         final NBTTagList var2 = new NBTTagList();
 
-        for (int var3 = 0; var3 < this.allowedPlayers.size(); ++var3) {
-            final String player = this.allowedPlayers.get(var3);
-
+        for (final String player : this.allowedPlayers) {
             if (player != null) {
                 final NBTTagCompound var4 = new NBTTagCompound();
                 var4.setString("allowedPlayer", player);
@@ -180,17 +181,20 @@ public class SpaceStationWorldData extends WorldSavedData {
     }
 
     /**
-     * Retrieve a space station data entry, creating if necessary (with provided data)
+     * Retrieve a space station data entry, creating if necessary (with provided
+     * data)
      */
     public static SpaceStationWorldData getStationData(
             World world, int stationID, int homeID, int providerIdDynamic, int providerIdStatic, EntityPlayer owner) {
-        int providerType = DimensionManager.getProviderType(stationID);
+        final int providerType = DimensionManager.getProviderType(stationID);
 
         boolean foundMatch = false;
 
-        // Loop through all registered satellites, checking for a provider ID match. If none is found, this method is
+        // Loop through all registered satellites, checking for a provider ID match. If
+        // none is found, this method is
         // being called on an incorrect
-        for (Satellite satellite : GalaxyRegistry.getRegisteredSatellites().values()) {
+        for (final Satellite satellite :
+                GalaxyRegistry.getRegisteredSatellites().values()) {
             if (satellite.getDimensionIdStatic() == providerType || satellite.getDimensionID() == providerType) {
                 foundMatch = true;
                 break;
@@ -246,7 +250,9 @@ public class SpaceStationWorldData extends WorldSavedData {
 
     public static SpaceStationWorldData getMPSpaceStationData(World var0, int var1, EntityPlayer player) {
         final String var2 = SpaceStationWorldData.getSpaceStationID(var1);
-        if (var0 == null) var0 = DimensionManager.getProvider(0).worldObj;
+        if (var0 == null) {
+            var0 = DimensionManager.getProvider(0).worldObj;
+        }
         SpaceStationWorldData var3 = (SpaceStationWorldData) var0.loadItemData(SpaceStationWorldData.class, var2);
 
         if (var3 == null) {
@@ -285,18 +291,20 @@ public class SpaceStationWorldData extends WorldSavedData {
             GCPlayerStats stats,
             int stationID,
             SpaceStationWorldData stationData) {
-        if (stationData == null) stationData = SpaceStationWorldData.getMPSpaceStationData(null, stationID, null);
+        if (stationData == null) {
+            stationData = SpaceStationWorldData.getMPSpaceStationData(null, stationID, null);
+        }
 
         if (stationData.owner.equals(playerName)) {
             // This player is the owner of the station - ensure stats data matches
-            if (!(stats.spaceStationDimensionData.values().contains(stationID))) {
+            if (!stats.spaceStationDimensionData.containsValue(stationID)) {
                 GCLog.debug("Player owns station: " + stationData.getSpaceStationName() + " with home planet "
                         + stationData.getHomePlanet());
                 stats.spaceStationDimensionData.put(stationData.getHomePlanet(), stationID);
             }
         } else {
             // This player is the owner of the station - remove from stats data
-            Integer savedOwned = stats.spaceStationDimensionData.get(stationData.getHomePlanet());
+            final Integer savedOwned = stats.spaceStationDimensionData.get(stationData.getHomePlanet());
             if (savedOwned != null && savedOwned == stationID) {
                 GCLog.debug("Player does not own station: " + stationData.getSpaceStationName() + " with home planet "
                         + stationData.getHomePlanet());
@@ -306,8 +314,9 @@ public class SpaceStationWorldData extends WorldSavedData {
     }
 
     public static void checkAllStations(EntityPlayerMP thePlayer, GCPlayerStats stats) {
-        String name = thePlayer.getGameProfile().getName().replace(".", "");
-        for (int id : WorldUtil.registeredSpaceStations.keySet())
+        final String name = thePlayer.getGameProfile().getName().replace(".", "");
+        for (final int id : WorldUtil.registeredSpaceStations.keySet()) {
             SpaceStationWorldData.updateSSOwnership(thePlayer, name, stats, id, null);
+        }
     }
 }

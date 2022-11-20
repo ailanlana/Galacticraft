@@ -11,7 +11,6 @@ import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.entity.EntityClientPlayerMP;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.potion.Potion;
@@ -54,7 +53,7 @@ public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
         ClientProxyCore.playerClientHandler.onLivingUpdatePre(this);
         try {
             if (this.worldObj.provider instanceof IZeroGDimension) {
-                //  from: EntityPlayerSP
+                // from: EntityPlayerSP
                 if (this.sprintingTicksLeft > 0) {
                     --this.sprintingTicksLeft;
 
@@ -71,7 +70,7 @@ public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
 
                 if (this.inPortal) {
                     if (this.mc.currentScreen != null) {
-                        this.mc.displayGuiScreen((GuiScreen) null);
+                        this.mc.displayGuiScreen(null);
                     }
 
                     if (this.timeInPortal == 0.0F) {
@@ -109,9 +108,8 @@ public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
                     --this.timeUntilPortal;
                 }
 
-                boolean flag = this.movementInput.jump;
-                float ff = 0.8F;
-                boolean flag1 = this.movementInput.moveForward >= ff;
+                final float ff = 0.8F;
+                final boolean flag1 = this.movementInput.moveForward >= ff;
                 this.movementInput.updatePlayerMoveState();
 
                 if (this.isUsingItem() && !this.isRiding()) {
@@ -121,7 +119,7 @@ public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
                 }
 
                 // CUSTOM-------------------
-                GCPlayerStatsClient stats = GCPlayerStatsClient.get(this);
+                final GCPlayerStatsClient stats = GCPlayerStatsClient.get(this);
                 if (stats.landingTicks > 0) {
                     this.ySize = stats.landingYOffset[stats.landingTicks];
                     this.movementInput.moveStrafe *= 0.5F;
@@ -137,23 +135,15 @@ public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
                 // -----------END CUSTOM
 
                 this.func_145771_j(
-                        this.posX - (double) this.width * 0.35D,
-                        this.boundingBox.minY + 0.5D,
-                        this.posZ + (double) this.width * 0.35D);
+                        this.posX - this.width * 0.35D, this.boundingBox.minY + 0.5D, this.posZ + this.width * 0.35D);
                 this.func_145771_j(
-                        this.posX - (double) this.width * 0.35D,
-                        this.boundingBox.minY + 0.5D,
-                        this.posZ - (double) this.width * 0.35D);
+                        this.posX - this.width * 0.35D, this.boundingBox.minY + 0.5D, this.posZ - this.width * 0.35D);
                 this.func_145771_j(
-                        this.posX + (double) this.width * 0.35D,
-                        this.boundingBox.minY + 0.5D,
-                        this.posZ - (double) this.width * 0.35D);
+                        this.posX + this.width * 0.35D, this.boundingBox.minY + 0.5D, this.posZ - this.width * 0.35D);
                 this.func_145771_j(
-                        this.posX + (double) this.width * 0.35D,
-                        this.boundingBox.minY + 0.5D,
-                        this.posZ + (double) this.width * 0.35D);
+                        this.posX + this.width * 0.35D, this.boundingBox.minY + 0.5D, this.posZ + this.width * 0.35D);
 
-                boolean flag2 = (float) this.getFoodStats().getFoodLevel() > 6.0F || this.capabilities.allowFlying;
+                final boolean flag2 = this.getFoodStats().getFoodLevel() > 6.0F || this.capabilities.allowFlying;
 
                 if (this.onGround
                         && !flag1
@@ -210,17 +200,15 @@ public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
                 this.inventory.decrementAnimations();
                 this.prevCameraYaw = this.cameraYaw;
 
-                //  from: EntityLivingBase
+                // from: EntityLivingBase
                 if (this.newPosRotationIncrements > 0) {
-                    double d0 = this.posX + (this.newPosX - this.posX) / (double) this.newPosRotationIncrements;
-                    double d1 = this.posY + (this.newPosY - this.posY) / (double) this.newPosRotationIncrements;
-                    double d2 = this.posZ + (this.newPosZ - this.posZ) / (double) this.newPosRotationIncrements;
-                    double d3 = MathHelper.wrapAngleTo180_double(this.newRotationYaw - (double) this.rotationYaw);
-                    this.rotationYaw =
-                            (float) ((double) this.rotationYaw + d3 / (double) this.newPosRotationIncrements);
-                    this.rotationPitch = (float) ((double) this.rotationPitch
-                            + (this.newRotationPitch - (double) this.rotationPitch)
-                                    / (double) this.newPosRotationIncrements);
+                    final double d0 = this.posX + (this.newPosX - this.posX) / this.newPosRotationIncrements;
+                    final double d1 = this.posY + (this.newPosY - this.posY) / this.newPosRotationIncrements;
+                    final double d2 = this.posZ + (this.newPosZ - this.posZ) / this.newPosRotationIncrements;
+                    final double d3 = MathHelper.wrapAngleTo180_double(this.newRotationYaw - this.rotationYaw);
+                    this.rotationYaw = (float) (this.rotationYaw + d3 / this.newPosRotationIncrements);
+                    this.rotationPitch = (float) (this.rotationPitch
+                            + (this.newRotationPitch - this.rotationPitch) / this.newPosRotationIncrements);
                     --this.newPosRotationIncrements;
                     this.setPosition(d0, d1, d2);
                     this.setRotation(this.rotationYaw, this.rotationPitch);
@@ -249,14 +237,16 @@ public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
                 this.moveStrafing *= 0.98F;
                 this.moveForward *= 0.98F;
                 this.randomYawVelocity *= 0.9F;
-                if ((this.boundingBox.minY % 1F) == 0.5F) this.boundingBox.minY += 0.00001F;
+                if (this.boundingBox.minY % 1F == 0.5F) {
+                    this.boundingBox.minY += 0.00001F;
+                }
                 this.moveEntityWithHeading(this.moveStrafing, this.moveForward);
 
                 // -from: EntityPlayer
 
                 // Omit IAttributeInstance - seems relevant only on server
 
-                // Omit        this.jumpMovementFactor = this.speedInAir;
+                // Omit this.jumpMovementFactor = this.speedInAir;
                 // (no bounding in space)
 
                 float f = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
@@ -288,11 +278,11 @@ public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
                         axisalignedbb = this.boundingBox.expand(1.0D, 0.5D, 1.0D);
                     }
 
-                    List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, axisalignedbb);
+                    final List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, axisalignedbb);
 
                     if (list != null) {
-                        for (int i = 0; i < list.size(); ++i) {
-                            Entity entity = (Entity) list.get(i);
+                        for (final Object element : list) {
+                            final Entity entity = (Entity) element;
 
                             if (!entity.isDead) {
                                 entity.onCollideWithPlayer(this);
@@ -301,17 +291,19 @@ public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
                     }
                 }
 
-                //  from: EntityPlayerSP
+                // from: EntityPlayerSP
                 // (modified CUSTOM)
                 if (this.lastIsFlying != this.capabilities.isFlying) {
                     this.lastIsFlying = this.capabilities.isFlying;
                     this.sendPlayerAbilities();
                 }
-            } else super.onLivingUpdate();
-        } catch (RuntimeException e) {
+            } else {
+                super.onLivingUpdate();
+            }
+        } catch (final RuntimeException e) {
             FMLLog.severe(
                     "A mod has crashed while Minecraft was doing a normal player tick update.  See details below.  GCEntityClientPlayerMP is in this because that is the player class name when Galacticraft is installed.  This is =*NOT*= a bug in Galacticraft, please report it to the mod indicated by the first lines of the crash report.");
-            throw (e);
+            throw e;
         }
         ClientProxyCore.playerClientHandler.onLivingUpdatePost(this);
     }
@@ -331,22 +323,32 @@ public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
     @Override
     public boolean isSneaking() {
         if (this.worldObj.provider instanceof IZeroGDimension) {
-            ZeroGravityEvent zeroGEvent = new ZeroGravityEvent.SneakOverride(this);
+            final ZeroGravityEvent zeroGEvent = new ZeroGravityEvent.SneakOverride(this);
             MinecraftForge.EVENT_BUS.post(zeroGEvent);
             if (zeroGEvent.isCanceled()) {
                 return super.isSneaking();
             }
 
-            GCPlayerStatsClient stats = GCPlayerStatsClient.get(this);
+            final GCPlayerStatsClient stats = GCPlayerStatsClient.get(this);
             if (stats.landingTicks > 0) {
-                if (this.lastLandingTicks == 0) this.lastLandingTicks = stats.landingTicks;
+                if (this.lastLandingTicks == 0) {
+                    this.lastLandingTicks = stats.landingTicks;
+                }
 
                 return stats.landingTicks < this.lastLandingTicks;
-            } else this.lastLandingTicks = 0;
-            if (stats.pjumpticks > 0) return true;
+            } else {
+                this.lastLandingTicks = 0;
+            }
+            if (stats.pjumpticks > 0) {
+                return true;
+            }
             if (ClientProxyCore.sneakRenderOverride) {
-                if (FreefallHandler.testFreefall(this)) return false;
-                if (stats.inFreefall) return false;
+                if (FreefallHandler.testFreefall(this)) {
+                    return false;
+                }
+                if (stats.inFreefall) {
+                    return false;
+                }
             }
         }
         return super.isSneaking();
@@ -358,16 +360,17 @@ public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
         return ClientProxyCore.playerClientHandler.getBedOrientationInDegrees(this, super.getBedOrientationInDegrees());
     }
     //
-    //    @Override
-    //    @SideOnly(Side.CLIENT)
-    //    public void setVelocity(double xx, double yy, double zz)
-    //    {
-    //      if (this.worldObj.provider instanceof WorldProviderOrbit)
-    //      {
-    //          ((WorldProviderOrbit)this.worldObj.provider).setVelocityClient(this, xx, yy, zz);
-    //      }
-    //      super.setVelocity(xx, yy, zz);
-    //    }
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // public void setVelocity(double xx, double yy, double zz)
+    // {
+    // if (this.worldObj.provider instanceof WorldProviderOrbit)
+    // {
+    // ((WorldProviderOrbit)this.worldObj.provider).setVelocityClient(this, xx, yy,
+    // zz);
+    // }
+    // super.setVelocity(xx, yy, zz);
+    // }
     //
 
     @Override

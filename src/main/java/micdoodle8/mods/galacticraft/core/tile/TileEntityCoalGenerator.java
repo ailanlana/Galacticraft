@@ -32,7 +32,8 @@ public class TileEntityCoalGenerator extends TileBaseUniversalElectricalSource
     // because on max heat it produces 120 gJ/t over 320 ticks
 
     // Below the min_generate, all heat is wasted
-    // At max generate, 100% efficient conversion coal energy -> electric makes 120 gJ/t
+    // At max generate, 100% efficient conversion coal energy -> electric makes 120
+    // gJ/t
     public static final int MAX_GENERATE_GJ_PER_TICK = 150;
     public static final int MIN_GENERATE_GJ_PER_TICK = 30;
 
@@ -50,8 +51,7 @@ public class TileEntityCoalGenerator extends TileBaseUniversalElectricalSource
     @NetworkedField(targetSide = Side.CLIENT)
     public int itemCookTime = 0;
     /**
-     * The ItemStacks that hold the items currently being used in the battery
-     * box
+     * The ItemStacks that hold the items currently being used in the battery box
      */
     private ItemStack[] containingItems = new ItemStack[1];
 
@@ -63,7 +63,7 @@ public class TileEntityCoalGenerator extends TileBaseUniversalElectricalSource
     @Override
     public void updateEntity() {
         if (!this.worldObj.isRemote && this.heatGJperTick - TileEntityCoalGenerator.MIN_GENERATE_GJ_PER_TICK > 0) {
-            this.receiveEnergyGC(null, (this.heatGJperTick - TileEntityCoalGenerator.MIN_GENERATE_GJ_PER_TICK), false);
+            this.receiveEnergyGC(null, this.heatGJperTick - TileEntityCoalGenerator.MIN_GENERATE_GJ_PER_TICK, false);
         }
 
         super.updateEntity();
@@ -113,12 +113,12 @@ public class TileEntityCoalGenerator extends TileBaseUniversalElectricalSource
         super.readFromNBT(par1NBTTagCompound);
         this.itemCookTime = par1NBTTagCompound.getInteger("itemCookTime");
         this.heatGJperTick = par1NBTTagCompound.getInteger("generateRateInt");
-        NBTTagList var2 = par1NBTTagCompound.getTagList("Items", 10);
+        final NBTTagList var2 = par1NBTTagCompound.getTagList("Items", 10);
         this.containingItems = new ItemStack[this.getSizeInventory()];
 
         for (int var3 = 0; var3 < var2.tagCount(); ++var3) {
-            NBTTagCompound var4 = var2.getCompoundTagAt(var3);
-            int var5 = var4.getByte("Slot") & 255;
+            final NBTTagCompound var4 = var2.getCompoundTagAt(var3);
+            final int var5 = var4.getByte("Slot") & 255;
 
             if (var5 < this.containingItems.length) {
                 this.containingItems[var5] = ItemStack.loadItemStackFromNBT(var4);
@@ -134,11 +134,11 @@ public class TileEntityCoalGenerator extends TileBaseUniversalElectricalSource
         super.writeToNBT(par1NBTTagCompound);
         par1NBTTagCompound.setInteger("itemCookTime", this.itemCookTime);
         par1NBTTagCompound.setFloat("generateRate", this.heatGJperTick);
-        NBTTagList var2 = new NBTTagList();
+        final NBTTagList var2 = new NBTTagList();
 
         for (int var3 = 0; var3 < this.containingItems.length; ++var3) {
             if (this.containingItems[var3] != null) {
-                NBTTagCompound var4 = new NBTTagCompound();
+                final NBTTagCompound var4 = new NBTTagCompound();
                 var4.setByte("Slot", (byte) var3);
                 this.containingItems[var3].writeToNBT(var4);
                 var2.appendTag(var4);
@@ -184,7 +184,7 @@ public class TileEntityCoalGenerator extends TileBaseUniversalElectricalSource
     @Override
     public ItemStack getStackInSlotOnClosing(int par1) {
         if (this.containingItems[par1] != null) {
-            ItemStack var2 = this.containingItems[par1];
+            final ItemStack var2 = this.containingItems[par1];
             this.containingItems[par1] = null;
             return var2;
         } else {
@@ -248,12 +248,8 @@ public class TileEntityCoalGenerator extends TileBaseUniversalElectricalSource
     }
 
     /*
-       @Override
-    public float getRequest(ForgeDirection direction)
-    {
-    	return 0;
-    }
-    */
+     * @Override public float getRequest(ForgeDirection direction) { return 0; }
+     */
 
     @Override
     public EnumSet<ForgeDirection> getElectricalInputDirections() {

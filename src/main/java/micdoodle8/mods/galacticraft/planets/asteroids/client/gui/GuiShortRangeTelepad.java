@@ -29,14 +29,14 @@ public class GuiShortRangeTelepad extends GuiContainerGC implements ITextBoxCall
     private static final ResourceLocation launchControllerGui =
             new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "textures/gui/shortRangeTelepad.png");
 
-    private TileEntityShortRangeTelepad telepad;
+    private final TileEntityShortRangeTelepad telepad;
 
     private GuiButton enableControllerButton;
     private GuiElementTextBox address;
     private GuiElementTextBox targetAddress;
-    private GuiElementInfoRegion electricInfoRegion = new GuiElementInfoRegion(0, 0, 52, 9, null, 0, 0, this);
+    private final GuiElementInfoRegion electricInfoRegion = new GuiElementInfoRegion(0, 0, 52, 9, null, 0, 0, this);
 
-    private Map<Integer, Integer> cannotEditMap = Maps.newHashMap();
+    private final Map<Integer, Integer> cannotEditMap = Maps.newHashMap();
 
     public GuiShortRangeTelepad(InventoryPlayer playerInventory, TileEntityShortRangeTelepad telepad) {
         super(new ContainerShortRangeTelepad(playerInventory, telepad));
@@ -46,11 +46,7 @@ public class GuiShortRangeTelepad extends GuiContainerGC implements ITextBoxCall
 
     @Override
     public void drawScreen(int par1, int par2, float par3) {
-        if (this.telepad.disableCooldown > 0) {
-            this.enableControllerButton.enabled = false;
-        } else {
-            this.enableControllerButton.enabled = true;
-        }
+        this.enableControllerButton.enabled = this.telepad.disableCooldown <= 0;
 
         this.enableControllerButton.displayString = this.telepad.getDisabled(0)
                 ? GCCoreUtil.translate("gui.button.enable.name")
@@ -88,13 +84,13 @@ public class GuiShortRangeTelepad extends GuiContainerGC implements ITextBoxCall
         this.buttonList.add(this.enableControllerButton);
         this.buttonList.add(this.address);
         this.buttonList.add(this.targetAddress);
-        this.electricInfoRegion.tooltipStrings = new ArrayList<String>();
+        this.electricInfoRegion.tooltipStrings = new ArrayList<>();
         this.electricInfoRegion.xPosition = (this.width - this.xSize) / 2 + 98;
         this.electricInfoRegion.yPosition = (this.height - this.ySize) / 2 + 113;
         this.electricInfoRegion.parentWidth = this.width;
         this.electricInfoRegion.parentHeight = this.height;
         this.infoRegions.add(this.electricInfoRegion);
-        List<String> batterySlotDesc = new ArrayList<String>();
+        List<String> batterySlotDesc = new ArrayList<>();
         batterySlotDesc.add(GCCoreUtil.translate("gui.batterySlot.desc.0"));
         batterySlotDesc.add(GCCoreUtil.translate("gui.batterySlot.desc.1"));
         this.infoRegions.add(new GuiElementInfoRegion(
@@ -106,7 +102,7 @@ public class GuiShortRangeTelepad extends GuiContainerGC implements ITextBoxCall
                 this.width,
                 this.height,
                 this));
-        batterySlotDesc = new ArrayList<String>();
+        batterySlotDesc = new ArrayList<>();
         batterySlotDesc.addAll(GCCoreUtil.translateWithSplit("gui.telepad.desc.0"));
         this.infoRegions.add(new GuiElementInfoRegion(
                 (this.width - this.xSize) / 2 + 5,
@@ -117,7 +113,7 @@ public class GuiShortRangeTelepad extends GuiContainerGC implements ITextBoxCall
                 this.width,
                 this.height,
                 this));
-        batterySlotDesc = new ArrayList<String>();
+        batterySlotDesc = new ArrayList<>();
         batterySlotDesc.addAll(GCCoreUtil.translateWithSplit("gui.telepad.desc.1"));
         this.infoRegions.add(new GuiElementInfoRegion(
                 (this.width - this.xSize) / 2 + 5,
@@ -152,7 +148,7 @@ public class GuiShortRangeTelepad extends GuiContainerGC implements ITextBoxCall
 
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-        String displayString = this.telepad.getInventoryName();
+        final String displayString = this.telepad.getInventoryName();
         this.fontRendererObj.drawString(
                 displayString, this.xSize / 2 - this.fontRendererObj.getStringWidth(displayString) / 2, 5, 4210752);
 
@@ -174,7 +170,7 @@ public class GuiShortRangeTelepad extends GuiContainerGC implements ITextBoxCall
         final int var6 = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(var5, var6, 0, 0, this.xSize, this.ySize);
 
-        List<String> electricityDesc = new ArrayList<String>();
+        final List<String> electricityDesc = new ArrayList<>();
         electricityDesc.add(GCCoreUtil.translate("gui.energyStorage.desc.0"));
         EnergyDisplayHelper.getEnergyDisplayTooltip(
                 this.telepad.getEnergyStoredGC(), this.telepad.getMaxEnergyStoredGC(), electricityDesc);
@@ -183,7 +179,7 @@ public class GuiShortRangeTelepad extends GuiContainerGC implements ITextBoxCall
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         if (this.telepad.getEnergyStoredGC() > 0) {
-            int scale = this.telepad.getScaledElecticalLevel(54);
+            final int scale = this.telepad.getScaledElecticalLevel(54);
             this.drawTexturedModalRect(var5 + 99, var6 + 114, 176, 0, Math.min(scale, 54), 7);
         }
 

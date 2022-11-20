@@ -173,7 +173,6 @@ public class MapGenCaveMars extends MapGenBaseMeta {
                         i3 = 16;
                     }
 
-                    final boolean flag2 = false;
                     int j3;
                     for (j3 = l1; j3 < i2; ++j3) {
                         for (int l3 = l2; l3 < i3; ++l3) {
@@ -206,10 +205,11 @@ public class MapGenCaveMars extends MapGenBaseMeta {
 
                                         if (yfactor > -0.7D && xfactorSq + yfactorSq + zfactorSq < 1.0D) {
                                             if (blockIdArray[coords] == MarsBlocks.marsBlock) {
-                                                if (metaArray[coords] == 6 || metaArray[coords] == 9) {
-                                                    blockIdArray[coords] = Blocks.air;
-                                                } else if (metaArray[coords] == 5
-                                                        && random.nextInt(MapGenCaveMars.BREAK_THROUGH_CHANCE) == 0) {
+                                                if (metaArray[coords] == 6
+                                                        || metaArray[coords] == 9
+                                                        || metaArray[coords] == 5
+                                                                && random.nextInt(MapGenCaveMars.BREAK_THROUGH_CHANCE)
+                                                                        == 0) {
                                                     blockIdArray[coords] = Blocks.air;
                                                 }
                                             }

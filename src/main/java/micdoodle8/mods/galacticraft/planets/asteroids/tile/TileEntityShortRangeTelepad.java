@@ -37,7 +37,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
         implements IMultiBlock, IInventory, ISidedInventory {
-    public static enum EnumTelepadSearchResult {
+    public enum EnumTelepadSearchResult {
         VALID,
         NOT_FOUND,
         TOO_FAR,
@@ -96,14 +96,15 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
 
     @Override
     public void updateEntity() {
-        if (this.ticks % 40 == 0 && !worldObj.isRemote) {
+        if (this.ticks % 40 == 0 && !this.worldObj.isRemote) {
             this.setAddress(this.address);
             this.setTargetAddress(this.targetAddress);
         }
 
         if (!this.worldObj.isRemote) {
-            if (this.targetAddressResult == EnumTelepadSearchResult.VALID && (this.ticks % 5 == 0 || teleporting)) {
-                List<EntityLivingBase> containedEntities = worldObj.getEntitiesWithinAABB(
+            if (this.targetAddressResult == EnumTelepadSearchResult.VALID
+                    && (this.ticks % 5 == 0 || this.teleporting)) {
+                final List<EntityLivingBase> containedEntities = this.worldObj.getEntitiesWithinAABB(
                         EntityLivingBase.class,
                         AxisAlignedBB.getBoundingBox(
                                 this.xCoord,
@@ -114,29 +115,29 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
                                 this.zCoord + 1));
 
                 if (containedEntities.size() > 0 && this.getEnergyStoredGC() >= ENERGY_USE_ON_TELEPORT) {
-                    ShortRangeTelepadHandler.TelepadEntry entry =
+                    final ShortRangeTelepadHandler.TelepadEntry entry =
                             ShortRangeTelepadHandler.getLocationFromAddress(this.targetAddress);
 
                     if (entry != null) {
-                        teleporting = true;
+                        this.teleporting = true;
                     }
                 } else {
-                    teleporting = false;
+                    this.teleporting = false;
                 }
             }
 
             if (this.teleporting) {
                 this.teleportTime++;
 
-                if (teleportTime >= MAX_TELEPORT_TIME) {
-                    ShortRangeTelepadHandler.TelepadEntry entry =
+                if (this.teleportTime >= MAX_TELEPORT_TIME) {
+                    final ShortRangeTelepadHandler.TelepadEntry entry =
                             ShortRangeTelepadHandler.getLocationFromAddress(this.targetAddress);
 
-                    BlockVec3 finalPos = (entry == null) ? null : entry.position;
+                    final BlockVec3 finalPos = entry == null ? null : entry.position;
 
                     if (finalPos != null) {
-                        TileEntity tileAt = finalPos.getTileEntityForce(this.worldObj);
-                        List<EntityLivingBase> containedEntities = worldObj.getEntitiesWithinAABB(
+                        final TileEntity tileAt = finalPos.getTileEntityForce(this.worldObj);
+                        final List<EntityLivingBase> containedEntities = this.worldObj.getEntitiesWithinAABB(
                                 EntityLivingBase.class,
                                 AxisAlignedBB.getBoundingBox(
                                         this.xCoord,
@@ -147,10 +148,10 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
                                         this.zCoord + 1));
 
                         if (tileAt != null && tileAt instanceof TileEntityShortRangeTelepad) {
-                            TileEntityShortRangeTelepad destTelepad = (TileEntityShortRangeTelepad) tileAt;
-                            int teleportResult = destTelepad.canTeleportHere();
+                            final TileEntityShortRangeTelepad destTelepad = (TileEntityShortRangeTelepad) tileAt;
+                            final int teleportResult = destTelepad.canTeleportHere();
                             if (teleportResult == 0) {
-                                for (EntityLivingBase e : containedEntities) {
+                                for (final EntityLivingBase e : containedEntities) {
                                     e.setPosition(finalPos.x + 0.5F, finalPos.y + 1.0F, finalPos.z + 0.5F);
                                     this.worldObj.updateEntityWithOptionalForce(e, true);
                                     if (e instanceof EntityPlayerMP) {
@@ -178,7 +179,7 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
                             } else {
                                 switch (teleportResult) {
                                     case -1:
-                                        for (EntityLivingBase e : containedEntities) {
+                                        for (final EntityLivingBase e : containedEntities) {
                                             if (e instanceof EntityPlayer) {
                                                 ((EntityPlayer) e)
                                                         .addChatComponentMessage(new ChatComponentText(
@@ -191,7 +192,7 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
                                         }
                                         break;
                                     case 1:
-                                        for (EntityLivingBase e : containedEntities) {
+                                        for (final EntityLivingBase e : containedEntities) {
                                             if (e instanceof EntityPlayer) {
                                                 ((EntityPlayer) e)
                                                         .addChatComponentMessage(new ChatComponentText(
@@ -203,7 +204,7 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
                                         }
                                         break;
                                     case 2:
-                                        for (EntityLivingBase e : containedEntities) {
+                                        for (final EntityLivingBase e : containedEntities) {
                                             if (e instanceof EntityPlayer) {
                                                 ((EntityPlayer) e)
                                                         .addChatComponentMessage(
@@ -231,12 +232,12 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
-        NBTTagList var2 = nbt.getTagList("Items", 10);
+        final NBTTagList var2 = nbt.getTagList("Items", 10);
         this.containingItems = new ItemStack[this.getSizeInventory()];
 
         for (int var3 = 0; var3 < var2.tagCount(); ++var3) {
-            NBTTagCompound var4 = var2.getCompoundTagAt(var3);
-            int var5 = var4.getByte("Slot") & 255;
+            final NBTTagCompound var4 = var2.getCompoundTagAt(var3);
+            final int var5 = var4.getByte("Slot") & 255;
 
             if (var5 < this.containingItems.length) {
                 this.containingItems[var5] = ItemStack.loadItemStackFromNBT(var4);
@@ -251,11 +252,11 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
     @Override
     public void writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
-        NBTTagList var2 = new NBTTagList();
+        final NBTTagList var2 = new NBTTagList();
 
         for (int var3 = 0; var3 < this.containingItems.length; ++var3) {
             if (this.containingItems[var3] != null) {
-                NBTTagCompound var4 = new NBTTagCompound();
+                final NBTTagCompound var4 = new NBTTagCompound();
                 var4.setByte("Slot", (byte) var3);
                 this.containingItems[var3].writeToNBT(var4);
                 var2.appendTag(var4);
@@ -272,13 +273,13 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
     @Override
     public void addExtraNetworkedData(List<Object> networkedList) {
         super.addExtraNetworkedData(networkedList);
-        networkedList.add(targetAddressResult.ordinal());
+        networkedList.add(this.targetAddressResult.ordinal());
     }
 
     @Override
     public void readExtraNetworkedData(ByteBuf dataStream) {
         super.readExtraNetworkedData(dataStream);
-        targetAddressResult = EnumTelepadSearchResult.values()[dataStream.readInt()];
+        this.targetAddressResult = EnumTelepadSearchResult.values()[dataStream.readInt()];
     }
 
     @Override
@@ -300,9 +301,11 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
 
     @Override
     public void onCreate(BlockVec3 placedPosition) {
-        int buildHeight = this.worldObj.getHeight() - 1;
+        final int buildHeight = this.worldObj.getHeight() - 1;
         for (int y = 0; y < 3; y += 2) {
-            if (placedPosition.y + y > buildHeight) return;
+            if (placedPosition.y + y > buildHeight) {
+                return;
+            }
             for (int x = -1; x <= 1; x++) {
                 for (int z = -1; z <= 1; z++) {
                     final BlockVec3 vecToAdd =
@@ -332,7 +335,8 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
-        return AxisAlignedBB.getBoundingBox(xCoord - 1, yCoord, zCoord - 1, xCoord + 2, yCoord + 4, zCoord + 2);
+        return AxisAlignedBB.getBoundingBox(
+                this.xCoord - 1, this.yCoord, this.zCoord - 1, this.xCoord + 2, this.yCoord + 4, this.zCoord + 2);
     }
 
     @Override
@@ -430,18 +434,19 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
         this.address = address;
 
         if (this.address >= 0) {
-            ShortRangeTelepadHandler.TelepadEntry entry = ShortRangeTelepadHandler.getLocationFromAddress(this.address);
+            final ShortRangeTelepadHandler.TelepadEntry entry =
+                    ShortRangeTelepadHandler.getLocationFromAddress(this.address);
             this.addressValid = entry == null
-                    || (this.worldObj != null
-                            && (entry.dimensionID == this.worldObj.provider.dimensionId
-                                    && entry.position.x == this.xCoord
-                                    && entry.position.y == this.yCoord
-                                    && entry.position.z == this.zCoord));
+                    || this.worldObj != null
+                            && entry.dimensionID == this.worldObj.provider.dimensionId
+                            && entry.position.x == this.xCoord
+                            && entry.position.y == this.yCoord
+                            && entry.position.z == this.zCoord;
         } else {
             this.addressValid = false;
         }
 
-        if (worldObj != null && !worldObj.isRemote) {
+        if (this.worldObj != null && !this.worldObj.isRemote) {
             ShortRangeTelepadHandler.addShortRangeTelepad(this);
         }
     }
@@ -450,12 +455,12 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
         if (this.targetAddress >= 0 && !this.worldObj.isRemote) {
             this.targetAddressResult = EnumTelepadSearchResult.NOT_FOUND;
 
-            ShortRangeTelepadHandler.TelepadEntry addressResult =
+            final ShortRangeTelepadHandler.TelepadEntry addressResult =
                     ShortRangeTelepadHandler.getLocationFromAddress(this.targetAddress);
 
             if (addressResult != null) {
                 if (this.worldObj.provider.dimensionId == addressResult.dimensionID) {
-                    double distance = this.getDistanceFrom(
+                    final double distance = this.getDistanceFrom(
                             addressResult.position.x + 0.5F,
                             addressResult.position.y + 0.5F,
                             addressResult.position.z + 0.5F);
@@ -528,7 +533,7 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
     @Override
     public ItemStack getStackInSlotOnClosing(int par1) {
         if (this.containingItems[par1] != null) {
-            ItemStack var2 = this.containingItems[par1];
+            final ItemStack var2 = this.containingItems[par1];
             this.containingItems[par1] = null;
             return var2;
         } else {
@@ -609,7 +614,7 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
 
     @SideOnly(Side.CLIENT)
     public Vector3 getParticleColor(Random rand, boolean sending) {
-        float teleportTimeScaled =
+        final float teleportTimeScaled =
                 Math.min(1.0F, this.teleportTime / (float) TileEntityShortRangeTelepad.MAX_TELEPORT_TIME);
         float f;
         f = rand.nextFloat() * 0.6F + 0.4F;
@@ -626,9 +631,9 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
             return new Vector3(f, f * 0.6F, f * 0.3F);
         }
 
-        float r = f * 0.3F;
-        float g = f * (0.3F + (teleportTimeScaled * 0.7F));
-        float b = f * (1.0F - (teleportTimeScaled * 0.7F));
+        final float r = f * 0.3F;
+        final float g = f * (0.3F + teleportTimeScaled * 0.7F);
+        final float b = f * (1.0F - teleportTimeScaled * 0.7F);
 
         return new Vector3(r, g, b);
     }

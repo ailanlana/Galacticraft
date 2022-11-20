@@ -3,8 +3,19 @@ package micdoodle8.mods.galacticraft.core.entities;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.api.entity.IEntityBreathable;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIMoveIndoors;
+import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
+import net.minecraft.entity.ai.EntityAIOpenDoor;
+import net.minecraft.entity.ai.EntityAIRestrictOpenDoor;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.EntityAIWatchClosest2;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -82,7 +93,7 @@ public class EntityAlienVillager extends EntityAgeable implements IEntityBreatha
             if (this.villageObj == null) {
                 this.detachHome();
             } else {
-                ChunkCoordinates chunkcoordinates = this.villageObj.getCenter();
+                final ChunkCoordinates chunkcoordinates = this.villageObj.getCenter();
                 this.setHomeArea(chunkcoordinates.posX, chunkcoordinates.posY, chunkcoordinates.posZ, (int)
                         (this.villageObj.getVillageRadius() * 0.6F));
 
@@ -195,7 +206,7 @@ public class EntityAlienVillager extends EntityAgeable implements IEntityBreatha
                     b0 = -3;
                 }
 
-                this.villageObj.setReputationForPlayer(((EntityPlayer) par1EntityLiving).getCommandSenderName(), b0);
+                this.villageObj.setReputationForPlayer(par1EntityLiving.getCommandSenderName(), b0);
 
                 if (this.isEntityAlive()) {
                     this.worldObj.setEntityState(this, (byte) 13);
@@ -214,7 +225,7 @@ public class EntityAlienVillager extends EntityAgeable implements IEntityBreatha
 
             if (entity != null) {
                 if (entity instanceof EntityPlayer) {
-                    this.villageObj.setReputationForPlayer(((EntityPlayer) entity).getCommandSenderName(), -2);
+                    this.villageObj.setReputationForPlayer(entity.getCommandSenderName(), -2);
                 } else if (entity instanceof IMob) {
                     this.villageObj.endMatingSeason();
                 }

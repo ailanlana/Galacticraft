@@ -1,7 +1,6 @@
 package micdoodle8.mods.galacticraft.core.asm;
 
 import static micdoodle8.mods.galacticraft.core.asm.GCLoadingPlugin.dev;
-import static micdoodle8.mods.galacticraft.core.asm.GCTransformer.log;
 import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
 import static org.objectweb.asm.Opcodes.NEW;
 
@@ -10,8 +9,9 @@ import org.objectweb.asm.MethodVisitor;
 
 /**
  * This cannot be a mixin, as it'd otherwise break on thermos server
- *
- * Scrubs ServerConfigurationManager for new EntityPlayerMP and replace it with new GCEntityPlayerMP
+ * <p>
+ * Scrubs ServerConfigurationManager for new EntityPlayerMP and replace it with
+ * new GCEntityPlayerMP
  */
 public class ServerConfigurationManagerVisitor extends ClassVisitor {
 
@@ -21,7 +21,7 @@ public class ServerConfigurationManagerVisitor extends ClassVisitor {
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        return new EntityPlayerMPReplacer(api, super.visitMethod(access, name, desc, signature, exceptions), name);
+        return new EntityPlayerMPReplacer(this.api, super.visitMethod(access, name, desc, signature, exceptions), name);
     }
 
     private static class EntityPlayerMPReplacer extends MethodVisitor {
@@ -38,12 +38,14 @@ public class ServerConfigurationManagerVisitor extends ClassVisitor {
         public void visitTypeInsn(int opcode, String type) {
             if (opcode == NEW
                     && (dev ? "net/minecraft/entity/player/EntityPlayerMP".equals(type) : "mw".equals(type))) {
-                log.debug(
+                GCLoadingPlugin.LOGGER.debug(
                         "Replacing NEW {} with NEW micdoodle8/mods/galacticraft/core/entities/player/GCEntityPlayerMP in {}",
                         type,
-                        methodName);
+                        this.methodName);
                 super.visitTypeInsn(NEW, REPLACEMENT_CLASS_INTERNAL_NAME);
-            } else super.visitTypeInsn(opcode, type);
+            } else {
+                super.visitTypeInsn(opcode, type);
+            }
         }
 
         @Override
@@ -51,16 +53,18 @@ public class ServerConfigurationManagerVisitor extends ClassVisitor {
             if (opcode == INVOKESPECIAL
                     && "<init>".equals(name)
                     && (dev ? "net/minecraft/entity/player/EntityPlayerMP".equals(owner) : "mw".equals(owner))) {
-                log.debug(
+                GCLoadingPlugin.LOGGER.debug(
                         "Replacing INVOKESPECIAL {}{}{} with NEW micdoodle8/mods/galacticraft/core/entities/player/GCEntityPlayerMP{}{} in {}",
                         owner,
                         name,
                         desc,
                         name,
                         desc,
-                        methodName);
+                        this.methodName);
                 super.visitMethodInsn(opcode, REPLACEMENT_CLASS_INTERNAL_NAME, name, desc, itf);
-            } else super.visitMethodInsn(opcode, owner, name, desc, itf);
+            } else {
+                super.visitMethodInsn(opcode, owner, name, desc, itf);
+            }
         }
     }
 }

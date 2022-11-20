@@ -9,22 +9,23 @@ import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.chunk.IChunkProvider;
 
 /***
- * Properties of a WorldProviderSpaceStation
- *     1.  Spinnable with Spin Thrusters (if you don't want spin, create your own SpinManager subclass which does nothing)
- *         (note: your SkyProvider needs to rotate according to setSpinDeltaPerTick()
- *     2.  Oregen from other mods is inhibited in this dimension
- *     3.  AstroMiner placement is inhibited in this dimension
- *     4.  The player on arrival into this dimension (after rocket flight) will be in 1st person view
+ * Properties of a WorldProviderSpaceStation 1. Spinnable with Spin Thrusters
+ * (if you don't want spin, create your own SpinManager subclass which does
+ * nothing) (note: your SkyProvider needs to rotate according to
+ * setSpinDeltaPerTick() 2. Oregen from other mods is inhibited in this
+ * dimension 3. AstroMiner placement is inhibited in this dimension 4. The
+ * player on arrival into this dimension (after rocket flight) will be in 1st
+ * person view
  *
  */
 public abstract class WorldProviderSpaceStation extends WorldProviderSpace {
-    private SpinManager spinManager = new SpinManager(this);
+    private final SpinManager spinManager = new SpinManager(this);
 
     /**
      * Do not return null here, the calling code does not perform a null check!
      */
     public SpinManager getSpinManager() {
-        return spinManager;
+        return this.spinManager;
     }
 
     @Override
@@ -33,8 +34,8 @@ public abstract class WorldProviderSpaceStation extends WorldProviderSpace {
     }
 
     /**
-     * Called only once from WorldProvider.registerWorld()
-     * so this provides a handy initialisation method
+     * Called only once from WorldProvider.registerWorld() so this provides a handy
+     * initialisation method
      */
     @Override
     public void registerWorldChunkManager() {
@@ -55,7 +56,7 @@ public abstract class WorldProviderSpaceStation extends WorldProviderSpace {
     @Override
     public void updateWeather() {
         super.updateWeather();
-        spinManager.updateSpin();
+        this.spinManager.updateSpin();
     }
 
     @SideOnly(Side.CLIENT)

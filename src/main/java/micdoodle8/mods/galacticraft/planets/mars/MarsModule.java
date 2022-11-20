@@ -1,7 +1,11 @@
 package micdoodle8.mods.galacticraft.planets.mars;
 
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -32,14 +36,33 @@ import micdoodle8.mods.galacticraft.planets.mars.blocks.BlockSludge;
 import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
 import micdoodle8.mods.galacticraft.planets.mars.dimension.TeleportTypeMars;
 import micdoodle8.mods.galacticraft.planets.mars.dimension.WorldProviderMars;
-import micdoodle8.mods.galacticraft.planets.mars.entities.*;
-import micdoodle8.mods.galacticraft.planets.mars.inventory.*;
+import micdoodle8.mods.galacticraft.planets.mars.entities.EntityCargoRocket;
+import micdoodle8.mods.galacticraft.planets.mars.entities.EntityCreeperBoss;
+import micdoodle8.mods.galacticraft.planets.mars.entities.EntityLandingBalloons;
+import micdoodle8.mods.galacticraft.planets.mars.entities.EntityProjectileTNT;
+import micdoodle8.mods.galacticraft.planets.mars.entities.EntitySlimeling;
+import micdoodle8.mods.galacticraft.planets.mars.entities.EntitySludgeling;
+import micdoodle8.mods.galacticraft.planets.mars.entities.EntityTier2Rocket;
+import micdoodle8.mods.galacticraft.planets.mars.inventory.ContainerElectrolyzer;
+import micdoodle8.mods.galacticraft.planets.mars.inventory.ContainerGasLiquefier;
+import micdoodle8.mods.galacticraft.planets.mars.inventory.ContainerLaunchController;
+import micdoodle8.mods.galacticraft.planets.mars.inventory.ContainerMethaneSynthesizer;
+import micdoodle8.mods.galacticraft.planets.mars.inventory.ContainerTerraformer;
 import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
 import micdoodle8.mods.galacticraft.planets.mars.network.PacketSimpleMars;
 import micdoodle8.mods.galacticraft.planets.mars.recipe.RecipeManagerMars;
 import micdoodle8.mods.galacticraft.planets.mars.schematic.SchematicCargoRocket;
 import micdoodle8.mods.galacticraft.planets.mars.schematic.SchematicTier2Rocket;
-import micdoodle8.mods.galacticraft.planets.mars.tile.*;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityCryogenicChamber;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityDungeonSpawnerMars;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityElectrolyzer;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityGasLiquefier;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityHydrogenPipe;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityLaunchController;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityMethaneSynthesizer;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntitySlimelingEgg;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityTerraformer;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityTreasureChestMars;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -173,17 +196,17 @@ public class MarsModule implements IPlanetsModule {
 
     private void registerMicroBlocks() {
         try {
-            Class clazz = Class.forName("codechicken.microblock.MicroMaterialRegistry");
+            final Class clazz = Class.forName("codechicken.microblock.MicroMaterialRegistry");
             if (clazz != null) {
                 Method registerMethod = null;
-                Method[] methodz = clazz.getMethods();
-                for (Method m : methodz) {
+                final Method[] methodz = clazz.getMethods();
+                for (final Method m : methodz) {
                     if (m.getName().equals("registerMaterial")) {
                         registerMethod = m;
                         break;
                     }
                 }
-                Class clazzbm = Class.forName("codechicken.microblock.BlockMicroMaterial");
+                final Class clazzbm = Class.forName("codechicken.microblock.BlockMicroMaterial");
                 registerMethod.invoke(
                         null,
                         clazzbm.getConstructor(Block.class, int.class).newInstance(MarsBlocks.marsBlock, 4),
@@ -209,7 +232,7 @@ public class MarsModule implements IPlanetsModule {
                         clazzbm.getConstructor(Block.class, int.class).newInstance(MarsBlocks.marsBlock, 9),
                         "tile.mars.marsstone");
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
         }
     }
 
@@ -246,7 +269,8 @@ public class MarsModule implements IPlanetsModule {
 
     public void registerOtherEntities() {
         MarsModule.registerGalacticraftNonMobEntity(EntityTier2Rocket.class, "SpaceshipT2", 150, 1, false);
-        //        MarsModule.registerGalacticraftNonMobEntity(EntityTerraformBubble.class, "TerraformBubble", 150, 20,
+        // MarsModule.registerGalacticraftNonMobEntity(EntityTerraformBubble.class,
+        // "TerraformBubble", 150, 20,
         // false);
         MarsModule.registerGalacticraftNonMobEntity(EntityProjectileTNT.class, "ProjectileTNT", 150, 1, true);
         MarsModule.registerGalacticraftNonMobEntity(EntityLandingBalloons.class, "LandingBalloons", 150, 5, true);
@@ -255,7 +279,7 @@ public class MarsModule implements IPlanetsModule {
 
     public void registerGalacticraftCreature(Class<? extends Entity> var0, String var1, int back, int fore) {
         MarsModule.registerGalacticraftNonMobEntity(var0, var1, 80, 3, true);
-        int nextEggID = GCCoreUtil.getNextValidEggID();
+        final int nextEggID = GCCoreUtil.getNextValidEggID();
         if (nextEggID < 65536) {
             EntityList.IDtoClassMapping.put(nextEggID, var0);
             VersionUtil.putClassToIDMapping(var0, nextEggID);
@@ -289,7 +313,7 @@ public class MarsModule implements IPlanetsModule {
     @Override
     public Object getGuiElement(Side side, int ID, EntityPlayer player, World world, int x, int y, int z) {
         if (side == Side.SERVER) {
-            TileEntity tile = world.getTileEntity(x, y, z);
+            final TileEntity tile = world.getTileEntity(x, y, z);
 
             if (ID == GuiIdsPlanets.MACHINE_MARS) {
                 if (tile instanceof TileEntityTerraformer) {
