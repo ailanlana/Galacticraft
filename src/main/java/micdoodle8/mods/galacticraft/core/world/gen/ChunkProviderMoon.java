@@ -3,6 +3,7 @@ package micdoodle8.mods.galacticraft.core.world.gen;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.prefab.world.gen.MapGenBaseMeta;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 import micdoodle8.mods.galacticraft.core.perlin.NoiseModule;
@@ -14,6 +15,7 @@ import micdoodle8.mods.galacticraft.core.world.gen.dungeon.RoomChestsMoon;
 import micdoodle8.mods.galacticraft.core.world.gen.dungeon.RoomEmptyMoon;
 import micdoodle8.mods.galacticraft.core.world.gen.dungeon.RoomSpawnerMoon;
 import micdoodle8.mods.galacticraft.core.world.gen.dungeon.RoomTreasureMoon;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.entity.EnumCreatureType;
@@ -27,6 +29,7 @@ import net.minecraft.world.gen.ChunkProviderGenerate;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class ChunkProviderMoon extends ChunkProviderGenerate {
+
     final Block topBlockID = GCBlocks.blockMoon;
     final byte topBlockMeta = 5;
     final Block fillBlockID = GCBlocks.blockMoon;
@@ -64,7 +67,7 @@ public class ChunkProviderMoon extends ChunkProviderGenerate {
         this.dungeonGenerator.treasureRooms.add(new RoomTreasureMoon(null, 0, 0, 0, ForgeDirection.UNKNOWN));
     }
 
-    private BiomeGenBase[] biomesForGeneration = {BiomeGenBaseMoon.moonFlat};
+    private BiomeGenBase[] biomesForGeneration = { BiomeGenBaseMoon.moonFlat };
 
     private final MapGenBaseMeta caveGenerator = new MapGenCavesMoon();
 
@@ -120,13 +123,12 @@ public class ChunkProviderMoon extends ChunkProviderGenerate {
     }
 
     @Override
-    public void replaceBlocksForBiome(
-            int par1, int par2, Block[] arrayOfIDs, byte[] arrayOfMeta, BiomeGenBase[] par4ArrayOfBiomeGenBase) {
+    public void replaceBlocksForBiome(int par1, int par2, Block[] arrayOfIDs, byte[] arrayOfMeta,
+            BiomeGenBase[] par4ArrayOfBiomeGenBase) {
         final int var5 = 20;
         for (int var8 = 0; var8 < 16; ++var8) {
             for (int var9 = 0; var9 < 16; ++var9) {
-                final int var12 = (int) (this.noiseGen4.getNoise(var8 + par1 * 16, var9 * par2 * 16) / 3.0D
-                        + 3.0D
+                final int var12 = (int) (this.noiseGen4.getNoise(var8 + par1 * 16, var9 * par2 * 16) / 3.0D + 3.0D
                         + this.rand.nextDouble() * 0.25D);
                 int var13 = -1;
                 Block var14 = this.topBlockID;
@@ -188,14 +190,21 @@ public class ChunkProviderMoon extends ChunkProviderGenerate {
         final byte[] meta = new byte[16 * 16 * 256];
         Arrays.fill(ids, Blocks.air);
         this.generateTerrain(par1, par2, ids, meta);
-        this.biomesForGeneration = this.worldObj
-                .getWorldChunkManager()
+        this.biomesForGeneration = this.worldObj.getWorldChunkManager()
                 .loadBlockGeneratorData(this.biomesForGeneration, par1 * 16, par2 * 16, 16, 16);
         this.createCraters(par1, par2, ids, meta);
         this.replaceBlocksForBiome(par1, par2, ids, meta, this.biomesForGeneration);
         this.caveGenerator.generate(this, this.worldObj, par1, par2, ids, meta);
         this.dungeonGenerator.generateUsingArrays(
-                this.worldObj, this.worldObj.getSeed(), par1 * 16, 25, par2 * 16, par1, par2, ids, meta);
+                this.worldObj,
+                this.worldObj.getSeed(),
+                par1 * 16,
+                25,
+                par2 * 16,
+                par1,
+                par2,
+                ids,
+                meta);
 
         final Chunk var4 = new Chunk(this.worldObj, ids, meta, par1, par2);
 
@@ -214,17 +223,21 @@ public class ChunkProviderMoon extends ChunkProviderGenerate {
             for (int cz = chunkZ - 2; cz <= chunkZ + 2; cz++) {
                 for (int x = 0; x < ChunkProviderMoon.CHUNK_SIZE_X; x++) {
                     for (int z = 0; z < ChunkProviderMoon.CHUNK_SIZE_Z; z++) {
-                        if (Math.abs(this.randFromPoint(cx * 16 + x, (cz * 16 + z) * 1000))
-                                < this.noiseGen4.getNoise(
-                                                x * ChunkProviderMoon.CHUNK_SIZE_X + x,
-                                                cz * ChunkProviderMoon.CHUNK_SIZE_Z + z)
-                                        / ChunkProviderMoon.CRATER_PROB) {
+                        if (Math.abs(this.randFromPoint(cx * 16 + x, (cz * 16 + z) * 1000)) < this.noiseGen4.getNoise(
+                                x * ChunkProviderMoon.CHUNK_SIZE_X + x,
+                                cz * ChunkProviderMoon.CHUNK_SIZE_Z + z) / ChunkProviderMoon.CRATER_PROB) {
                             final Random random = new Random(cx * 16 + x + (cz * 16 + z) * 5000);
-                            final EnumCraterSize cSize =
-                                    EnumCraterSize.sizeArray[random.nextInt(EnumCraterSize.sizeArray.length)];
+                            final EnumCraterSize cSize = EnumCraterSize.sizeArray[random
+                                    .nextInt(EnumCraterSize.sizeArray.length)];
                             final int size = random.nextInt(cSize.MAX_SIZE - cSize.MIN_SIZE) + cSize.MIN_SIZE;
                             this.makeCrater(
-                                    cx * 16 + x, cz * 16 + z, chunkX * 16, chunkZ * 16, size, chunkArray, metaArray);
+                                    cx * 16 + x,
+                                    cz * 16 + z,
+                                    chunkX * 16,
+                                    chunkZ * 16,
+                                    size,
+                                    chunkArray,
+                                    metaArray);
                         }
                     }
                 }
@@ -232,8 +245,8 @@ public class ChunkProviderMoon extends ChunkProviderGenerate {
         }
     }
 
-    public void makeCrater(
-            int craterX, int craterZ, int chunkX, int chunkZ, int size, Block[] chunkArray, byte[] metaArray) {
+    public void makeCrater(int craterX, int craterZ, int chunkX, int chunkZ, int size, Block[] chunkArray,
+            byte[] metaArray) {
         for (int x = 0; x < ChunkProviderMoon.CHUNK_SIZE_X; x++) {
             for (int z = 0; z < ChunkProviderMoon.CHUNK_SIZE_Z; z++) {
                 double xDev = craterX - (chunkX + x);
@@ -326,7 +339,7 @@ public class ChunkProviderMoon extends ChunkProviderGenerate {
         return "MoonLevelSource";
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public List getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int i, int j, int k) {
         if (par1EnumCreatureType == EnumCreatureType.monster) {

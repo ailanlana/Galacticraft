@@ -2,10 +2,12 @@ package micdoodle8.mods.galacticraft.core.entities;
 
 import java.util.Iterator;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -21,6 +23,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public class EntityMeteor extends Entity {
+
     public EntityLiving shootingEntity;
     public int size;
 
@@ -55,8 +58,8 @@ public class EntityMeteor extends Entity {
         }
 
         Vec3 var15 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
-        Vec3 var2 =
-                Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+        Vec3 var2 = Vec3
+                .createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
         MovingObjectPosition var3 = this.worldObj.func_147447_a(var15, var2, true, true, false);
         var15 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
         var2 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
@@ -68,9 +71,7 @@ public class EntityMeteor extends Entity {
         Entity var4 = null;
         final List<?> var5 = this.worldObj.getEntitiesWithinAABBExcludingEntity(
                 this,
-                this.boundingBox
-                        .addCoord(this.motionX, this.motionY, this.motionZ)
-                        .expand(2.0D, 2.0D, 2.0D));
+                this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(2.0D, 2.0D, 2.0D));
         double var6 = 0.0D;
         final Iterator<?> var8 = var5.iterator();
 
@@ -137,8 +138,8 @@ public class EntityMeteor extends Entity {
     protected void onImpact(MovingObjectPosition movingObjPos) {
         if (!this.worldObj.isRemote) {
             if (movingObjPos != null) {
-                final Block b =
-                        this.worldObj.getBlock(movingObjPos.blockX, movingObjPos.blockY + 1, movingObjPos.blockZ);
+                final Block b = this.worldObj
+                        .getBlock(movingObjPos.blockX, movingObjPos.blockY + 1, movingObjPos.blockZ);
                 if (b != null
                         && b.isAir(this.worldObj, movingObjPos.blockX, movingObjPos.blockY + 1, movingObjPos.blockZ)) {
                     this.worldObj.setBlock(
@@ -164,8 +165,8 @@ public class EntityMeteor extends Entity {
     }
 
     @Override
-    public boolean func_145774_a(
-            Explosion explosionIn, World worldIn, int x, int y, int z, Block blockIn, float unused) {
+    public boolean func_145774_a(Explosion explosionIn, World worldIn, int x, int y, int z, Block blockIn,
+            float unused) {
         return ConfigManagerCore.meteorBlockDamageEnabled;
     }
 

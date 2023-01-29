@@ -1,12 +1,15 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
 import java.util.ArrayList;
+
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityLandingPadSingle extends TileEntity {
+
     @Override
     public void updateEntity() {
         if (!this.worldObj.isRemote) {
@@ -31,8 +34,8 @@ public class TileEntityLandingPadSingle extends TileEntity {
                 }
 
                 this.worldObj.setBlock(this.xCoord, this.yCoord, this.zCoord, GCBlocks.landingPadFull, 0, 3);
-                final TileEntityLandingPad tilePadFull =
-                        (TileEntityLandingPad) this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord);
+                final TileEntityLandingPad tilePadFull = (TileEntityLandingPad) this.worldObj
+                        .getTileEntity(this.xCoord, this.yCoord, this.zCoord);
 
                 if (tilePadFull != null) {
                     tilePadFull.onCreate(new BlockVec3(this.xCoord, this.yCoord, this.zCoord));

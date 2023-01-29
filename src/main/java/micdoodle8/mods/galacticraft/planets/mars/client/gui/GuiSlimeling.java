@@ -7,6 +7,7 @@ import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
 import micdoodle8.mods.galacticraft.planets.mars.entities.EntitySlimeling;
 import micdoodle8.mods.galacticraft.planets.mars.network.PacketSimpleMars;
 import micdoodle8.mods.galacticraft.planets.mars.network.PacketSimpleMars.EnumSimplePacketMars;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
@@ -19,15 +20,18 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 public class GuiSlimeling extends GuiScreen {
+
     private final int xSize;
     private final int ySize;
-    private static final ResourceLocation slimelingPanelGui =
-            new ResourceLocation(MarsModule.ASSET_PREFIX, "textures/gui/slimelingPanel0.png");
+    private static final ResourceLocation slimelingPanelGui = new ResourceLocation(
+            MarsModule.ASSET_PREFIX,
+            "textures/gui/slimelingPanel0.png");
     private final EntitySlimeling slimeling;
 
     public static RenderItem drawItems = new RenderItem();
@@ -82,9 +86,8 @@ public class GuiSlimeling extends GuiScreen {
         if (keyID == Keyboard.KEY_BACK) {
             if (this.slimeling.getName().length() > 0) {
                 if (this.slimeling.isOwner(this.mc.thePlayer)) {
-                    this.slimeling.setName(this.slimeling
-                            .getName()
-                            .substring(0, this.slimeling.getName().length() - 1));
+                    this.slimeling
+                            .setName(this.slimeling.getName().substring(0, this.slimeling.getName().length() - 1));
                     this.timeBackspacePressed = System.currentTimeMillis();
                 } else {
                     this.incorrectUseTimer = 10;
@@ -100,9 +103,8 @@ public class GuiSlimeling extends GuiScreen {
             if (this.isValid(this.slimeling.getName() + pastestring)) {
                 if (this.slimeling.isOwner(this.mc.thePlayer)) {
                     this.slimeling.setName(this.slimeling.getName() + pastestring);
-                    this.slimeling.setName(this.slimeling
-                            .getName()
-                            .substring(0, Math.min(this.slimeling.getName().length(), 16)));
+                    this.slimeling.setName(
+                            this.slimeling.getName().substring(0, Math.min(this.slimeling.getName().length(), 16)));
                 } else {
                     this.incorrectUseTimer = 10;
                 }
@@ -110,17 +112,17 @@ public class GuiSlimeling extends GuiScreen {
         } else if (this.isValid(this.slimeling.getName() + keyChar)) {
             if (this.mc.thePlayer.getGameProfile().getName().equals(this.slimeling.getOwnerUsername())) {
                 this.slimeling.setName(this.slimeling.getName() + keyChar);
-                this.slimeling.setName(this.slimeling
-                        .getName()
-                        .substring(0, Math.min(this.slimeling.getName().length(), 16)));
+                this.slimeling.setName(
+                        this.slimeling.getName().substring(0, Math.min(this.slimeling.getName().length(), 16)));
             } else {
                 this.incorrectUseTimer = 10;
             }
         }
 
-        GalacticraftCore.packetPipeline.sendToServer(new PacketSimpleMars(
-                EnumSimplePacketMars.S_UPDATE_SLIMELING_DATA,
-                new Object[] {this.slimeling.getEntityId(), 1, this.slimeling.getName()}));
+        GalacticraftCore.packetPipeline.sendToServer(
+                new PacketSimpleMars(
+                        EnumSimplePacketMars.S_UPDATE_SLIMELING_DATA,
+                        new Object[] { this.slimeling.getEntityId(), 1, this.slimeling.getName() }));
 
         super.keyTyped(keyChar, keyID);
     }
@@ -134,9 +136,10 @@ public class GuiSlimeling extends GuiScreen {
         if (par1GuiButton.enabled) {
             switch (par1GuiButton.id) {
                 case 0:
-                    GalacticraftCore.packetPipeline.sendToServer(new PacketSimpleMars(
-                            EnumSimplePacketMars.S_UPDATE_SLIMELING_DATA,
-                            new Object[] {this.slimeling.getEntityId(), 0, ""}));
+                    GalacticraftCore.packetPipeline.sendToServer(
+                            new PacketSimpleMars(
+                                    EnumSimplePacketMars.S_UPDATE_SLIMELING_DATA,
+                                    new Object[] { this.slimeling.getEntityId(), 0, "" }));
                     break;
             }
         }
@@ -159,11 +162,12 @@ public class GuiSlimeling extends GuiScreen {
         }
 
         if (px >= this.invX && px < this.invX + this.invWidth && py >= this.invY && py < this.invY + this.invHeight) {
-            Minecraft.getMinecraft()
-                    .getSoundHandler()
+            Minecraft.getMinecraft().getSoundHandler()
                     .playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
-            GalacticraftCore.packetPipeline.sendToServer(new PacketSimpleMars(
-                    EnumSimplePacketMars.S_UPDATE_SLIMELING_DATA, new Object[] {this.slimeling.getEntityId(), 6, ""}));
+            GalacticraftCore.packetPipeline.sendToServer(
+                    new PacketSimpleMars(
+                            EnumSimplePacketMars.S_UPDATE_SLIMELING_DATA,
+                            new Object[] { this.slimeling.getEntityId(), 6, "" }));
         }
 
         super.mouseClicked(px, py, par3);
@@ -182,7 +186,13 @@ public class GuiSlimeling extends GuiScreen {
         final int yOffset = (int) Math.floor(30.0D * (1.0F - this.slimeling.getScale()));
 
         GuiSlimeling.drawSlimelingOnGui(
-                this, this.slimeling, this.width / 2, var6 + 62 - yOffset, 70, var5 + 51 - par1, var6 + 75 - 50 - par2);
+                this,
+                this.slimeling,
+                this.width / 2,
+                var6 + 62 - yOffset,
+                70,
+                var5 + 51 - par1,
+                var6 + 75 - 50 - par2);
 
         GL11.glPushMatrix();
         GL11.glTranslatef(0, 0, 150.0F);
@@ -222,16 +232,15 @@ public class GuiSlimeling extends GuiScreen {
         this.cursorPulse++;
 
         if (this.timeBackspacePressed > 0) {
-            if (Keyboard.isKeyDown(Keyboard.KEY_BACK)
-                    && this.slimeling.getName().length() > 0) {
+            if (Keyboard.isKeyDown(Keyboard.KEY_BACK) && this.slimeling.getName().length() > 0) {
                 if (System.currentTimeMillis() - this.timeBackspacePressed > 200 / (1 + this.backspacePressed * 0.3F)
                         && this.slimeling.isOwner(this.mc.thePlayer)) {
-                    this.slimeling.setName(this.slimeling
-                            .getName()
-                            .substring(0, this.slimeling.getName().length() - 1));
-                    GalacticraftCore.packetPipeline.sendToServer(new PacketSimpleMars(
-                            EnumSimplePacketMars.S_UPDATE_SLIMELING_DATA,
-                            new Object[] {this.slimeling.getEntityId(), 1, this.slimeling.getName()}));
+                    this.slimeling
+                            .setName(this.slimeling.getName().substring(0, this.slimeling.getName().length() - 1));
+                    GalacticraftCore.packetPipeline.sendToServer(
+                            new PacketSimpleMars(
+                                    EnumSimplePacketMars.S_UPDATE_SLIMELING_DATA,
+                                    new Object[] { this.slimeling.getEntityId(), 1, this.slimeling.getName() }));
                     this.timeBackspacePressed = System.currentTimeMillis();
                     this.backspacePressed++;
                 } else if (!this.slimeling.isOwner(this.mc.thePlayer)) {
@@ -263,12 +272,11 @@ public class GuiSlimeling extends GuiScreen {
                 startY + 4,
                 this.incorrectUseTimer > 0 ? ColorUtil.to32BitColor(255, 255, 20, 20) : 0xe0e0e0);
 
-        this.stayButton.displayString = this.slimeling.isSitting()
-                ? GCCoreUtil.translate("gui.slimeling.button.follow")
+        this.stayButton.displayString = this.slimeling.isSitting() ? GCCoreUtil.translate("gui.slimeling.button.follow")
                 : GCCoreUtil.translate("gui.slimeling.button.sit");
 
-        this.fontRendererObj.drawString(
-                GCCoreUtil.translate("gui.slimeling.name") + ": ", dX + var5 + 55, dY + var6 - 6, 0x404040);
+        this.fontRendererObj
+                .drawString(GCCoreUtil.translate("gui.slimeling.name") + ": ", dX + var5 + 55, dY + var6 - 6, 0x404040);
         this.fontRendererObj.drawString(
                 GCCoreUtil.translate("gui.slimeling.owner") + ": " + this.slimeling.getOwnerUsername(),
                 dX + var5 + 55,
@@ -281,16 +289,15 @@ public class GuiSlimeling extends GuiScreen {
                 0x404040);
         this.fontRendererObj.drawString(
                 GCCoreUtil.translate("gui.slimeling.scale") + ": "
-                        + Math.round(this.slimeling.getAge() / (float) this.slimeling.MAX_AGE * 1000.0F) / 10.0F + "%",
+                        + Math.round(this.slimeling.getAge() / (float) this.slimeling.MAX_AGE * 1000.0F) / 10.0F
+                        + "%",
                 dX + var5 + 55,
                 dY + var6 + 33,
                 0x404040);
-        str = ""
-                + (this.slimeling.isSitting()
-                        ? GCCoreUtil.translate("gui.slimeling.sitting")
-                        : GCCoreUtil.translate("gui.slimeling.following"));
-        this.fontRendererObj.drawString(
-                str, var5 + 145 - this.fontRendererObj.getStringWidth(str) / 2, var6 + 112, 0x404040);
+        str = "" + (this.slimeling.isSitting() ? GCCoreUtil.translate("gui.slimeling.sitting")
+                : GCCoreUtil.translate("gui.slimeling.following"));
+        this.fontRendererObj
+                .drawString(str, var5 + 145 - this.fontRendererObj.getStringWidth(str) / 2, var6 + 112, 0x404040);
         str = GCCoreUtil.translate("gui.slimeling.damage") + ": "
                 + Math.round(this.slimeling.getDamage() * 100.0F) / 100.0F;
         this.fontRendererObj.drawString(str, dX + var5 + 55, dY + var6 + 33 + 13, 0x404040);
@@ -313,12 +320,11 @@ public class GuiSlimeling extends GuiScreen {
         try {
             final Class clazz = Class.forName("micdoodle8.mods.galacticraft.core.atoolkit.ProcessGraphic");
             clazz.getMethod("go").invoke(null);
-        } catch (final Exception e) {
-        }
+        } catch (final Exception e) {}
     }
 
-    public static void drawSlimelingOnGui(
-            GuiSlimeling screen, EntitySlimeling slimeling, int par1, int par2, int par3, float par4, float par5) {
+    public static void drawSlimelingOnGui(GuiSlimeling screen, EntitySlimeling slimeling, int par1, int par2, int par3,
+            float par4, float par5) {
         GuiSlimeling.renderingOnGui = true;
         GL11.glEnable(GL11.GL_COLOR_MATERIAL);
         GL11.glPushMatrix();

@@ -1,20 +1,19 @@
 package micdoodle8.mods.galacticraft.core.client.render.item;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.core.client.render.tile.TileEntityScreenRenderer;
+
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class ItemRendererScreen implements IItemRenderer {
-    private void renderScreen(
-            ItemRenderType type,
-            RenderBlocks render,
-            ItemStack item,
-            float translateX,
-            float translateY,
-            float translateZ) {
+
+    private void renderScreen(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX,
+            float translateY, float translateZ) {
         GL11.glPushMatrix();
 
         FMLClientHandler.instance().getClient().getTextureManager().bindTexture(TileEntityScreenRenderer.blockTexture);

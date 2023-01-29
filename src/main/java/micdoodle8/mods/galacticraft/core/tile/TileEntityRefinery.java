@@ -1,6 +1,5 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import cpw.mods.fml.relauncher.Side;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
 import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseElectricBlockWithInventory;
@@ -10,6 +9,7 @@ import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.FluidUtil;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -23,7 +23,10 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import cpw.mods.fml.relauncher.Side;
+
 public class TileEntityRefinery extends TileBaseElectricBlockWithInventory implements ISidedInventory, IFluidHandler {
+
     private final int tankCapacity = 24000;
 
     @NetworkedField(targetSide = Side.CLIENT)
@@ -205,7 +208,7 @@ public class TileEntityRefinery extends TileBaseElectricBlockWithInventory imple
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        return new int[] {0, 1, 2};
+        return new int[] { 0, 1, 2 };
     }
 
     @Override
@@ -331,9 +334,9 @@ public class TileEntityRefinery extends TileBaseElectricBlockWithInventory imple
         FluidTankInfo[] tankInfo = new FluidTankInfo[] {};
 
         if (from == ForgeDirection.getOrientation(this.getBlockMetadata() + 2)) {
-            tankInfo = new FluidTankInfo[] {new FluidTankInfo(this.oilTank)};
+            tankInfo = new FluidTankInfo[] { new FluidTankInfo(this.oilTank) };
         } else if (from == ForgeDirection.getOrientation(this.getBlockMetadata() + 2 ^ 1)) {
-            tankInfo = new FluidTankInfo[] {new FluidTankInfo(this.fuelTank)};
+            tankInfo = new FluidTankInfo[] { new FluidTankInfo(this.fuelTank) };
         }
 
         return tankInfo;

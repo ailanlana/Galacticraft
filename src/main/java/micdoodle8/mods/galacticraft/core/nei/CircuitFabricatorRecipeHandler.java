@@ -1,24 +1,30 @@
 package micdoodle8.mods.galacticraft.core.nei;
 
-import codechicken.lib.gui.GuiDraw;
-import codechicken.nei.NEIServerUtils;
-import codechicken.nei.PositionedStack;
-import codechicken.nei.recipe.TemplateRecipeHandler;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
+import codechicken.lib.gui.GuiDraw;
+import codechicken.nei.NEIServerUtils;
+import codechicken.nei.PositionedStack;
+import codechicken.nei.recipe.TemplateRecipeHandler;
+
 public class CircuitFabricatorRecipeHandler extends TemplateRecipeHandler {
-    private static final ResourceLocation circuitFabricatorTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/circuitFabricator.png");
+
+    private static final ResourceLocation circuitFabricatorTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/gui/circuitFabricator.png");
     int ticksPassed;
 
     public String getRecipeId() {
@@ -33,12 +39,11 @@ public class CircuitFabricatorRecipeHandler extends TemplateRecipeHandler {
     public Set<Entry<ArrayList<PositionedStack>, PositionedStack>> getRecipes() {
         final HashMap<ArrayList<PositionedStack>, PositionedStack> recipes = new HashMap<>();
 
-        for (final Entry<HashMap<Integer, PositionedStack>, PositionedStack> stack :
-                NEIGalacticraftConfig.getCircuitFabricatorRecipes()) {
+        for (final Entry<HashMap<Integer, PositionedStack>, PositionedStack> stack : NEIGalacticraftConfig
+                .getCircuitFabricatorRecipes()) {
             final ArrayList<PositionedStack> inputStacks = new ArrayList<>();
 
-            for (final Map.Entry<Integer, PositionedStack> input :
-                    stack.getKey().entrySet()) {
+            for (final Map.Entry<Integer, PositionedStack> input : stack.getKey().entrySet()) {
                 inputStacks.add(input.getValue());
             }
 
@@ -121,13 +126,14 @@ public class CircuitFabricatorRecipeHandler extends TemplateRecipeHandler {
     }
 
     public class CachedCircuitRecipe extends TemplateRecipeHandler.CachedRecipe {
+
         public ArrayList<PositionedStack> input;
         public PositionedStack output;
 
         @Override
         public ArrayList<PositionedStack> getIngredients() {
-            return (ArrayList<PositionedStack>)
-                    this.getCycledIngredients(CircuitFabricatorRecipeHandler.this.cycleticks / 20, this.input);
+            return (ArrayList<PositionedStack>) this
+                    .getCycledIngredients(CircuitFabricatorRecipeHandler.this.cycleticks / 20, this.input);
         }
 
         @Override

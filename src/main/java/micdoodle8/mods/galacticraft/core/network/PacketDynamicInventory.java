@@ -1,10 +1,10 @@
 package micdoodle8.mods.galacticraft.core.network;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 import java.io.IOException;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.inventory.IInventorySettable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -12,7 +12,11 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+
 public class PacketDynamicInventory implements IPacket {
+
     private int type;
     private Object[] data;
     private ItemStack[] stacks;
@@ -22,7 +26,7 @@ public class PacketDynamicInventory implements IPacket {
     public PacketDynamicInventory(Entity entity) {
         assert entity instanceof IInventory : "Entity does not implement " + IInventory.class.getSimpleName();
         this.type = 0;
-        this.data = new Object[] {entity.getEntityId()};
+        this.data = new Object[] { entity.getEntityId() };
         this.stacks = new ItemStack[((IInventory) entity).getSizeInventory()];
 
         for (int i = 0; i < this.stacks.length; i++) {
@@ -33,7 +37,7 @@ public class PacketDynamicInventory implements IPacket {
     public PacketDynamicInventory(TileEntity chest) {
         assert chest instanceof IInventory : "Tile does not implement " + IInventory.class.getSimpleName();
         this.type = 1;
-        this.data = new Object[] {chest.xCoord, chest.yCoord, chest.zCoord};
+        this.data = new Object[] { chest.xCoord, chest.yCoord, chest.zCoord };
         this.stacks = new ItemStack[((IInventory) chest).getSizeInventory()];
 
         for (int i = 0; i < this.stacks.length; i++) {
@@ -111,8 +115,8 @@ public class PacketDynamicInventory implements IPacket {
 
                 break;
             case 1:
-                final TileEntity tile = player.worldObj.getTileEntity(
-                        (Integer) this.data[0], (Integer) this.data[1], (Integer) this.data[2]);
+                final TileEntity tile = player.worldObj
+                        .getTileEntity((Integer) this.data[0], (Integer) this.data[1], (Integer) this.data[2]);
 
                 if (tile instanceof IInventorySettable) {
                     this.setInventoryStacks((IInventorySettable) tile);
@@ -134,8 +138,8 @@ public class PacketDynamicInventory implements IPacket {
 
                 break;
             case 1:
-                final TileEntity tile = player.worldObj.getTileEntity(
-                        (Integer) this.data[0], (Integer) this.data[1], (Integer) this.data[2]);
+                final TileEntity tile = player.worldObj
+                        .getTileEntity((Integer) this.data[0], (Integer) this.data[1], (Integer) this.data[2]);
 
                 if (tile instanceof IInventorySettable) {
                     GalacticraftCore.packetPipeline.sendTo(new PacketDynamicInventory(tile), (EntityPlayerMP) player);

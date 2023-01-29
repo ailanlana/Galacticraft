@@ -1,7 +1,9 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+
 import net.minecraft.block.BlockAir;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -10,6 +12,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockBrightAir extends BlockAir {
+
     public BlockBrightAir(String assetName) {
         this.setResistance(1000.0F);
         this.setHardness(0.0F);

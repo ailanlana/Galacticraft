@@ -1,8 +1,8 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import cpw.mods.fml.relauncher.Side;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import micdoodle8.mods.galacticraft.api.recipe.CircuitFabricatorRecipes;
 import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
 import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseElectricBlockWithInventory;
@@ -11,12 +11,16 @@ import micdoodle8.mods.galacticraft.core.items.ItemBasic;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import cpw.mods.fml.relauncher.Side;
+
 public class TileEntityCircuitFabricator extends TileBaseElectricBlockWithInventory implements ISidedInventory {
+
     public static final int PROCESS_TIME_REQUIRED = 300;
 
     @NetworkedField(targetSide = Side.CLIENT)
@@ -46,7 +50,12 @@ public class TileEntityCircuitFabricator extends TileBaseElectricBlockWithInvent
 
                     if (this.processTicks == TileEntityCircuitFabricator.PROCESS_TIME_REQUIRED) {
                         this.worldObj.playSoundEffect(
-                                this.xCoord, this.yCoord, this.zCoord, "random.anvil_land", 0.2F, 0.5F);
+                                this.xCoord,
+                                this.yCoord,
+                                this.zCoord,
+                                "random.anvil_land",
+                                0.2F,
+                                0.5F);
                         this.processTicks = 0;
                         this.compressItems();
                         updateInv = true;
@@ -71,8 +80,8 @@ public class TileEntityCircuitFabricator extends TileBaseElectricBlockWithInvent
     }
 
     public void updateInput() {
-        this.producingStack =
-                CircuitFabricatorRecipes.getOutputForInput(Arrays.copyOfRange(this.containingItems, 1, 6));
+        this.producingStack = CircuitFabricatorRecipes
+                .getOutputForInput(Arrays.copyOfRange(this.containingItems, 1, 6));
     }
 
     private boolean canCompress() {
@@ -86,8 +95,8 @@ public class TileEntityCircuitFabricator extends TileBaseElectricBlockWithInvent
         if (this.containingItems[6] != null && !this.containingItems[6].isItemEqual(itemstack)) {
             return false;
         }
-        final int result =
-                this.containingItems[6] == null ? 0 : this.containingItems[6].stackSize + itemstack.stackSize;
+        final int result = this.containingItems[6] == null ? 0
+                : this.containingItems[6].stackSize + itemstack.stackSize;
         return result <= this.getInventoryStackLimit() && result <= itemstack.getMaxStackSize();
     }
 
@@ -189,14 +198,13 @@ public class TileEntityCircuitFabricator extends TileBaseElectricBlockWithInvent
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
         if (side == 0) {
-            return new int[] {6};
+            return new int[] { 6 };
         }
 
         // Offer whichever silicon slot has less silicon
-        final boolean siliconFlag = this.containingItems[2] != null
-                && (this.containingItems[3] == null
-                        || this.containingItems[3].stackSize < this.containingItems[2].stackSize);
-        return siliconFlag ? new int[] {0, 1, 3, 4, 5} : new int[] {0, 1, 2, 4, 5};
+        final boolean siliconFlag = this.containingItems[2] != null && (this.containingItems[3] == null
+                || this.containingItems[3].stackSize < this.containingItems[2].stackSize);
+        return siliconFlag ? new int[] { 0, 1, 3, 4, 5 } : new int[] { 0, 1, 2, 4, 5 };
     }
 
     @Override

@@ -1,23 +1,28 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.nei;
 
-import codechicken.lib.gui.GuiDraw;
-import codechicken.nei.NEIServerUtils;
-import codechicken.nei.PositionedStack;
-import codechicken.nei.recipe.TemplateRecipeHandler;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
 import micdoodle8.mods.galacticraft.core.util.EnumColor;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
 import micdoodle8.mods.galacticraft.planets.asteroids.client.gui.GuiSchematicAstroMiner;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
+import codechicken.lib.gui.GuiDraw;
+import codechicken.nei.NEIServerUtils;
+import codechicken.nei.PositionedStack;
+import codechicken.nei.recipe.TemplateRecipeHandler;
+
 public class AstroMinerRecipeHandler extends TemplateRecipeHandler {
+
     private static final ResourceLocation rocketGuiTexture = GuiSchematicAstroMiner.schematicTexture;
     public static final int x = -1;
     public static final int y = 0;
@@ -84,6 +89,7 @@ public class AstroMinerRecipeHandler extends TemplateRecipeHandler {
     }
 
     public class CachedRocketRecipe extends TemplateRecipeHandler.CachedRecipe {
+
         public ArrayList<PositionedStack> input;
         public PositionedStack output;
 

@@ -6,9 +6,11 @@ import static net.minecraftforge.common.util.ForgeDirection.SOUTH;
 import static net.minecraftforge.common.util.ForgeDirection.WEST;
 
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -19,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockGlowstoneTorch extends Block implements ItemBlockDesc.IBlockShiftDesc {
+
     protected BlockGlowstoneTorch(String assetName) {
         super(Material.circuits);
         this.setTickRandomly(true);
@@ -28,8 +31,8 @@ public class BlockGlowstoneTorch extends Block implements ItemBlockDesc.IBlockSh
         this.setStepSound(Block.soundTypeWood);
     }
 
-    private static boolean isBlockSolidOnSide(
-            World world, int x, int y, int z, ForgeDirection direction, boolean nope) {
+    private static boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection direction,
+            boolean nope) {
         return world.getBlock(x, y, z).isSideSolid(world, x, y, z, direction);
     }
 
@@ -77,8 +80,8 @@ public class BlockGlowstoneTorch extends Block implements ItemBlockDesc.IBlockSh
     }
 
     @Override
-    public int onBlockPlaced(
-            World par1World, int par2, int par3, int par4, int par5, float par6, float par7, float par8, int par9) {
+    public int onBlockPlaced(World par1World, int par2, int par3, int par4, int par5, float par6, float par7,
+            float par8, int par9) {
         int j1 = par9;
 
         if (par5 == 1 && this.canPlaceTorchOn(par1World, par2, par3 - 1, par4)) {
@@ -179,8 +182,8 @@ public class BlockGlowstoneTorch extends Block implements ItemBlockDesc.IBlockSh
     }
 
     @Override
-    public MovingObjectPosition collisionRayTrace(
-            World par1World, int par2, int par3, int par4, Vec3 par5Vec3, Vec3 par6Vec3) {
+    public MovingObjectPosition collisionRayTrace(World par1World, int par2, int par3, int par4, Vec3 par5Vec3,
+            Vec3 par6Vec3) {
         final int l = par1World.getBlockMetadata(par2, par3, par4) & 7;
         float f = 0.15F;
 

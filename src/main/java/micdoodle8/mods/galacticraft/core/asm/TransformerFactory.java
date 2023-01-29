@@ -1,11 +1,14 @@
 package micdoodle8.mods.galacticraft.core.asm;
 
-import cpw.mods.fml.relauncher.FMLLaunchHandler;
-import cpw.mods.fml.relauncher.Side;
 import java.util.function.BiFunction;
+
 import org.objectweb.asm.ClassVisitor;
 
+import cpw.mods.fml.relauncher.FMLLaunchHandler;
+import cpw.mods.fml.relauncher.Side;
+
 class TransformerFactory {
+
     private final BiFunction<Integer, ClassVisitor, ClassVisitor> factory;
     private final Side activeSide;
     private final boolean expandFrames;
@@ -23,14 +26,13 @@ class TransformerFactory {
     }
 
     /**
-     * @param factory      the constructor of actual ClassVisitor. First argument is
-     *                     api level. Second argument is downstream ClassVisitor
-     * @param activeSide   the side this transformer will be active on. null for
-     *                     both side.
+     * @param factory      the constructor of actual ClassVisitor. First argument is api level. Second argument is
+     *                     downstream ClassVisitor
+     * @param activeSide   the side this transformer will be active on. null for both side.
      * @param expandFrames whether the frames need to be recalculated
      */
-    public TransformerFactory(
-            BiFunction<Integer, ClassVisitor, ClassVisitor> factory, Side activeSide, boolean expandFrames) {
+    public TransformerFactory(BiFunction<Integer, ClassVisitor, ClassVisitor> factory, Side activeSide,
+            boolean expandFrames) {
         this.factory = factory;
         this.activeSide = activeSide;
         this.expandFrames = expandFrames;

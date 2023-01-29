@@ -1,11 +1,10 @@
 package micdoodle8.mods.galacticraft.planets.mars.nei;
 
-import codechicken.nei.api.IHighlightHandler;
-import codechicken.nei.api.ItemInfo;
-import codechicken.nei.guihook.GuiContainerManager;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.planets.asteroids.blocks.AsteroidBlocks;
 import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -13,15 +12,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
+import codechicken.nei.api.IHighlightHandler;
+import codechicken.nei.api.ItemInfo;
+import codechicken.nei.guihook.GuiContainerManager;
+
 public class GCMarsNEIHighlightHandler implements IHighlightHandler {
+
     @Override
-    public List<String> handleTextData(
-            ItemStack stack,
-            World world,
-            EntityPlayer player,
-            MovingObjectPosition mop,
-            List<String> currenttip,
-            ItemInfo.Layout layout) {
+    public List<String> handleTextData(ItemStack stack, World world, EntityPlayer player, MovingObjectPosition mop,
+            List<String> currenttip, ItemInfo.Layout layout) {
         String name = null;
         try {
             final String s = GuiContainerManager.itemDisplayNameShort(stack);
@@ -32,8 +31,7 @@ public class GCMarsNEIHighlightHandler implements IHighlightHandler {
             if (name != null) {
                 currenttip.add(name);
             }
-        } catch (final Exception e) {
-        }
+        } catch (final Exception e) {}
 
         if (stack.getItem() == Items.redstone) {
             final int md = world.getBlockMetadata(mop.blockX, mop.blockY, mop.blockZ);

@@ -1,40 +1,42 @@
 package micdoodle8.mods.galacticraft.core.client.render.item;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.entities.EntityBuggy;
+
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
+
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class ItemRendererBuggy implements IItemRenderer {
-    private static final ResourceLocation buggyTextureBody =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/model/buggyMain.png");
-    private static final ResourceLocation buggyTextureWheel =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/model/buggyWheels.png");
-    private static final ResourceLocation buggyTextureStorage =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/model/buggyStorage.png");
+
+    private static final ResourceLocation buggyTextureBody = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/model/buggyMain.png");
+    private static final ResourceLocation buggyTextureWheel = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/model/buggyWheels.png");
+    private static final ResourceLocation buggyTextureStorage = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/model/buggyStorage.png");
 
     EntityBuggy spaceship = new EntityBuggy(FMLClientHandler.instance().getClient().theWorld);
 
-    private final IModelCustom modelBuggy =
-            AdvancedModelLoader.loadModel(new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "models/buggy.obj"));
-    private final IModelCustom modelBuggyWheelRight = AdvancedModelLoader.loadModel(
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "models/buggyWheelRight.obj"));
-    private final IModelCustom modelBuggyWheelLeft = AdvancedModelLoader.loadModel(
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "models/buggyWheelLeft.obj"));
+    private final IModelCustom modelBuggy = AdvancedModelLoader
+            .loadModel(new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "models/buggy.obj"));
+    private final IModelCustom modelBuggyWheelRight = AdvancedModelLoader
+            .loadModel(new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "models/buggyWheelRight.obj"));
+    private final IModelCustom modelBuggyWheelLeft = AdvancedModelLoader
+            .loadModel(new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "models/buggyWheelLeft.obj"));
 
-    private void renderPipeItem(
-            ItemRenderType type,
-            RenderBlocks render,
-            ItemStack item,
-            float translateX,
-            float translateY,
-            float translateZ) {
+    private void renderPipeItem(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX,
+            float translateY, float translateZ) {
         GL11.glPushMatrix();
         long var10 = this.spaceship.getEntityId() * 493286711L;
         var10 = var10 * var10 * 4392167121L + var10 * 98761L;

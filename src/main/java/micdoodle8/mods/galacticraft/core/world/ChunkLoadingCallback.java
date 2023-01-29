@@ -11,7 +11,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+
 import micdoodle8.mods.galacticraft.core.util.GCLog;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -27,6 +29,7 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.config.Configuration;
 
 public class ChunkLoadingCallback implements LoadingCallback {
+
     private static boolean loaded;
     private static final HashMap<String, HashMap<Integer, HashSet<ChunkCoordinates>>> chunkLoaderList = new HashMap<>();
     // private static HashMap<Integer, HashSet<IChunkLoader>> loadedChunks = new
@@ -155,13 +158,13 @@ public class ChunkLoadingCallback implements LoadingCallback {
                 try {
                     dataStream.writeInt(ChunkLoadingCallback.chunkLoaderList.size());
 
-                    for (final Entry<String, HashMap<Integer, HashSet<ChunkCoordinates>>> playerEntry :
-                            ChunkLoadingCallback.chunkLoaderList.entrySet()) {
+                    for (final Entry<String, HashMap<Integer, HashSet<ChunkCoordinates>>> playerEntry : ChunkLoadingCallback.chunkLoaderList
+                            .entrySet()) {
                         dataStream.writeUTF(playerEntry.getKey());
                         dataStream.writeInt(playerEntry.getValue().size());
 
-                        for (final Entry<Integer, HashSet<ChunkCoordinates>> dimensionEntry :
-                                playerEntry.getValue().entrySet()) {
+                        for (final Entry<Integer, HashSet<ChunkCoordinates>> dimensionEntry : playerEntry.getValue()
+                                .entrySet()) {
                             dataStream.writeInt(dimensionEntry.getKey());
                             dataStream.writeInt(dimensionEntry.getValue().size());
 
@@ -238,8 +241,11 @@ public class ChunkLoadingCallback implements LoadingCallback {
                             final int coordSetSize = dataStream.readInt();
 
                             for (int j = 0; j < coordSetSize; j++) {
-                                coords.add(new ChunkCoordinates(
-                                        dataStream.readInt(), dataStream.readInt(), dataStream.readInt()));
+                                coords.add(
+                                        new ChunkCoordinates(
+                                                dataStream.readInt(),
+                                                dataStream.readInt(),
+                                                dataStream.readInt()));
                             }
                         }
 
@@ -265,11 +271,11 @@ public class ChunkLoadingCallback implements LoadingCallback {
     }
 
     public static void onPlayerLogin(EntityPlayer player) {
-        for (final Entry<String, HashMap<Integer, HashSet<ChunkCoordinates>>> playerEntry :
-                ChunkLoadingCallback.chunkLoaderList.entrySet()) {
+        for (final Entry<String, HashMap<Integer, HashSet<ChunkCoordinates>>> playerEntry : ChunkLoadingCallback.chunkLoaderList
+                .entrySet()) {
             if (player.getGameProfile().getName().equals(playerEntry.getKey())) {
-                for (final Entry<Integer, HashSet<ChunkCoordinates>> dimensionEntry :
-                        playerEntry.getValue().entrySet()) {
+                for (final Entry<Integer, HashSet<ChunkCoordinates>> dimensionEntry : playerEntry.getValue()
+                        .entrySet()) {
                     final int dimID = dimensionEntry.getKey();
 
                     if (ChunkLoadingCallback.loadOnLogin) {

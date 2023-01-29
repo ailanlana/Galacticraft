@@ -1,12 +1,10 @@
 package micdoodle8.mods.galacticraft.core.client.render.entities;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.model.ModelEvolvedCreeper;
 import micdoodle8.mods.galacticraft.core.entities.EntityEvolvedCreeper;
 import micdoodle8.mods.galacticraft.core.items.ItemSensorGlasses;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelBase;
@@ -17,14 +15,22 @@ import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderEvolvedCreeper extends RenderCreeper {
-    private static final ResourceLocation creeperTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/model/creeper.png");
-    private static final ResourceLocation powerTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/model/power.png");
+
+    private static final ResourceLocation creeperTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/model/creeper.png");
+    private static final ResourceLocation powerTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/model/power.png");
 
     private final ModelBase creeperModel = new ModelEvolvedCreeper(0.2F);
 
@@ -111,8 +117,7 @@ public class RenderEvolvedCreeper extends RenderCreeper {
             helmetSlot = player.inventory.armorItemInSlot(3);
         }
 
-        if (helmetSlot != null
-                && helmetSlot.getItem() instanceof ItemSensorGlasses
+        if (helmetSlot != null && helmetSlot.getItem() instanceof ItemSensorGlasses
                 && minecraft.currentScreen == null) {
             if (par2 == 1) {
                 final float var4 = creeper.ticksExisted * 2 + par3;

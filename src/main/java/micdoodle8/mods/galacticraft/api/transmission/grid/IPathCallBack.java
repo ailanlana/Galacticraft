@@ -1,14 +1,15 @@
 package micdoodle8.mods.galacticraft.api.transmission.grid;
 
 import java.util.Set;
+
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 
 public interface IPathCallBack {
+
     /**
      * @param finder      - The Pathfinder object.
      * @param currentNode - The node being iterated through.
-     * @return A set of nodes connected to the currentNode. Essentially one should
-     * return a set of neighboring nodes.
+     * @return A set of nodes connected to the currentNode. Essentially one should return a set of neighboring nodes.
      */
     Set<BlockVec3> getConnectedNodes(Pathfinder finder, BlockVec3 currentNode);
 

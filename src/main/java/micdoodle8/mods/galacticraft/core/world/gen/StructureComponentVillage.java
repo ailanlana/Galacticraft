@@ -2,7 +2,9 @@ package micdoodle8.mods.galacticraft.core.world.gen;
 
 import java.util.List;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.core.entities.EntityAlienVillager;
+
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -10,6 +12,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
 public abstract class StructureComponentVillage extends StructureComponent {
+
     static {
         try {
             MapGenVillageMoon.initiateStructures();
@@ -38,13 +41,9 @@ public abstract class StructureComponentVillage extends StructureComponent {
         this.villagersSpawned = nbttagcompound.getInteger("VCount");
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    protected StructureComponent getNextComponentNN(
-            StructureComponentVillageStartPiece par1ComponentVillageStartPiece,
-            List par2List,
-            Random par3Random,
-            int par4,
-            int par5) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected StructureComponent getNextComponentNN(StructureComponentVillageStartPiece par1ComponentVillageStartPiece,
+            List par2List, Random par3Random, int par4, int par5) {
         switch (this.coordBaseMode) {
             case 0:
                 return StructureVillagePiecesMoon.getNextStructureComponent(
@@ -91,13 +90,9 @@ public abstract class StructureComponentVillage extends StructureComponent {
         }
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    protected StructureComponent getNextComponentPP(
-            StructureComponentVillageStartPiece par1ComponentVillageStartPiece,
-            List par2List,
-            Random par3Random,
-            int par4,
-            int par5) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected StructureComponent getNextComponentPP(StructureComponentVillageStartPiece par1ComponentVillageStartPiece,
+            List par2List, Random par3Random, int par4, int par5) {
         switch (this.coordBaseMode) {
             case 0:
                 return StructureVillagePiecesMoon.getNextStructureComponent(
@@ -152,7 +147,8 @@ public abstract class StructureComponentVillage extends StructureComponent {
             for (int var6 = this.boundingBox.minX; var6 <= this.boundingBox.maxX; ++var6) {
                 if (par2StructureBoundingBox.isVecInside(var6, 64, var5)) {
                     var3 += Math.max(
-                            par1World.getTopSolidOrLiquidBlock(var6, var5), par1World.provider.getAverageGroundLevel());
+                            par1World.getTopSolidOrLiquidBlock(var6, var5),
+                            par1World.provider.getAverageGroundLevel());
                     ++var4;
                 }
             }
@@ -169,8 +165,8 @@ public abstract class StructureComponentVillage extends StructureComponent {
         return par0StructureBoundingBox != null && par0StructureBoundingBox.minY > 10;
     }
 
-    protected void spawnVillagers(
-            World par1World, StructureBoundingBox par2StructureBoundingBox, int par3, int par4, int par5, int par6) {
+    protected void spawnVillagers(World par1World, StructureBoundingBox par2StructureBoundingBox, int par3, int par4,
+            int par5, int par6) {
         if (this.villagersSpawned < par6) {
             for (int var7 = this.villagersSpawned; var7 < par6; ++var7) {
                 int var8 = this.getXWithOffset(par3 + var7, par5);
@@ -205,13 +201,7 @@ public abstract class StructureComponentVillage extends StructureComponent {
     }
 
     @Override
-    protected void placeBlockAtCurrentPosition(
-            World par1World,
-            Block par2,
-            int par3,
-            int par4,
-            int par5,
-            int par6,
+    protected void placeBlockAtCurrentPosition(World par1World, Block par2, int par3, int par4, int par5, int par6,
             StructureBoundingBox par7StructureBoundingBox) {
         final Block var8 = this.getBiomeSpecificBlock(par2, par3);
         final int var9 = this.getBiomeSpecificBlockMetadata(par2, par3);
@@ -219,18 +209,8 @@ public abstract class StructureComponentVillage extends StructureComponent {
     }
 
     @Override
-    protected void fillWithBlocks(
-            World par1World,
-            StructureBoundingBox par2StructureBoundingBox,
-            int par3,
-            int par4,
-            int par5,
-            int par6,
-            int par7,
-            int par8,
-            Block par9,
-            Block par10,
-            boolean par11) {
+    protected void fillWithBlocks(World par1World, StructureBoundingBox par2StructureBoundingBox, int par3, int par4,
+            int par5, int par6, int par7, int par8, Block par9, Block par10, boolean par11) {
         final Block var12 = this.getBiomeSpecificBlock(par9, 0);
         final int var13 = this.getBiomeSpecificBlockMetadata(par9, 0);
         final Block var14 = this.getBiomeSpecificBlock(par10, 0);
@@ -252,13 +232,7 @@ public abstract class StructureComponentVillage extends StructureComponent {
     }
 
     @Override
-    protected void func_151554_b(
-            World par1World,
-            Block par2,
-            int par3,
-            int par4,
-            int par5,
-            int par6,
+    protected void func_151554_b(World par1World, Block par2, int par3, int par4, int par5, int par6,
             StructureBoundingBox par7StructureBoundingBox) {
         final Block var8 = this.getBiomeSpecificBlock(par2, par3);
         final int var9 = this.getBiomeSpecificBlockMetadata(par2, par3);

@@ -2,6 +2,7 @@ package micdoodle8.mods.galacticraft.core.client.gui.container;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
@@ -14,15 +15,19 @@ import micdoodle8.mods.galacticraft.core.oxygen.OxygenPressureProtocol;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenSealer;
 import micdoodle8.mods.galacticraft.core.util.EnumColor;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
 public class GuiOxygenSealer extends GuiContainerGC {
-    private static final ResourceLocation sealerTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/oxygen_sealer.png");
+
+    private static final ResourceLocation sealerTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/gui/oxygen_sealer.png");
 
     private final TileEntityOxygenSealer sealer;
     private GuiButton buttonDisable;
@@ -56,9 +61,10 @@ public class GuiOxygenSealer extends GuiContainerGC {
     protected void actionPerformed(GuiButton par1GuiButton) {
         switch (par1GuiButton.id) {
             case 0:
-                GalacticraftCore.packetPipeline.sendToServer(new PacketSimple(
-                        EnumSimplePacket.S_UPDATE_DISABLEABLE_BUTTON,
-                        new Object[] {this.sealer.xCoord, this.sealer.yCoord, this.sealer.zCoord, 0}));
+                GalacticraftCore.packetPipeline.sendToServer(
+                        new PacketSimple(
+                                EnumSimplePacket.S_UPDATE_DISABLEABLE_BUTTON,
+                                new Object[] { this.sealer.xCoord, this.sealer.yCoord, this.sealer.zCoord, 0 }));
                 break;
         }
     }
@@ -70,44 +76,50 @@ public class GuiOxygenSealer extends GuiContainerGC {
         final List<String> batterySlotDesc = new ArrayList<>();
         batterySlotDesc.add(GCCoreUtil.translate("gui.batterySlot.desc.0"));
         batterySlotDesc.add(GCCoreUtil.translate("gui.batterySlot.desc.1"));
-        this.infoRegions.add(new GuiElementInfoRegion(
-                (this.width - this.xSize) / 2 + 32,
-                (this.height - this.ySize) / 2 + 26,
-                18,
-                18,
-                batterySlotDesc,
-                this.width,
-                this.height,
-                this));
+        this.infoRegions.add(
+                new GuiElementInfoRegion(
+                        (this.width - this.xSize) / 2 + 32,
+                        (this.height - this.ySize) / 2 + 26,
+                        18,
+                        18,
+                        batterySlotDesc,
+                        this.width,
+                        this.height,
+                        this));
         final List<String> oxygenSlotDesc = new ArrayList<>();
         oxygenSlotDesc.add(GCCoreUtil.translate("gui.oxygenSlot.desc.0"));
         oxygenSlotDesc.add(GCCoreUtil.translate("gui.oxygenSlot.desc.1"));
-        this.infoRegions.add(new GuiElementInfoRegion(
-                (this.width - this.xSize) / 2 + 9,
-                (this.height - this.ySize) / 2 + 26,
-                18,
-                18,
-                oxygenSlotDesc,
-                this.width,
-                this.height,
-                this));
+        this.infoRegions.add(
+                new GuiElementInfoRegion(
+                        (this.width - this.xSize) / 2 + 9,
+                        (this.height - this.ySize) / 2 + 26,
+                        18,
+                        18,
+                        oxygenSlotDesc,
+                        this.width,
+                        this.height,
+                        this));
         final List<String> ambientThermalDesc = new ArrayList<>();
         ambientThermalDesc.add(GCCoreUtil.translate("gui.thermalSlot.desc.0"));
         ambientThermalDesc.add(GCCoreUtil.translate("gui.thermalSlot.desc.1"));
         ambientThermalDesc.add(GCCoreUtil.translate("gui.thermalSlot.desc.2"));
-        this.infoRegions.add(new GuiElementInfoRegion(
-                (this.width - this.xSize) / 2 + 55,
-                (this.height - this.ySize) / 2 + 26,
-                18,
-                18,
-                ambientThermalDesc,
-                this.width,
-                this.height,
-                this));
+        this.infoRegions.add(
+                new GuiElementInfoRegion(
+                        (this.width - this.xSize) / 2 + 55,
+                        (this.height - this.ySize) / 2 + 26,
+                        18,
+                        18,
+                        ambientThermalDesc,
+                        this.width,
+                        this.height,
+                        this));
         final List<String> oxygenDesc = new ArrayList<>();
         oxygenDesc.add(GCCoreUtil.translate("gui.oxygenStorage.desc.0"));
-        oxygenDesc.add(EnumColor.YELLOW + GCCoreUtil.translate("gui.oxygenStorage.desc.1") + ": "
-                + ((int) Math.floor(this.sealer.storedOxygen) + " / " + (int) Math.floor(this.sealer.maxOxygen)));
+        oxygenDesc.add(
+                EnumColor.YELLOW + GCCoreUtil.translate("gui.oxygenStorage.desc.1")
+                        + ": "
+                        + ((int) Math.floor(this.sealer.storedOxygen) + " / "
+                                + (int) Math.floor(this.sealer.maxOxygen)));
         this.oxygenInfoRegion.tooltipStrings = oxygenDesc;
         this.oxygenInfoRegion.xPosition = (this.width - this.xSize) / 2 + 112;
         this.oxygenInfoRegion.yPosition = (this.height - this.ySize) / 2 + 23;
@@ -116,9 +128,11 @@ public class GuiOxygenSealer extends GuiContainerGC {
         this.infoRegions.add(this.oxygenInfoRegion);
         final List<String> electricityDesc = new ArrayList<>();
         electricityDesc.add(GCCoreUtil.translate("gui.energyStorage.desc.0"));
-        electricityDesc.add(EnumColor.YELLOW + GCCoreUtil.translate("gui.energyStorage.desc.1") + ": "
-                + ((int) Math.floor(this.sealer.getEnergyStoredGC()) + " / "
-                        + (int) Math.floor(this.sealer.getMaxEnergyStoredGC())));
+        electricityDesc.add(
+                EnumColor.YELLOW + GCCoreUtil.translate("gui.energyStorage.desc.1")
+                        + ": "
+                        + ((int) Math.floor(this.sealer.getEnergyStoredGC()) + " / "
+                                + (int) Math.floor(this.sealer.getMaxEnergyStoredGC())));
         this.electricInfoRegion.tooltipStrings = electricityDesc;
         this.electricInfoRegion.xPosition = (this.width - this.xSize) / 2 + 112;
         this.electricInfoRegion.yPosition = (this.height - this.ySize) / 2 + 36;
@@ -139,27 +153,35 @@ public class GuiOxygenSealer extends GuiContainerGC {
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         this.fontRendererObj.drawString(this.sealer.getInventoryName(), 8, 10, 4210752);
         GCCoreUtil.drawStringRightAligned(
-                GCCoreUtil.translate("gui.message.in.name") + ":", 99, 26, 4210752, this.fontRendererObj);
+                GCCoreUtil.translate("gui.message.in.name") + ":",
+                99,
+                26,
+                4210752,
+                this.fontRendererObj);
         GCCoreUtil.drawStringRightAligned(
-                GCCoreUtil.translate("gui.message.in.name") + ":", 99, 38, 4210752, this.fontRendererObj);
+                GCCoreUtil.translate("gui.message.in.name") + ":",
+                99,
+                38,
+                4210752,
+                this.fontRendererObj);
         String status = GCCoreUtil.translate("gui.message.status.name") + ": " + this.getStatus();
         this.buttonDisable.enabled = this.sealer.disableCooldown == 0;
-        this.buttonDisable.displayString = this.sealer.disabled
-                ? GCCoreUtil.translate("gui.button.enableseal.name")
+        this.buttonDisable.displayString = this.sealer.disabled ? GCCoreUtil.translate("gui.button.enableseal.name")
                 : GCCoreUtil.translate("gui.button.disableseal.name");
-        this.fontRendererObj.drawString(
-                status, this.xSize / 2 - this.fontRendererObj.getStringWidth(status) / 2, 50, 4210752);
+        this.fontRendererObj
+                .drawString(status, this.xSize / 2 - this.fontRendererObj.getStringWidth(status) / 2, 50, 4210752);
         int adjustedOxygenPerTick = (int) (this.sealer.oxygenPerTick * 20);
         if (this.sealer.disabled || this.sealer.getEnergyStoredGC() < this.sealer.storage.getMaxExtract()) {
             adjustedOxygenPerTick = 0;
         }
-        status = GCCoreUtil.translate("gui.oxygenUse.desc") + ": " + adjustedOxygenPerTick
+        status = GCCoreUtil.translate("gui.oxygenUse.desc") + ": "
+                + adjustedOxygenPerTick
                 + GCCoreUtil.translate("gui.perSecond");
-        this.fontRendererObj.drawString(
-                status, this.xSize / 2 - this.fontRendererObj.getStringWidth(status) / 2, 60, 4210752);
+        this.fontRendererObj
+                .drawString(status, this.xSize / 2 - this.fontRendererObj.getStringWidth(status) / 2, 60, 4210752);
         status = GCCoreUtil.translate("gui.message.thermalStatus.name") + ": " + this.getThermalStatus();
-        this.fontRendererObj.drawString(
-                status, this.xSize / 2 - this.fontRendererObj.getStringWidth(status) / 2, 70, 4210752);
+        this.fontRendererObj
+                .drawString(status, this.xSize / 2 - this.fontRendererObj.getStringWidth(status) / 2, 70, 4210752);
         // status = ElectricityDisplay.getDisplay(this.sealer.ueWattsPerTick * 20,
         // ElectricUnit.WATT);
         // this.fontRendererObj.drawString(status, this.xSize / 2 -
@@ -174,10 +196,9 @@ public class GuiOxygenSealer extends GuiContainerGC {
     }
 
     private String getThermalStatus() {
-        final Block blockAbove =
-                this.sealer.getWorldObj().getBlock(this.sealer.xCoord, this.sealer.yCoord + 1, this.sealer.zCoord);
-        final int metadata = this.sealer
-                .getWorldObj()
+        final Block blockAbove = this.sealer.getWorldObj()
+                .getBlock(this.sealer.xCoord, this.sealer.yCoord + 1, this.sealer.zCoord);
+        final int metadata = this.sealer.getWorldObj()
                 .getBlockMetadata(this.sealer.xCoord, this.sealer.yCoord + 1, this.sealer.zCoord);
 
         if (blockAbove == GCBlocks.breatheableAir || blockAbove == GCBlocks.brightBreatheableAir) {
@@ -194,12 +215,11 @@ public class GuiOxygenSealer extends GuiContainerGC {
     }
 
     private String getStatus() {
-        final Block blockAbove =
-                this.sealer.getWorldObj().getBlock(this.sealer.xCoord, this.sealer.yCoord + 1, this.sealer.zCoord);
+        final Block blockAbove = this.sealer.getWorldObj()
+                .getBlock(this.sealer.xCoord, this.sealer.yCoord + 1, this.sealer.zCoord);
 
-        if (blockAbove != null
-                && !blockAbove.isAir(
-                        this.sealer.getWorldObj(), this.sealer.xCoord, this.sealer.yCoord + 1, this.sealer.zCoord)
+        if (blockAbove != null && !blockAbove
+                .isAir(this.sealer.getWorldObj(), this.sealer.xCoord, this.sealer.yCoord + 1, this.sealer.zCoord)
                 && !OxygenPressureProtocol.canBlockPassAir(
                         this.sealer.getWorldObj(),
                         blockAbove,
@@ -268,14 +288,19 @@ public class GuiOxygenSealer extends GuiContainerGC {
         if (this.sealer != null) {
             final List<String> oxygenDesc = new ArrayList<>();
             oxygenDesc.add(GCCoreUtil.translate("gui.oxygenStorage.desc.0"));
-            oxygenDesc.add(EnumColor.YELLOW + GCCoreUtil.translate("gui.oxygenStorage.desc.1") + ": "
-                    + ((int) Math.floor(this.sealer.storedOxygen) + " / " + (int) Math.floor(this.sealer.maxOxygen)));
+            oxygenDesc.add(
+                    EnumColor.YELLOW + GCCoreUtil.translate("gui.oxygenStorage.desc.1")
+                            + ": "
+                            + ((int) Math.floor(this.sealer.storedOxygen) + " / "
+                                    + (int) Math.floor(this.sealer.maxOxygen)));
             this.oxygenInfoRegion.tooltipStrings = oxygenDesc;
 
             final List<String> electricityDesc = new ArrayList<>();
             electricityDesc.add(GCCoreUtil.translate("gui.energyStorage.desc.0"));
             EnergyDisplayHelper.getEnergyDisplayTooltip(
-                    this.sealer.getEnergyStoredGC(), this.sealer.getMaxEnergyStoredGC(), electricityDesc);
+                    this.sealer.getEnergyStoredGC(),
+                    this.sealer.getMaxEnergyStoredGC(),
+                    electricityDesc);
             // electricityDesc.add(EnumColor.YELLOW +
             // GCCoreUtil.translate("gui.energyStorage.desc.1") + ": " + ((int)
             // Math.floor(this.sealer.getEnergyStoredGC()) + " / " + (int)

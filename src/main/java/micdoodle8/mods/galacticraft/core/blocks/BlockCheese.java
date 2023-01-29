@@ -1,11 +1,11 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -17,7 +17,11 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockCheese extends Block implements ItemBlockDesc.IBlockShiftDesc {
+
     IIcon[] cheeseIcons;
 
     public BlockCheese() {
@@ -60,8 +64,8 @@ public class BlockCheese extends Block implements ItemBlockDesc.IBlockShiftDesc 
     }
 
     /**
-     * Returns a bounding box from the pool of bounding boxes (this means this box
-     * can change after the pool has been cleared to be reused)
+     * Returns a bounding box from the pool of bounding boxes (this means this box can change after the pool has been
+     * cleared to be reused)
      */
     @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
@@ -69,8 +73,8 @@ public class BlockCheese extends Block implements ItemBlockDesc.IBlockShiftDesc 
         final float var6 = 0.0625F;
         final float var7 = (1 + var5 * 2) / 16.0F;
         final float var8 = 0.5F;
-        return AxisAlignedBB.getBoundingBox(
-                par2 + var7, par3, par4 + var6, par2 + 1 - var6, par3 + var8 - var6, par4 + 1 - var6);
+        return AxisAlignedBB
+                .getBoundingBox(par2 + var7, par3, par4 + var6, par2 + 1 - var6, par3 + var8 - var6, par4 + 1 - var6);
     }
 
     @Override
@@ -83,24 +87,21 @@ public class BlockCheese extends Block implements ItemBlockDesc.IBlockShiftDesc 
         final float var6 = 0.0625F;
         final float var7 = (1 + var5 * 2) / 16.0F;
         final float var8 = 0.5F;
-        return AxisAlignedBB.getBoundingBox(
-                par2 + var7, par3, par4 + var6, par2 + 1 - var6, par3 + var8, par4 + 1 - var6);
+        return AxisAlignedBB
+                .getBoundingBox(par2 + var7, par3, par4 + var6, par2 + 1 - var6, par3 + var8, par4 + 1 - var6);
     }
 
     /**
-     * From the specified side and block metadata retrieves the blocks texture.
-     * Args: side, metadata
+     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
     @Override
     public IIcon getIcon(int par1, int par2) {
-        return par1 == 1
-                ? this.cheeseIcons[0]
+        return par1 == 1 ? this.cheeseIcons[0]
                 : par1 == 0 ? this.cheeseIcons[0] : par2 > 0 && par1 == 4 ? this.cheeseIcons[2] : this.cheeseIcons[1];
     }
 
     /**
-     * If this block doesn't render as an ordinary block it will return False
-     * (examples: signs, buttons, stairs, etc)
+     * If this block doesn't render as an ordinary block it will return False (examples: signs, buttons, stairs, etc)
      */
     @Override
     public boolean renderAsNormalBlock() {
@@ -108,9 +109,8 @@ public class BlockCheese extends Block implements ItemBlockDesc.IBlockShiftDesc 
     }
 
     /**
-     * Is this block (a) opaque and (b) a full 1m cube? This determines whether or
-     * not to render the shared face of two adjacent blocks and also whether the
-     * player can attach torches, redstone wire, etc to this block.
+     * Is this block (a) opaque and (b) a full 1m cube? This determines whether or not to render the shared face of two
+     * adjacent blocks and also whether the player can attach torches, redstone wire, etc to this block.
      */
     @Override
     public boolean isOpaqueCube() {
@@ -121,16 +121,8 @@ public class BlockCheese extends Block implements ItemBlockDesc.IBlockShiftDesc 
      * Called upon block activation (right click on the block.)
      */
     @Override
-    public boolean onBlockActivated(
-            World par1World,
-            int par2,
-            int par3,
-            int par4,
-            EntityPlayer par5EntityPlayer,
-            int par6,
-            float par7,
-            float par8,
-            float par9) {
+    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer,
+            int par6, float par7, float par8, float par9) {
         this.eatCakeSlice(par1World, par2, par3, par4, par5EntityPlayer);
         return true;
     }
@@ -160,8 +152,7 @@ public class BlockCheese extends Block implements ItemBlockDesc.IBlockShiftDesc 
     }
 
     /**
-     * Checks to see if its valid to put this block at the specified coordinates.
-     * Args: world, x, y, z
+     * Checks to see if its valid to put this block at the specified coordinates. Args: world, x, y, z
      */
     @Override
     public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4) {
@@ -169,9 +160,8 @@ public class BlockCheese extends Block implements ItemBlockDesc.IBlockShiftDesc 
     }
 
     /**
-     * Lets the block know when one of its neighbor changes. Doesn't know which
-     * neighbor changed (coordinates passed are their own) Args: x, y, z, neighbor
-     * blockID
+     * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed (coordinates passed are
+     * their own) Args: x, y, z, neighbor blockID
      */
     @Override
     public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, Block par5) {
@@ -181,8 +171,7 @@ public class BlockCheese extends Block implements ItemBlockDesc.IBlockShiftDesc 
     }
 
     /**
-     * Can this block stay at this position. Similar to canPlaceBlockAt except gets
-     * checked often with plants.
+     * Can this block stay at this position. Similar to canPlaceBlockAt except gets checked often with plants.
      */
     @Override
     public boolean canBlockStay(World par1World, int par2, int par3, int par4) {

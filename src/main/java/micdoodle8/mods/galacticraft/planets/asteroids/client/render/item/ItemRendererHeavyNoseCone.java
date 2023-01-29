@@ -1,27 +1,26 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.client.render.item;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.dimension.SpaceRace;
 import micdoodle8.mods.galacticraft.core.dimension.SpaceRaceManager;
 import micdoodle8.mods.galacticraft.core.util.VersionUtil;
+
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class ItemRendererHeavyNoseCone implements IItemRenderer {
-    private void renderHeavyNoseCone(
-            ItemRenderType type,
-            RenderBlocks render,
-            ItemStack item,
-            float translateX,
-            float translateY,
-            float translateZ) {
+
+    private void renderHeavyNoseCone(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX,
+            float translateY, float translateZ) {
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
 
@@ -29,10 +28,8 @@ public class ItemRendererHeavyNoseCone implements IItemRenderer {
             GL11.glPushMatrix();
 
             if (i == 1) {
-                final SpaceRace race = SpaceRaceManager.getSpaceRaceFromPlayer(FMLClientHandler.instance()
-                        .getClientPlayerEntity()
-                        .getGameProfile()
-                        .getName());
+                final SpaceRace race = SpaceRaceManager.getSpaceRaceFromPlayer(
+                        FMLClientHandler.instance().getClientPlayerEntity().getGameProfile().getName());
                 Vector3 color = null;
 
                 if (race != null) {
@@ -46,20 +43,15 @@ public class ItemRendererHeavyNoseCone implements IItemRenderer {
                 GL11.glColor4f(color.floatX(), color.floatY(), color.floatZ(), 1.0F);
             }
 
-            final IIcon iicon =
-                    FMLClientHandler.instance().getClientPlayerEntity().getItemIcon(item, i);
+            final IIcon iicon = FMLClientHandler.instance().getClientPlayerEntity().getItemIcon(item, i);
 
             if (iicon == null) {
                 GL11.glPopMatrix();
                 return;
             }
 
-            FMLClientHandler.instance()
-                    .getClient()
-                    .getTextureManager()
-                    .bindTexture(FMLClientHandler.instance()
-                            .getClient()
-                            .getTextureManager()
+            FMLClientHandler.instance().getClient().getTextureManager().bindTexture(
+                    FMLClientHandler.instance().getClient().getTextureManager()
                             .getResourceLocation(item.getItemSpriteNumber()));
             VersionUtil.setMipMap(false, false);
             final Tessellator tessellator = Tessellator.instance;
@@ -74,8 +66,8 @@ public class ItemRendererHeavyNoseCone implements IItemRenderer {
             final float f6 = 16.0F;
             GL11.glScalef(f6, f6, f6);
             GL11.glTranslatef(-f4, -f5, 0.0F);
-            ItemRenderer.renderItemIn2D(
-                    tessellator, f1, f2, f, f3, iicon.getIconWidth(), iicon.getIconHeight(), 0.0625F);
+            ItemRenderer
+                    .renderItemIn2D(tessellator, f1, f2, f, f3, iicon.getIconWidth(), iicon.getIconHeight(), 0.0625F);
             GL11.glPopMatrix();
         }
 

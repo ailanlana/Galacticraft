@@ -4,6 +4,7 @@ import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.items.GCItems;
 import micdoodle8.mods.galacticraft.core.network.PacketSimple;
 import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
@@ -11,12 +12,13 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class SlotRocketBench extends Slot {
+
     private final int index;
     private final int x, y, z;
     private final EntityPlayer player;
 
-    public SlotRocketBench(
-            IInventory par2IInventory, int par3, int par4, int par5, int x, int y, int z, EntityPlayer player) {
+    public SlotRocketBench(IInventory par2IInventory, int par3, int par4, int par5, int x, int y, int z,
+            EntityPlayer player) {
         super(par2IInventory, par3, par4, par5);
         this.index = par3;
         this.x = x;
@@ -40,7 +42,7 @@ public class SlotRocketBench extends Slot {
                         GalacticraftCore.packetPipeline.sendTo(
                                 new PacketSimple(
                                         EnumSimplePacket.C_SPAWN_SPARK_PARTICLES,
-                                        new Object[] {this.x, this.y, this.z}),
+                                        new Object[] { this.x, this.y, this.z }),
                                 var13);
                     }
                 }
@@ -91,8 +93,8 @@ public class SlotRocketBench extends Slot {
     }
 
     /**
-     * Returns the maximum stack size for a given slot (usually the same as
-     * getInventoryStackLimit(), but 1 in the case of armor slots)
+     * Returns the maximum stack size for a given slot (usually the same as getInventoryStackLimit(), but 1 in the case
+     * of armor slots)
      */
     @Override
     public int getSlotStackLimit() {

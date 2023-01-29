@@ -1,11 +1,9 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import io.netty.buffer.ByteBuf;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.block.IOxygenReliantBlock;
 import micdoodle8.mods.galacticraft.api.item.IItemOxygenSupply;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3Dim;
@@ -14,6 +12,7 @@ import micdoodle8.mods.galacticraft.core.entities.IBubbleProvider;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
 import micdoodle8.mods.galacticraft.core.util.FluidUtil;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -26,8 +25,13 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
+
 public class TileEntityOxygenDistributor extends TileEntityOxygen
         implements IInventory, ISidedInventory, IBubbleProvider {
+
     public boolean active;
     public boolean lastActive;
 
@@ -47,15 +51,15 @@ public class TileEntityOxygenDistributor extends TileEntityOxygen
     public void validate() {
         super.validate();
         if (!this.worldObj.isRemote) {
-            TileEntityOxygenDistributor.loadedTiles.add(
-                    new BlockVec3Dim(this.xCoord, this.yCoord, this.zCoord, this.worldObj.provider.dimensionId));
+            TileEntityOxygenDistributor.loadedTiles
+                    .add(new BlockVec3Dim(this.xCoord, this.yCoord, this.zCoord, this.worldObj.provider.dimensionId));
         }
     }
 
     @Override
     public void onChunkUnload() {
-        TileEntityOxygenDistributor.loadedTiles.remove(
-                new BlockVec3Dim(this.xCoord, this.yCoord, this.zCoord, this.worldObj.provider.dimensionId));
+        TileEntityOxygenDistributor.loadedTiles
+                .remove(new BlockVec3Dim(this.xCoord, this.yCoord, this.zCoord, this.worldObj.provider.dimensionId));
         super.onChunkUnload();
     }
 
@@ -182,8 +186,7 @@ public class TileEntityOxygenDistributor extends TileEntityOxygen
         super.updateEntity();
 
         if (!this.worldObj.isRemote) {
-            if (this.getEnergyStoredGC() > 0.0F
-                    && this.hasEnoughEnergyToRun
+            if (this.getEnergyStoredGC() > 0.0F && this.hasEnoughEnergyToRun
                     && this.storedOxygen > this.oxygenPerTick) {
                 this.bubbleSize += 0.01F;
             } else {
@@ -357,7 +360,7 @@ public class TileEntityOxygenDistributor extends TileEntityOxygen
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        return new int[] {0, 1};
+        return new int[] { 0, 1 };
     }
 
     @Override

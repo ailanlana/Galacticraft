@@ -1,17 +1,8 @@
 package micdoodle8.mods.galacticraft.planets.mars;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.relauncher.Side;
 import java.lang.reflect.Method;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
 import micdoodle8.mods.galacticraft.api.galaxies.GalaxyRegistry;
@@ -63,6 +54,7 @@ import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityMethaneSynthesiz
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntitySlimelingEgg;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityTerraformer;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityTreasureChestMars;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -81,7 +73,19 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.relauncher.Side;
+
 public class MarsModule implements IPlanetsModule {
+
     public static final String ASSET_PREFIX = "galacticraftmars";
     public static final String TEXTURE_PREFIX = MarsModule.ASSET_PREFIX + ":";
 
@@ -108,7 +112,9 @@ public class MarsModule implements IPlanetsModule {
             MarsBlocks.blockSludge = new BlockSludge().setBlockName("sludge");
             ((BlockSludge) MarsBlocks.blockSludge).setQuantaPerBlock(3);
             GameRegistry.registerBlock(
-                    MarsBlocks.blockSludge, ItemBlockDesc.class, MarsBlocks.blockSludge.getUnlocalizedName());
+                    MarsBlocks.blockSludge,
+                    ItemBlockDesc.class,
+                    MarsBlocks.blockSludge.getUnlocalizedName());
             sludge.setBlock(MarsBlocks.blockSludge);
         } else {
             MarsBlocks.blockSludge = sludge.getBlock();
@@ -146,21 +152,15 @@ public class MarsModule implements IPlanetsModule {
         this.registerCreatures();
         this.registerOtherEntities();
 
-        MarsModule.planetMars = (Planet) new Planet("mars")
-                .setParentSolarSystem(GalacticraftCore.solarSystemSol)
-                .setRingColorRGB(0.67F, 0.1F, 0.1F)
-                .setPhaseShift(0.1667F)
-                .setRelativeSize(0.5319F)
+        MarsModule.planetMars = (Planet) new Planet("mars").setParentSolarSystem(GalacticraftCore.solarSystemSol)
+                .setRingColorRGB(0.67F, 0.1F, 0.1F).setPhaseShift(0.1667F).setRelativeSize(0.5319F)
                 .setRelativeDistanceFromCenter(new CelestialBody.ScalableDistance(1.25F, 1.25F))
                 .setRelativeOrbitTime(1.8811610076670317634173055859803F);
         MarsModule.planetMars.setBodyIcon(
                 new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/celestialbodies/mars.png"));
-        MarsModule.planetMars
-                .setDimensionInfo(ConfigManagerMars.dimensionIDMars, WorldProviderMars.class)
+        MarsModule.planetMars.setDimensionInfo(ConfigManagerMars.dimensionIDMars, WorldProviderMars.class)
                 .setTierRequired(2);
-        MarsModule.planetMars
-                .atmosphereComponent(IAtmosphericGas.CO2)
-                .atmosphereComponent(IAtmosphericGas.ARGON)
+        MarsModule.planetMars.atmosphereComponent(IAtmosphericGas.CO2).atmosphereComponent(IAtmosphericGas.ARGON)
                 .atmosphereComponent(IAtmosphericGas.NITROGEN);
 
         GalaxyRegistry.registerPlanet(MarsModule.planetMars);
@@ -178,8 +178,7 @@ public class MarsModule implements IPlanetsModule {
                 new ItemStack(GCItems.meteoricIronIngot, 1, 1));
         CompressorRecipes.addShapelessRecipe(
                 new ItemStack(MarsItems.marsItemBasic, 1, 5),
-                ConfigManagerCore.recipesRequireGCAdvancedMetals
-                        ? new ItemStack(MarsItems.marsItemBasic, 1, 2)
+                ConfigManagerCore.recipesRequireGCAdvancedMetals ? new ItemStack(MarsItems.marsItemBasic, 1, 2)
                         : "ingotDesh");
     }
 
@@ -232,8 +231,7 @@ public class MarsModule implements IPlanetsModule {
                         clazzbm.getConstructor(Block.class, int.class).newInstance(MarsBlocks.marsBlock, 9),
                         "tile.mars.marsstone");
             }
-        } catch (final Exception e) {
-        }
+        } catch (final Exception e) {}
     }
 
     public void registerTileEntities() {
@@ -287,13 +285,12 @@ public class MarsModule implements IPlanetsModule {
         }
     }
 
-    public static void registerGalacticraftNonMobEntity(
-            Class<? extends Entity> var0, String var1, int trackingDistance, int updateFreq, boolean sendVel) {
+    public static void registerGalacticraftNonMobEntity(Class<? extends Entity> var0, String var1, int trackingDistance,
+            int updateFreq, boolean sendVel) {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-            LanguageRegistry.instance()
-                    .addStringLocalization(
-                            "entity.GalacticraftMars." + var1 + ".name",
-                            GCCoreUtil.translate("entity." + var1 + ".name"));
+            LanguageRegistry.instance().addStringLocalization(
+                    "entity.GalacticraftMars." + var1 + ".name",
+                    GCCoreUtil.translate("entity." + var1 + ".name"));
         }
         EntityRegistry.registerModEntity(
                 var0,

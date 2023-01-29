@@ -1,19 +1,16 @@
 package micdoodle8.mods.galacticraft.core.entities;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.network.PacketEntityUpdate;
 import micdoodle8.mods.galacticraft.core.network.PacketEntityUpdate.IEntityFullSync;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
@@ -25,7 +22,14 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
+
 public abstract class EntityAdvancedMotion extends InventoryEntity implements IControllableEntity, IEntityFullSync {
+
     protected long ticks = 0;
 
     public float currentDamage;
@@ -96,16 +100,8 @@ public abstract class EntityAdvancedMotion extends InventoryEntity implements IC
     }
 
     @Override
-    public void setPositionRotationAndMotion(
-            double x,
-            double y,
-            double z,
-            float yaw,
-            float pitch,
-            double motX,
-            double motY,
-            double motZ,
-            boolean onGround) {
+    public void setPositionRotationAndMotion(double x, double y, double z, float yaw, float pitch, double motX,
+            double motY, double motZ, boolean onGround) {
         if (this.worldObj.isRemote) {
             this.advancedPositionX = x;
             this.advancedPositionY = y;
@@ -145,8 +141,7 @@ public abstract class EntityAdvancedMotion extends InventoryEntity implements IC
             return true;
         } else {
             final Entity e = var1.getEntity();
-            if (this.isEntityInvulnerable()
-                    || this.posY > 300
+            if (this.isEntityInvulnerable() || this.posY > 300
                     || e instanceof EntityLivingBase && !(e instanceof EntityPlayer)) {
                 return false;
             } else {
@@ -185,15 +180,14 @@ public abstract class EntityAdvancedMotion extends InventoryEntity implements IC
     public abstract boolean shouldSpawnParticles();
 
     /**
-     * @return map of the particle vectors. Map key is the position and map value is
-     * the motion of the particles. Each entry will be spawned as a separate
-     * particle
+     * @return map of the particle vectors. Map key is the position and map value is the motion of the particles. Each
+     *         entry will be spawned as a separate particle
      */
     public abstract Map<Vector3, Vector3> getParticleMap();
 
     @SideOnly(Side.CLIENT)
-    public abstract EntityFX getParticle(
-            Random rand, double x, double y, double z, double motX, double motY, double motZ);
+    public abstract EntityFX getParticle(Random rand, double x, double y, double z, double motX, double motY,
+            double motZ);
 
     public abstract void tickInAir();
 
@@ -204,8 +198,8 @@ public abstract class EntityAdvancedMotion extends InventoryEntity implements IC
     public abstract Vector3 getMotionVec();
 
     /**
-     * Can be called in the superclass init method before the subclass fields have
-     * been initialised! Therefore include null checks!!!
+     * Can be called in the superclass init method before the subclass fields have been initialised! Therefore include
+     * null checks!!!
      */
     public abstract ArrayList<Object> getNetworkedData();
 
@@ -239,8 +233,7 @@ public abstract class EntityAdvancedMotion extends InventoryEntity implements IC
     public void setPositionAndRotation2(double d, double d1, double d2, float f, float f1, int i) {
         if (this.riddenByEntity != null) {
             if (this.riddenByEntity instanceof EntityPlayer
-                    && FMLClientHandler.instance().getClient().thePlayer.equals(this.riddenByEntity)) {
-            } else {
+                    && FMLClientHandler.instance().getClient().thePlayer.equals(this.riddenByEntity)) {} else {
                 this.posRotIncrements = i + 5;
                 this.advancedPositionX = d;
                 this.advancedPositionY = d1 + (this.riddenByEntity == null ? 1 : 0);
@@ -272,10 +265,8 @@ public abstract class EntityAdvancedMotion extends InventoryEntity implements IC
 
         super.onUpdate();
 
-        if (this.canSetPositionClient()
-                && this.worldObj.isRemote
-                && (this.riddenByEntity == null
-                        || !(this.riddenByEntity instanceof EntityPlayer)
+        if (this.canSetPositionClient() && this.worldObj.isRemote
+                && (this.riddenByEntity == null || !(this.riddenByEntity instanceof EntityPlayer)
                         || !FMLClientHandler.instance().getClient().thePlayer.equals(this.riddenByEntity))) {
             double x;
             double y;
@@ -287,8 +278,8 @@ public abstract class EntityAdvancedMotion extends InventoryEntity implements IC
                 z = this.posZ + (this.advancedPositionZ - this.posZ) / this.posRotIncrements;
                 var12 = MathHelper.wrapAngleTo180_double(this.advancedYaw - this.rotationYaw);
                 this.rotationYaw = (float) (this.rotationYaw + var12 / this.posRotIncrements);
-                this.rotationPitch = (float)
-                        (this.rotationPitch + (this.advancedPitch - this.rotationPitch) / this.posRotIncrements);
+                this.rotationPitch = (float) (this.rotationPitch
+                        + (this.advancedPitch - this.rotationPitch) / this.posRotIncrements);
                 --this.posRotIncrements;
                 this.setPosition(x, y, z);
                 this.setRotation(this.rotationYaw, this.rotationPitch);

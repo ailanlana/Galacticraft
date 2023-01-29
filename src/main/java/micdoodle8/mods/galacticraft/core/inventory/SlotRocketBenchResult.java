@@ -6,16 +6,12 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class SlotRocketBenchResult extends Slot {
+
     private final IInventory craftMatrix;
     private final EntityPlayer thePlayer;
 
-    public SlotRocketBenchResult(
-            EntityPlayer par1EntityPlayer,
-            IInventory par2IInventory,
-            IInventory par3IInventory,
-            int par4,
-            int par5,
-            int par6) {
+    public SlotRocketBenchResult(EntityPlayer par1EntityPlayer, IInventory par2IInventory, IInventory par3IInventory,
+            int par4, int par5, int par6) {
         super(par3IInventory, par4, par5, par6);
         this.thePlayer = par1EntityPlayer;
         this.craftMatrix = par2IInventory;

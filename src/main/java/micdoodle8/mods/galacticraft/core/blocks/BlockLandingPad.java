@@ -1,14 +1,14 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityBuggyFuelerSingle;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityLandingPadSingle;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -20,7 +20,11 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockLandingPad extends BlockAdvancedTile implements IPartialSealableBlock, ItemBlockDesc.IBlockShiftDesc {
+
     private final IIcon[] icons = new IIcon[3];
 
     public BlockLandingPad(String assetName) {
@@ -38,7 +42,7 @@ public class BlockLandingPad extends BlockAdvancedTile implements IPartialSealab
         return GalacticraftCore.galacticraftBlocksTab;
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
@@ -69,26 +73,22 @@ public class BlockLandingPad extends BlockAdvancedTile implements IPartialSealab
     public boolean canPlaceBlockOnSide(World par1World, int par2, int par3, int par4, int par5) {
         final Block id = GCBlocks.landingPad;
 
-        if (par1World.getBlock(par2 + 1, par3, par4) == id
-                && par1World.getBlock(par2 + 2, par3, par4) == id
+        if (par1World.getBlock(par2 + 1, par3, par4) == id && par1World.getBlock(par2 + 2, par3, par4) == id
                 && par1World.getBlock(par2 + 3, par3, par4) == id) {
             return false;
         }
 
-        if (par1World.getBlock(par2 - 1, par3, par4) == id
-                && par1World.getBlock(par2 - 2, par3, par4) == id
+        if (par1World.getBlock(par2 - 1, par3, par4) == id && par1World.getBlock(par2 - 2, par3, par4) == id
                 && par1World.getBlock(par2 - 3, par3, par4) == id) {
             return false;
         }
 
-        if (par1World.getBlock(par2, par3, par4 + 1) == id
-                && par1World.getBlock(par2, par3, par4 + 2) == id
+        if (par1World.getBlock(par2, par3, par4 + 1) == id && par1World.getBlock(par2, par3, par4 + 2) == id
                 && par1World.getBlock(par2, par3, par4 + 3) == id) {
             return false;
         }
 
-        if (par1World.getBlock(par2, par3, par4 - 1) == id
-                && par1World.getBlock(par2, par3, par4 - 2) == id
+        if (par1World.getBlock(par2, par3, par4 - 1) == id && par1World.getBlock(par2, par3, par4 - 2) == id
                 && par1World.getBlock(par2, par3, par4 - 3) == id) {
             return false;
         }
@@ -111,8 +111,8 @@ public class BlockLandingPad extends BlockAdvancedTile implements IPartialSealab
                 return new TileEntityLandingPadSingle();
             case 1:
                 return new TileEntityBuggyFuelerSingle();
-                // case 2:
-                // return new GCCoreTileEntityCargoPadSingle();
+            // case 2:
+            // return new GCCoreTileEntityCargoPadSingle();
             default:
                 return null;
         }

@@ -1,9 +1,7 @@
 package micdoodle8.mods.galacticraft.core.client.gui.screen;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.nio.DoubleBuffer;
+
 import micdoodle8.mods.galacticraft.api.client.IGameScreen;
 import micdoodle8.mods.galacticraft.api.client.IScreenManager;
 import micdoodle8.mods.galacticraft.api.entity.ITelemetry;
@@ -11,6 +9,7 @@ import micdoodle8.mods.galacticraft.core.client.render.entities.RenderPlayerGC;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityTelemetry;
 import micdoodle8.mods.galacticraft.core.util.ColorUtil;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -29,11 +28,17 @@ import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GameScreenText implements IGameScreen {
+
     private float frameA;
     private float frameBx;
     private float frameBy;
@@ -77,16 +82,15 @@ public class GameScreenText implements IGameScreen {
         // Make the text to draw. To look good it's important the width and height
         // of the whole text box are correctly set here.
         String strName = "";
-        final String[] str = {GCCoreUtil.translate("gui.display.nolink"), "", "", "", ""};
+        final String[] str = { GCCoreUtil.translate("gui.display.nolink"), "", "", "", "" };
         Render renderEntity = null;
         Entity entity = null;
         float Xmargin = 0;
 
         if (telemeter != null && telemeter.clientData.length >= 3) {
             if (telemeter.clientClass != null) {
-                if (telemeter.clientClass == screen.telemetryLastClass
-                        && (telemeter.clientClass != EntityPlayerMP.class
-                                || telemeter.clientName.equals(screen.telemetryLastName))) {
+                if (telemeter.clientClass == screen.telemetryLastClass && (telemeter.clientClass != EntityPlayerMP.class
+                        || telemeter.clientName.equals(screen.telemetryLastName))) {
                     // Used cached data from last time if possible
                     entity = screen.telemetryLastEntity;
                     renderEntity = screen.telemetryLastRender;
@@ -101,12 +105,9 @@ public class GameScreenText implements IGameScreen {
                         renderEntity = (Render) RenderManager.instance.entityRenderMap.get(EntityPlayer.class);
                     } else {
                         try {
-                            entity = (Entity) telemeter
-                                    .clientClass
-                                    .getConstructor(World.class)
+                            entity = (Entity) telemeter.clientClass.getConstructor(World.class)
                                     .newInstance(screen.driver.getWorldObj());
-                        } catch (final Exception ex) {
-                        }
+                        } catch (final Exception ex) {}
                         if (entity != null) {
                             strName = entity.getCommandSenderName();
                         }
@@ -163,16 +164,17 @@ public class GameScreenText implements IGameScreen {
                     if (oxygen == 180 || oxygen == 90) {
                         str[4] = GCCoreUtil.translate("gui.oxygenStorage.desc.1") + ": OK";
                     } else {
-                        str[4] = GCCoreUtil.translate("gui.oxygenStorage.desc.1") + ": " + this.makeOxygenString(oxygen)
+                        str[4] = GCCoreUtil.translate("gui.oxygenStorage.desc.1") + ": "
+                                + this.makeOxygenString(oxygen)
                                 + GCCoreUtil.translate("gui.seconds");
                     }
                 }
             } else
-            // Generic - could be boats or minecarts etc - just show the speed
-            // TODO can add more here, e.g. position data?
-            if (telemeter.clientData[2] >= 0) {
-                str[2] = makeSpeedString(telemeter.clientData[2]);
-            }
+                // Generic - could be boats or minecarts etc - just show the speed
+                // TODO can add more here, e.g. position data?
+                if (telemeter.clientData[2] >= 0) {
+                    str[2] = makeSpeedString(telemeter.clientData[2]);
+                }
         } else {
             // Default - draw a simple time display just to show the Display Screen is
             // working
@@ -313,8 +315,8 @@ public class GameScreenText implements IGameScreen {
         GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
 
-    private void planeEquation(
-            float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3) {
+    private void planeEquation(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3,
+            float z3) {
         final double[] result = new double[4];
         result[0] = y1 * (z2 - z3) + y2 * (z3 - z1) + y3 * (z1 - z2);
         result[1] = z1 * (x2 - x3) + z2 * (x3 - x1) + z3 * (x1 - x2);

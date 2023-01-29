@@ -2,7 +2,9 @@ package micdoodle8.mods.galacticraft.core.world.gen;
 
 import java.util.List;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,16 +13,13 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
 public class StructureComponentVillageWell extends StructureComponentVillage {
+
     private int averageGroundLevel = -1;
 
     public StructureComponentVillageWell() {}
 
-    public StructureComponentVillageWell(
-            StructureComponentVillageStartPiece par1ComponentVillageStartPiece,
-            int par2,
-            Random par3Random,
-            int par4,
-            int par5) {
+    public StructureComponentVillageWell(StructureComponentVillageStartPiece par1ComponentVillageStartPiece, int par2,
+            Random par3Random, int par4, int par5) {
         super(par1ComponentVillageStartPiece, par2);
         this.coordBaseMode = par3Random.nextInt(4);
 
@@ -48,7 +47,7 @@ public class StructureComponentVillageWell extends StructureComponentVillage {
         this.averageGroundLevel = nbt.getInteger("AvgGroundLevel");
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void buildComponent(StructureComponent par1StructureComponent, List par2List, Random par3Random) {
         StructureVillagePiecesMoon.getNextStructureComponentVillagePath(
@@ -90,8 +89,8 @@ public class StructureComponentVillageWell extends StructureComponentVillage {
     }
 
     @Override
-    public boolean addComponentParts(
-            World par1World, Random par2Random, StructureBoundingBox par3StructureBoundingBox) {
+    public boolean addComponentParts(World par1World, Random par2Random,
+            StructureBoundingBox par3StructureBoundingBox) {
         if (this.averageGroundLevel < 0) {
             this.averageGroundLevel = this.getAverageGroundLevel(par1World, par3StructureBoundingBox);
 
@@ -147,7 +146,13 @@ public class StructureComponentVillageWell extends StructureComponentVillage {
             for (int var5 = 0; var5 <= 5; ++var5) {
                 if (var5 == 0 || var5 == 5 || var4 == 0 || var4 == 5) {
                     this.placeBlockAtCurrentPosition(
-                            par1World, Blocks.planks, 1, var5, 11, var4, par3StructureBoundingBox);
+                            par1World,
+                            Blocks.planks,
+                            1,
+                            var5,
+                            11,
+                            var4,
+                            par3StructureBoundingBox);
                     this.clearCurrentPositionBlocksUpwards(par1World, var5, 12, var4, par3StructureBoundingBox);
                 }
             }
@@ -156,18 +161,8 @@ public class StructureComponentVillageWell extends StructureComponentVillage {
         return true;
     }
 
-    protected void fillWithBlocksAndMetadata(
-            World par1World,
-            StructureBoundingBox par2StructureBoundingBox,
-            int par3,
-            int par4,
-            int par5,
-            int par6,
-            int par7,
-            int par8,
-            Block par9,
-            Block par10,
-            boolean par11) {
+    protected void fillWithBlocksAndMetadata(World par1World, StructureBoundingBox par2StructureBoundingBox, int par3,
+            int par4, int par5, int par6, int par7, int par8, Block par9, Block par10, boolean par11) {
         final Block var12 = this.getBiomeSpecificBlock(par9, 0);
         final int var13 = this.getBiomeSpecificBlockMetadata(par9, 0);
         final Block var14 = this.getBiomeSpecificBlock(par10, 0);

@@ -1,8 +1,5 @@
 package micdoodle8.mods.galacticraft.planets.mars.tile;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.blocks.BlockMulti;
@@ -14,6 +11,7 @@ import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
 import micdoodle8.mods.galacticraft.planets.mars.network.PacketSimpleMars;
 import micdoodle8.mods.galacticraft.planets.mars.network.PacketSimpleMars.EnumSimplePacketMars;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayer.EnumStatus;
@@ -25,14 +23,24 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.biome.BiomeGenBase;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class TileEntityCryogenicChamber extends TileEntityMulti implements IMultiBlock {
+
     public boolean isOccupied;
 
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
         return AxisAlignedBB.getBoundingBox(
-                this.xCoord - 1, this.yCoord, this.zCoord - 1, this.xCoord + 2, this.yCoord + 3, this.zCoord + 2);
+                this.xCoord - 1,
+                this.yCoord,
+                this.zCoord - 1,
+                this.xCoord + 2,
+                this.yCoord + 3,
+                this.zCoord + 2);
     }
 
     @Override
@@ -45,23 +53,25 @@ public class TileEntityCryogenicChamber extends TileEntityMulti implements IMult
 
         switch (enumstatus) {
             case OK:
-                ((EntityPlayerMP) entityPlayer)
-                        .playerNetServerHandler.setPlayerLocation(
-                                entityPlayer.posX,
-                                entityPlayer.posY,
-                                entityPlayer.posZ,
-                                entityPlayer.rotationYaw,
-                                entityPlayer.rotationPitch);
+                ((EntityPlayerMP) entityPlayer).playerNetServerHandler.setPlayerLocation(
+                        entityPlayer.posX,
+                        entityPlayer.posY,
+                        entityPlayer.posZ,
+                        entityPlayer.rotationYaw,
+                        entityPlayer.rotationPitch);
                 GalacticraftCore.packetPipeline.sendTo(
                         new PacketSimpleMars(
                                 EnumSimplePacketMars.C_BEGIN_CRYOGENIC_SLEEP,
-                                new Object[] {this.xCoord, this.yCoord, this.zCoord}),
+                                new Object[] { this.xCoord, this.yCoord, this.zCoord }),
                         (EntityPlayerMP) entityPlayer);
                 return true;
             case NOT_POSSIBLE_NOW:
-                entityPlayer.addChatMessage(new ChatComponentText(GCCoreUtil.translateWithFormat(
-                        "gui.cryogenic.chat.cantUse",
-                        GCPlayerStats.get((EntityPlayerMP) entityPlayer).cryogenicChamberCooldown / 20)));
+                entityPlayer.addChatMessage(
+                        new ChatComponentText(
+                                GCCoreUtil.translateWithFormat(
+                                        "gui.cryogenic.chat.cantUse",
+                                        GCPlayerStats.get((EntityPlayerMP) entityPlayer).cryogenicChamberCooldown
+                                                / 20)));
                 return false;
             default:
                 return false;
@@ -150,15 +160,12 @@ public class TileEntityCryogenicChamber extends TileEntityMulti implements IMult
 
         for (int y = 0; y < 3; y++) {
             if (this.worldObj.isRemote && this.worldObj.rand.nextDouble() < 0.1D) {
-                FMLClientHandler.instance()
-                        .getClient()
-                        .effectRenderer
-                        .addBlockDestroyEffects(
-                                thisBlock.x,
-                                thisBlock.y + y,
-                                thisBlock.z,
-                                MarsBlocks.machine,
-                                Block.getIdFromBlock(MarsBlocks.machine) >> 12 & 255);
+                FMLClientHandler.instance().getClient().effectRenderer.addBlockDestroyEffects(
+                        thisBlock.x,
+                        thisBlock.y + y,
+                        thisBlock.z,
+                        MarsBlocks.machine,
+                        Block.getIdFromBlock(MarsBlocks.machine) >> 12 & 255);
             }
             this.worldObj.func_147480_a(thisBlock.x, thisBlock.y + y, thisBlock.z, true);
         }

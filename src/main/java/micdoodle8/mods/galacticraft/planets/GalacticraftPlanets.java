@@ -1,5 +1,21 @@
 package micdoodle8.mods.galacticraft.planets;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.core.Constants;
+import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
+import micdoodle8.mods.galacticraft.planets.asteroids.ConfigManagerAsteroids;
+import micdoodle8.mods.galacticraft.planets.mars.ConfigManagerMars;
+import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
+
+import net.minecraft.block.Block;
+import net.minecraftforge.common.config.ConfigElement;
+
 import cpw.mods.fml.client.config.IConfigElement;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -13,19 +29,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.Constants;
-import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
-import micdoodle8.mods.galacticraft.planets.asteroids.ConfigManagerAsteroids;
-import micdoodle8.mods.galacticraft.planets.mars.ConfigManagerMars;
-import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
-import net.minecraft.block.Block;
-import net.minecraftforge.common.config.ConfigElement;
 
 @Mod(
         modid = Constants.MOD_ID_PLANETS,
@@ -36,6 +39,7 @@ import net.minecraftforge.common.config.ConfigElement;
         dependencies = "required-after:" + Constants.MOD_ID_CORE + ";",
         guiFactory = "micdoodle8.mods.galacticraft.planets.ConfigGuiFactoryPlanets")
 public class GalacticraftPlanets {
+
     public static final String NAME = "Galacticraft Planets";
 
     @Instance(Constants.MOD_ID_PLANETS)
@@ -113,16 +117,21 @@ public class GalacticraftPlanets {
         // Get the last planet to be configured only, as all will reference and re-use
         // the same planets.conf config file
         final IPlanetsModule module = GalacticraftPlanets.commonModules.get(MODULE_KEY_ASTEROIDS);
-        list.addAll(new ConfigElement(module.getConfiguration().getCategory(Constants.CONFIG_CATEGORY_DIMENSIONS))
-                .getChildElements());
-        list.addAll(new ConfigElement(module.getConfiguration().getCategory(Constants.CONFIG_CATEGORY_ENTITIES))
-                .getChildElements());
-        list.addAll(new ConfigElement(module.getConfiguration().getCategory(Constants.CONFIG_CATEGORY_ACHIEVEMENTS))
-                .getChildElements());
-        list.addAll(new ConfigElement(module.getConfiguration().getCategory(Constants.CONFIG_CATEGORY_ENTITIES))
-                .getChildElements());
-        list.addAll(new ConfigElement(module.getConfiguration().getCategory(Constants.CONFIG_CATEGORY_GENERAL))
-                .getChildElements());
+        list.addAll(
+                new ConfigElement(module.getConfiguration().getCategory(Constants.CONFIG_CATEGORY_DIMENSIONS))
+                        .getChildElements());
+        list.addAll(
+                new ConfigElement(module.getConfiguration().getCategory(Constants.CONFIG_CATEGORY_ENTITIES))
+                        .getChildElements());
+        list.addAll(
+                new ConfigElement(module.getConfiguration().getCategory(Constants.CONFIG_CATEGORY_ACHIEVEMENTS))
+                        .getChildElements());
+        list.addAll(
+                new ConfigElement(module.getConfiguration().getCategory(Constants.CONFIG_CATEGORY_ENTITIES))
+                        .getChildElements());
+        list.addAll(
+                new ConfigElement(module.getConfiguration().getCategory(Constants.CONFIG_CATEGORY_GENERAL))
+                        .getChildElements());
 
         return list;
     }

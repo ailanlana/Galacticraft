@@ -1,13 +1,13 @@
 package micdoodle8.mods.galacticraft.core.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 import micdoodle8.mods.galacticraft.core.util.EnumColor;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,7 +24,11 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class ItemOilExtractor extends Item {
+
     protected IIcon[] icons = new IIcon[5];
 
     public ItemOilExtractor(String assetName) {
@@ -184,8 +188,7 @@ public class ItemOilExtractor extends Item {
         final float var6 = par1EntityPlayer.prevRotationYaw
                 + (par1EntityPlayer.rotationYaw - par1EntityPlayer.prevRotationYaw) * var4;
         final double var7 = par1EntityPlayer.prevPosX + (par1EntityPlayer.posX - par1EntityPlayer.prevPosX) * var4;
-        final double var9 = par1EntityPlayer.prevPosY
-                + (par1EntityPlayer.posY - par1EntityPlayer.prevPosY) * var4
+        final double var9 = par1EntityPlayer.prevPosY + (par1EntityPlayer.posY - par1EntityPlayer.prevPosY) * var4
                 + 1.62D
                 - par1EntityPlayer.yOffset;
         final double var11 = par1EntityPlayer.prevPosZ + (par1EntityPlayer.posZ - par1EntityPlayer.prevPosZ) * var4;

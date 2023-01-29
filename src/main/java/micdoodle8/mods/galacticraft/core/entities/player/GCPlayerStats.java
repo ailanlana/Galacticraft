@@ -1,10 +1,10 @@
 package micdoodle8.mods.galacticraft.core.entities.player;
 
-import com.google.common.collect.Maps;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+
 import micdoodle8.mods.galacticraft.api.recipe.ISchematicPage;
 import micdoodle8.mods.galacticraft.api.recipe.SchematicRegistry;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
@@ -15,6 +15,7 @@ import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.core.util.GCLog;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -25,7 +26,10 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
+import com.google.common.collect.Maps;
+
 public class GCPlayerStats implements IExtendedEntityProperties {
+
     public static final String GC_PLAYER_PROP = "GCPlayerStats";
 
     public WeakReference<EntityPlayerMP> player;
@@ -221,8 +225,7 @@ public class GCPlayerStats implements IExtendedEntityProperties {
         // will make sure nothing happens)
         final EntityPlayerMP p = this.player.get();
         if (p != null) {
-            final ItemStack[] saveinv =
-                    CommandGCInv.getSaveData(p.getGameProfile().getName().toLowerCase());
+            final ItemStack[] saveinv = CommandGCInv.getSaveData(p.getGameProfile().getName().toLowerCase());
             if (saveinv != null) {
                 CommandGCInv.doLoad(p);
             }
@@ -259,11 +262,11 @@ public class GCPlayerStats implements IExtendedEntityProperties {
         if (nbt.hasKey("spaceStationDimensionID")) {
             // If loading from an old save file, the home space station is always the
             // overworld, so use 0 as home planet
-            this.spaceStationDimensionData =
-                    WorldUtil.stringToSpaceStationData("0$" + nbt.getInteger("spaceStationDimensionID"));
+            this.spaceStationDimensionData = WorldUtil
+                    .stringToSpaceStationData("0$" + nbt.getInteger("spaceStationDimensionID"));
         } else {
-            this.spaceStationDimensionData =
-                    WorldUtil.stringToSpaceStationData(nbt.getString("spaceStationDimensionInfo"));
+            this.spaceStationDimensionData = WorldUtil
+                    .stringToSpaceStationData(nbt.getString("spaceStationDimensionInfo"));
         }
 
         if (nbt.getBoolean("usingPlanetSelectionGui")) {
@@ -290,8 +293,7 @@ public class GCPlayerStats implements IExtendedEntityProperties {
 
         if (p != null) {
             for (int i = 0; i < nbt.getTagList("Schematics", 10).tagCount(); ++i) {
-                final NBTTagCompound nbttagcompound =
-                        nbt.getTagList("Schematics", 10).getCompoundTagAt(i);
+                final NBTTagCompound nbttagcompound = nbt.getTagList("Schematics", 10).getCompoundTagAt(i);
 
                 final int j = nbttagcompound.getInteger("UnlockedPage");
 
@@ -335,8 +337,10 @@ public class GCPlayerStats implements IExtendedEntityProperties {
 
         this.sentFlags = false;
         if (ConfigManagerCore.enableDebug) {
-            GCLog.info("Loading GC player data for "
-                    + this.player.get().getGameProfile().getName() + " : " + this.buildFlags);
+            GCLog.info(
+                    "Loading GC player data for " + this.player.get().getGameProfile().getName()
+                            + " : "
+                            + this.buildFlags);
         }
     }
 

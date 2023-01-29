@@ -4,6 +4,7 @@ import micdoodle8.mods.galacticraft.api.item.IItemElectric;
 import micdoodle8.mods.galacticraft.core.items.GCItems;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityRefinery;
 import micdoodle8.mods.galacticraft.core.util.FluidUtil;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -11,6 +12,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerRefinery extends Container {
+
     private final TileEntityRefinery tileEntity;
 
     public ContainerRefinery(InventoryPlayer par1InventoryPlayer, TileEntityRefinery tileEntity) {
@@ -52,8 +54,7 @@ public class ContainerRefinery extends Container {
     }
 
     /**
-     * Called to transfer a stack from one inventory to the other eg. when shift
-     * clicking.
+     * Called to transfer a stack from one inventory to the other eg. when shift clicking.
      */
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1) {

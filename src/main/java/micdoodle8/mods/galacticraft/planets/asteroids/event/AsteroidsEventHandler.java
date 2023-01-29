@@ -1,10 +1,11 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.event;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerHandler.ThermalArmorEvent;
 import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class AsteroidsEventHandler {
+
     @SubscribeEvent
     public void onThermalArmorEvent(ThermalArmorEvent event) {
         if (event.armorStack == null) {

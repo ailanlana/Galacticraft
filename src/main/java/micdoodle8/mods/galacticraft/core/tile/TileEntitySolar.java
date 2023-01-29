@@ -1,9 +1,7 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.EnumSet;
+
 import micdoodle8.mods.galacticraft.api.tile.IDisableableMachine;
 import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
 import micdoodle8.mods.galacticraft.api.transmission.tile.IConnector;
@@ -17,6 +15,7 @@ import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
 import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectricalSource;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -29,8 +28,13 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class TileEntitySolar extends TileBaseUniversalElectricalSource
         implements IMultiBlock, IDisableableMachine, IInventory, ISidedInventory, IConnector {
+
     @NetworkedField(targetSide = Side.CLIENT)
     public int solarStrength = 0;
 
@@ -95,9 +99,8 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
             if (!this.getDisabled(0) && this.ticks % 20 == 0) {
                 this.solarStrength = 0;
 
-                if (this.worldObj.isDaytime()
-                        && (this.worldObj.provider instanceof IGalacticraftWorldProvider
-                                || !this.worldObj.isRaining() && !this.worldObj.isThundering())) {
+                if (this.worldObj.isDaytime() && (this.worldObj.provider instanceof IGalacticraftWorldProvider
+                        || !this.worldObj.isRaining() && !this.worldObj.isThundering())) {
                     final double distance = 100.0D;
                     final double sinA = -Math.sin((this.currentAngle - 77.5D) * Math.PI / 180.0D);
                     final double cosA = Math.abs(Math.cos((this.currentAngle - 77.5D) * Math.PI / 180.0D));
@@ -105,8 +108,8 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
                     for (int x = -1; x <= 1; x++) {
                         for (int z = -1; z <= 1; z++) {
                             if (this.tierGC == 1) {
-                                if (this.worldObj.canBlockSeeTheSky(
-                                        this.xCoord + x, this.yCoord + 2, this.zCoord + z)) {
+                                if (this.worldObj
+                                        .canBlockSeeTheSky(this.xCoord + x, this.yCoord + 2, this.zCoord + z)) {
                                     boolean valid = true;
 
                                     for (int y = this.yCoord + 3; y < 256; y++) {
@@ -127,8 +130,8 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
 
                                 final BlockVec3 blockVec = new BlockVec3(this).translate(x, 3, z);
                                 for (double d = 0.0D; d < distance; d++) {
-                                    final BlockVec3 blockAt =
-                                            blockVec.clone().translate((int) (d * sinA), (int) (d * cosA), 0);
+                                    final BlockVec3 blockAt = blockVec.clone()
+                                            .translate((int) (d * sinA), (int) (d * cosA), 0);
                                     final Block block = blockAt.getBlock(this.worldObj);
 
                                     if (block.isOpaqueCube()) {
@@ -192,41 +195,39 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
             return 0;
         }
 
-        final float angle =
-                this.worldObj.getCelestialAngle(1.0F) - 0.784690560F < 0 ? 1.0F - 0.784690560F : -0.784690560F;
+        final float angle = this.worldObj.getCelestialAngle(1.0F) - 0.784690560F < 0 ? 1.0F - 0.784690560F
+                : -0.784690560F;
         float celestialAngle = (this.worldObj.getCelestialAngle(1.0F) + angle) * 360.0F;
 
         celestialAngle %= 360;
 
         final float difference = (180.0F - Math.abs(this.currentAngle % 180 - celestialAngle)) / 180.0F;
 
-        return MathHelper.floor_float(0.01F
-                * difference
-                * difference
-                * (this.solarStrength * (Math.abs(difference) * 500.0F))
-                * this.getSolarBoost());
+        return MathHelper.floor_float(
+                0.01F * difference
+                        * difference
+                        * (this.solarStrength * (Math.abs(difference) * 500.0F))
+                        * this.getSolarBoost());
     }
 
     public float getSolarBoost() {
-        return (float)
-                (this.worldObj.provider instanceof ISolarLevel
-                        ? ((ISolarLevel) this.worldObj.provider).getSolarEnergyMultiplier()
-                        : 1.0F);
+        return (float) (this.worldObj.provider instanceof ISolarLevel
+                ? ((ISolarLevel) this.worldObj.provider).getSolarEnergyMultiplier()
+                : 1.0F);
     }
 
     @Override
     public boolean onActivated(EntityPlayer entityPlayer) {
-        return this.getBlockType()
-                .onBlockActivated(
-                        this.worldObj,
-                        this.xCoord,
-                        this.yCoord,
-                        this.zCoord,
-                        entityPlayer,
-                        0,
-                        this.xCoord,
-                        this.yCoord,
-                        this.zCoord);
+        return this.getBlockType().onBlockActivated(
+                this.worldObj,
+                this.xCoord,
+                this.yCoord,
+                this.zCoord,
+                entityPlayer,
+                0,
+                this.xCoord,
+                this.yCoord,
+                this.zCoord);
     }
 
     @Override
@@ -249,8 +250,10 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
         }
         for (int x = -1; x < 2; x++) {
             for (int z = -1; z < 2; z++) {
-                final BlockVec3 vecToAdd =
-                        new BlockVec3(placedPosition.x + x, placedPosition.y + 2, placedPosition.z + z);
+                final BlockVec3 vecToAdd = new BlockVec3(
+                        placedPosition.x + x,
+                        placedPosition.y + 2,
+                        placedPosition.z + z);
 
                 ((BlockMulti) GCBlocks.fakeBlock)
                         .makeFakeBlock(this.worldObj, vecToAdd, placedPosition, this.getTierGC() == 1 ? 4 : 0);
@@ -266,19 +269,18 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
             for (int x = -1; x < 2; x++) {
                 for (int z = -1; z < 2; z++) {
                     if (this.worldObj.isRemote && this.worldObj.rand.nextDouble() < 0.1D) {
-                        FMLClientHandler.instance()
-                                .getClient()
-                                .effectRenderer
-                                .addBlockDestroyEffects(
-                                        thisBlock.x + (y == 2 ? x : 0),
-                                        thisBlock.y + y,
-                                        thisBlock.z + (y == 2 ? z : 0),
-                                        GCBlocks.solarPanel,
-                                        Block.getIdFromBlock(GCBlocks.solarPanel) >> 12 & 255);
+                        FMLClientHandler.instance().getClient().effectRenderer.addBlockDestroyEffects(
+                                thisBlock.x + (y == 2 ? x : 0),
+                                thisBlock.y + y,
+                                thisBlock.z + (y == 2 ? z : 0),
+                                GCBlocks.solarPanel,
+                                Block.getIdFromBlock(GCBlocks.solarPanel) >> 12 & 255);
                     }
 
                     this.worldObj.setBlockToAir(
-                            thisBlock.x + (y == 2 ? x : 0), thisBlock.y + y, thisBlock.z + (y == 2 ? z : 0));
+                            thisBlock.x + (y == 2 ? x : 0),
+                            thisBlock.y + y,
+                            thisBlock.z + (y == 2 ? z : 0));
                 }
             }
         }
@@ -360,7 +362,12 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
         return AxisAlignedBB.getBoundingBox(
-                this.xCoord - 1, this.yCoord, this.zCoord - 1, this.xCoord + 2, this.yCoord + 4, this.zCoord + 2);
+                this.xCoord - 1,
+                this.yCoord,
+                this.zCoord - 1,
+                this.xCoord + 2,
+                this.yCoord + 4,
+                this.zCoord + 2);
     }
 
     @Override
@@ -462,7 +469,7 @@ public class TileEntitySolar extends TileBaseUniversalElectricalSource
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        return new int[] {0};
+        return new int[] { 0 };
     }
 
     @Override

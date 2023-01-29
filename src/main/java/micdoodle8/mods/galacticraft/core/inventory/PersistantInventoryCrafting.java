@@ -6,6 +6,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
 public class PersistantInventoryCrafting implements IInventory {
+
     /**
      * List of the stacks in the crafting matrix.
      */
@@ -17,8 +18,7 @@ public class PersistantInventoryCrafting implements IInventory {
     private final int inventoryWidth;
 
     /**
-     * Class containing the callbacks for the events on_GUIClosed and
-     * on_CraftMaxtrixChanged.
+     * Class containing the callbacks for the events on_GUIClosed and on_CraftMaxtrixChanged.
      */
     public Container eventHandler;
 
@@ -45,8 +45,7 @@ public class PersistantInventoryCrafting implements IInventory {
     }
 
     /**
-     * Returns the itemstack in the slot specified (Top left is 0, 0). Args: row,
-     * column
+     * Returns the itemstack in the slot specified (Top left is 0, 0). Args: row, column
      */
     public ItemStack getStackInRowAndColumn(int par1, int par2) {
         if (par1 >= 0 && par1 < this.inventoryWidth) {
@@ -66,9 +65,8 @@ public class PersistantInventoryCrafting implements IInventory {
     }
 
     /**
-     * If this returns false, the inventory name will be used as an unlocalized
-     * name, and translated into the player's language. Otherwise it will be used
-     * directly.
+     * If this returns false, the inventory name will be used as an unlocalized name, and translated into the player's
+     * language. Otherwise it will be used directly.
      */
     @Override
     public boolean hasCustomInventoryName() {
@@ -76,8 +74,8 @@ public class PersistantInventoryCrafting implements IInventory {
     }
 
     /**
-     * When some containers are closed they call this on each slot, then drop
-     * whatever it returns as an EntityItem - like when you close a workbench GUI.
+     * When some containers are closed they call this on each slot, then drop whatever it returns as an EntityItem -
+     * like when you close a workbench GUI.
      */
     @Override
     public ItemStack getStackInSlotOnClosing(int par1) {
@@ -91,8 +89,8 @@ public class PersistantInventoryCrafting implements IInventory {
     }
 
     /**
-     * Removes from an inventory slot (first arg) up to a specified number (second
-     * arg) of items and returns them in a new stack.
+     * Removes from an inventory slot (first arg) up to a specified number (second arg) of items and returns them in a
+     * new stack.
      */
     @Override
     public ItemStack decrStackSize(int par1, int par2) {
@@ -127,8 +125,8 @@ public class PersistantInventoryCrafting implements IInventory {
     }
 
     /**
-     * Sets the given item stack to the specified slot in the crafting inventory
-     * Updates recipe matching in the containing machine.
+     * Sets the given item stack to the specified slot in the crafting inventory Updates recipe matching in the
+     * containing machine.
      */
     @Override
     public void setInventorySlotContents(int par1, ItemStack par2ItemStack) {
@@ -140,16 +138,15 @@ public class PersistantInventoryCrafting implements IInventory {
     }
 
     /**
-     * Sets the given item stack to the specified slot in the crafting inventory. No
-     * update to the containing machine.
+     * Sets the given item stack to the specified slot in the crafting inventory. No update to the containing machine.
      */
     public void setInventorySlotContentsNoUpdate(int par1, ItemStack par2ItemStack) {
         this.stackList[par1] = par2ItemStack;
     }
 
     /**
-     * Returns the maximum stack size for a inventory slot. Seems to always be 64,
-     * possibly will be extended. *Isn't this more of a set than a get?*
+     * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended. *Isn't
+     * this more of a set than a get?*
      */
     @Override
     public int getInventoryStackLimit() {
@@ -163,8 +160,7 @@ public class PersistantInventoryCrafting implements IInventory {
     public void markDirty() {}
 
     /**
-     * Do not make give this method the name canInteractWith because it clashes with
-     * Container
+     * Do not make give this method the name canInteractWith because it clashes with Container
      */
     @Override
     public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer) {
@@ -178,8 +174,7 @@ public class PersistantInventoryCrafting implements IInventory {
     public void closeInventory() {}
 
     /**
-     * Returns true if automation is allowed to insert the given stack (ignoring
-     * stack size) into the given slot.
+     * Returns true if automation is allowed to insert the given stack (ignoring stack size) into the given slot.
      */
     @Override
     public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack) {

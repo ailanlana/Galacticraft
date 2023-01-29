@@ -1,12 +1,11 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical;
 import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenSealer;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -20,7 +19,11 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockOxygenSealer extends BlockAdvancedTile implements ItemBlockDesc.IBlockShiftDesc {
+
     private IIcon iconMachineSide;
     private IIcon iconSealer;
     private IIcon iconInput;
@@ -54,16 +57,8 @@ public class BlockOxygenSealer extends BlockAdvancedTile implements ItemBlockDes
     }
 
     @Override
-    public boolean onUseWrench(
-            World par1World,
-            int x,
-            int y,
-            int z,
-            EntityPlayer par5EntityPlayer,
-            int side,
-            float hitX,
-            float hitY,
-            float hitZ) {
+    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ) {
         int change = 0;
 
         // Re-orient the block
@@ -92,8 +87,8 @@ public class BlockOxygenSealer extends BlockAdvancedTile implements ItemBlockDes
     }
 
     @Override
-    public boolean onMachineActivated(
-            World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
+    public boolean onMachineActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX,
+            float hitY, float hitZ) {
         entityPlayer.openGui(GalacticraftCore.instance, -1, world, x, y, z);
         return true;
     }
@@ -104,8 +99,7 @@ public class BlockOxygenSealer extends BlockAdvancedTile implements ItemBlockDes
             return this.iconSealer;
         } else if (side == metadata + 2) {
             return this.iconOutput;
-        } else if (side
-                == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) {
+        } else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) {
             return this.iconInput;
         } else {
             return this.iconMachineSide;
@@ -147,16 +141,10 @@ public class BlockOxygenSealer extends BlockAdvancedTile implements ItemBlockDes
         // Also don't want to clear all the breatheableAir if there are still
         // working sealers in the space
         /*
-         * TileEntity tile = world.getTileEntity(x, y, z);
-         *
-         * if (tile instanceof GCCoreTileEntityOxygenSealer) {
-         * GCCoreTileEntityOxygenSealer sealer = (GCCoreTileEntityOxygenSealer) tile;
-         *
-         * if (sealer.threadSeal != null && sealer.threadSeal.sealed) { for (BlockVec3
-         * checkedVec : sealer.threadSeal.checked) { int blockID =
-         * checkedVec.getBlockID(world);
-         *
-         * if (blockID == GCCoreBlocks.breatheableAir) { world.setBlock(checkedVec.x,
+         * TileEntity tile = world.getTileEntity(x, y, z); if (tile instanceof GCCoreTileEntityOxygenSealer) {
+         * GCCoreTileEntityOxygenSealer sealer = (GCCoreTileEntityOxygenSealer) tile; if (sealer.threadSeal != null &&
+         * sealer.threadSeal.sealed) { for (BlockVec3 checkedVec : sealer.threadSeal.checked) { int blockID =
+         * checkedVec.getBlockID(world); if (blockID == GCCoreBlocks.breatheableAir) { world.setBlock(checkedVec.x,
          * checkedVec.y, checkedVec.z, 0, 0, 2); } } } }
          */
 

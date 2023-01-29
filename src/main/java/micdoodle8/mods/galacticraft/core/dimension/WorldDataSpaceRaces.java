@@ -5,6 +5,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 
 public class WorldDataSpaceRaces extends WorldSavedData {
+
     public static final String saveDataID = "GCSpaceRaceData";
     private NBTTagCompound dataCompound;
 
@@ -23,8 +24,8 @@ public class WorldDataSpaceRaces extends WorldSavedData {
     }
 
     public static WorldDataSpaceRaces initWorldData(World world) {
-        WorldDataSpaceRaces worldData =
-                (WorldDataSpaceRaces) world.loadItemData(WorldDataSpaceRaces.class, WorldDataSpaceRaces.saveDataID);
+        WorldDataSpaceRaces worldData = (WorldDataSpaceRaces) world
+                .loadItemData(WorldDataSpaceRaces.class, WorldDataSpaceRaces.saveDataID);
 
         if (worldData == null) {
             worldData = new WorldDataSpaceRaces(WorldDataSpaceRaces.saveDataID);

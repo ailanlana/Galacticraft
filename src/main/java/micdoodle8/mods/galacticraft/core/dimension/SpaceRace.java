@@ -1,11 +1,10 @@
 package micdoodle8.mods.galacticraft.core.dimension;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
 import micdoodle8.mods.galacticraft.api.galaxies.GalaxyRegistry;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
@@ -13,10 +12,15 @@ import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.core.util.GCLog;
 import micdoodle8.mods.galacticraft.core.wrappers.FlagData;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+
 public class SpaceRace {
+
     public static final String DEFAULT_NAME = "gui.spaceRace.unnamed";
     private static int lastSpaceRaceID = 0;
     private int spaceRaceID;
@@ -46,8 +50,10 @@ public class SpaceRace {
         this.spaceRaceID = nbt.getInteger("SpaceRaceID");
         this.ticksSpent = (int) nbt.getLong("TicksSpent"); // Deal with legacy error
         this.flagData = FlagData.readFlagData(nbt);
-        this.teamColor =
-                new Vector3(nbt.getDouble("teamColorR"), nbt.getDouble("teamColorG"), nbt.getDouble("teamColorB"));
+        this.teamColor = new Vector3(
+                nbt.getDouble("teamColorR"),
+                nbt.getDouble("teamColorG"),
+                nbt.getDouble("teamColorB"));
 
         NBTTagList tagList = nbt.getTagList("PlayerList", 10);
         for (int i = 0; i < tagList.tagCount(); i++) {
@@ -59,8 +65,8 @@ public class SpaceRace {
         for (int i = 0; i < tagList.tagCount(); i++) {
             final NBTTagCompound tagAt = tagList.getCompoundTagAt(i);
 
-            final CelestialBody body =
-                    GalaxyRegistry.getCelestialBodyFromUnlocalizedName(tagAt.getString("CelestialBodyName"));
+            final CelestialBody body = GalaxyRegistry
+                    .getCelestialBodyFromUnlocalizedName(tagAt.getString("CelestialBodyName"));
 
             if (body != null) {
                 this.celestialBodyStatusList.put(body, tagAt.getInteger("TimeTaken"));

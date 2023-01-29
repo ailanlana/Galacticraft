@@ -1,13 +1,14 @@
 package micdoodle8.mods.galacticraft.core.entities.player;
 
-import api.player.client.ClientPlayerAPI;
-import api.player.client.ClientPlayerBase;
-import cpw.mods.fml.common.Loader;
 import micdoodle8.mods.galacticraft.api.world.IZeroGDimension;
 import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
+import api.player.client.ClientPlayerAPI;
+import api.player.client.ClientPlayerBase;
+import cpw.mods.fml.common.Loader;
 
 public class GCPlayerBaseSP extends ClientPlayerBase {
+
     boolean lastIsFlying;
     int lastLandingTicks;
 

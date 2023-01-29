@@ -1,23 +1,29 @@
 package micdoodle8.mods.galacticraft.core.nei;
 
-import codechicken.lib.gui.GuiDraw;
-import codechicken.nei.NEIServerUtils;
-import codechicken.nei.PositionedStack;
-import codechicken.nei.recipe.TemplateRecipeHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
+import codechicken.lib.gui.GuiDraw;
+import codechicken.nei.NEIServerUtils;
+import codechicken.nei.PositionedStack;
+import codechicken.nei.recipe.TemplateRecipeHandler;
+
 public class RocketT1RecipeHandler extends TemplateRecipeHandler {
-    private static final ResourceLocation rocketGuiTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/rocketbench.png");
+
+    private static final ResourceLocation rocketGuiTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/gui/rocketbench.png");
 
     public String getRecipeId() {
         return "galacticraft.rocketT1";
@@ -31,12 +37,11 @@ public class RocketT1RecipeHandler extends TemplateRecipeHandler {
     public Set<Entry<ArrayList<PositionedStack>, PositionedStack>> getRecipes() {
         final HashMap<ArrayList<PositionedStack>, PositionedStack> recipes = new HashMap<>();
 
-        for (final Entry<HashMap<Integer, PositionedStack>, PositionedStack> stack :
-                NEIGalacticraftConfig.getRocketBenchRecipes()) {
+        for (final Entry<HashMap<Integer, PositionedStack>, PositionedStack> stack : NEIGalacticraftConfig
+                .getRocketBenchRecipes()) {
             final ArrayList<PositionedStack> inputStacks = new ArrayList<>();
 
-            for (final Map.Entry<Integer, PositionedStack> input :
-                    stack.getKey().entrySet()) {
+            for (final Map.Entry<Integer, PositionedStack> input : stack.getKey().entrySet()) {
                 inputStacks.add(input.getValue());
             }
 
@@ -89,6 +94,7 @@ public class RocketT1RecipeHandler extends TemplateRecipeHandler {
     }
 
     public class CachedRocketRecipe extends TemplateRecipeHandler.CachedRecipe {
+
         public ArrayList<PositionedStack> input;
         public PositionedStack output;
 

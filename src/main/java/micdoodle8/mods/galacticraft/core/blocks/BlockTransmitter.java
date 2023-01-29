@@ -1,7 +1,7 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
 import micdoodle8.mods.galacticraft.api.transmission.tile.INetworkConnection;
 import micdoodle8.mods.galacticraft.api.transmission.tile.ITransmitter;
@@ -12,6 +12,7 @@ import micdoodle8.mods.galacticraft.core.network.PacketSimple;
 import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
 import micdoodle8.mods.galacticraft.core.util.OxygenUtil;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityHydrogenPipe;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -21,7 +22,10 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+
 public abstract class BlockTransmitter extends BlockContainer {
+
     public Vector3 minVector = new Vector3(0.3, 0.3, 0.3);
     public Vector3 maxVector = new Vector3(0.7, 0.7, 0.7);
 
@@ -37,7 +41,7 @@ public abstract class BlockTransmitter extends BlockContainer {
 
         this.setBlockBoundsBasedOnState(world, x, y, z);
         GalacticraftCore.packetPipeline.sendToAllAround(
-                new PacketSimple(EnumSimplePacket.C_UPDATE_WIRE_BOUNDS, new Object[] {x, y, z}),
+                new PacketSimple(EnumSimplePacket.C_UPDATE_WIRE_BOUNDS, new Object[] { x, y, z }),
                 new TargetPoint(world.provider.dimensionId, x, y, z, 10.0D));
 
         if (tile instanceof INetworkConnection) {
@@ -46,8 +50,8 @@ public abstract class BlockTransmitter extends BlockContainer {
     }
 
     /**
-     * Returns a bounding box from the pool of bounding boxes (this means this box
-     * can change after the pool has been cleared to be reused)
+     * Returns a bounding box from the pool of bounding boxes (this means this box can change after the pool has been
+     * cleared to be reused)
      */
     @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
@@ -123,8 +127,8 @@ public abstract class BlockTransmitter extends BlockContainer {
 
     @SuppressWarnings("rawtypes")
     @Override
-    public void addCollisionBoxesToList(
-            World world, int x, int y, int z, AxisAlignedBB axisalignedbb, List list, Entity entity) {
+    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisalignedbb, List list,
+            Entity entity) {
         this.setBlockBounds(
                 (float) this.minVector.x,
                 (float) this.minVector.y,

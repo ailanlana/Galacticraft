@@ -2,12 +2,15 @@ package micdoodle8.mods.galacticraft.core.recipe;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
+
 import micdoodle8.mods.galacticraft.api.recipe.INasaWorkbenchRecipe;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class NasaWorkbenchRecipe implements INasaWorkbenchRecipe {
+
     private final ItemStack output;
     private final HashMap<Integer, ItemStack> input;
 
@@ -34,9 +37,8 @@ public class NasaWorkbenchRecipe implements INasaWorkbenchRecipe {
             return false;
         }
         return target == null && input == null
-                || target.getItem() == input.getItem()
-                        && (target.getItemDamage() == OreDictionary.WILDCARD_VALUE
-                                || target.getItemDamage() == input.getItemDamage());
+                || target.getItem() == input.getItem() && (target.getItemDamage() == OreDictionary.WILDCARD_VALUE
+                        || target.getItemDamage() == input.getItemDamage());
     }
 
     @Override

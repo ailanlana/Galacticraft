@@ -1,11 +1,13 @@
 package micdoodle8.mods.galacticraft.api.recipe;
 
 import java.util.ArrayList;
+
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 public class RocketFuelRecipe {
+
     public static ArrayList<RocketFuel> fuelList = new ArrayList<>();
 
     public static void addFuel(Fluid fluid, int MaxTier) {

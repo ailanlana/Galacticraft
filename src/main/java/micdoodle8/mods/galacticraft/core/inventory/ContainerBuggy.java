@@ -7,6 +7,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerBuggy extends Container {
+
     private final IInventory lowerChestInventory;
     private final IInventory spaceshipInv;
 
@@ -29,8 +30,12 @@ public class ContainerBuggy extends Container {
 
         for (var4 = 0; var4 < 3; ++var4) {
             for (var5 = 0; var5 < 9; ++var5) {
-                this.addSlotToContainer(new Slot(
-                        this.lowerChestInventory, var5 + var4 * 9 + 9, 8 + var5 * 18, 49 + var4 * 18 + 14 + type * 36));
+                this.addSlotToContainer(
+                        new Slot(
+                                this.lowerChestInventory,
+                                var5 + var4 * 9 + 9,
+                                8 + var5 * 18,
+                                49 + var4 * 18 + 14 + type * 36));
             }
         }
 
@@ -45,8 +50,7 @@ public class ContainerBuggy extends Container {
     }
 
     /**
-     * Called when a player shift-clicks on a slot. You must override this or you
-     * will crash when someone does that.
+     * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
      */
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {

@@ -1,10 +1,10 @@
 package micdoodle8.mods.galacticraft.core.client.gui.container;
 
-import cpw.mods.fml.common.Loader;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.gui.screen.InventoryTabGalacticraft;
 import micdoodle8.mods.galacticraft.core.inventory.ContainerExtendedInventory;
 import micdoodle8.mods.galacticraft.core.inventory.InventoryExtended;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
@@ -13,14 +13,19 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
 import tconstruct.client.tabs.AbstractTab;
 import tconstruct.client.tabs.TabRegistry;
+import cpw.mods.fml.common.Loader;
 
 public class GuiExtendedInventory extends InventoryEffectRenderer {
-    private static final ResourceLocation inventoryTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/inventory.png");
+
+    private static final ResourceLocation inventoryTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/gui/inventory.png");
 
     private float xSize_lo_2;
     private float ySize_lo_2;
@@ -160,8 +165,7 @@ public class GuiExtendedInventory extends InventoryEffectRenderer {
                     // Active NEI undoes the standard potion offset
                     return -60;
                 }
-            } catch (final Exception e) {
-            }
+            } catch (final Exception e) {}
         }
         // No NEI, no change
         return 0;

@@ -1,7 +1,9 @@
 package micdoodle8.mods.galacticraft.planets.mars.world.gen;
 
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -10,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class WorldGenTerraformTree extends WorldGenerator {
+
     private final int minTreeHeight;
     private final boolean vinesGrow;
     private final int metaWood;
@@ -60,8 +63,7 @@ public class WorldGenTerraformTree extends WorldGenerator {
 
                             final boolean isAir = par1World.isAirBlock(l1, i1, j1);
 
-                            if (!isAir
-                                    && k1b != Blocks.grass
+                            if (!isAir && k1b != Blocks.grass
                                     && k1b != Blocks.water
                                     && k1b != Blocks.flowing_water
                                     && k1b != MarsBlocks.marsBlock
@@ -98,7 +100,12 @@ public class WorldGenTerraformTree extends WorldGenerator {
 
                                 if (block == null || block.canBeReplacedByLeaves(par1World, j2, j1, l2)) {
                                     this.setBlockAndNotifyAdequately(
-                                            par1World, j2, j1, l2, Blocks.leaves, this.metaLeaves);
+                                            par1World,
+                                            j2,
+                                            j1,
+                                            l2,
+                                            Blocks.leaves,
+                                            this.metaLeaves);
                                 }
                             }
                         }
@@ -189,8 +196,7 @@ public class WorldGenTerraformTree extends WorldGenerator {
     }
 
     /**
-     * Grows vines downward from the given block for a given length. Args: World, x,
-     * starty, z, vine-length
+     * Grows vines downward from the given block for a given length. Args: World, x, starty, z, vine-length
      */
     private void growVines(World par1World, int x, int y, int z, int meta) {
         this.setBlockAndNotifyAdequately(par1World, x, y, z, Blocks.vine, meta);

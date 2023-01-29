@@ -1,16 +1,20 @@
 package micdoodle8.mods.galacticraft.core.client.gui.element;
 
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
 public class GuiElementCheckbox extends GuiButton {
-    protected static final ResourceLocation texture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/gui.png");
+
+    protected static final ResourceLocation texture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/gui/gui.png");
     public Boolean isSelected;
     private final ICheckBoxCallback parentGui;
     private final int textColor;
@@ -28,34 +32,13 @@ public class GuiElementCheckbox extends GuiButton {
         this(id, parentGui, x, y, 13, 13, 20, 24, text, textColor);
     }
 
-    private GuiElementCheckbox(
-            int id,
-            ICheckBoxCallback parentGui,
-            int x,
-            int y,
-            int width,
-            int height,
-            int texX,
-            int texY,
-            String text,
-            int textColor) {
+    private GuiElementCheckbox(int id, ICheckBoxCallback parentGui, int x, int y, int width, int height, int texX,
+            int texY, String text, int textColor) {
         this(id, parentGui, x, y, width, height, width, height, texX, texY, text, textColor, true);
     }
 
-    public GuiElementCheckbox(
-            int id,
-            ICheckBoxCallback parentGui,
-            int x,
-            int y,
-            int width,
-            int height,
-            int texWidth,
-            int texHeight,
-            int texX,
-            int texY,
-            String text,
-            int textColor,
-            boolean shiftOnHover) {
+    public GuiElementCheckbox(int id, ICheckBoxCallback parentGui, int x, int y, int width, int height, int texWidth,
+            int texHeight, int texX, int texY, String text, int textColor, boolean shiftOnHover) {
         super(id, x, y, width, height, text);
         this.parentGui = parentGui;
         this.textColor = textColor;
@@ -75,8 +58,7 @@ public class GuiElementCheckbox extends GuiButton {
         if (this.visible) {
             par1Minecraft.getTextureManager().bindTexture(GuiElementCheckbox.texture);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            this.field_146123_n = par2 >= this.xPosition
-                    && par3 >= this.yPosition
+            this.field_146123_n = par2 >= this.xPosition && par3 >= this.yPosition
                     && par2 < this.xPosition + this.width
                     && par3 < this.yPosition + this.height;
             this.drawTexturedModalRect(
@@ -104,7 +86,11 @@ public class GuiElementCheckbox extends GuiButton {
         tessellator.startDrawingQuads();
         tessellator.addVertexWithUV(par1 + 0, par2 + par6, this.zLevel, (par3 + 0) * f, (par4 + this.texHeight) * f1);
         tessellator.addVertexWithUV(
-                par1 + par5, par2 + par6, this.zLevel, (par3 + this.texWidth) * f, (par4 + this.texHeight) * f1);
+                par1 + par5,
+                par2 + par6,
+                this.zLevel,
+                (par3 + this.texWidth) * f,
+                (par4 + this.texHeight) * f1);
         tessellator.addVertexWithUV(par1 + par5, par2 + 0, this.zLevel, (par3 + this.texWidth) * f, (par4 + 0) * f1);
         tessellator.addVertexWithUV(par1 + 0, par2 + 0, this.zLevel, (par3 + 0) * f, (par4 + 0) * f1);
         tessellator.draw();
@@ -112,8 +98,7 @@ public class GuiElementCheckbox extends GuiButton {
 
     @Override
     public boolean mousePressed(Minecraft par1Minecraft, int par2, int par3) {
-        if (this.enabled
-                && this.visible
+        if (this.enabled && this.visible
                 && par2 >= this.xPosition
                 && par3 >= this.yPosition
                 && par2 < this.xPosition + this.width
@@ -131,6 +116,7 @@ public class GuiElementCheckbox extends GuiButton {
     }
 
     public interface ICheckBoxCallback {
+
         void onSelectionChanged(GuiElementCheckbox checkbox, boolean newSelected);
 
         boolean canPlayerEdit(GuiElementCheckbox checkbox, EntityPlayer player);

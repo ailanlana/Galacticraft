@@ -2,6 +2,7 @@ package micdoodle8.mods.galacticraft.planets.mars.inventory;
 
 import micdoodle8.mods.galacticraft.core.inventory.SlotRocketBenchResult;
 import micdoodle8.mods.galacticraft.planets.mars.util.RecipeUtilMars;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -12,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class ContainerSchematicCargoRocket extends Container {
+
     public InventorySchematicCargoRocket craftMatrix = new InventorySchematicCargoRocket(this);
     public IInventory craftResult = new InventoryCraftResult();
     private final World worldObj;
@@ -28,8 +30,16 @@ public class ContainerSchematicCargoRocket extends Container {
         this.addSlotToContainer(new SlotSchematicCargoRocket(this.craftMatrix, 2, 134, 28, x, y, z, inventory.player));
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
-                this.addSlotToContainer(new SlotSchematicCargoRocket(
-                        this.craftMatrix, 3 + i * 2 + j, 116 + j * 36, 19 + i * 18, x, y, z, inventory.player));
+                this.addSlotToContainer(
+                        new SlotSchematicCargoRocket(
+                                this.craftMatrix,
+                                3 + i * 2 + j,
+                                116 + j * 36,
+                                19 + i * 18,
+                                x,
+                                y,
+                                z,
+                                inventory.player));
             }
         }
         this.addSlotToContainer(new SlotSchematicCargoRocket(this.craftMatrix, 21, 134, 46, x, y, z, inventory.player));
@@ -40,8 +50,16 @@ public class ContainerSchematicCargoRocket extends Container {
         // body
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 2; j++) {
-                this.addSlotToContainer(new SlotSchematicCargoRocket(
-                        this.craftMatrix, 8 + i * 2 + j, 44 + j * 18, 37 + i * 18, x, y, z, inventory.player));
+                this.addSlotToContainer(
+                        new SlotSchematicCargoRocket(
+                                this.craftMatrix,
+                                8 + i * 2 + j,
+                                44 + j * 18,
+                                37 + i * 18,
+                                x,
+                                y,
+                                z,
+                                inventory.player));
             }
         }
         // engine
@@ -49,8 +67,16 @@ public class ContainerSchematicCargoRocket extends Container {
         // fins
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
-                this.addSlotToContainer(new SlotSchematicCargoRocket(
-                        this.craftMatrix, 17 + i * 2 + j, 26 + j * 54, 91 + i * 18, x, y, z, inventory.player));
+                this.addSlotToContainer(
+                        new SlotSchematicCargoRocket(
+                                this.craftMatrix,
+                                17 + i * 2 + j,
+                                26 + j * 54,
+                                91 + i * 18,
+                                x,
+                                y,
+                                z,
+                                inventory.player));
             }
         }
 

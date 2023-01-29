@@ -3,6 +3,7 @@ package micdoodle8.mods.galacticraft.core.tile;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
+
 import micdoodle8.mods.galacticraft.api.item.IItemElectricBase;
 import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
 import micdoodle8.mods.galacticraft.api.transmission.tile.IConnector;
@@ -10,6 +11,7 @@ import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
 import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectricalSource;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -20,6 +22,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityEnergyStorageModule extends TileBaseUniversalElectricalSource
         implements ISidedInventory, IConnector {
+
     private static final float BASE_CAPACITY = 500000;
     private static final float TIER2_CAPACITY = 2500000;
     private ItemStack[] containingItems = new ItemStack[2];
@@ -237,7 +240,7 @@ public class TileEntityEnergyStorageModule extends TileBaseUniversalElectricalSo
 
     @Override
     public int[] getAccessibleSlotsFromSide(int slotID) {
-        return new int[] {0, 1};
+        return new int[] { 0, 1 };
     }
 
     @Override
@@ -269,7 +272,8 @@ public class TileEntityEnergyStorageModule extends TileBaseUniversalElectricalSo
     @Override
     public EnumSet<ForgeDirection> getElectricalInputDirections() {
         return EnumSet.of(
-                ForgeDirection.getOrientation((this.getBlockMetadata() & 3) + 2).getOpposite(), ForgeDirection.UNKNOWN);
+                ForgeDirection.getOrientation((this.getBlockMetadata() & 3) + 2).getOpposite(),
+                ForgeDirection.UNKNOWN);
     }
 
     @Override

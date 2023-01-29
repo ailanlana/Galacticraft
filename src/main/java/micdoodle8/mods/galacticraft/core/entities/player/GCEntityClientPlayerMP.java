@@ -1,13 +1,12 @@
 package micdoodle8.mods.galacticraft.core.entities.player;
 
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.event.ZeroGravityEvent;
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import micdoodle8.mods.galacticraft.api.world.IZeroGDimension;
 import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -23,15 +22,16 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
+
     boolean lastIsFlying;
     int lastLandingTicks;
 
-    public GCEntityClientPlayerMP(
-            Minecraft minecraft,
-            World world,
-            Session session,
-            NetHandlerPlayClient netHandler,
+    public GCEntityClientPlayerMP(Minecraft minecraft, World world, Session session, NetHandlerPlayClient netHandler,
             StatFileWriter statFileWriter) {
         super(minecraft, world, session, netHandler, statFileWriter);
     }
@@ -74,10 +74,10 @@ public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
                     }
 
                     if (this.timeInPortal == 0.0F) {
-                        this.mc
-                                .getSoundHandler()
-                                .playSound(PositionedSoundRecord.func_147674_a(
-                                        new ResourceLocation("portal.trigger"), this.rand.nextFloat() * 0.4F + 0.8F));
+                        this.mc.getSoundHandler().playSound(
+                                PositionedSoundRecord.func_147674_a(
+                                        new ResourceLocation("portal.trigger"),
+                                        this.rand.nextFloat() * 0.4F + 0.8F));
                     }
 
                     this.timeInPortal += 0.0125F;
@@ -89,20 +89,20 @@ public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
                     this.inPortal = false;
                 } else if (this.isPotionActive(Potion.confusion)
                         && this.getActivePotionEffect(Potion.confusion).getDuration() > 60) {
-                    this.timeInPortal += 0.006666667F;
+                            this.timeInPortal += 0.006666667F;
 
-                    if (this.timeInPortal > 1.0F) {
-                        this.timeInPortal = 1.0F;
-                    }
-                } else {
-                    if (this.timeInPortal > 0.0F) {
-                        this.timeInPortal -= 0.05F;
-                    }
+                            if (this.timeInPortal > 1.0F) {
+                                this.timeInPortal = 1.0F;
+                            }
+                        } else {
+                            if (this.timeInPortal > 0.0F) {
+                                this.timeInPortal -= 0.05F;
+                            }
 
-                    if (this.timeInPortal < 0.0F) {
-                        this.timeInPortal = 0.0F;
-                    }
-                }
+                            if (this.timeInPortal < 0.0F) {
+                                this.timeInPortal = 0.0F;
+                            }
+                        }
 
                 if (this.timeUntilPortal > 0) {
                     --this.timeUntilPortal;
@@ -135,18 +135,25 @@ public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
                 // -----------END CUSTOM
 
                 this.func_145771_j(
-                        this.posX - this.width * 0.35D, this.boundingBox.minY + 0.5D, this.posZ + this.width * 0.35D);
+                        this.posX - this.width * 0.35D,
+                        this.boundingBox.minY + 0.5D,
+                        this.posZ + this.width * 0.35D);
                 this.func_145771_j(
-                        this.posX - this.width * 0.35D, this.boundingBox.minY + 0.5D, this.posZ - this.width * 0.35D);
+                        this.posX - this.width * 0.35D,
+                        this.boundingBox.minY + 0.5D,
+                        this.posZ - this.width * 0.35D);
                 this.func_145771_j(
-                        this.posX + this.width * 0.35D, this.boundingBox.minY + 0.5D, this.posZ - this.width * 0.35D);
+                        this.posX + this.width * 0.35D,
+                        this.boundingBox.minY + 0.5D,
+                        this.posZ - this.width * 0.35D);
                 this.func_145771_j(
-                        this.posX + this.width * 0.35D, this.boundingBox.minY + 0.5D, this.posZ + this.width * 0.35D);
+                        this.posX + this.width * 0.35D,
+                        this.boundingBox.minY + 0.5D,
+                        this.posZ + this.width * 0.35D);
 
                 final boolean flag2 = this.getFoodStats().getFoodLevel() > 6.0F || this.capabilities.allowFlying;
 
-                if (this.onGround
-                        && !flag1
+                if (this.onGround && !flag1
                         && this.movementInput.moveForward >= ff
                         && !this.isSprinting()
                         && flag2
@@ -159,8 +166,7 @@ public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
                     }
                 }
 
-                if (!this.isSprinting()
-                        && this.movementInput.moveForward >= ff
+                if (!this.isSprinting() && this.movementInput.moveForward >= ff
                         && flag2
                         && !this.isUsingItem()
                         && !this.isPotionActive(Potion.blindness)
@@ -190,8 +196,7 @@ public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
                 // -from: EntityPlayer
 
                 // Omit fly toggle timer
-                if (this.worldObj.difficultySetting == EnumDifficulty.PEACEFUL
-                        && this.getHealth() < this.getMaxHealth()
+                if (this.worldObj.difficultySetting == EnumDifficulty.PEACEFUL && this.getHealth() < this.getMaxHealth()
                         && this.worldObj.getGameRules().getGameRuleBooleanValue("naturalRegeneration")
                         && this.ticksExisted % 20 * 12 == 0) {
                     this.heal(1.0F);
@@ -271,8 +276,7 @@ public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
                     AxisAlignedBB axisalignedbb = null;
 
                     if (this.ridingEntity != null && !this.ridingEntity.isDead) {
-                        axisalignedbb = this.boundingBox
-                                .func_111270_a(this.ridingEntity.boundingBox)
+                        axisalignedbb = this.boundingBox.func_111270_a(this.ridingEntity.boundingBox)
                                 .expand(1.0D, 0.0D, 1.0D);
                     } else {
                         axisalignedbb = this.boundingBox.expand(1.0D, 0.5D, 1.0D);

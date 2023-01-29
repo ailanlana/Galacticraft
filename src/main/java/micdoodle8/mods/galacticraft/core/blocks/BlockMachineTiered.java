@@ -1,12 +1,14 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical;
 import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityElectricFurnace;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityEnergyStorageModule;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -22,6 +24,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockMachineTiered extends BlockTileGC implements ItemBlockDesc.IBlockShiftDesc {
+
     public static final int STORAGE_MODULE_METADATA = 0;
     public static final int ELECTRIC_FURNACE_METADATA = 4;
 
@@ -66,18 +69,17 @@ public class BlockMachineTiered extends BlockTileGC implements ItemBlockDesc.IBl
         this.iconEnergyStorageModule = new IIcon[17];
 
         for (int i = 0; i < this.iconEnergyStorageModule.length; i++) {
-            this.iconEnergyStorageModule[i] =
-                    iconRegister.registerIcon(GalacticraftCore.TEXTURE_PREFIX + "energyStorageModule_" + i);
+            this.iconEnergyStorageModule[i] = iconRegister
+                    .registerIcon(GalacticraftCore.TEXTURE_PREFIX + "energyStorageModule_" + i);
         }
 
         this.iconElectricFurnace = iconRegister.registerIcon(GalacticraftCore.TEXTURE_PREFIX + "electricFurnace");
 
         if (GalacticraftCore.isPlanetsLoaded) {
             try {
-                final String prefix =
-                        (String) Class.forName("micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule")
-                                .getField("TEXTURE_PREFIX")
-                                .get(null);
+                final String prefix = (String) Class
+                        .forName("micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule")
+                        .getField("TEXTURE_PREFIX").get(null);
                 this.iconTier2 = iconRegister.registerIcon(prefix + "machine");
                 this.iconInputT2 = iconRegister.registerIcon(prefix + "machine_input");
                 this.iconOutputT2 = iconRegister.registerIcon(prefix + "machine_output");
@@ -177,15 +179,14 @@ public class BlockMachineTiered extends BlockTileGC implements ItemBlockDesc.IBl
                 return this.iconInput;
             }
             // If it is the back side
-            else if (metaside == 2 && side == 4
-                    || metaside == 3 && side == 5
+            else if (metaside == 2 && side == 4 || metaside == 3 && side == 5
                     || metaside == 4 && side == 3
                     || metaside == 5 && side == 2) {
-                if (metadata >= 8) {
-                    return this.iconElectricFurnaceT2;
-                }
-                return this.iconElectricFurnace;
-            }
+                        if (metadata >= 8) {
+                            return this.iconElectricFurnaceT2;
+                        }
+                        return this.iconElectricFurnace;
+                    }
         } else {
             // If it is the front side
             if (side == metaside) {
@@ -243,16 +244,8 @@ public class BlockMachineTiered extends BlockTileGC implements ItemBlockDesc.IBl
     }
 
     @Override
-    public boolean onUseWrench(
-            World par1World,
-            int x,
-            int y,
-            int z,
-            EntityPlayer par5EntityPlayer,
-            int side,
-            float hitX,
-            float hitY,
-            float hitZ) {
+    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ) {
         final int metadata = par1World.getBlockMetadata(x, y, z);
         final int original = metadata & 3;
         int change = 0;
@@ -286,16 +279,8 @@ public class BlockMachineTiered extends BlockTileGC implements ItemBlockDesc.IBl
      * Called when the block is right clicked by the player
      */
     @Override
-    public boolean onMachineActivated(
-            World par1World,
-            int x,
-            int y,
-            int z,
-            EntityPlayer par5EntityPlayer,
-            int side,
-            float hitX,
-            float hitY,
-            float hitZ) {
+    public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ) {
         if (!par1World.isRemote) {
             par5EntityPlayer.openGui(GalacticraftCore.instance, -1, par1World, x, y, z);
         }
@@ -330,7 +315,7 @@ public class BlockMachineTiered extends BlockTileGC implements ItemBlockDesc.IBl
         return new ItemStack(this, 1, 8 + BlockMachineTiered.ELECTRIC_FURNACE_METADATA);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
         par3List.add(this.getEnergyStorageModule());

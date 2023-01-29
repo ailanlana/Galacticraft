@@ -3,6 +3,7 @@ package micdoodle8.mods.galacticraft.api;
 import java.lang.reflect.Field;
 
 public class GalacticraftConfigAccess {
+
     private static Field quickMode;
     private static Field hardMode;
     private static Field adventureMode;
@@ -18,8 +19,7 @@ public class GalacticraftConfigAccess {
 
         try {
             return quickMode.getBoolean(null);
-        } catch (final Exception e) {
-        }
+        } catch (final Exception e) {}
         return false;
     }
 
@@ -30,8 +30,7 @@ public class GalacticraftConfigAccess {
 
         try {
             return hardMode.getBoolean(null);
-        } catch (final Exception e) {
-        }
+        } catch (final Exception e) {}
         return false;
     }
 
@@ -42,8 +41,7 @@ public class GalacticraftConfigAccess {
 
         try {
             return adventureMode.getBoolean(null);
-        } catch (final Exception e) {
-        }
+        } catch (final Exception e) {}
         return false;
     }
 
@@ -54,8 +52,7 @@ public class GalacticraftConfigAccess {
 
         try {
             return adventureRecipes.getBoolean(null);
-        } catch (final Exception e) {
-        }
+        } catch (final Exception e) {}
         return false;
     }
 
@@ -66,8 +63,7 @@ public class GalacticraftConfigAccess {
 
         try {
             return adventureMobDropsAndSpawning.getBoolean(null);
-        } catch (final Exception e) {
-        }
+        } catch (final Exception e) {}
         return false;
     }
 
@@ -78,8 +74,7 @@ public class GalacticraftConfigAccess {
 
         try {
             return adventureSpawnHandling.getBoolean(null);
-        } catch (final Exception e) {
-        }
+        } catch (final Exception e) {}
         return false;
     }
 
@@ -90,8 +85,7 @@ public class GalacticraftConfigAccess {
 
         try {
             return adventureAsteroidPopulation.getBoolean(null);
-        } catch (final Exception e) {
-        }
+        } catch (final Exception e) {}
         return false;
     }
 

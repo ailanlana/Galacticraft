@@ -5,6 +5,7 @@ import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
 import micdoodle8.mods.galacticraft.planets.mars.entities.EntitySlimeling;
 import micdoodle8.mods.galacticraft.planets.mars.inventory.ContainerSlimeling;
 import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
@@ -17,12 +18,15 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 public class GuiSlimelingInventory extends GuiContainer {
-    private static final ResourceLocation slimelingPanelGui =
-            new ResourceLocation(MarsModule.ASSET_PREFIX, "textures/gui/slimelingPanel2.png");
+
+    private static final ResourceLocation slimelingPanelGui = new ResourceLocation(
+            MarsModule.ASSET_PREFIX,
+            "textures/gui/slimelingPanel2.png");
     private final EntitySlimeling slimeling;
 
     public static RenderItem drawItems = new RenderItem();
@@ -67,8 +71,7 @@ public class GuiSlimelingInventory extends GuiContainer {
     @Override
     protected void mouseClicked(int px, int py, int par3) {
         if (px >= this.invX && px < this.invX + this.invWidth && py >= this.invY && py < this.invY + this.invHeight) {
-            Minecraft.getMinecraft()
-                    .getSoundHandler()
+            Minecraft.getMinecraft().getSoundHandler()
                     .playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
             this.mc.displayGuiScreen(new GuiSlimeling(this.slimeling));
         }
@@ -76,14 +79,8 @@ public class GuiSlimelingInventory extends GuiContainer {
         super.mouseClicked(px, py, par3);
     }
 
-    public static void drawSlimelingOnGui(
-            GuiSlimelingInventory screen,
-            EntitySlimeling slimeling,
-            int par1,
-            int par2,
-            int par3,
-            float par4,
-            float par5) {
+    public static void drawSlimelingOnGui(GuiSlimelingInventory screen, EntitySlimeling slimeling, int par1, int par2,
+            int par3, float par4, float par5) {
         GuiSlimeling.renderingOnGui = true;
         GL11.glEnable(GL11.GL_COLOR_MATERIAL);
         GL11.glPushMatrix();
@@ -137,7 +134,13 @@ public class GuiSlimelingInventory extends GuiContainer {
         final int yOffset = (int) Math.floor(30.0D * (1.0F - this.slimeling.getScale()));
 
         GuiSlimelingInventory.drawSlimelingOnGui(
-                this, this.slimeling, this.width / 2, var6 + 62 - yOffset, 70, var5 + 51 - i, var6 + 75 - 50 - j);
+                this,
+                this.slimeling,
+                this.width / 2,
+                var6 + 62 - yOffset,
+                70,
+                var5 + 51 - i,
+                var6 + 75 - 50 - j);
 
         GL11.glTranslatef(0, 0, 100);
 

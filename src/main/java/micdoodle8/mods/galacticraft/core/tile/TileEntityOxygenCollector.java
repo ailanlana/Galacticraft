@@ -1,12 +1,13 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import cpw.mods.fml.relauncher.Side;
 import java.util.EnumSet;
+
 import micdoodle8.mods.galacticraft.api.world.IAtmosphericGas;
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,7 +21,10 @@ import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+
 public class TileEntityOxygenCollector extends TileEntityOxygen implements IInventory, ISidedInventory {
+
     public boolean active;
     public static final int OUTPUT_PER_TICK = 100;
 
@@ -39,8 +43,8 @@ public class TileEntityOxygenCollector extends TileEntityOxygen implements IInve
 
     @Override
     public int getCappedScaledOxygenLevel(int scale) {
-        return (int)
-                Math.max(Math.min(Math.floor((double) this.storedOxygen / (double) this.maxOxygen * scale), scale), 0);
+        return (int) Math
+                .max(Math.min(Math.floor((double) this.storedOxygen / (double) this.maxOxygen * scale), scale), 0);
     }
 
     @Override
@@ -108,8 +112,7 @@ public class TileEntityOxygenCollector extends TileEntityOxygen implements IInve
                         // Pre-test to see if close to the map edges, so code
                         // doesn't have to continually test for map edges inside the
                         // loop
-                        if (this.xCoord > -29999995
-                                && this.xCoord < 2999995
+                        if (this.xCoord > -29999995 && this.xCoord < 2999995
                                 && this.zCoord > -29999995
                                 && this.zCoord < 29999995) {
                             // Test the y coordinates, so code doesn't have to keep
@@ -149,10 +152,9 @@ public class TileEntityOxygenCollector extends TileEntityOxygen implements IInve
                                         // and breatheable air) without looking up
                                         // in the blocksList
                                         if (!(block instanceof BlockAir)) {
-                                            if (block.isLeaves(this.worldObj, x, y, z)
-                                                    || block instanceof IPlantable
-                                                            && ((IPlantable) block).getPlantType(this.worldObj, x, y, z)
-                                                                    == EnumPlantType.Crop) {
+                                            if (block.isLeaves(this.worldObj, x, y, z) || block instanceof IPlantable
+                                                    && ((IPlantable) block).getPlantType(this.worldObj, x, y, z)
+                                                            == EnumPlantType.Crop) {
                                                 nearbyLeaves += 0.075F * 10F;
                                             }
                                         }
@@ -290,7 +292,7 @@ public class TileEntityOxygenCollector extends TileEntityOxygen implements IInve
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        return new int[] {0};
+        return new int[] { 0 };
     }
 
     @Override

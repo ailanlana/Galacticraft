@@ -2,17 +2,12 @@ package micdoodle8.mods.galacticraft.core.util;
 
 import static net.minecraftforge.common.config.Configuration.CATEGORY_GENERAL;
 
-import com.google.common.primitives.Ints;
-import cpw.mods.fml.client.config.IConfigElement;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.registry.GameData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.vector.BlockTuple;
 import micdoodle8.mods.galacticraft.core.Constants;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
@@ -20,6 +15,7 @@ import micdoodle8.mods.galacticraft.core.energy.EnergyConfigHandler;
 import micdoodle8.mods.galacticraft.core.recipe.RecipeManagerGC;
 import micdoodle8.mods.galacticraft.core.tick.TickHandlerClient;
 import micdoodle8.mods.galacticraft.planets.asteroids.world.gen.BiomeGenBaseAsteroids;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -27,9 +23,19 @@ import net.minecraft.item.ItemBlock;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+
 import org.lwjgl.input.Keyboard;
 
+import com.google.common.primitives.Ints;
+
+import cpw.mods.fml.client.config.IConfigElement;
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.registry.GameData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class ConfigManagerCore {
+
     static Configuration config;
 
     // GAME CONTROL
@@ -64,7 +70,7 @@ public class ConfigManagerCore {
     public static int biomeIDbase = 102;
     public static boolean disableBiomeTypeRegistrations;
     public static int[] staticLoadDimensions = {};
-    public static int[] disableRocketLaunchDimensions = {-1, 1};
+    public static int[] disableRocketLaunchDimensions = { -1, 1 };
     public static boolean disableRocketLaunchAllNonGC;
     public static int otherPlanetWorldBorders = 0;
     public static boolean keepLoadedNewSpaceStations;
@@ -155,8 +161,7 @@ public class ConfigManagerCore {
             }
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Enable Debug Messages", false);
-            prop.comment =
-                    "If this is enabled, debug messages will appear in the console. This is useful for finding bugs in the mod.";
+            prop.comment = "If this is enabled, debug messages will appear in the console. This is useful for finding bugs in the mod.";
             prop.setLanguageKey("gc.configgui.enableDebug");
             enableDebug = prop.getBoolean(false);
             propOrder.add(prop.getName());
@@ -174,15 +179,13 @@ public class ConfigManagerCore {
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_DIMENSIONS, "idDimensionOverworldOrbit", -27);
-            prop.comment =
-                    "WorldProvider ID for Overworld Space Stations (advanced: do not change unless you have conflicts)";
+            prop.comment = "WorldProvider ID for Overworld Space Stations (advanced: do not change unless you have conflicts)";
             prop.setLanguageKey("gc.configgui.idDimensionOverworldOrbit").setRequiresMcRestart(true);
             idDimensionOverworldOrbit = prop.getInt();
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_DIMENSIONS, "idDimensionOverworldOrbitStatic", -26);
-            prop.comment =
-                    "WorldProvider ID for Static Space Stations (advanced: do not change unless you have conflicts)";
+            prop.comment = "WorldProvider ID for Static Space Stations (advanced: do not change unless you have conflicts)";
             prop.setLanguageKey("gc.configgui.idDimensionOverworldOrbitStatic").setRequiresMcRestart(true);
             idDimensionOverworldOrbitStatic = prop.getInt();
             propOrder.add(prop.getName());
@@ -205,8 +208,8 @@ public class ConfigManagerCore {
             staticLoadDimensions = prop.getIntList();
             propOrder.add(prop.getName());
 
-            prop = config.get(
-                    Constants.CONFIG_CATEGORY_DIMENSIONS, "Set new Space Stations to be static loaded", false);
+            prop = config
+                    .get(Constants.CONFIG_CATEGORY_DIMENSIONS, "Set new Space Stations to be static loaded", false);
             prop.comment = "Set this to true to have an automatic /gckeeploaded for any new Space Station created.";
             prop.setLanguageKey("gc.configgui.staticLoadedNewSS");
             keepLoadedNewSpaceStations = prop.getBoolean();
@@ -215,17 +218,16 @@ public class ConfigManagerCore {
             prop = config.get(
                     Constants.CONFIG_CATEGORY_DIMENSIONS,
                     "Dimensions where rockets cannot launch",
-                    new String[] {"1", "-1"});
+                    new String[] { "1", "-1" });
             prop.comment = "IDs of dimensions where rockets should not launch - this should always include the Nether.";
             prop.setLanguageKey("gc.configgui.rocketDisabledDimensions");
             disableRocketLaunchDimensions = prop.getIntList();
             disableRocketLaunchAllNonGC = searchAsterisk(prop.getStringList());
             propOrder.add(prop.getName());
 
-            prop = config.get(
-                    Constants.CONFIG_CATEGORY_DIMENSIONS, "Disable rockets from returning to Overworld", false);
-            prop.comment =
-                    "If true, rockets will be unable to reach the Overworld (only use this in special modpacks!)";
+            prop = config
+                    .get(Constants.CONFIG_CATEGORY_DIMENSIONS, "Disable rockets from returning to Overworld", false);
+            prop.comment = "If true, rockets will be unable to reach the Overworld (only use this in special modpacks!)";
             prop.setLanguageKey("gc.configgui.rocketDisableOverworldReturn");
             disableRocketsToOverworld = prop.getBoolean(false);
             propOrder.add(prop.getName());
@@ -234,15 +236,13 @@ public class ConfigManagerCore {
                     Constants.CONFIG_CATEGORY_DIMENSIONS,
                     "World border for landing location on other planets (Moon, Mars, etc)",
                     0);
-            prop.comment =
-                    "Set this to 0 for no borders (default).  If set to e.g. 2000, players will land on the Moon inside the x,z range -2000 to 2000.)";
+            prop.comment = "Set this to 0 for no borders (default).  If set to e.g. 2000, players will land on the Moon inside the x,z range -2000 to 2000.)";
             prop.setLanguageKey("gc.configgui.planetWorldBorders");
             otherPlanetWorldBorders = prop.getInt(0);
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Force Overworld Spawn", false);
-            prop.comment =
-                    "By default, you will respawn on galacticraft dimensions if you die. If you set this to true, you will respawn back on earth.";
+            prop.comment = "By default, you will respawn on galacticraft dimensions if you die. If you set this to true, you will respawn back on earth.";
             prop.setLanguageKey("gc.configgui.forceOverworldRespawn");
             forceOverworldRespawn = prop.getBoolean(false);
             propOrder.add(prop.getName());
@@ -284,29 +284,25 @@ public class ConfigManagerCore {
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Disable Spaceship Particles", false);
-            prop.comment =
-                    "If you have FPS problems, setting this to true will help if rocket particles are in your sights";
+            prop.comment = "If you have FPS problems, setting this to true will help if rocket particles are in your sights";
             prop.setLanguageKey("gc.configgui.disableSpaceshipParticles");
             disableSpaceshipParticles = prop.getBoolean(false);
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Disable Vehicle Third-Person and Zoom", false);
-            prop.comment =
-                    "If you're using this mod in virtual reality, or if you don't want the camera changes when entering a Galacticraft vehicle, set this to true.";
+            prop.comment = "If you're using this mod in virtual reality, or if you don't want the camera changes when entering a Galacticraft vehicle, set this to true.";
             prop.setLanguageKey("gc.configgui.disableVehicleCameraChanges");
             disableVehicleCameraChanges = prop.getBoolean(false);
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Minimap Left", false);
-            prop.comment =
-                    "If true, this will move the Oxygen Indicator to the left side. You can combine this with \"Minimap Bottom\"";
+            prop.comment = "If true, this will move the Oxygen Indicator to the left side. You can combine this with \"Minimap Bottom\"";
             prop.setLanguageKey("gc.configgui.oxygenIndicatorLeft");
             oxygenIndicatorLeft = prop.getBoolean(false);
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Minimap Bottom", false);
-            prop.comment =
-                    "If true, this will move the Oxygen Indicator to the bottom. You can combine this with \"Minimap Left\"";
+            prop.comment = "If true, this will move the Oxygen Indicator to the bottom. You can combine this with \"Minimap Left\"";
             prop.setLanguageKey("gc.configgui.oxygenIndicatorBottom");
             oxygenIndicatorBottom = prop.getBoolean(false);
             propOrder.add(prop.getName());
@@ -319,7 +315,7 @@ public class ConfigManagerCore {
             oilGenFactor = prop.getDouble(1.8);
             propOrder.add(prop.getName());
 
-            prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Oil gen in external dimensions", new int[] {0});
+            prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Oil gen in external dimensions", new int[] { 0 });
             prop.comment = "List of non-galacticraft dimension IDs to generate oil in.";
             prop.setLanguageKey("gc.configgui.externalOilGen");
             externalOilGen = prop.getIntList();
@@ -380,8 +376,7 @@ public class ConfigManagerCore {
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Generate all other mods features on planets", false);
-            prop.comment =
-                    "If this is enabled, other mods' standard ores and all other features (eg. plants) can generate on the Moon and planets. Apart from looking wrong, this make cause 'Already Decorating!' type crashes.  NOT RECOMMENDED!  See Wiki.";
+            prop.comment = "If this is enabled, other mods' standard ores and all other features (eg. plants) can generate on the Moon and planets. Apart from looking wrong, this make cause 'Already Decorating!' type crashes.  NOT RECOMMENDED!  See Wiki.";
             prop.setLanguageKey("gc.configgui.enableOtherModsFeatures");
             enableOtherModsFeatures = prop.getBoolean(false);
             propOrder.add(prop.getName());
@@ -390,14 +385,15 @@ public class ConfigManagerCore {
                     Constants.CONFIG_CATEGORY_GENERAL,
                     "Whitelist CoFHCore worldgen to generate its ores and lakes on planets",
                     false);
-            prop.comment =
-                    "If generate other mods features is disabled as recommended, this setting can whitelist CoFHCore custom worldgen on planets.";
+            prop.comment = "If generate other mods features is disabled as recommended, this setting can whitelist CoFHCore custom worldgen on planets.";
             prop.setLanguageKey("gc.configgui.whitelistCoFHCoreGen");
             whitelistCoFHCoreGen = prop.getBoolean(false);
             propOrder.add(prop.getName());
 
             prop = config.get(
-                    Constants.CONFIG_CATEGORY_GENERAL, "Generate ThaumCraft wild nodes on planetary surfaces", true);
+                    Constants.CONFIG_CATEGORY_GENERAL,
+                    "Generate ThaumCraft wild nodes on planetary surfaces",
+                    true);
             prop.comment = "If ThaumCraft is installed, ThaumCraft wild nodes can generate on the Moon and planets.";
             prop.setLanguageKey("gc.configgui.enableThaumCraftNodes");
             enableThaumCraftNodes = prop.getBoolean(true);
@@ -407,29 +403,25 @@ public class ConfigManagerCore {
                     Constants.CONFIG_CATEGORY_GENERAL,
                     "Other mods ores for GC to generate on the Moon and planets",
                     new String[] {});
-            prop.comment =
-                    "Enter IDs of other mods' ores here for Galacticraft to generate them on the Moon and other planets. Format is BlockName or BlockName:metadata. Use optional parameters at end of each line: /RARE /UNCOMMON or /COMMON for rarity in a chunk; /DEEP /SHALLOW or /BOTH for height; /SINGLE /STANDARD or /LARGE for clump size; /XTRARANDOM for ores sometimes there sometimes not at all.  /ONLYMOON or /ONLYMARS if wanted on one planet only.  If nothing specified, defaults are /COMMON, /BOTH and /STANDARD.  Repeat lines to generate a huge quantity of ores.";
+            prop.comment = "Enter IDs of other mods' ores here for Galacticraft to generate them on the Moon and other planets. Format is BlockName or BlockName:metadata. Use optional parameters at end of each line: /RARE /UNCOMMON or /COMMON for rarity in a chunk; /DEEP /SHALLOW or /BOTH for height; /SINGLE /STANDARD or /LARGE for clump size; /XTRARANDOM for ores sometimes there sometimes not at all.  /ONLYMOON or /ONLYMARS if wanted on one planet only.  If nothing specified, defaults are /COMMON, /BOTH and /STANDARD.  Repeat lines to generate a huge quantity of ores.";
             prop.setLanguageKey("gc.configgui.otherModOreGenIDs");
             oregenIDs = prop.getStringList();
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Use legacy oilgc fluid registration", false);
-            prop.comment =
-                    "Set to true to make Galacticraft oil register as oilgc, for backwards compatibility with previously generated worlds.";
+            prop.comment = "Set to true to make Galacticraft oil register as oilgc, for backwards compatibility with previously generated worlds.";
             prop.setLanguageKey("gc.configgui.useOldOilFluidID");
             useOldOilFluidID = prop.getBoolean(false);
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Use legacy fuelgc fluid registration", false);
-            prop.comment =
-                    "Set to true to make Galacticraft fuel register as fuelgc, for backwards compatibility with previously generated worlds.";
+            prop.comment = "Set to true to make Galacticraft fuel register as fuelgc, for backwards compatibility with previously generated worlds.";
             prop.setLanguageKey("gc.configgui.useOldFuelFluidID");
             useOldFuelFluidID = prop.getBoolean(false);
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Disable lander on Moon and other planets", false);
-            prop.comment =
-                    "If this is true, the player will parachute onto the Moon instead - use only in debug situations.";
+            prop.comment = "If this is true, the player will parachute onto the Moon instead - use only in debug situations.";
             prop.setLanguageKey("gc.configgui.disableLander");
             disableLander = prop.getBoolean(false);
             propOrder.add(prop.getName());
@@ -443,8 +435,7 @@ public class ConfigManagerCore {
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Space Stations Require Permission", true);
-            prop.comment =
-                    "While true, space stations require you to invite other players using /ssinvite <playername>";
+            prop.comment = "While true, space stations require you to invite other players using /ssinvite <playername>";
             prop.setLanguageKey("gc.configgui.spaceStationsRequirePermission");
             spaceStationsRequirePermission = prop.getBoolean(true);
             propOrder.add(prop.getName());
@@ -456,8 +447,7 @@ public class ConfigManagerCore {
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Override Capes", true);
-            prop.comment =
-                    "By default, Galacticraft will override capes with the mod's donor cape. Set to false to disable.";
+            prop.comment = "By default, Galacticraft will override capes with the mod's donor cape. Set to false to disable.";
             prop.setLanguageKey("gc.configgui.overrideCapes");
             overrideCapes = prop.getBoolean(true);
             propOrder.add(prop.getName());
@@ -469,11 +459,11 @@ public class ConfigManagerCore {
             propOrder.add(prop.getName());
 
             try {
-                prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "External Sealable IDs", new String[] {
-                    GameData.getBlockRegistry().getNameForObject(Blocks.glass_pane) + ":0"
-                });
-                prop.comment =
-                        "List non-opaque blocks from other mods (for example, special types of glass) that the Oxygen Sealer should recognize as solid seals. Format is BlockName or BlockName:metadata";
+                prop = config.get(
+                        Constants.CONFIG_CATEGORY_GENERAL,
+                        "External Sealable IDs",
+                        new String[] { GameData.getBlockRegistry().getNameForObject(Blocks.glass_pane) + ":0" });
+                prop.comment = "List non-opaque blocks from other mods (for example, special types of glass) that the Oxygen Sealer should recognize as solid seals. Format is BlockName or BlockName:metadata";
                 prop.setLanguageKey("gc.configgui.sealableIDs").setRequiresMcRestart(true);
                 sealableIDs = prop.getStringList();
                 propOrder.add(prop.getName());
@@ -482,17 +472,17 @@ public class ConfigManagerCore {
                         "[Galacticraft] It appears you have installed the 'Dev' version of Galacticraft instead of the regular version (or vice versa).  Please re-install.");
             }
 
-            prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "External Detectable IDs", new String[] {
-                GameData.getBlockRegistry().getNameForObject(Blocks.coal_ore),
-                GameData.getBlockRegistry().getNameForObject(Blocks.diamond_ore),
-                GameData.getBlockRegistry().getNameForObject(Blocks.gold_ore),
-                GameData.getBlockRegistry().getNameForObject(Blocks.iron_ore),
-                GameData.getBlockRegistry().getNameForObject(Blocks.lapis_ore),
-                GameData.getBlockRegistry().getNameForObject(Blocks.redstone_ore),
-                GameData.getBlockRegistry().getNameForObject(Blocks.lit_redstone_ore)
-            });
-            prop.comment =
-                    "List blocks from other mods that the Sensor Glasses should recognize as solid blocks. Format is BlockName or BlockName:metadata.";
+            prop = config.get(
+                    Constants.CONFIG_CATEGORY_GENERAL,
+                    "External Detectable IDs",
+                    new String[] { GameData.getBlockRegistry().getNameForObject(Blocks.coal_ore),
+                            GameData.getBlockRegistry().getNameForObject(Blocks.diamond_ore),
+                            GameData.getBlockRegistry().getNameForObject(Blocks.gold_ore),
+                            GameData.getBlockRegistry().getNameForObject(Blocks.iron_ore),
+                            GameData.getBlockRegistry().getNameForObject(Blocks.lapis_ore),
+                            GameData.getBlockRegistry().getNameForObject(Blocks.redstone_ore),
+                            GameData.getBlockRegistry().getNameForObject(Blocks.lit_redstone_ore) });
+            prop.comment = "List blocks from other mods that the Sensor Glasses should recognize as solid blocks. Format is BlockName or BlockName:metadata.";
             prop.setLanguageKey("gc.configgui.detectableIDs").setRequiresMcRestart(true);
             detectableIDs = prop.getStringList();
             propOrder.add(prop.getName());
@@ -528,8 +518,7 @@ public class ConfigManagerCore {
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Adventure Game Mode", false);
-            prop.comment =
-                    "Set this to true for a challenging adventure where the player starts the game stranded in the Asteroids dimension with low resources (only effective if Galacticraft Planets installed).";
+            prop.comment = "Set this to true for a challenging adventure where the player starts the game stranded in the Asteroids dimension with low resources (only effective if Galacticraft Planets installed).";
             prop.setLanguageKey("gc.configgui.asteroidsStart");
             challengeMode = prop.getBoolean(false);
             if (!GalacticraftCore.isPlanetsLoaded) {
@@ -538,15 +527,13 @@ public class ConfigManagerCore {
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Adventure Game Mode Flags", 15);
-            prop.comment =
-                    "Add together flags 8, 4, 2, 1 to enable the four elements of adventure game mode. Default 15.  1 = extended compressor recipes.  2 = mob drops and spawning.  4 = more trees in hollow asteroids.  8 = start stranded in Asteroids.";
+            prop.comment = "Add together flags 8, 4, 2, 1 to enable the four elements of adventure game mode. Default 15.  1 = extended compressor recipes.  2 = mob drops and spawning.  4 = more trees in hollow asteroids.  8 = start stranded in Asteroids.";
             prop.setLanguageKey("gc.configgui.asteroidsFlags");
             challengeFlags = prop.getInt(15);
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Enable Sealed edge checks", true);
-            prop.comment =
-                    "If this is enabled, areas sealed by Oxygen Sealers will run a seal check when the player breaks or places a block (or on block updates).  This should be enabled for a 100% accurate sealed status, but can be disabled on servers for performance reasons.";
+            prop.comment = "If this is enabled, areas sealed by Oxygen Sealers will run a seal check when the player breaks or places a block (or on block updates).  This should be enabled for a 100% accurate sealed status, but can be disabled on servers for performance reasons.";
             prop.setLanguageKey("gc.configgui.enableSealerEdgeChecks");
             enableSealerEdgeChecks = prop.getBoolean(true);
             propOrder.add(prop.getName());
@@ -561,22 +548,19 @@ public class ConfigManagerCore {
                     Constants.CONFIG_CATEGORY_GENERAL,
                     "OreDict name of other mod's silicon usable in Galacticraft",
                     "itemSilicon");
-            prop.comment =
-                    "This needs to match the OreDictionary name used in the other mod. Set a nonsense name to disable.";
+            prop.comment = "This needs to match the OreDictionary name used in the other mod. Set a nonsense name to disable.";
             prop.setLanguageKey("gc.configgui.oreDictSilicon").setRequiresMcRestart(true);
             otherModsSilicon = prop.getString();
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Must use GC's own space metals in recipes", true);
-            prop.comment =
-                    "Should normally be true. If you set this to false, in a modpack with other mods with the same metals, players may be able to craft advanced GC items without travelling to Moon, Mars, Asteroids etc.";
+            prop.comment = "Should normally be true. If you set this to false, in a modpack with other mods with the same metals, players may be able to craft advanced GC items without travelling to Moon, Mars, Asteroids etc.";
             prop.setLanguageKey("gc.configgui.disableOreDictSpaceMetals").setRequiresMcRestart(true);
             recipesRequireGCAdvancedMetals = prop.getBoolean(true);
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Always show Oxygen HUD", false);
-            prop.comment =
-                    "Toggle this to always display the Oxygen HUD, if off it will only be shown on GC planets which require Oxygen.";
+            prop.comment = "Toggle this to always display the Oxygen HUD, if off it will only be shown on GC planets which require Oxygen.";
             prop.setLanguageKey("gc.configgui.alwaysDisplayOxygenHUD").setRequiresMcRestart(false);
             alwaysDisplayOxygenHUD = prop.getBoolean(false);
             propOrder.add(prop.getName());
@@ -588,32 +572,28 @@ public class ConfigManagerCore {
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Open Galaxy Map", "KEY_M");
-            prop.comment =
-                    "Leave 'KEY_' value, adding the intended keyboard character to replace the letter. Values 0-9 and A-Z are accepted";
+            prop.comment = "Leave 'KEY_' value, adding the intended keyboard character to replace the letter. Values 0-9 and A-Z are accepted";
             prop.setLanguageKey("gc.configgui.overrideMap").setRequiresMcRestart(true);
             keyOverrideMap = prop.getString();
             keyOverrideMapI = parseKeyValue(keyOverrideMap);
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Open Fuel GUI", "KEY_F");
-            prop.comment =
-                    "Leave 'KEY_' value, adding the intended keyboard character to replace the letter. Values 0-9 and A-Z are accepted";
+            prop.comment = "Leave 'KEY_' value, adding the intended keyboard character to replace the letter. Values 0-9 and A-Z are accepted";
             prop.setLanguageKey("gc.configgui.keyOverrideFuelLevel").setRequiresMcRestart(true);
             keyOverrideFuelLevel = prop.getString();
             keyOverrideFuelLevelI = parseKeyValue(keyOverrideFuelLevel);
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Toggle Advanced Goggles", "KEY_K");
-            prop.comment =
-                    "Leave 'KEY_' value, adding the intended keyboard character to replace the letter. Values 0-9 and A-Z are accepted";
+            prop.comment = "Leave 'KEY_' value, adding the intended keyboard character to replace the letter. Values 0-9 and A-Z are accepted";
             prop.setLanguageKey("gc.configgui.keyOverrideToggleAdvGoggles").setRequiresMcRestart(true);
             keyOverrideToggleAdvGoggles = prop.getString();
             keyOverrideToggleAdvGogglesI = parseKeyValue(keyOverrideToggleAdvGoggles);
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Rocket fuel factor", 1);
-            prop.comment =
-                    "The normal factor is 1.  Increase this to 2 - 5 if other mods with a lot of oil (e.g. BuildCraft) are installed to increase GC rocket fuel requirement.";
+            prop.comment = "The normal factor is 1.  Increase this to 2 - 5 if other mods with a lot of oil (e.g. BuildCraft) are installed to increase GC rocket fuel requirement.";
             prop.setLanguageKey("gc.configgui.rocketFuelFactor");
             rocketFuelFactor = prop.getInt(1);
             propOrder.add(prop.getName());
@@ -655,8 +635,7 @@ public class ConfigManagerCore {
             propOrder.add(prop.getName());
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Enable Hand fill", false);
-            prop.comment =
-                    "You will be able to refill oxygen tank by crafting it with LOX cells if this is set to true.";
+            prop.comment = "You will be able to refill oxygen tank by crafting it with LOX cells if this is set to true.";
             prop.setLanguageKey("gc.configgui.handfill");
             prop.setRequiresMcRestart(true);
             handfillOxygen = prop.getBoolean(false);
@@ -670,8 +649,7 @@ public class ConfigManagerCore {
 
             final boolean thisIsMC172 = VersionUtil.mcVersion1_7_2;
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Disable Biome Type Registrations", thisIsMC172);
-            prop.comment =
-                    "Biome Types will not be registered in the BiomeDictionary if this is set to true. Ignored (always true) for MC 1.7.2.";
+            prop.comment = "Biome Types will not be registered in the BiomeDictionary if this is set to true. Ignored (always true) for MC 1.7.2.";
             prop.setLanguageKey("gc.configgui.disableBiomeTypeRegistrations");
             disableBiomeTypeRegistrations = prop.getBoolean(thisIsMC172);
             if (thisIsMC172) {
@@ -797,9 +775,9 @@ public class ConfigManagerCore {
     }
 
     /**
-     * Note for this to be effective, the prop = config.get() call has to provide a
-     * String[] as the default values If you use an Integer[] then the config parser
-     * deletes all non-numerical lines from the config before GC even sees them
+     * Note for this to be effective, the prop = config.get() call has to provide a String[] as the default values If
+     * you use an Integer[] then the config parser deletes all non-numerical lines from the config before GC even sees
+     * them
      */
     private static boolean searchAsterisk(String[] strings) {
         for (final String s : strings) {
@@ -828,8 +806,7 @@ public class ConfigManagerCore {
         if (lastColon > 0) {
             try {
                 meta = Integer.parseInt(s.substring(lastColon + 1));
-            } catch (final NumberFormatException ex) {
-            }
+            } catch (final NumberFormatException ex) {}
         }
 
         if (meta == -1) {
@@ -855,11 +832,14 @@ public class ConfigManagerCore {
             Integer.parseInt(name);
             final String bName = GameData.getBlockRegistry().getNameForObject(block);
             if (logging) {
-                GCLog.info("[config] " + caller + ": the use of numeric IDs is discouraged, please use " + bName
-                        + " instead of " + name);
+                GCLog.info(
+                        "[config] " + caller
+                                + ": the use of numeric IDs is discouraged, please use "
+                                + bName
+                                + " instead of "
+                                + name);
             }
-        } catch (final NumberFormatException ex) {
-        }
+        } catch (final NumberFormatException ex) {}
         if (Blocks.air == block) {
             if (logging) {
                 GCLog.info("[config] " + caller + ": not a good idea to specify air, skipping that!");

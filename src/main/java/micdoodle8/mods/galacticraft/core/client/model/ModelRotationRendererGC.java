@@ -1,35 +1,37 @@
 package micdoodle8.mods.galacticraft.core.client.model;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.smart.render.ModelRotationRenderer;
+
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 /**
- * If Smart Moving is installed, this is used by ModelPlayerBaseGC as the
- * ModelRenderer - see ModelPlayerBaseGC.createModelRenderer()
+ * If Smart Moving is installed, this is used by ModelPlayerBaseGC as the ModelRenderer - see
+ * ModelPlayerBaseGC.createModelRenderer()
  * <p>
- * This renders the player equipment, there is one of these renderers for each
- * type of equipment. Smart Moving will call this.doRender() when the
- * corresponding player body part is being drawn. Most GC equipment is rendered
- * when the body is drawn; Oxygen Mask and Frequency Module are rendered when
- * the head is drawn. Smart Moving handles all relevant transformations so that
- * the position will match the Smart Moving model.
+ * This renders the player equipment, there is one of these renderers for each type of equipment. Smart Moving will call
+ * this.doRender() when the corresponding player body part is being drawn. Most GC equipment is rendered when the body
+ * is drawn; Oxygen Mask and Frequency Module are rendered when the head is drawn. Smart Moving handles all relevant
+ * transformations so that the position will match the Smart Moving model.
  *
  * @author User
  */
 public class ModelRotationRendererGC extends ModelRotationRenderer {
+
     private final int type;
 
     public ModelRotationRendererGC(ModelBase modelBase, int i, int j, ModelRenderer baseRenderer, int type) {
         super(modelBase, i, j, (ModelRotationRenderer) baseRenderer);
         this.type = type;
-        ModelPlayerBaseGC.frequencyModule = AdvancedModelLoader.loadModel(
-                new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "models/frequencyModule.obj"));
+        ModelPlayerBaseGC.frequencyModule = AdvancedModelLoader
+                .loadModel(new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "models/frequencyModule.obj"));
     }
 
     @Override
@@ -90,15 +92,11 @@ public class ModelRotationRendererGC extends ModelRotationRenderer {
                     FMLClientHandler.instance().getClient().renderEngine.bindTexture(ModelPlayerGC.oxygenMaskTexture);
                     break;
                 case 1:
-                    FMLClientHandler.instance()
-                            .getClient()
-                            .renderEngine
+                    FMLClientHandler.instance().getClient().renderEngine
                             .bindTexture(ModelPlayerBaseGC.currentGearData.getParachute());
                     break;
                 case 15:
-                    FMLClientHandler.instance()
-                            .getClient()
-                            .renderEngine
+                    FMLClientHandler.instance().getClient().renderEngine
                             .bindTexture(ModelPlayerGC.frequencyModuleTexture);
                     break;
                 default:
@@ -117,9 +115,15 @@ public class ModelRotationRendererGC extends ModelRotationRenderer {
                 ModelPlayerBaseGC.frequencyModule.renderPart("Main");
                 GL11.glTranslatef(0, 1.2F, 0);
                 GL11.glRotatef(
-                        (float) (Math.sin(ModelPlayerBaseGC.playerRendering.ticksExisted * 0.05) * 50.0F), 1, 0, 0);
+                        (float) (Math.sin(ModelPlayerBaseGC.playerRendering.ticksExisted * 0.05) * 50.0F),
+                        1,
+                        0,
+                        0);
                 GL11.glRotatef(
-                        (float) (Math.cos(ModelPlayerBaseGC.playerRendering.ticksExisted * 0.1) * 50.0F), 0, 1, 0);
+                        (float) (Math.cos(ModelPlayerBaseGC.playerRendering.ticksExisted * 0.1) * 50.0F),
+                        0,
+                        1,
+                        0);
                 GL11.glTranslatef(0, -1.2F, 0);
                 ModelPlayerBaseGC.frequencyModule.renderPart("Radar");
                 GL11.glPopMatrix();

@@ -2,7 +2,6 @@ package micdoodle8.mods.galacticraft.api.spaceprojects;
 
 import static micdoodle8.mods.galacticraft.api.spaceprojects.SpaceProject.*;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -11,11 +10,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.UUID;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraftforge.event.world.WorldEvent;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class GCGlobalVariableWorldSavedData extends WorldSavedData {
 

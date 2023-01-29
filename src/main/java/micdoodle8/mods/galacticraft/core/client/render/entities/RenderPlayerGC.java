@@ -1,6 +1,5 @@
 package micdoodle8.mods.galacticraft.core.client.render.entities;
 
-import cpw.mods.fml.common.Loader;
 import micdoodle8.mods.galacticraft.api.entity.ICameraZoomEntity;
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import micdoodle8.mods.galacticraft.api.world.IZeroGDimension;
@@ -12,6 +11,7 @@ import micdoodle8.mods.galacticraft.core.tile.TileEntityMulti;
 import micdoodle8.mods.galacticraft.core.wrappers.PlayerGearData;
 import micdoodle8.mods.galacticraft.planets.mars.blocks.BlockMachineMars;
 import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -26,20 +26,22 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.common.Loader;
+
 /**
- * This renders the thermal armor (unless RenderPlayerAPI is installed). The
- * thermal armor render is done after the corresponding body part of the player
- * is drawn. This ALSO patches RenderPlayer so that it uses ModelPlayerGC in
- * place of ModelPlayer to draw the player.
+ * This renders the thermal armor (unless RenderPlayerAPI is installed). The thermal armor render is done after the
+ * corresponding body part of the player is drawn. This ALSO patches RenderPlayer so that it uses ModelPlayerGC in place
+ * of ModelPlayer to draw the player.
  * <p>
- * Finally, this also adds a hook into rotateCorpse so as to fire a
- * RotatePlayerEvent - used by the Cryogenic Chamber
+ * Finally, this also adds a hook into rotateCorpse so as to fire a RotatePlayerEvent - used by the Cryogenic Chamber
  *
  * @author User
  */
 public class RenderPlayerGC extends RenderPlayer {
+
     public static ModelBiped modelThermalPadding;
     public static ModelBiped modelThermalPaddingHelmet;
     private static ResourceLocation thermalPaddingTexture0;
@@ -61,10 +63,9 @@ public class RenderPlayerGC extends RenderPlayer {
 
         if (GalacticraftCore.isPlanetsLoaded) {
             try {
-                final String prefix =
-                        (String) Class.forName("micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule")
-                                .getField("ASSET_PREFIX")
-                                .get(null);
+                final String prefix = (String) Class
+                        .forName("micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule")
+                        .getField("ASSET_PREFIX").get(null);
                 thermalPaddingTexture0 = new ResourceLocation(prefix, "textures/misc/thermalPadding_0.png");
                 thermalPaddingTexture1 = new ResourceLocation(prefix, "textures/misc/thermalPadding_1.png");
             } catch (final Exception e) {
@@ -73,15 +74,8 @@ public class RenderPlayerGC extends RenderPlayer {
         }
     }
 
-    public static void renderModelS(
-            RendererLivingEntity inst,
-            EntityLivingBase par1EntityLivingBase,
-            float par2,
-            float par3,
-            float par4,
-            float par5,
-            float par6,
-            float par7) {
+    public static void renderModelS(RendererLivingEntity inst, EntityLivingBase par1EntityLivingBase, float par2,
+            float par3, float par4, float par5, float par6, float par7) {
         if (inst instanceof RenderPlayer) {
             final RenderPlayer thisInst = (RenderPlayer) inst;
 
@@ -90,8 +84,8 @@ public class RenderPlayerGC extends RenderPlayer {
             }
 
             if (RenderPlayerGC.thermalPaddingTexture0 != null && !isSmartRenderLoaded) {
-                final PlayerGearData gearData =
-                        ClientProxyCore.playerItemData.get(par1EntityLivingBase.getCommandSenderName());
+                final PlayerGearData gearData = ClientProxyCore.playerItemData
+                        .get(par1EntityLivingBase.getCommandSenderName());
 
                 if (gearData != null && !RenderPlayerGC.flagThermalOverride) {
                     ModelBiped modelBiped;
@@ -145,8 +139,7 @@ public class RenderPlayerGC extends RenderPlayer {
                             float b = 0.2F * sTime;
 
                             if (par1EntityLivingBase.worldObj.provider instanceof IGalacticraftWorldProvider) {
-                                final float modifier = ((IGalacticraftWorldProvider)
-                                                par1EntityLivingBase.worldObj.provider)
+                                final float modifier = ((IGalacticraftWorldProvider) par1EntityLivingBase.worldObj.provider)
                                         .getThermalLevelModifier();
 
                                 if (modifier > 0) {
@@ -196,12 +189,12 @@ public class RenderPlayerGC extends RenderPlayer {
                             pos.posZ,
                             par1AbstractClientPlayer)) {
                         if (bed == GCBlocks.fakeBlock && meta == 5) {
-                            final TileEntity tile =
-                                    event.entityPlayer.worldObj.getTileEntity(pos.posX, pos.posY, pos.posZ);
+                            final TileEntity tile = event.entityPlayer.worldObj
+                                    .getTileEntity(pos.posX, pos.posY, pos.posZ);
                             if (tile instanceof TileEntityMulti) {
                                 bed = ((TileEntityMulti) tile).mainBlockPosition.getBlock(event.entityPlayer.worldObj);
-                                meta = ((TileEntityMulti) tile)
-                                        .mainBlockPosition.getBlockMetadata(event.entityPlayer.worldObj);
+                                meta = ((TileEntityMulti) tile).mainBlockPosition
+                                        .getBlockMetadata(event.entityPlayer.worldObj);
                             }
                         }
 
@@ -253,6 +246,7 @@ public class RenderPlayerGC extends RenderPlayer {
     }
 
     public static class RotatePlayerEvent extends PlayerEvent {
+
         public Boolean shouldRotate = null;
         public boolean vanillaOverride = false;
 

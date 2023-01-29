@@ -1,19 +1,22 @@
 package micdoodle8.mods.galacticraft.core.client.gui.overlay;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.api.prefab.entity.EntityAutoRocket;
 import micdoodle8.mods.galacticraft.core.tick.KeyHandlerClient;
 import micdoodle8.mods.galacticraft.core.util.ClientUtil;
 import micdoodle8.mods.galacticraft.core.util.ColorUtil;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.settings.GameSettings;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 @SideOnly(Side.CLIENT)
 public class OverlayDockingRocket extends Overlay {
+
     private static final Minecraft minecraft = FMLClientHandler.instance().getClient();
 
     private static long screenTicks;
@@ -49,16 +52,16 @@ public class OverlayDockingRocket extends Overlay {
                         "gui.dockingRocket.warning.name.1",
                         GameSettings.getKeyDisplayString(KeyHandlerClient.leftShiftKey.getKeyCode()));
 
-                final double targetMotionY =
-                        Math.round(Math.max((rocket.posY - rocket.targetVec.y) / -100.0D, -0.9D) * 100.0D) / 100.0D;
+                final double targetMotionY = Math
+                        .round(Math.max((rocket.posY - rocket.targetVec.y) / -100.0D, -0.9D) * 100.0D) / 100.0D;
                 final double currentMotionY = Math.round(rocket.motionY * 100.0D) / 100.0D;
                 final double dMY = Math.floor((targetMotionY - currentMotionY) * 300);
                 final int dMotionY = (int) Math.max(1, Math.min(255, dMY));
                 final int dMotionYN = (int) Math.max(1, Math.min(255, -dMY));
-                final String targetMotionYStr =
-                        GCCoreUtil.translate("gui.dockingRocket.targetVel.name") + ": " + targetMotionY;
-                final String currentMotionYStr =
-                        GCCoreUtil.translate("gui.dockingRocket.currentVel.name") + ": " + currentMotionY;
+                final String targetMotionYStr = GCCoreUtil.translate("gui.dockingRocket.targetVel.name") + ": "
+                        + targetMotionY;
+                final String currentMotionYStr = GCCoreUtil.translate("gui.dockingRocket.currentVel.name") + ": "
+                        + currentMotionY;
 
                 final int red = ColorUtil.to32BitColor(dMY > 0 ? 0 : dMotionYN, 255, 255, 255);
                 final int green = ColorUtil.to32BitColor(dMY < 0 ? 0 : dMotionY, 255, 255, 255);
@@ -92,18 +95,20 @@ public class OverlayDockingRocket extends Overlay {
                         grey);
 
                 OverlayDockingRocket.minecraft.fontRenderer.drawString(
-                        GCCoreUtil.translate("gui.dockingRocket.distanceFrom.name"), 50, height / 3 + 15, grey);
-                OverlayDockingRocket.minecraft.fontRenderer.drawString(
-                        "X: " + dXStr, 50, height / 3 + 35, Math.abs(dX) > 15 ? red : grey);
+                        GCCoreUtil.translate("gui.dockingRocket.distanceFrom.name"),
+                        50,
+                        height / 3 + 15,
+                        grey);
+                OverlayDockingRocket.minecraft.fontRenderer
+                        .drawString("X: " + dXStr, 50, height / 3 + 35, Math.abs(dX) > 15 ? red : grey);
                 OverlayDockingRocket.minecraft.fontRenderer.drawString(
                         "Y: " + dYStr,
                         50,
                         height / 3 + 45,
-                        Math.abs(dY) > 50 || Math.abs(dY) < 1.9
-                                ? grey
+                        Math.abs(dY) > 50 || Math.abs(dY) < 1.9 ? grey
                                 : OverlayDockingRocket.screenTicks / 10 % 2 == 0 ? red : grey);
-                OverlayDockingRocket.minecraft.fontRenderer.drawString(
-                        "Z: " + dZStr, 50, height / 3 + 55, Math.abs(dZ) > 15 ? red : grey);
+                OverlayDockingRocket.minecraft.fontRenderer
+                        .drawString("Z: " + dZStr, 50, height / 3 + 55, Math.abs(dZ) > 15 ? red : grey);
             }
         }
     }

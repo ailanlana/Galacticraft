@@ -1,9 +1,8 @@
 package micdoodle8.mods.galacticraft.core.client.gui.container;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementInfoRegion;
 import micdoodle8.mods.galacticraft.core.energy.EnergyDisplayHelper;
@@ -11,14 +10,21 @@ import micdoodle8.mods.galacticraft.core.inventory.ContainerElectricFurnace;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityElectricFurnace;
 import micdoodle8.mods.galacticraft.core.util.EnumColor;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiElectricFurnace extends GuiContainerGC {
-    private static final ResourceLocation electricFurnaceTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/electric_furnace.png");
+
+    private static final ResourceLocation electricFurnaceTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/gui/electric_furnace.png");
     private final GuiElementInfoRegion electricInfoRegion = new GuiElementInfoRegion(0, 0, 56, 9, null, 0, 0, this);
 
     private final TileEntityElectricFurnace tileEntity;
@@ -40,20 +46,20 @@ public class GuiElectricFurnace extends GuiContainerGC {
         final List<String> batterySlotDesc = new ArrayList<>();
         batterySlotDesc.add(GCCoreUtil.translate("gui.batterySlot.desc.0"));
         batterySlotDesc.add(GCCoreUtil.translate("gui.batterySlot.desc.1"));
-        this.infoRegions.add(new GuiElementInfoRegion(
-                (this.width - this.xSize) / 2 + 7,
-                (this.height - this.ySize) / 2 + 48,
-                18,
-                18,
-                batterySlotDesc,
-                this.width,
-                this.height,
-                this));
+        this.infoRegions.add(
+                new GuiElementInfoRegion(
+                        (this.width - this.xSize) / 2 + 7,
+                        (this.height - this.ySize) / 2 + 48,
+                        18,
+                        18,
+                        batterySlotDesc,
+                        this.width,
+                        this.height,
+                        this));
     }
 
     /**
-     * Draw the foreground layer for the GuiContainer (everything in front of the
-     * items)
+     * Draw the foreground layer for the GuiContainer (everything in front of the items)
      */
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
@@ -66,8 +72,8 @@ public class GuiElectricFurnace extends GuiContainerGC {
             displayText = EnumColor.ORANGE + GCCoreUtil.translate("gui.status.idle.name");
         }
 
-        this.fontRendererObj.drawString(
-                GCCoreUtil.translate("gui.message.status.name") + ": " + displayText, 97, 52, 4210752);
+        this.fontRendererObj
+                .drawString(GCCoreUtil.translate("gui.message.status.name") + ": " + displayText, 97, 52, 4210752);
         // this.fontRendererObj.drawString("" + this.tileEntity.storage.getMaxExtract(),
         // 97, 56, 4210752);
         // this.fontRendererObj.drawString("Voltage: " + (int)
@@ -92,7 +98,9 @@ public class GuiElectricFurnace extends GuiContainerGC {
         final List<String> electricityDesc = new ArrayList<>();
         electricityDesc.add(GCCoreUtil.translate("gui.energyStorage.desc.0"));
         EnergyDisplayHelper.getEnergyDisplayTooltip(
-                this.tileEntity.getEnergyStoredGC(), this.tileEntity.getMaxEnergyStoredGC(), electricityDesc);
+                this.tileEntity.getEnergyStoredGC(),
+                this.tileEntity.getMaxEnergyStoredGC(),
+                electricityDesc);
         this.electricInfoRegion.tooltipStrings = electricityDesc;
 
         if (this.tileEntity.processTicks > 0) {

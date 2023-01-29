@@ -1,8 +1,8 @@
 package micdoodle8.mods.galacticraft.core.client.gui.screen;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import java.util.ArrayList;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementCheckbox;
@@ -20,16 +20,22 @@ import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
 import micdoodle8.mods.galacticraft.core.util.ColorUtil;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.core.wrappers.FlagData;
+
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class GuiJoinSpaceRace extends GuiScreen implements ICheckBoxCallback, ITextBoxCallback {
-    protected static final ResourceLocation texture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/gui.png");
+
+    protected static final ResourceLocation texture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/gui/gui.png");
 
     private int ticksPassed;
     private final EntityPlayer thePlayer;
@@ -39,8 +45,7 @@ public class GuiJoinSpaceRace extends GuiScreen implements ICheckBoxCallback, IT
     private int buttonFlag_xPosition;
     private int buttonFlag_yPosition;
 
-    private final EntityFlag dummyFlag =
-            new EntityFlag(FMLClientHandler.instance().getClient().theWorld);
+    private final EntityFlag dummyFlag = new EntityFlag(FMLClientHandler.instance().getClient().theWorld);
     private final ModelFlag dummyModel = new ModelFlag();
 
     private final SpaceRace spaceRaceData;
@@ -56,8 +61,11 @@ public class GuiJoinSpaceRace extends GuiScreen implements ICheckBoxCallback, IT
         } else {
             final List<String> playerList = new ArrayList<>();
             playerList.add(player.getGameProfile().getName());
-            this.spaceRaceData =
-                    new SpaceRace(playerList, SpaceRace.DEFAULT_NAME, new FlagData(48, 32), new Vector3(1, 1, 1));
+            this.spaceRaceData = new SpaceRace(
+                    playerList,
+                    SpaceRace.DEFAULT_NAME,
+                    new FlagData(48, 32),
+                    new Vector3(1, 1, 1));
         }
     }
 
@@ -74,21 +82,24 @@ public class GuiJoinSpaceRace extends GuiScreen implements ICheckBoxCallback, IT
             this.buttonFlag_xPosition = this.width / 2 - buttonFlag_width / 2;
             this.buttonFlag_yPosition = this.height / 2 - this.height / 3 + 10;
 
-            this.buttonList.add(new GuiElementGradientButton(
-                    0,
-                    this.width / 2 - this.width / 3 + 15,
-                    this.height / 2 - this.height / 4 - 15,
-                    50,
-                    15,
-                    GCCoreUtil.translate("gui.spaceRace.create.close.name")));
+            this.buttonList.add(
+                    new GuiElementGradientButton(
+                            0,
+                            this.width / 2 - this.width / 3 + 15,
+                            this.height / 2 - this.height / 4 - 15,
+                            50,
+                            15,
+                            GCCoreUtil.translate("gui.spaceRace.create.close.name")));
             final int width = (int) (var5 / 1.0F);
-            this.buttonList.add(new GuiElementGradientButton(
-                    1,
-                    this.width / 2 - width / 2,
-                    this.buttonFlag_yPosition + this.buttonFlag_height + 60,
-                    width,
-                    20,
-                    GCCoreUtil.translateWithFormat("gui.spaceRace.join.name", this.spaceRaceData.getTeamName())));
+            this.buttonList.add(
+                    new GuiElementGradientButton(
+                            1,
+                            this.width / 2 - width / 2,
+                            this.buttonFlag_yPosition + this.buttonFlag_height + 60,
+                            width,
+                            20,
+                            GCCoreUtil
+                                    .translateWithFormat("gui.spaceRace.join.name", this.spaceRaceData.getTeamName())));
         }
     }
 
@@ -99,9 +110,11 @@ public class GuiJoinSpaceRace extends GuiScreen implements ICheckBoxCallback, IT
                 this.thePlayer.closeScreen();
                 break;
             case 1:
-                GalacticraftCore.packetPipeline.sendToServer(new PacketSimple(
-                        EnumSimplePacket.S_ADD_RACE_PLAYER,
-                        new Object[] {this.thePlayer.getGameProfile().getName(), this.spaceRaceData.getSpaceRaceID()}));
+                GalacticraftCore.packetPipeline.sendToServer(
+                        new PacketSimple(
+                                EnumSimplePacket.S_ADD_RACE_PLAYER,
+                                new Object[] { this.thePlayer.getGameProfile().getName(),
+                                        this.spaceRaceData.getSpaceRaceID() }));
                 this.thePlayer.closeScreen();
                 break;
             default:
@@ -151,8 +164,7 @@ public class GuiJoinSpaceRace extends GuiScreen implements ICheckBoxCallback, IT
             GL11.glPushMatrix();
             GL11.glTranslatef(
                     this.width / 2,
-                    this.buttonFlag_yPosition
-                            + this.buttonFlag_height
+                    this.buttonFlag_yPosition + this.buttonFlag_height
                             + 5
                             + FMLClientHandler.instance().getClient().fontRenderer.FONT_HEIGHT / 2,
                     0);
@@ -177,7 +189,9 @@ public class GuiJoinSpaceRace extends GuiScreen implements ICheckBoxCallback, IT
     private void drawFlagButton(int mouseX, int mouseY) {
         GL11.glPushMatrix();
         GL11.glTranslatef(
-                this.buttonFlag_xPosition + 2.9F, this.buttonFlag_yPosition + this.buttonFlag_height + 1 - 4, 0);
+                this.buttonFlag_xPosition + 2.9F,
+                this.buttonFlag_yPosition + this.buttonFlag_height + 1 - 4,
+                0);
         GL11.glScalef(74.0F, 74.0F, 1F);
         GL11.glTranslatef(0.0F, 0.36F, 1.0F);
         GL11.glScalef(1.0F, 1.0F, -1F);

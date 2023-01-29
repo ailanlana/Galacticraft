@@ -1,18 +1,23 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.client.render.block;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import java.util.Arrays;
+
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 import micdoodle8.mods.galacticraft.core.util.OxygenUtil;
 import micdoodle8.mods.galacticraft.planets.asteroids.blocks.AsteroidBlocks;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
+
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+
 public class BlockRendererWalkway implements ISimpleBlockRenderingHandler {
+
     final int renderID;
 
     public BlockRendererWalkway(int var1) {
@@ -20,8 +25,8 @@ public class BlockRendererWalkway implements ISimpleBlockRenderingHandler {
     }
 
     @Override
-    public boolean renderWorldBlock(
-            IBlockAccess var1, int var2, int var3, int var4, Block var5, int var6, RenderBlocks var7) {
+    public boolean renderWorldBlock(IBlockAccess var1, int var2, int var3, int var4, Block var5, int var6,
+            RenderBlocks var7) {
         this.renderWalkway(var7, var5, var1, var2, var3, var4);
         return true;
     }

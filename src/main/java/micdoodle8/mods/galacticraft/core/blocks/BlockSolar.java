@@ -1,8 +1,7 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
@@ -10,6 +9,7 @@ import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical
 import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
 import micdoodle8.mods.galacticraft.core.tile.TileEntitySolar;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -25,11 +25,15 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockSolar extends BlockTileGC implements ItemBlockDesc.IBlockShiftDesc, IPartialSealableBlock {
+
     public static final int BASIC_METADATA = 0;
     public static final int ADVANCED_METADATA = 4;
 
-    public static String[] names = {"basic", "advanced"};
+    public static String[] names = { "basic", "advanced" };
 
     private final IIcon[] icons = new IIcon[6];
 
@@ -41,7 +45,7 @@ public class BlockSolar extends BlockTileGC implements ItemBlockDesc.IBlockShift
         this.setBlockName(assetName);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
@@ -71,10 +75,7 @@ public class BlockSolar extends BlockTileGC implements ItemBlockDesc.IBlockShift
         if (meta >= BlockSolar.ADVANCED_METADATA) {
             final int shiftedMeta = meta -= BlockSolar.ADVANCED_METADATA;
 
-            if (side
-                    == ForgeDirection.getOrientation(shiftedMeta + 2)
-                            .getOpposite()
-                            .ordinal()) {
+            if (side == ForgeDirection.getOrientation(shiftedMeta + 2).getOpposite().ordinal()) {
                 return this.icons[5];
             } else if (side == ForgeDirection.UP.ordinal()) {
                 return this.icons[2];
@@ -86,10 +87,7 @@ public class BlockSolar extends BlockTileGC implements ItemBlockDesc.IBlockShift
         } else if (meta >= BlockSolar.BASIC_METADATA) {
             final int shiftedMeta = meta -= BlockSolar.BASIC_METADATA;
 
-            if (side
-                    == ForgeDirection.getOrientation(shiftedMeta + 2)
-                            .getOpposite()
-                            .ordinal()) {
+            if (side == ForgeDirection.getOrientation(shiftedMeta + 2).getOpposite().ordinal()) {
                 return this.icons[5];
             } else if (side == ForgeDirection.UP.ordinal()) {
                 return this.icons[0];
@@ -167,16 +165,8 @@ public class BlockSolar extends BlockTileGC implements ItemBlockDesc.IBlockShift
     }
 
     @Override
-    public boolean onUseWrench(
-            World par1World,
-            int x,
-            int y,
-            int z,
-            EntityPlayer par5EntityPlayer,
-            int side,
-            float hitX,
-            float hitY,
-            float hitZ) {
+    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ) {
         final int metadata = par1World.getBlockMetadata(x, y, z);
         int original = metadata;
 
@@ -215,8 +205,8 @@ public class BlockSolar extends BlockTileGC implements ItemBlockDesc.IBlockShift
     }
 
     @Override
-    public boolean onMachineActivated(
-            World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
+    public boolean onMachineActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX,
+            float hitY, float hitZ) {
         entityPlayer.openGui(GalacticraftCore.instance, -1, world, x, y, z);
         return true;
     }

@@ -1,18 +1,22 @@
 package micdoodle8.mods.galacticraft.core.client.render.entities;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.api.prefab.entity.EntitySpaceshipBase;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModelCustom;
+
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderTier1Rocket extends Render {
+
     private final ResourceLocation spaceshipTexture;
 
     protected ModelBase modelSpaceship;
@@ -42,8 +46,8 @@ public class RenderTier1Rocket extends Render {
         return this.func_110779_a(par1Entity);
     }
 
-    public void renderSpaceship(
-            EntitySpaceshipBase entity, double par2, double par4, double par6, float par8, float par9) {
+    public void renderSpaceship(EntitySpaceshipBase entity, double par2, double par4, double par6, float par8,
+            float par9) {
         GL11.glPushMatrix();
         final float var24 = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * par9;
         final float var25 = entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * par9;
@@ -60,8 +64,8 @@ public class RenderTier1Rocket extends Render {
         }
 
         if (var28 > 0.0F) {
-            final float i =
-                    entity.getLaunched() ? (5 - MathHelper.floor_double(entity.timeUntilLaunch / 85)) / 10F : 0.3F;
+            final float i = entity.getLaunched() ? (5 - MathHelper.floor_double(entity.timeUntilLaunch / 85)) / 10F
+                    : 0.3F;
             GL11.glRotatef(MathHelper.sin(var28) * var28 * i * par9, 1.0F, 0.0F, 0.0F);
             GL11.glRotatef(MathHelper.sin(var28) * var28 * i * par9, 1.0F, 0.0F, 1.0F);
         }

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.GalacticraftConfigAccess;
+
 import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -16,6 +18,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class CompressorRecipes {
+
     private static final List<IRecipe> recipes = new ArrayList<>();
     private static final List<IRecipe> recipesAdventure = new ArrayList<>();
     private static boolean adventureOnly = false;
@@ -145,8 +148,7 @@ public class CompressorRecipes {
             }
         }
 
-        if (i == 2
-                && itemstack.getItem() == itemstack1.getItem()
+        if (i == 2 && itemstack.getItem() == itemstack1.getItem()
                 && itemstack.stackSize == 1
                 && itemstack1.stackSize == 1
                 && itemstack.getItem().isRepairable()) {
@@ -167,10 +169,9 @@ public class CompressorRecipes {
                 final IRecipe irecipe = theRecipes.get(j);
 
                 if (irecipe instanceof ShapedRecipes
-                                && CompressorRecipes.matches((ShapedRecipes) irecipe, inventory, par2World)
-                        || irecipe instanceof ShapelessOreRecipe
-                                && CompressorRecipes.matchesShapeless(
-                                        (ShapelessOreRecipe) irecipe, inventory, par2World)) {
+                        && CompressorRecipes.matches((ShapedRecipes) irecipe, inventory, par2World)
+                        || irecipe instanceof ShapelessOreRecipe && CompressorRecipes
+                                .matchesShapeless((ShapelessOreRecipe) irecipe, inventory, par2World)) {
                     return irecipe.getRecipeOutput().copy();
                 }
             }
@@ -277,13 +278,12 @@ public class CompressorRecipes {
     }
 
     public static List<IRecipe> getRecipeList() {
-        return GalacticraftConfigAccess.getChallengeRecipes()
-                ? CompressorRecipes.recipesAdventure
+        return GalacticraftConfigAccess.getChallengeRecipes() ? CompressorRecipes.recipesAdventure
                 : CompressorRecipes.recipes;
     }
 
     public static void removeRecipe(ItemStack match) {
-        for (final Iterator<IRecipe> it = CompressorRecipes.getRecipeList().iterator(); it.hasNext(); ) {
+        for (final Iterator<IRecipe> it = CompressorRecipes.getRecipeList().iterator(); it.hasNext();) {
             final IRecipe irecipe = it.next();
             if (ItemStack.areItemStacksEqual(match, irecipe.getRecipeOutput())) {
                 it.remove();

@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.item.IItemElectric;
 import micdoodle8.mods.galacticraft.core.inventory.SlotSpecific;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityTerraformer;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,14 +20,21 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class ContainerTerraformer extends Container {
+
     private final TileEntityTerraformer tileEntity;
     private static LinkedList<ItemStack> saplingList = null;
 
     public ContainerTerraformer(InventoryPlayer par1InventoryPlayer, TileEntityTerraformer tileEntity) {
         this.tileEntity = tileEntity;
 
-        this.addSlotToContainer(new SlotSpecific(
-                tileEntity, 0, 25, 19, new ItemStack(Items.water_bucket), new ItemStack(Items.bucket)));
+        this.addSlotToContainer(
+                new SlotSpecific(
+                        tileEntity,
+                        0,
+                        25,
+                        19,
+                        new ItemStack(Items.water_bucket),
+                        new ItemStack(Items.bucket)));
 
         this.addSlotToContainer(new SlotSpecific(tileEntity, 1, 25, 39, IItemElectric.class));
 
@@ -48,12 +57,13 @@ public class ContainerTerraformer extends Container {
             }
 
             for (var7 = 0; var7 < 4; ++var7) {
-                this.addSlotToContainer(new SlotSpecific(
-                        tileEntity,
-                        var7 + var6 * 4 + 2,
-                        25 + var7 * 18,
-                        63 + var6 * 24,
-                        stacks.toArray(new ItemStack[stacks.size()])));
+                this.addSlotToContainer(
+                        new SlotSpecific(
+                                tileEntity,
+                                var7 + var6 * 4 + 2,
+                                25 + var7 * 18,
+                                63 + var6 * 24,
+                                stacks.toArray(new ItemStack[stacks.size()])));
             }
         }
 
@@ -179,8 +189,7 @@ public class ContainerTerraformer extends Container {
                             ContainerTerraformer.saplingList.add(testStack);
                         }
                     }
-                } catch (final Exception e) {
-                }
+                } catch (final Exception e) {}
             }
         }
     }

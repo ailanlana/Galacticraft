@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.blocks.BlockUnlitTorch;
@@ -15,6 +16,7 @@ import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenSealer;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.GCLog;
 import micdoodle8.mods.galacticraft.core.wrappers.ScheduledBlockChange;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEnchantmentTable;
 import net.minecraft.block.BlockFarmland;
@@ -33,6 +35,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class ThreadFindSeal {
+
     public AtomicBoolean sealedFinal = new AtomicBoolean();
     public static AtomicBoolean anylooping = new AtomicBoolean();
     public AtomicBoolean looping = new AtomicBoolean();
@@ -111,6 +114,7 @@ public class ThreadFindSeal {
 
     // Multi-threaded version of the code for sealer updates (not for edge checks).
     public class ThreadedFindSeal extends Thread {
+
         public ThreadedFindSeal() {
             super("GC Sealer Roomfinder Thread");
             ThreadFindSeal.anylooping.set(true);
@@ -135,8 +139,8 @@ public class ThreadFindSeal {
 
         this.sealed = true;
         final TileEntity tile = this.head.getTileEntityOnSide(this.world, ForgeDirection.DOWN);
-        this.foundAmbientThermal =
-                tile instanceof TileEntityOxygenSealer && ((TileEntityOxygenSealer) tile).thermalControlEnabled();
+        this.foundAmbientThermal = tile instanceof TileEntityOxygenSealer
+                && ((TileEntityOxygenSealer) tile).thermalControlEnabled();
         this.checkedAdd(this.head.clone());
         this.currentLayer = new LinkedList<>();
         this.airToReplace = new LinkedList<>();
@@ -145,8 +149,7 @@ public class ThreadFindSeal {
 
         if (this.checkCount > 0) {
             this.currentLayer.add(this.head);
-            if (this.head.x < -29990000
-                    || this.head.z < -29990000
+            if (this.head.x < -29990000 || this.head.z < -29990000
                     || this.head.x >= 29990000
                     || this.head.z >= 29990000) {
                 final Block b = this.head.getBlockID_noChunkLoad(this.world);
@@ -191,8 +194,7 @@ public class ThreadFindSeal {
             this.currentLayer.clear();
             this.currentLayer.add(this.head);
             this.torchesToUpdate.clear();
-            if (this.head.x < -29990000
-                    || this.head.z < -29990000
+            if (this.head.x < -29990000 || this.head.z < -29990000
                     || this.head.x >= 29990000
                     || this.head.z >= 29990000) {
                 this.unsealNearMapEdge();
@@ -227,8 +229,7 @@ public class ThreadFindSeal {
                         this.airToReplaceBright.clear();
                         this.torchesToUpdate = new LinkedList<>();
                         this.currentLayer.add(newhead.clone());
-                        if (newhead.x < -29990000
-                                || newhead.z < -29990000
+                        if (newhead.x < -29990000 || newhead.z < -29990000
                                 || newhead.x >= 29990000
                                 || newhead.z >= 29990000) {
                             this.doLayerNearMapEdge();
@@ -240,8 +241,12 @@ public class ThreadFindSeal {
                         // should take over as head
                         if (this.sealed) {
                             if (ConfigManagerCore.enableDebug) {
-                                GCLog.info("Oxygen Sealer replacing head at x" + this.head.x + " y" + (this.head.y - 1)
-                                        + " z" + this.head.z);
+                                GCLog.info(
+                                        "Oxygen Sealer replacing head at x" + this.head.x
+                                                + " y"
+                                                + (this.head.y - 1)
+                                                + " z"
+                                                + this.head.z);
                             }
                             if (!sealersSave.isEmpty()) {
                                 final TileEntityOxygenSealer oldHead = sealersSave.get(0);
@@ -294,8 +299,7 @@ public class ThreadFindSeal {
         // own seal checks for a while
         // (The player can control which is the head sealer in a space by
         // enabling just that one and disabling all the others)
-        final TileEntityOxygenSealer headSealer =
-                this.sealersAround.get(this.head.clone().translate(0, -1, 0));
+        final TileEntityOxygenSealer headSealer = this.sealersAround.get(this.head.clone().translate(0, -1, 0));
 
         // TODO: if multi-threaded, this final code block giving access to the sealer
         // tiles needs to be threadsafe
@@ -326,16 +330,25 @@ public class ThreadFindSeal {
             final float looping = (time2 - time1) / 1000000.0F;
             final float replacing = (time3 - time2) / 1000000.0F;
             GCLog.info("Oxygen Sealer Check Completed at x" + this.head.x + " y" + this.head.y + " z" + this.head.z);
-            GCLog.info("   Sealed: " + this.sealed + "  ~  " + this.sealers.size() + " sealers  ~  "
-                    + (this.checkedSize - 1) + " blocks");
-            GCLog.info("   Total Time taken: " + String.format("%.2f", total) + "ms  ~  "
-                    + String.format("%.2f", looping) + " + " + String.format("%.2f", replacing) + "");
+            GCLog.info(
+                    "   Sealed: " + this.sealed
+                            + "  ~  "
+                            + this.sealers.size()
+                            + " sealers  ~  "
+                            + (this.checkedSize - 1)
+                            + " blocks");
+            GCLog.info(
+                    "   Total Time taken: " + String.format("%.2f", total)
+                            + "ms  ~  "
+                            + String.format("%.2f", looping)
+                            + " + "
+                            + String.format("%.2f", replacing)
+                            + "");
         }
     }
 
     private void makeSealGood(boolean ambientThermal) {
-        if (!this.airToReplace.isEmpty()
-                || !this.airToReplaceBright.isEmpty()
+        if (!this.airToReplace.isEmpty() || !this.airToReplaceBright.isEmpty()
                 || !this.ambientThermalTracked.isEmpty()) {
             final List<ScheduledBlockChange> changeList = new LinkedList<>();
             final Block breatheableAirID = GCBlocks.breatheableAir;
@@ -348,8 +361,8 @@ public class ThreadFindSeal {
                 changeList.add(new ScheduledBlockChange(checkedVec.clone(), breatheableAirID, metadata, 2));
             }
             for (final BlockVec3 checkedVec : this.airToReplaceBright) {
-                changeList.add(
-                        new ScheduledBlockChange(checkedVec.clone(), GCBlocks.brightBreatheableAir, metadata, 2));
+                changeList
+                        .add(new ScheduledBlockChange(checkedVec.clone(), GCBlocks.brightBreatheableAir, metadata, 2));
             }
             for (final BlockVec3 checkedVec : this.ambientThermalTracked) {
                 changeList.add(
@@ -608,8 +621,7 @@ public class ThreadFindSeal {
                                 final Block id = sideVec.getBlockIDsafe_noChunkLoad(this.world);
                                 // id == null means the void or height y>255, both
                                 // of which are unsealed obviously
-                                if (id == null
-                                        || id == airID
+                                if (id == null || id == airID
                                         || id == breatheableAirID
                                         || id == airIDBright
                                         || id == breatheableAirIDBright
@@ -715,8 +727,7 @@ public class ThreadFindSeal {
                                 final Block id = sideVec.getBlockID_noChunkLoad(this.world);
                                 // id == null means the void or height y>255, both
                                 // of which are unsealed obviously
-                                if (id == null
-                                        || id == airID
+                                if (id == null || id == airID
                                         || id == breatheableAirID
                                         || id == airIDBright
                                         || id == breatheableAirIDBright
@@ -897,11 +908,9 @@ public class ThreadFindSeal {
     }
 
     /**
-     * @param block - the block ID, already taken from the world (can't be null or
-     *              air here)
+     * @param block - the block ID, already taken from the world (can't be null or air here)
      * @param vec   - the position of the block to check: metadata might be needed
-     * @param side  - this is the side approached from, e.g. 1 means this was
-     *              approached from beneath
+     * @param side  - this is the side approached from, e.g. 1 means this was approached from beneath
      * @return
      */
     private boolean canBlockPassAirCheck(Block block, BlockVec3 vec, int side) {
@@ -941,8 +950,7 @@ public class ThreadFindSeal {
         if (block.isOpaqueCube()) {
             // Gravel, wool and sponge are porous
             this.checkedAdd(vec);
-            return block instanceof BlockGravel
-                    || block.getMaterial() == Material.cloth
+            return block instanceof BlockGravel || block.getMaterial() == Material.cloth
                     || block instanceof BlockSponge;
         }
 
@@ -1051,6 +1059,7 @@ public class ThreadFindSeal {
     }
 
     public class intBucket {
+
         private int maxSize = 64; // default size
         private int size = 0;
         private int[] table = new int[this.maxSize];

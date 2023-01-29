@@ -1,10 +1,12 @@
 package micdoodle8.mods.galacticraft.core.client.gui.overlay;
 
 import micdoodle8.mods.galacticraft.core.entities.EntityTier1Rocket;
+
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class Overlay {
+
     /**
      * Get the player's spaceship height off ground
      *

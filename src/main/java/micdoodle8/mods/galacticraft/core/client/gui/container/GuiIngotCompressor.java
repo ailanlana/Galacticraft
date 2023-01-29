@@ -1,23 +1,29 @@
 package micdoodle8.mods.galacticraft.core.client.gui.container;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementInfoRegion;
 import micdoodle8.mods.galacticraft.core.inventory.ContainerIngotCompressor;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityIngotCompressor;
 import micdoodle8.mods.galacticraft.core.util.EnumColor;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiIngotCompressor extends GuiContainerGC {
-    private static final ResourceLocation electricFurnaceTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/ingotCompressor.png");
+
+    private static final ResourceLocation electricFurnaceTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/gui/ingotCompressor.png");
     private final GuiElementInfoRegion processInfoRegion = new GuiElementInfoRegion(0, 0, 52, 25, null, 0, 0, this);
 
     private final TileEntityIngotCompressor tileEntity;
@@ -40,15 +46,14 @@ public class GuiIngotCompressor extends GuiContainerGC {
     }
 
     /**
-     * Draw the foreground layer for the GuiContainer (everything in front of the
-     * items)
+     * Draw the foreground layer for the GuiContainer (everything in front of the items)
      */
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         this.fontRendererObj.drawString(this.tileEntity.getInventoryName(), 10, 6, 4210752);
         String displayText = GCCoreUtil.translate("gui.message.fuel.name") + ":";
-        this.fontRendererObj.drawString(
-                displayText, 50 - this.fontRendererObj.getStringWidth(displayText), 79, 4210752);
+        this.fontRendererObj
+                .drawString(displayText, 50 - this.fontRendererObj.getStringWidth(displayText), 79, 4210752);
 
         if (this.tileEntity.processTicks > 0) {
             displayText = EnumColor.BRIGHT_GREEN + GCCoreUtil.translate("gui.status.compressing.name");
@@ -101,10 +106,16 @@ public class GuiIngotCompressor extends GuiContainerGC {
         }
 
         if (this.tileEntity.furnaceBurnTime > 0) {
-            final int scale = (int)
-                    ((double) this.tileEntity.furnaceBurnTime / (double) this.tileEntity.currentItemBurnTime * 14);
+            final int scale = (int) ((double) this.tileEntity.furnaceBurnTime
+                    / (double) this.tileEntity.currentItemBurnTime
+                    * 14);
             this.drawTexturedModalRect(
-                    containerWidth + 81, containerHeight + 27 + 14 - scale, 176, 30 + 14 - scale, 14, scale);
+                    containerWidth + 81,
+                    containerHeight + 27 + 14 - scale,
+                    176,
+                    30 + 14 - scale,
+                    14,
+                    scale);
         }
 
         if (this.tileEntity.processTicks > TileEntityIngotCompressor.PROCESS_TIME_REQUIRED / 2) {

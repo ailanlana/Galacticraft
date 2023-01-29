@@ -1,7 +1,7 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.dimension;
 
-import cpw.mods.fml.common.FMLLog;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.entity.IRocketType;
 import micdoodle8.mods.galacticraft.api.recipe.SchematicRegistry;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
@@ -17,6 +17,7 @@ import micdoodle8.mods.galacticraft.planets.asteroids.entities.EntityEntryPod;
 import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
 import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
 import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -28,7 +29,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.gen.ChunkProviderServer;
 
+import cpw.mods.fml.common.FMLLog;
+
 public class TeleportTypeAsteroids implements ITeleportType {
+
     @Override
     public boolean useParachute() {
         return false;
@@ -301,8 +305,10 @@ public class TeleportTypeAsteroids implements ITeleportType {
         stats.rocketStacks[i++] = new ItemStack(Items.spawn_egg, 2, VersionUtil.getClassToIDMapping(EntityCow.class));
         stats.rocketStacks[i++] = new ItemStack(Items.potionitem, 4, 8262); // Night Vision Potion
         stats.rocketStacks[i++] = new ItemStack(MarsBlocks.machine, 1, 4); // Cryogenic Chamber
-        stats.rocketStacks[i++] =
-                new ItemStack(MarsItems.spaceship, 1, IRocketType.EnumRocketType.INVENTORY36.ordinal());
+        stats.rocketStacks[i++] = new ItemStack(
+                MarsItems.spaceship,
+                1,
+                IRocketType.EnumRocketType.INVENTORY36.ordinal());
         // stats.rocketStacks[15] = new ItemStack(GCBlocks.brightLamp, 4);
         // stats.rocketStacks[16] = new ItemStack(GCBlocks.aluminumWire, 32);
     }

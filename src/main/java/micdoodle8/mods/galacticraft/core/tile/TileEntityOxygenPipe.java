@@ -1,19 +1,22 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import cpw.mods.fml.relauncher.Side;
-import io.netty.buffer.ByteBuf;
 import micdoodle8.mods.galacticraft.api.tile.IColorable;
 import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.network.PacketDynamic;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
+
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+import io.netty.buffer.ByteBuf;
+
 public class TileEntityOxygenPipe extends TileEntityOxygenTransmitter implements IColorable {
+
     @NetworkedField(targetSide = Side.CLIENT)
     public byte pipeColor = 15;
 
@@ -44,8 +47,8 @@ public class TileEntityOxygenPipe extends TileEntityOxygenTransmitter implements
         super.updateEntity();
 
         if (this.ticks % 60 == 0 && this.lastPipeColor != this.getColor() && !this.worldObj.isRemote) {
-            GalacticraftCore.packetPipeline.sendToDimension(
-                    new PacketDynamic(this), this.worldObj.provider.dimensionId);
+            GalacticraftCore.packetPipeline
+                    .sendToDimension(new PacketDynamic(this), this.worldObj.provider.dimensionId);
             this.lastPipeColor = this.getColor();
         }
     }

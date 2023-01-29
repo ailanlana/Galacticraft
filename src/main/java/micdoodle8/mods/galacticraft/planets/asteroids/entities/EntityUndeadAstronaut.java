@@ -5,8 +5,8 @@
 //
 // public class EntityUndeadAstronaut extends EntityZombie
 // {
-//    public EntityUndeadAstronaut(World world)
-//    {
-//        super(world);
-//    }
+// public EntityUndeadAstronaut(World world)
+// {
+// super(world);
+// }
 // }

@@ -1,16 +1,17 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import cpw.mods.fml.relauncher.Side;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
+
 import micdoodle8.mods.galacticraft.api.recipe.CompressorRecipes;
 import micdoodle8.mods.galacticraft.core.inventory.PersistantInventoryCrafting;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -25,7 +26,10 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import cpw.mods.fml.relauncher.Side;
+
 public class TileEntityIngotCompressor extends TileEntityAdvanced implements IInventory, ISidedInventory {
+
     public static final int PROCESS_TIME_REQUIRED = 200;
 
     @NetworkedField(targetSide = Side.CLIENT)
@@ -79,8 +83,8 @@ public class TileEntityIngotCompressor extends TileEntityAdvanced implements IIn
 
                 if (this.processTicks % 40 == 0
                         && this.processTicks > TileEntityIngotCompressor.PROCESS_TIME_REQUIRED / 2) {
-                    this.worldObj.playSoundEffect(
-                            this.xCoord, this.yCoord, this.zCoord, "random.anvil_land", 0.2F, 0.5F);
+                    this.worldObj
+                            .playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "random.anvil_land", 0.2F, 0.5F);
                 }
 
                 if (this.processTicks == TileEntityIngotCompressor.PROCESS_TIME_REQUIRED) {
@@ -137,9 +141,8 @@ public class TileEntityIngotCompressor extends TileEntityAdvanced implements IIn
         for (final IRecipe recipe : CompressorRecipes.getRecipeList()) {
             if (recipe instanceof ShapedRecipes) {
                 for (final ItemStack itemstack1 : ((ShapedRecipes) recipe).recipeItems) {
-                    if (stack.getItem() == itemstack1.getItem()
-                            && (itemstack1.getItemDamage() == 32767
-                                    || stack.getItemDamage() == itemstack1.getItemDamage())) {
+                    if (stack.getItem() == itemstack1.getItem() && (itemstack1.getItemDamage() == 32767
+                            || stack.getItemDamage() == itemstack1.getItemDamage())) {
                         return true;
                     }
                 }
@@ -188,10 +191,7 @@ public class TileEntityIngotCompressor extends TileEntityAdvanced implements IIn
         if (this.canSmelt()) {
             final ItemStack resultItemStack = this.producingStack;
             if (ConfigManagerCore.quickMode) {
-                if (resultItemStack
-                        .getItem()
-                        .getUnlocalizedName(resultItemStack)
-                        .contains("compressed")) {
+                if (resultItemStack.getItem().getUnlocalizedName(resultItemStack).contains("compressed")) {
                     resultItemStack.stackSize *= 2;
                 }
             }
@@ -249,7 +249,8 @@ public class TileEntityIngotCompressor extends TileEntityAdvanced implements IIn
                 this.containingItems[var5] = ItemStack.loadItemStackFromNBT(var4);
             } else if (var5 < this.containingItems.length + this.compressingCraftMatrix.getSizeInventory()) {
                 this.compressingCraftMatrix.setInventorySlotContents(
-                        var5 - this.containingItems.length, ItemStack.loadItemStackFromNBT(var4));
+                        var5 - this.containingItems.length,
+                        ItemStack.loadItemStackFromNBT(var4));
             }
         }
 
@@ -301,8 +302,8 @@ public class TileEntityIngotCompressor extends TileEntityAdvanced implements IIn
     @Override
     public ItemStack decrStackSize(int par1, int par2) {
         if (par1 >= this.containingItems.length) {
-            final ItemStack result =
-                    this.compressingCraftMatrix.decrStackSize(par1 - this.containingItems.length, par2);
+            final ItemStack result = this.compressingCraftMatrix
+                    .decrStackSize(par1 - this.containingItems.length, par2);
             if (result != null) {
                 this.updateInput();
             }
@@ -398,9 +399,9 @@ public class TileEntityIngotCompressor extends TileEntityAdvanced implements IIn
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
         if (side == 0) {
-            return new int[] {1};
+            return new int[] { 1 };
         }
-        final int[] slots = new int[] {0, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        final int[] slots = new int[] { 0, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         final ArrayList<Integer> removeSlots = new ArrayList();
 
         for (int i = 2; i < 11; i++) {

@@ -1,15 +1,9 @@
 package micdoodle8.mods.galacticraft.core.nei;
 
-import codechicken.nei.PositionedStack;
-import codechicken.nei.api.API;
-import codechicken.nei.api.IConfigureNEI;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_OreDictUnificator;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
+
 import micdoodle8.mods.galacticraft.api.recipe.CompressorRecipes;
 import micdoodle8.mods.galacticraft.core.Constants;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
@@ -17,6 +11,7 @@ import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 import micdoodle8.mods.galacticraft.core.items.GCItems;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.RecipeUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -27,16 +22,21 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import codechicken.nei.PositionedStack;
+import codechicken.nei.api.API;
+import codechicken.nei.api.IConfigureNEI;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
+
 public class NEIGalacticraftConfig implements IConfigureNEI {
-    private static final HashMap<HashMap<Integer, PositionedStack>, PositionedStack> rocketBenchRecipes =
-            new HashMap<>();
-    private static final HashMap<HashMap<Integer, PositionedStack>, PositionedStack> buggyBenchRecipes =
-            new HashMap<>();
+
+    private static final HashMap<HashMap<Integer, PositionedStack>, PositionedStack> rocketBenchRecipes = new HashMap<>();
+    private static final HashMap<HashMap<Integer, PositionedStack>, PositionedStack> buggyBenchRecipes = new HashMap<>();
     private static final HashMap<PositionedStack, PositionedStack> refineryRecipes = new HashMap<>();
-    private static final HashMap<HashMap<Integer, PositionedStack>, PositionedStack> circuitFabricatorRecipes =
-            new HashMap<>();
-    private static final HashMap<HashMap<Integer, PositionedStack>, PositionedStack> ingotCompressorRecipes =
-            new HashMap<>();
+    private static final HashMap<HashMap<Integer, PositionedStack>, PositionedStack> circuitFabricatorRecipes = new HashMap<>();
+    private static final HashMap<HashMap<Integer, PositionedStack>, PositionedStack> ingotCompressorRecipes = new HashMap<>();
 
     @Override
     public void loadConfig() {
@@ -57,8 +57,8 @@ public class NEIGalacticraftConfig implements IConfigureNEI {
 
         // Handled by GalaxySpace
         /*
-         * API.registerRecipeHandler(new RocketT1RecipeHandler());
-         * API.registerUsageHandler(new RocketT1RecipeHandler());
+         * API.registerRecipeHandler(new RocketT1RecipeHandler()); API.registerUsageHandler(new
+         * RocketT1RecipeHandler());
          */
         API.registerRecipeHandler(new BuggyRecipeHandler());
         API.registerUsageHandler(new BuggyRecipeHandler());
@@ -68,11 +68,9 @@ public class NEIGalacticraftConfig implements IConfigureNEI {
         API.registerUsageHandler(new CircuitFabricatorRecipeHandler());
 
         /*
-         * Not used in GTNH API.registerRecipeHandler(new
-         * IngotCompressorRecipeHandler()); API.registerUsageHandler(new
-         * IngotCompressorRecipeHandler()); API.registerRecipeHandler(new
-         * ElectricIngotCompressorRecipeHandler()); API.registerUsageHandler(new
-         * ElectricIngotCompressorRecipeHandler());
+         * Not used in GTNH API.registerRecipeHandler(new IngotCompressorRecipeHandler()); API.registerUsageHandler(new
+         * IngotCompressorRecipeHandler()); API.registerRecipeHandler(new ElectricIngotCompressorRecipeHandler());
+         * API.registerUsageHandler(new ElectricIngotCompressorRecipeHandler());
          */
 
         API.registerHighlightIdentifier(GCBlocks.basicBlock, new GCNEIHighlightHandler());
@@ -152,8 +150,8 @@ public class NEIGalacticraftConfig implements IConfigureNEI {
             input.put(
                     3,
                     new PositionedStack(
-                            GT_ModHandler.getModItem(
-                                    Constants.MOD_ID_GALAXYSPACE, "item.RocketControlComputer", 1, 100),
+                            GT_ModHandler
+                                    .getModItem(Constants.MOD_ID_GALAXYSPACE, "item.RocketControlComputer", 1, 100),
                             62 - x,
                             73 - y));
         }
@@ -164,19 +162,27 @@ public class NEIGalacticraftConfig implements IConfigureNEI {
         input.put(
                 8,
                 new PositionedStack(
-                        GT_OreDictUnificator.get(OrePrefixes.stick, Materials.StainlessSteel, 1), 26 - x, 19 - y));
+                        GT_OreDictUnificator.get(OrePrefixes.stick, Materials.StainlessSteel, 1),
+                        26 - x,
+                        19 - y));
         input.put(
                 9,
                 new PositionedStack(
-                        GT_OreDictUnificator.get(OrePrefixes.stick, Materials.StainlessSteel, 1), 98 - x, 19 - y));
+                        GT_OreDictUnificator.get(OrePrefixes.stick, Materials.StainlessSteel, 1),
+                        98 - x,
+                        19 - y));
         input.put(
                 10,
                 new PositionedStack(
-                        GT_OreDictUnificator.get(OrePrefixes.stick, Materials.StainlessSteel, 1), 26 - x, 109 - y));
+                        GT_OreDictUnificator.get(OrePrefixes.stick, Materials.StainlessSteel, 1),
+                        26 - x,
+                        109 - y));
         input.put(
                 11,
                 new PositionedStack(
-                        GT_OreDictUnificator.get(OrePrefixes.stick, Materials.StainlessSteel, 1), 98 - x, 109 - y));
+                        GT_OreDictUnificator.get(OrePrefixes.stick, Materials.StainlessSteel, 1),
+                        98 - x,
+                        109 - y));
         input.put(12, new PositionedStack(new ItemStack(GCItems.meteoricIronIngot, 1, 1), 44 - x, 19 - y));
         input.put(13, new PositionedStack(new ItemStack(GCItems.meteoricIronIngot, 1, 1), 80 - x, 19 - y));
         input.put(14, new PositionedStack(new ItemStack(GCItems.meteoricIronIngot, 1, 1), 44 - x, 109 - y));
@@ -185,35 +191,51 @@ public class NEIGalacticraftConfig implements IConfigureNEI {
         input.put(
                 17,
                 new PositionedStack(
-                        GT_OreDictUnificator.get(OrePrefixes.screw, Materials.StainlessSteel, 1), 8 - x, 37 - y));
+                        GT_OreDictUnificator.get(OrePrefixes.screw, Materials.StainlessSteel, 1),
+                        8 - x,
+                        37 - y));
         input.put(
                 18,
                 new PositionedStack(
-                        GT_OreDictUnificator.get(OrePrefixes.screw, Materials.StainlessSteel, 1), 26 - x, 37 - y));
+                        GT_OreDictUnificator.get(OrePrefixes.screw, Materials.StainlessSteel, 1),
+                        26 - x,
+                        37 - y));
         input.put(
                 19,
                 new PositionedStack(
-                        GT_OreDictUnificator.get(OrePrefixes.screw, Materials.StainlessSteel, 1), 98 - x, 37 - y));
+                        GT_OreDictUnificator.get(OrePrefixes.screw, Materials.StainlessSteel, 1),
+                        98 - x,
+                        37 - y));
         input.put(
                 20,
                 new PositionedStack(
-                        GT_OreDictUnificator.get(OrePrefixes.screw, Materials.StainlessSteel, 1), 116 - x, 37 - y));
+                        GT_OreDictUnificator.get(OrePrefixes.screw, Materials.StainlessSteel, 1),
+                        116 - x,
+                        37 - y));
         input.put(
                 21,
                 new PositionedStack(
-                        GT_OreDictUnificator.get(OrePrefixes.screw, Materials.StainlessSteel, 1), 8 - x, 91 - y));
+                        GT_OreDictUnificator.get(OrePrefixes.screw, Materials.StainlessSteel, 1),
+                        8 - x,
+                        91 - y));
         input.put(
                 22,
                 new PositionedStack(
-                        GT_OreDictUnificator.get(OrePrefixes.screw, Materials.StainlessSteel, 1), 26 - x, 91 - y));
+                        GT_OreDictUnificator.get(OrePrefixes.screw, Materials.StainlessSteel, 1),
+                        26 - x,
+                        91 - y));
         input.put(
                 23,
                 new PositionedStack(
-                        GT_OreDictUnificator.get(OrePrefixes.screw, Materials.StainlessSteel, 1), 98 - x, 91 - y));
+                        GT_OreDictUnificator.get(OrePrefixes.screw, Materials.StainlessSteel, 1),
+                        98 - x,
+                        91 - y));
         input.put(
                 24,
                 new PositionedStack(
-                        GT_OreDictUnificator.get(OrePrefixes.screw, Materials.StainlessSteel, 1), 116 - x, 91 - y));
+                        GT_OreDictUnificator.get(OrePrefixes.screw, Materials.StainlessSteel, 1),
+                        116 - x,
+                        91 - y));
         input.put(25, new PositionedStack(new ItemStack(GCItems.heavyPlatingTier1), 44 - x, 37 - y));
         input.put(26, new PositionedStack(new ItemStack(GCItems.heavyPlatingTier1), 62 - x, 37 - y));
         input.put(27, new PositionedStack(new ItemStack(GCItems.heavyPlatingTier1), 80 - x, 37 - y));
@@ -239,14 +261,12 @@ public class NEIGalacticraftConfig implements IConfigureNEI {
     private void addCircuitFabricatorRecipes() {
         final HashMap<Integer, PositionedStack> input1 = new HashMap<>();
         input1.put(0, new PositionedStack(new ItemStack(Items.diamond), 10, 22));
-        final int siliconCount =
-                OreDictionary.getOres(ConfigManagerCore.otherModsSilicon).size();
+        final int siliconCount = OreDictionary.getOres(ConfigManagerCore.otherModsSilicon).size();
         final ItemStack[] silicons = new ItemStack[siliconCount];
         // silicons[0] = new ItemStack(GCItems.basicItem, 1, 2); //This is now included
         // in the oredict
         for (int j = 0; j < siliconCount; j++) {
-            silicons[j] =
-                    OreDictionary.getOres(ConfigManagerCore.otherModsSilicon).get(j);
+            silicons[j] = OreDictionary.getOres(ConfigManagerCore.otherModsSilicon).get(j);
         }
         input1.put(1, new PositionedStack(silicons, 69, 51));
         input1.put(2, new PositionedStack(silicons, 69, 69));
@@ -255,19 +275,24 @@ public class NEIGalacticraftConfig implements IConfigureNEI {
         this.registerCircuitFabricatorRecipe(
                 input1,
                 new PositionedStack(
-                        new ItemStack(GCItems.basicItem, ConfigManagerCore.quickMode ? 5 : 3, 13), 147, 91));
+                        new ItemStack(GCItems.basicItem, ConfigManagerCore.quickMode ? 5 : 3, 13),
+                        147,
+                        91));
 
         HashMap<Integer, PositionedStack> input2 = new HashMap<>(input1);
         input2.put(4, new PositionedStack(new ItemStack(Items.dye, 1, 4), 140, 25));
         this.registerCircuitFabricatorRecipe(
-                input2, new PositionedStack(new ItemStack(GCItems.basicItem, 9, 12), 147, 91));
+                input2,
+                new PositionedStack(new ItemStack(GCItems.basicItem, 9, 12), 147, 91));
 
         input2 = new HashMap<>(input1);
         input2.put(4, new PositionedStack(new ItemStack(Items.repeater), 140, 25));
         this.registerCircuitFabricatorRecipe(
                 input2,
                 new PositionedStack(
-                        new ItemStack(GCItems.basicItem, ConfigManagerCore.quickMode ? 2 : 1, 14), 147, 91));
+                        new ItemStack(GCItems.basicItem, ConfigManagerCore.quickMode ? 2 : 1, 14),
+                        147,
+                        91));
     }
 
     private void addIngotCompressorRecipes() {
@@ -293,10 +318,7 @@ public class NEIGalacticraftConfig implements IConfigureNEI {
 
             final ItemStack resultItemStack = rec.getRecipeOutput();
             if (ConfigManagerCore.quickMode) {
-                if (resultItemStack
-                        .getItem()
-                        .getUnlocalizedName(resultItemStack)
-                        .contains("compressed")) {
+                if (resultItemStack.getItem().getUnlocalizedName(resultItemStack).contains("compressed")) {
                     resultItemStack.stackSize *= 2;
                 }
             }

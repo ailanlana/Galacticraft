@@ -1,12 +1,12 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 import micdoodle8.mods.galacticraft.core.util.OxygenUtil;
+
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -21,7 +21,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockFluidGC extends BlockFluidClassic {
+
     private IIcon stillIcon;
     private IIcon flowingIcon;
     private final String fluidName;
@@ -30,8 +34,7 @@ public class BlockFluidGC extends BlockFluidClassic {
     public BlockFluidGC(Fluid fluid, String assetName) {
         super(
                 fluid,
-                assetName.startsWith("oil") || assetName.startsWith("fuel")
-                        ? GalacticraftCore.materialOil
+                assetName.startsWith("oil") || assetName.startsWith("fuel") ? GalacticraftCore.materialOil
                         : Material.water);
         this.setRenderPass(1);
         this.fluidName = assetName;
@@ -63,8 +66,8 @@ public class BlockFluidGC extends BlockFluidClassic {
     }
 
     @Override
-    public boolean onBlockActivated(
-            World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX,
+            float hitY, float hitZ) {
         if (world.isRemote && this.fluidName.startsWith("oil") && entityPlayer instanceof EntityPlayerSP) {
             ClientProxyCore.playerClientHandler.onBuild(7, (EntityPlayerSP) entityPlayer);
         }
@@ -137,7 +140,8 @@ public class BlockFluidGC extends BlockFluidClassic {
         }
         if (OxygenUtil.noAtmosphericCombustion(((World) world).provider)) {
             if (!OxygenUtil.isAABBInBreathableAirBlock(
-                    (World) world, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 2, z + 1))) {
+                    (World) world,
+                    AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 2, z + 1))) {
                 return false;
             }
         }

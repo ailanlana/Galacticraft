@@ -1,26 +1,31 @@
 package micdoodle8.mods.galacticraft.core.client.render;
 
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import javax.imageio.ImageIO;
+
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 @SideOnly(Side.CLIENT)
 public class ThreadDownloadImageDataGC extends SimpleTexture {
+
     private static final Logger logger = LogManager.getLogger();
     private static final AtomicInteger threadDownloadCounter = new AtomicInteger(0);
     private final File field_152434_e;
@@ -30,8 +35,8 @@ public class ThreadDownloadImageDataGC extends SimpleTexture {
     private Thread imageThread;
     private boolean textureUploaded;
 
-    public ThreadDownloadImageDataGC(
-            File p_i1049_1_, String p_i1049_2_, ResourceLocation p_i1049_3_, IImageBuffer p_i1049_4_) {
+    public ThreadDownloadImageDataGC(File p_i1049_1_, String p_i1049_2_, ResourceLocation p_i1049_3_,
+            IImageBuffer p_i1049_4_) {
         super(p_i1049_3_);
         this.field_152434_e = p_i1049_1_;
         this.imageUrl = p_i1049_2_;
@@ -93,16 +98,18 @@ public class ThreadDownloadImageDataGC extends SimpleTexture {
 
     protected void func_152433_a() {
         this.imageThread = new Thread("Texture Downloader #" + threadDownloadCounter.incrementAndGet()) {
+
             @Override
             public void run() {
                 HttpURLConnection httpurlconnection = null;
                 FMLLog.fine(
                         "Downloading http texture from %s to %s",
-                        ThreadDownloadImageDataGC.this.imageUrl, ThreadDownloadImageDataGC.this.field_152434_e);
+                        ThreadDownloadImageDataGC.this.imageUrl,
+                        ThreadDownloadImageDataGC.this.field_152434_e);
 
                 try {
-                    httpurlconnection =
-                            (HttpURLConnection) new URL(ThreadDownloadImageDataGC.this.imageUrl).openConnection();
+                    httpurlconnection = (HttpURLConnection) new URL(ThreadDownloadImageDataGC.this.imageUrl)
+                            .openConnection();
                     httpurlconnection.setDoInput(true);
                     httpurlconnection.setDoOutput(false);
                     httpurlconnection.connect();
@@ -112,7 +119,8 @@ public class ThreadDownloadImageDataGC extends SimpleTexture {
 
                         if (ThreadDownloadImageDataGC.this.field_152434_e != null) {
                             FileUtils.copyInputStreamToFile(
-                                    httpurlconnection.getInputStream(), ThreadDownloadImageDataGC.this.field_152434_e);
+                                    httpurlconnection.getInputStream(),
+                                    ThreadDownloadImageDataGC.this.field_152434_e);
                             bufferedimage = ImageIO.read(ThreadDownloadImageDataGC.this.field_152434_e);
                         } else {
                             bufferedimage = ImageIO.read(httpurlconnection.getInputStream());

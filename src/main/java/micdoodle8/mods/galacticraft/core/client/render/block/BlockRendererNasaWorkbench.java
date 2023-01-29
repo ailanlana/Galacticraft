@@ -1,23 +1,27 @@
 package micdoodle8.mods.galacticraft.core.client.render.block;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityNasaWorkbench;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.world.IBlockAccess;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+
 public class BlockRendererNasaWorkbench implements ISimpleBlockRenderingHandler {
+
     final int renderID;
 
     public BlockRendererNasaWorkbench(int var1) {
         this.renderID = var1;
     }
 
-    public void renderNasaBench(
-            RenderBlocks renderBlocks, IBlockAccess iblockaccess, Block par1Block, int par2, int par3, int par4) {
+    public void renderNasaBench(RenderBlocks renderBlocks, IBlockAccess iblockaccess, Block par1Block, int par2,
+            int par3, int par4) {
         renderBlocks.setRenderBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.92F, 1.0F);
         renderBlocks.renderStandardBlock(par1Block, par2, par3, par4);
 
@@ -36,8 +40,8 @@ public class BlockRendererNasaWorkbench implements ISimpleBlockRenderingHandler 
     }
 
     @Override
-    public boolean renderWorldBlock(
-            IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId,
+            RenderBlocks renderer) {
         this.renderNasaBench(renderer, world, block, x, y, z);
         return true;
     }

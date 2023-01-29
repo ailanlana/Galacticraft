@@ -1,11 +1,5 @@
 package micdoodle8.mods.galacticraft.core.network;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent.ServerConnectionFromClientEvent;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.dimension.SpaceRace;
 import micdoodle8.mods.galacticraft.core.dimension.SpaceRaceManager;
@@ -18,10 +12,19 @@ import micdoodle8.mods.galacticraft.core.util.GCLog;
 import micdoodle8.mods.galacticraft.core.util.MapUtil;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 import micdoodle8.mods.galacticraft.core.world.ChunkLoadingCallback;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.EnumConnectionState;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ServerConnectionFromClientEvent;
+
 public class ConnectionEvents {
+
     private static boolean clientConnected = false;
 
     static {
@@ -42,13 +45,15 @@ public class ConnectionEvents {
             final EntityPlayerMP thePlayer = (EntityPlayerMP) event.player;
             final GCPlayerStats stats = GCPlayerStats.get(thePlayer);
             SpaceStationWorldData.checkAllStations(thePlayer, stats);
-            GalacticraftCore.packetPipeline.sendTo(
-                    new PacketSimple(
-                            EnumSimplePacket.C_UPDATE_SPACESTATION_CLIENT_ID,
-                            new Object[] {WorldUtil.spaceStationDataToString(stats.spaceStationDimensionData)}),
-                    thePlayer);
-            final SpaceRace raceForPlayer = SpaceRaceManager.getSpaceRaceFromPlayer(
-                    thePlayer.getGameProfile().getName());
+            GalacticraftCore.packetPipeline
+                    .sendTo(
+                            new PacketSimple(
+                                    EnumSimplePacket.C_UPDATE_SPACESTATION_CLIENT_ID,
+                                    new Object[] {
+                                            WorldUtil.spaceStationDataToString(stats.spaceStationDimensionData) }),
+                            thePlayer);
+            final SpaceRace raceForPlayer = SpaceRaceManager
+                    .getSpaceRaceFromPlayer(thePlayer.getGameProfile().getName());
             if (raceForPlayer != null) {
                 SpaceRaceManager.sendSpaceRaceData(thePlayer, raceForPlayer);
             }
@@ -56,8 +61,7 @@ public class ConnectionEvents {
 
         if (event.player.worldObj.provider instanceof WorldProviderSpaceStation
                 && event.player instanceof EntityPlayerMP) {
-            ((WorldProviderSpaceStation) event.player.worldObj.provider)
-                    .getSpinManager()
+            ((WorldProviderSpaceStation) event.player.worldObj.provider).getSpinManager()
                     .sendPacketsToClient((EntityPlayerMP) event.player);
         }
     }

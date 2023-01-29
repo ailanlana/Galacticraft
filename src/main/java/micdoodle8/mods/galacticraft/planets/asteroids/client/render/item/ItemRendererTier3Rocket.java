@@ -1,9 +1,9 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.client.render.item;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.api.entity.IRocketType.EnumRocketType;
 import micdoodle8.mods.galacticraft.core.entities.EntityTier1Rocket;
 import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
+
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -12,10 +12,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.model.IModelCustom;
+
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class ItemRendererTier3Rocket implements IItemRenderer {
+
     protected static final ResourceLocation chestTexture = new ResourceLocation("textures/entity/chest/normal.png");
 
     protected IModelCustom modelSpaceship;
@@ -23,20 +27,16 @@ public class ItemRendererTier3Rocket implements IItemRenderer {
 
     protected static RenderItem drawItems = new RenderItem();
 
-    protected ResourceLocation texture =
-            new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "textures/model/tier3rocket.png");
+    protected ResourceLocation texture = new ResourceLocation(
+            AsteroidsModule.ASSET_PREFIX,
+            "textures/model/tier3rocket.png");
 
     public ItemRendererTier3Rocket(IModelCustom model) {
         this.modelSpaceship = model;
     }
 
-    protected void renderSpaceship(
-            ItemRenderType type,
-            RenderBlocks render,
-            ItemStack item,
-            float translateX,
-            float translateY,
-            float translateZ) {
+    protected void renderSpaceship(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX,
+            float translateY, float translateZ) {
         GL11.glPushMatrix();
 
         this.transform(item, type);

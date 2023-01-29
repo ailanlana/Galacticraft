@@ -1,11 +1,10 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.tile.IMultiBlock;
 import micdoodle8.mods.galacticraft.core.tile.TileEntitySpaceStationBase;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.ITileEntityProvider;
@@ -18,7 +17,11 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockSpaceStationBase extends BlockContainer implements ITileEntityProvider {
+
     private IIcon[] spaceStationIcons;
 
     public BlockSpaceStationBase(String assetName) {
@@ -39,10 +42,10 @@ public class BlockSpaceStationBase extends BlockContainer implements ITileEntity
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister par1IconRegister) {
         this.spaceStationIcons = new IIcon[2];
-        this.spaceStationIcons[0] =
-                par1IconRegister.registerIcon(GalacticraftCore.TEXTURE_PREFIX + "space_station_top");
-        this.spaceStationIcons[1] =
-                par1IconRegister.registerIcon(GalacticraftCore.TEXTURE_PREFIX + "space_station_side");
+        this.spaceStationIcons[0] = par1IconRegister
+                .registerIcon(GalacticraftCore.TEXTURE_PREFIX + "space_station_top");
+        this.spaceStationIcons[1] = par1IconRegister
+                .registerIcon(GalacticraftCore.TEXTURE_PREFIX + "space_station_side");
         this.blockIcon = this.spaceStationIcons[0];
     }
 

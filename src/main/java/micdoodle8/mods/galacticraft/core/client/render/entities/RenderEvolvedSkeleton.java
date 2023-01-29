@@ -1,11 +1,9 @@
 package micdoodle8.mods.galacticraft.core.client.render.entities;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.model.ModelEvolvedSkeleton;
 import micdoodle8.mods.galacticraft.core.items.ItemSensorGlasses;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.entity.RenderBiped;
@@ -16,14 +14,22 @@ import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderEvolvedSkeleton extends RenderBiped {
-    private static final ResourceLocation skeletonTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/model/skeleton.png");
-    private static final ResourceLocation powerTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/model/power.png");
+
+    private static final ResourceLocation skeletonTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/model/skeleton.png");
+    private static final ResourceLocation powerTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/model/power.png");
 
     private final ModelEvolvedSkeleton model = new ModelEvolvedSkeleton(0.2F);
     private static int isBG2Loaded = 0;
@@ -36,10 +42,8 @@ public class RenderEvolvedSkeleton extends RenderBiped {
             final Class<?> clazz = Class.forName("mods.battlegear2.MobHookContainerClass");
 
             // accessing this: public static final int Skell_Arrow_Datawatcher = 25;
-            RenderEvolvedSkeleton.isBG2Loaded =
-                    clazz.getField("Skell_Arrow_Datawatcher").getInt(null);
-        } catch (final Exception e) {
-        }
+            RenderEvolvedSkeleton.isBG2Loaded = clazz.getField("Skell_Arrow_Datawatcher").getInt(null);
+        } catch (final Exception e) {}
     }
 
     protected ResourceLocation func_110779_a(EntitySkeleton par1EntityArrow) {
@@ -105,8 +109,7 @@ public class RenderEvolvedSkeleton extends RenderBiped {
             helmetSlot = player.inventory.armorItemInSlot(3);
         }
 
-        if (helmetSlot != null
-                && helmetSlot.getItem() instanceof ItemSensorGlasses
+        if (helmetSlot != null && helmetSlot.getItem() instanceof ItemSensorGlasses
                 && minecraft.currentScreen == null) {
             if (par2 == 1) {
                 final float var4 = par1EntityLiving.ticksExisted * 2 + par3;

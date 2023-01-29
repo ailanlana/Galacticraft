@@ -1,8 +1,10 @@
 package micdoodle8.mods.galacticraft.planets.mars.world.gen;
 
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.prefab.world.gen.MapGenBaseMeta;
 import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
@@ -10,13 +12,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
 public class MapGenCavernMars extends MapGenBaseMeta {
+
     @Override
-    public void generate(
-            IChunkProvider par1IChunkProvider,
-            World par2World,
-            int par3,
-            int par4,
-            Block[] arrayOfIDs,
+    public void generate(IChunkProvider par1IChunkProvider, World par2World, int par3, int par4, Block[] arrayOfIDs,
             byte[] arrayOfMeta) {
         final int var6 = this.range;
         this.worldObj = par2World;
@@ -35,32 +33,26 @@ public class MapGenCavernMars extends MapGenBaseMeta {
     }
 
     @Override
-    protected void recursiveGenerate(
-            World par1World,
-            int xChunkCoord,
-            int zChunkCoord,
-            int origXChunkCoord,
-            int origZChunkCoord,
-            Block[] arrayOfIDs,
-            byte[] arrayOfMeta) {
+    protected void recursiveGenerate(World par1World, int xChunkCoord, int zChunkCoord, int origXChunkCoord,
+            int origZChunkCoord, Block[] arrayOfIDs, byte[] arrayOfMeta) {
         if (this.rand.nextInt(100) == 0) {
             final double xPos = xChunkCoord * 16 + this.rand.nextInt(16);
             final double yPos = 25;
             final double zPos = zChunkCoord * 16 + this.rand.nextInt(16);
             this.generateLargeCaveNode(
-                    this.rand.nextLong(), origXChunkCoord, origZChunkCoord, arrayOfIDs, arrayOfMeta, xPos, yPos, zPos);
+                    this.rand.nextLong(),
+                    origXChunkCoord,
+                    origZChunkCoord,
+                    arrayOfIDs,
+                    arrayOfMeta,
+                    xPos,
+                    yPos,
+                    zPos);
         }
     }
 
-    protected void generateLargeCaveNode(
-            long par1,
-            int origXChunkCoord,
-            int origZChunkCoord,
-            Block[] arrayOfIDs,
-            byte[] arrayOfMeta,
-            double xPos,
-            double yPos,
-            double zPos) {
+    protected void generateLargeCaveNode(long par1, int origXChunkCoord, int origZChunkCoord, Block[] arrayOfIDs,
+            byte[] arrayOfMeta, double xPos, double yPos, double zPos) {
         this.generateCaveNode(
                 par1,
                 origXChunkCoord,
@@ -78,21 +70,9 @@ public class MapGenCavernMars extends MapGenBaseMeta {
                 0.2D);
     }
 
-    protected void generateCaveNode(
-            long par1,
-            int origXChunkCoord,
-            int origZChunkCoord,
-            Block[] arrayOfIDs,
-            byte[] arrayOfMeta,
-            double xPos,
-            double yPos,
-            double zPos,
-            float par12,
-            float par13,
-            float par14,
-            int par15,
-            int par16,
-            double heightMultiplier) {
+    protected void generateCaveNode(long par1, int origXChunkCoord, int origZChunkCoord, Block[] arrayOfIDs,
+            byte[] arrayOfMeta, double xPos, double yPos, double zPos, float par12, float par13, float par14, int par15,
+            int par16, double heightMultiplier) {
         final double var19 = origXChunkCoord * 16 + 8;
         final double var21 = origZChunkCoord * 16 + 8;
         float var23 = 0.0F;
@@ -144,8 +124,7 @@ public class MapGenCavernMars extends MapGenBaseMeta {
                     return;
                 }
 
-                if (xPos >= var19 - 16.0D - caveWidth * 2.0D
-                        && zPos >= var21 - 16.0D - caveWidth * 2.0D
+                if (xPos >= var19 - 16.0D - caveWidth * 2.0D && zPos >= var21 - 16.0D - caveWidth * 2.0D
                         && xPos <= var19 + 16.0D + caveWidth * 2.0D
                         && zPos <= var21 + 16.0D + caveWidth * 2.0D) // CHECKED
                 {
@@ -190,8 +169,7 @@ public class MapGenCavernMars extends MapGenBaseMeta {
                                 var45 = (var42 * 16 + var43) * 128 + var44;
 
                                 if (var44 >= 0 && var44 < 128) {
-                                    if (var44 != caveMinY - 1
-                                            && var42 != caveMinX
+                                    if (var44 != caveMinY - 1 && var42 != caveMinX
                                             && var42 != caveMaxX - 1
                                             && var43 != caveMinZ
                                             && var43 != caveMaxZ - 1) {
@@ -257,9 +235,9 @@ public class MapGenCavernMars extends MapGenBaseMeta {
                                                     }
                                                 } else if (arrayOfIDs[coordsBelow] == MarsBlocks.marsBlock
                                                         && this.rand.nextInt(200) == 0) {
-                                                    arrayOfIDs[coords] = MarsBlocks.blockSludge;
-                                                    arrayOfMeta[coords] = 0;
-                                                }
+                                                            arrayOfIDs[coords] = MarsBlocks.blockSludge;
+                                                            arrayOfMeta[coords] = 0;
+                                                        }
                                             }
                                         }
                                     }

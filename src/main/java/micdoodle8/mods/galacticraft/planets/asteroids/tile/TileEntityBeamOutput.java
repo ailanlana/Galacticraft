@@ -1,19 +1,23 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.tile;
 
-import cpw.mods.fml.relauncher.Side;
 import java.util.LinkedList;
+
 import micdoodle8.mods.galacticraft.api.power.ILaserNode;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityAdvanced;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
+import cpw.mods.fml.relauncher.Side;
+
 public abstract class TileEntityBeamOutput extends TileEntityAdvanced implements ILaserNode {
+
     public LinkedList<ILaserNode> nodeList = new LinkedList<>();
 
     @NetworkedField(targetSide = Side.CLIENT)
@@ -27,8 +31,8 @@ public abstract class TileEntityBeamOutput extends TileEntityAdvanced implements
     @Override
     public void updateEntity() {
         if (this.preLoadTarget != null) {
-            final TileEntity tileAtTarget =
-                    this.worldObj.getTileEntity(this.preLoadTarget.x, this.preLoadTarget.y, this.preLoadTarget.z);
+            final TileEntity tileAtTarget = this.worldObj
+                    .getTileEntity(this.preLoadTarget.x, this.preLoadTarget.y, this.preLoadTarget.z);
 
             if (tileAtTarget != null && tileAtTarget instanceof ILaserNode) {
                 this.setTarget((ILaserNode) tileAtTarget);
@@ -90,8 +94,8 @@ public abstract class TileEntityBeamOutput extends TileEntityAdvanced implements
 
                     for (final Object obj : chunk.chunkTileEntityMap.values()) {
                         if (obj != this && obj instanceof ILaserNode) {
-                            final BlockVec3 deltaPos =
-                                    new BlockVec3(this).subtract(new BlockVec3(((ILaserNode) obj).getTile()));
+                            final BlockVec3 deltaPos = new BlockVec3(this)
+                                    .subtract(new BlockVec3(((ILaserNode) obj).getTile()));
 
                             if (deltaPos.x < 16 && deltaPos.y < 16 && deltaPos.z < 16) {
                                 final ILaserNode laserNode = (ILaserNode) obj;
@@ -183,13 +187,11 @@ public abstract class TileEntityBeamOutput extends TileEntityAdvanced implements
 
     public void updateOrientation() {
         if (this.getTarget() != null) {
-            final Vector3 direction = Vector3.subtract(
-                            this.getOutputPoint(false), this.getTarget().getInputPoint())
+            final Vector3 direction = Vector3.subtract(this.getOutputPoint(false), this.getTarget().getInputPoint())
                     .normalize();
-            this.pitch = (float) -Vector3.getAngle(
-                                    new Vector3(-direction.x, -direction.y, -direction.z), new Vector3(0, 1, 0))
-                            * (float) (180.0F / Math.PI)
-                    + 90;
+            this.pitch = (float) -Vector3
+                    .getAngle(new Vector3(-direction.x, -direction.y, -direction.z), new Vector3(0, 1, 0))
+                    * (float) (180.0F / Math.PI) + 90;
             this.yaw = (float) -(Math.atan2(direction.z, direction.x) * (float) (180.0F / Math.PI)) + 90;
         }
     }
@@ -202,8 +204,7 @@ public abstract class TileEntityBeamOutput extends TileEntityAdvanced implements
     @Override
     public int compareTo(ILaserNode otherNode, BlockVec3 origin) {
         final int thisDistance = new BlockVec3(this).subtract(origin).getMagnitudeSquared();
-        final int otherDistance =
-                new BlockVec3(otherNode.getTile()).subtract(origin).getMagnitudeSquared();
+        final int otherDistance = new BlockVec3(otherNode.getTile()).subtract(origin).getMagnitudeSquared();
 
         if (thisDistance < otherDistance) {
             return 1;
@@ -214,8 +215,8 @@ public abstract class TileEntityBeamOutput extends TileEntityAdvanced implements
         return 0;
     }
 
-    public boolean onMachineActivated(
-            World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
+    public boolean onMachineActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX,
+            float hitY, float hitZ) {
         if (this.nodeList.size() > 1) {
             int index = -1;
 
@@ -246,8 +247,8 @@ public abstract class TileEntityBeamOutput extends TileEntityAdvanced implements
     @Override
     public ILaserNode getTarget() {
         if (!this.targetVec.equals(BlockVec3.INVALID_VECTOR)) {
-            final TileEntity tileAtTarget =
-                    this.worldObj.getTileEntity(this.targetVec.x, this.targetVec.y, this.targetVec.z);
+            final TileEntity tileAtTarget = this.worldObj
+                    .getTileEntity(this.targetVec.x, this.targetVec.y, this.targetVec.z);
 
             if (tileAtTarget != null && tileAtTarget instanceof ILaserNode) {
                 return (ILaserNode) tileAtTarget;
@@ -272,8 +273,10 @@ public abstract class TileEntityBeamOutput extends TileEntityAdvanced implements
         super.readFromNBT(nbt);
 
         if (nbt.getBoolean("HasTarget")) {
-            this.preLoadTarget =
-                    new BlockVec3(nbt.getInteger("TargetX"), nbt.getInteger("TargetY"), nbt.getInteger("TargetZ"));
+            this.preLoadTarget = new BlockVec3(
+                    nbt.getInteger("TargetX"),
+                    nbt.getInteger("TargetY"),
+                    nbt.getInteger("TargetZ"));
         }
     }
 

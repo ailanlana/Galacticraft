@@ -1,12 +1,12 @@
 package micdoodle8.mods.galacticraft.core.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 import micdoodle8.mods.galacticraft.core.util.EnumColor;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -20,30 +20,15 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class ItemBasic extends Item {
-    public static final String[] names = {
-        "solar_module_0",
-        "solar_module_1",
-        "rawSilicon",
-        "ingotCopper",
-        "ingotTin",
-        "ingotAluminum",
-        "compressedCopper",
-        "compressedTin",
-        "compressedAluminum",
-        "compressedSteel",
-        "compressedBronze",
-        "compressedIron",
-        "waferSolar",
-        "waferBasic",
-        "waferAdvanced",
-        "dehydratedApple",
-        "dehydratedCarrot",
-        "dehydratedMelon",
-        "dehydratedPotato",
-        "frequencyModule",
-        "ambientThermalController"
-    };
+
+    public static final String[] names = { "solar_module_0", "solar_module_1", "rawSilicon", "ingotCopper", "ingotTin",
+            "ingotAluminum", "compressedCopper", "compressedTin", "compressedAluminum", "compressedSteel",
+            "compressedBronze", "compressedIron", "waferSolar", "waferBasic", "waferAdvanced", "dehydratedApple",
+            "dehydratedCarrot", "dehydratedMelon", "dehydratedPotato", "frequencyModule", "ambientThermalController" };
     public static final int WAFER_BASIC = 13;
     public static final int WAFER_ADVANCED = 14;
 
@@ -96,7 +81,7 @@ public class ItemBasic extends Item {
         return super.getIconFromDamage(damage);
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
         for (int i = 0; i < ItemBasic.names.length; i++) {
@@ -110,13 +95,15 @@ public class ItemBasic extends Item {
     }
 
     @Override
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
         if (par1ItemStack.getItemDamage() > 14 && par1ItemStack.getItemDamage() < 19) {
-            par3List.add(EnumColor.BRIGHT_GREEN
-                    + GCCoreUtil.translate(this.getUnlocalizedName() + "."
-                            + ItemBasic.names[par1ItemStack.getItemDamage()] + ".name"));
+            par3List.add(
+                    EnumColor.BRIGHT_GREEN + GCCoreUtil.translate(
+                            this.getUnlocalizedName() + "."
+                                    + ItemBasic.names[par1ItemStack.getItemDamage()]
+                                    + ".name"));
         } else if (par1ItemStack.getItemDamage() == 19) {
             par3List.add(EnumColor.AQUA + GCCoreUtil.translate("gui.frequencyModule.desc.0"));
             par3List.add(EnumColor.AQUA + GCCoreUtil.translate("gui.frequencyModule.desc.1"));
@@ -157,11 +144,10 @@ public class ItemBasic extends Item {
     public ItemStack onEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
         if (par1ItemStack.getItemDamage() > 14 && par1ItemStack.getItemDamage() < 19) {
             --par1ItemStack.stackSize;
-            par3EntityPlayer
-                    .getFoodStats()
+            par3EntityPlayer.getFoodStats()
                     .addStats(this.getHealAmount(par1ItemStack), this.getSaturationModifier(par1ItemStack));
-            par2World.playSoundAtEntity(
-                    par3EntityPlayer, "random.burp", 0.5F, par2World.rand.nextFloat() * 0.1F + 0.9F);
+            par2World
+                    .playSoundAtEntity(par3EntityPlayer, "random.burp", 0.5F, par2World.rand.nextFloat() * 0.1F + 0.9F);
             if (!par2World.isRemote) {
                 par3EntityPlayer.entityDropItem(new ItemStack(GCItems.canister, 1, 0), 0.0F);
             }
@@ -191,8 +177,7 @@ public class ItemBasic extends Item {
 
     @Override
     public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
-        if (par1ItemStack.getItemDamage() > 14
-                && par1ItemStack.getItemDamage() < 19
+        if (par1ItemStack.getItemDamage() > 14 && par1ItemStack.getItemDamage() < 19
                 && par3EntityPlayer.canEat(false)) {
             par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
         }
@@ -212,10 +197,8 @@ public class ItemBasic extends Item {
                 itemStack.setTagCompound(new NBTTagCompound());
             }
 
-            itemStack.stackTagCompound.setLong(
-                    "linkedUUIDMost", entity.getUniqueID().getMostSignificantBits());
-            itemStack.stackTagCompound.setLong(
-                    "linkedUUIDLeast", entity.getUniqueID().getLeastSignificantBits());
+            itemStack.stackTagCompound.setLong("linkedUUIDMost", entity.getUniqueID().getMostSignificantBits());
+            itemStack.stackTagCompound.setLong("linkedUUIDLeast", entity.getUniqueID().getLeastSignificantBits());
 
             player.addChatMessage(new ChatComponentText(GCCoreUtil.translate("gui.tracking.message")));
             return true;

@@ -1,14 +1,14 @@
 package micdoodle8.mods.galacticraft.core.entities;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+
 import micdoodle8.mods.galacticraft.api.entity.IIgnoreShift;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
+
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,7 +20,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import io.netty.buffer.ByteBuf;
+
 public class EntityCelestialFake extends EntityAdvancedMotion implements IIgnoreShift {
+
     private UUID persistantRiderUUID;
     private Boolean shouldMoveClient;
     private Boolean shouldMoveServer;
@@ -40,7 +44,9 @@ public class EntityCelestialFake extends EntityAdvancedMotion implements IIgnore
     public void updateRiderPosition() {
         if (this.riddenByEntity != null) {
             this.riddenByEntity.setPosition(
-                    this.posX, this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset(), this.posZ);
+                    this.posX,
+                    this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset(),
+                    this.posZ);
         }
     }
 
@@ -200,8 +206,7 @@ public class EntityCelestialFake extends EntityAdvancedMotion implements IIgnore
                 final int shouldBeMountedId = buffer.readInt();
                 if (this.riddenByEntity == null) {
                     if (shouldBeMountedId > -1) {
-                        final Entity e =
-                                FMLClientHandler.instance().getWorldClient().getEntityByID(shouldBeMountedId);
+                        final Entity e = FMLClientHandler.instance().getWorldClient().getEntityByID(shouldBeMountedId);
                         if (e != null) {
                             e.mountEntity(this);
                         }
@@ -210,8 +215,7 @@ public class EntityCelestialFake extends EntityAdvancedMotion implements IIgnore
                     if (shouldBeMountedId == -1) {
                         this.riddenByEntity.mountEntity(null);
                     } else {
-                        final Entity e =
-                                FMLClientHandler.instance().getWorldClient().getEntityByID(shouldBeMountedId);
+                        final Entity e = FMLClientHandler.instance().getWorldClient().getEntityByID(shouldBeMountedId);
                         if (e != null) {
                             e.mountEntity(this);
                         }

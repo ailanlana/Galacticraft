@@ -1,9 +1,8 @@
 package micdoodle8.mods.galacticraft.api.prefab.entity;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 import java.util.Iterator;
+
 import micdoodle8.mods.galacticraft.api.entity.ICameraZoomEntity;
 import micdoodle8.mods.galacticraft.api.entity.IDockable;
 import micdoodle8.mods.galacticraft.api.entity.IRocketType;
@@ -22,6 +21,7 @@ import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.GCLog;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -32,11 +32,15 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import io.netty.buffer.ByteBuf;
+
 /**
  * Do not include this prefab class in your released mod download.
  */
 public abstract class EntityTieredRocket extends EntityAutoRocket
         implements IRocketType, IDockable, IInventory, IWorldTransferCallback, ICameraZoomEntity {
+
     public EnumRocketType rocketType;
     public float rumble;
     public int launchCooldown;
@@ -148,8 +152,12 @@ public abstract class EntityTieredRocket extends EntityAutoRocket
                 for (final Integer dimID : toPreGen) {
                     this.preGenList.add(new BlockVec3(cx, dimID, cz));
                     if (ConfigManagerCore.enableDebug) {
-                        GCLog.info("Starting terrain pregen for dimension " + dimID + " at " + (cx * 16 + 8) + ", "
-                                + (cz * 16 + 8));
+                        GCLog.info(
+                                "Starting terrain pregen for dimension " + dimID
+                                        + " at "
+                                        + (cx * 16 + 8)
+                                        + ", "
+                                        + (cz * 16 + 8));
                     }
                 }
                 for (int r = 1; r < 12; r++) {
@@ -280,8 +288,8 @@ public abstract class EntityTieredRocket extends EntityAutoRocket
         list.add(this.rocketType != null ? this.rocketType.getIndex() : 0);
         super.getNetworkedData(list);
 
-        final boolean sendPosUpdates =
-                this.ticks < 25 || this.launchPhase != EnumLaunchPhase.LAUNCHED.ordinal() || this.landing;
+        final boolean sendPosUpdates = this.ticks < 25 || this.launchPhase != EnumLaunchPhase.LAUNCHED.ordinal()
+                || this.landing;
         list.add(sendPosUpdates);
 
         if (sendPosUpdates) {
@@ -310,25 +318,23 @@ public abstract class EntityTieredRocket extends EntityAutoRocket
                         boolean dimensionAllowed = this.targetDimension == ConfigManagerCore.idDimensionOverworld;
 
                         if (targetDim instanceof IGalacticraftWorldProvider) {
-                            dimensionAllowed =
-                                    ((IGalacticraftWorldProvider) targetDim).canSpaceshipTierPass(this.getRocketTier());
+                            dimensionAllowed = ((IGalacticraftWorldProvider) targetDim)
+                                    .canSpaceshipTierPass(this.getRocketTier());
                         } else
-                        // No rocket flight to non-Galacticraft dimensions other than the Overworld
-                        // allowed unless
-                        // config
-                        if (this.targetDimension > 1 || this.targetDimension < -1) {
-                            try {
-                                final Class<?> marsConfig =
-                                        Class.forName("micdoodle8.mods.galacticraft.planets.mars.ConfigManagerMars");
-                                if (marsConfig
-                                        .getField("launchControllerAllDims")
-                                        .getBoolean(null)) {
-                                    dimensionAllowed = true;
+                            // No rocket flight to non-Galacticraft dimensions other than the Overworld
+                            // allowed unless
+                            // config
+                            if (this.targetDimension > 1 || this.targetDimension < -1) {
+                                try {
+                                    final Class<?> marsConfig = Class
+                                            .forName("micdoodle8.mods.galacticraft.planets.mars.ConfigManagerMars");
+                                    if (marsConfig.getField("launchControllerAllDims").getBoolean(null)) {
+                                        dimensionAllowed = true;
+                                    }
+                                } catch (final Exception e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (final Exception e) {
-                                e.printStackTrace();
                             }
-                        }
 
                         if (dimensionAllowed) {
                             if (this.riddenByEntity != null) {
@@ -340,7 +346,11 @@ public abstract class EntityTieredRocket extends EntityAutoRocket
                                         this);
                             } else {
                                 final Entity e = WorldUtil.transferEntityToDimension(
-                                        this, this.targetDimension, (WorldServer) targetDim.worldObj, false, null);
+                                        this,
+                                        this.targetDimension,
+                                        (WorldServer) targetDim.worldObj,
+                                        false,
+                                        null);
                                 if (e instanceof EntityAutoRocket) {
                                     int fromSky = 800;
                                     if (this.destinationFrequency != 1) {
@@ -402,9 +412,8 @@ public abstract class EntityTieredRocket extends EntityAutoRocket
                 this.posY = Math.max(
                         255,
                         (this.worldObj.provider instanceof IExitHeight
-                                        ? ((IExitHeight) this.worldObj.provider).getYCoordinateToTeleport()
-                                        : 1200)
-                                - 200);
+                                ? ((IExitHeight) this.worldObj.provider).getYCoordinateToTeleport()
+                                : 1200) - 200);
                 return;
             }
         }
@@ -417,7 +426,10 @@ public abstract class EntityTieredRocket extends EntityAutoRocket
                 this.onTeleport(player);
                 final GCPlayerStats stats = GCPlayerStats.get(player);
                 WorldUtil.toCelestialSelection(
-                        player, stats, this.getRocketTier(), GuiCelestialSelection.MapMode.TRAVEL);
+                        player,
+                        stats,
+                        this.getRocketTier(),
+                        GuiCelestialSelection.MapMode.TRAVEL);
             }
 
             // Destroy any rocket which reached the top of the atmosphere and is not
@@ -531,7 +543,9 @@ public abstract class EntityTieredRocket extends EntityAutoRocket
     public void updateRiderPosition() {
         if (this.riddenByEntity != null) {
             this.riddenByEntity.setPosition(
-                    this.posX, this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset(), this.posZ);
+                    this.posX,
+                    this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset(),
+                    this.posZ);
         }
     }
 

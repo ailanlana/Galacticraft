@@ -1,17 +1,15 @@
 package micdoodle8.mods.galacticraft.core.util;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.relauncher.Side;
 import java.util.Arrays;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.entities.EntityLanderBase;
 import micdoodle8.mods.galacticraft.core.inventory.ContainerBuggy;
 import micdoodle8.mods.galacticraft.core.inventory.ContainerParaChest;
 import micdoodle8.mods.galacticraft.core.network.PacketSimple;
 import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -25,7 +23,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.util.StatCollector;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.relauncher.Side;
+
 public class GCCoreUtil {
+
     public static int nextID = 0;
     private static boolean deobfuscated;
 
@@ -45,8 +49,8 @@ public class GCCoreUtil {
         player.getNextWindowId();
         player.closeContainer();
         final int id = player.currentWindowId;
-        GalacticraftCore.packetPipeline.sendTo(
-                new PacketSimple(EnumSimplePacket.C_OPEN_PARACHEST_GUI, new Object[] {id, 0, 0}), player);
+        GalacticraftCore.packetPipeline
+                .sendTo(new PacketSimple(EnumSimplePacket.C_OPEN_PARACHEST_GUI, new Object[] { id, 0, 0 }), player);
         player.openContainer = new ContainerBuggy(player.inventory, buggyInv, type);
         player.openContainer.windowId = id;
         player.openContainer.addCraftingToCrafters(player);
@@ -58,7 +62,8 @@ public class GCCoreUtil {
         final int windowId = player.currentWindowId;
         GalacticraftCore.packetPipeline.sendTo(
                 new PacketSimple(
-                        EnumSimplePacket.C_OPEN_PARACHEST_GUI, new Object[] {windowId, 1, landerInv.getEntityId()}),
+                        EnumSimplePacket.C_OPEN_PARACHEST_GUI,
+                        new Object[] { windowId, 1, landerInv.getEntityId() }),
                 player);
         player.openContainer = new ContainerParaChest(player.inventory, landerInv);
         player.openContainer.windowId = windowId;
@@ -94,16 +99,21 @@ public class GCCoreUtil {
         return eggID;
     }
 
-    public static void registerGalacticraftNonMobEntity(
-            Class<? extends Entity> var0, String var1, int trackingDistance, int updateFreq, boolean sendVel) {
+    public static void registerGalacticraftNonMobEntity(Class<? extends Entity> var0, String var1, int trackingDistance,
+            int updateFreq, boolean sendVel) {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-            LanguageRegistry.instance()
-                    .addStringLocalization(
-                            "entity.GalacticraftCore." + var1 + ".name",
-                            GCCoreUtil.translate("entity." + var1 + ".name"));
+            LanguageRegistry.instance().addStringLocalization(
+                    "entity.GalacticraftCore." + var1 + ".name",
+                    GCCoreUtil.translate("entity." + var1 + ".name"));
         }
         EntityRegistry.registerModEntity(
-                var0, var1, nextInternalID(), GalacticraftCore.instance, trackingDistance, updateFreq, sendVel);
+                var0,
+                var1,
+                nextInternalID(),
+                GalacticraftCore.instance,
+                trackingDistance,
+                updateFreq,
+                sendVel);
     }
 
     public static void registerGalacticraftItem(String key, Item item) {

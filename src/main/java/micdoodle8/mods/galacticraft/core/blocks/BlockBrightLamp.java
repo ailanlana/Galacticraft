@@ -7,6 +7,7 @@ import micdoodle8.mods.galacticraft.core.tile.TileEntityArclamp;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.core.util.RedstoneUtil;
 import micdoodle8.mods.galacticraft.core.util.VersionUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -21,6 +22,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockBrightLamp extends BlockAdvanced implements ItemBlockDesc.IBlockShiftDesc {
+
     public static IIcon icon;
 
     // Metadata: bits 0-2 are the side of the base plate using standard side
@@ -50,7 +52,12 @@ public class BlockBrightLamp extends BlockAdvanced implements ItemBlockDesc.IBlo
         final double boundsMin = 0.2D;
         final double boundsMax = 0.8D;
         return AxisAlignedBB.getBoundingBox(
-                x + boundsMin, y + boundsMin, z + boundsMin, x + boundsMax, y + boundsMax, z + boundsMax);
+                x + boundsMin,
+                y + boundsMin,
+                z + boundsMin,
+                x + boundsMax,
+                y + boundsMax,
+                z + boundsMax);
     }
 
     @Override
@@ -80,8 +87,8 @@ public class BlockBrightLamp extends BlockAdvanced implements ItemBlockDesc.IBlo
     }
 
     @Override
-    public int onBlockPlaced(
-            World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metaOld) {
+    public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ,
+            int metaOld) {
         final BlockVec3 thisvec = new BlockVec3(x, y, z);
 
         if (thisvec.blockOnSideHasSolidFace(world, side ^ 1)) {
@@ -92,9 +99,8 @@ public class BlockBrightLamp extends BlockAdvanced implements ItemBlockDesc.IBlo
     }
 
     /**
-     * Lets the block know when one of its neighbor changes. Doesn't know which
-     * neighbor changed (coordinates passed are their own) Args: x, y, z, neighbor
-     * blockID
+     * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed (coordinates passed are
+     * their own) Args: x, y, z, neighbor blockID
      */
     @Override
     public void onNeighborBlockChange(World par1World, int x, int y, int z, Block par5) {
@@ -111,8 +117,8 @@ public class BlockBrightLamp extends BlockAdvanced implements ItemBlockDesc.IBlo
     }
 
     /**
-     * Ray traces through the blocks collision from start vector to end vector
-     * returning a ray trace hit. Args: world, x, y, z, startVec, endVec
+     * Ray traces through the blocks collision from start vector to end vector returning a ray trace hit. Args: world,
+     * x, y, z, startVec, endVec
      */
     @Override
     public MovingObjectPosition collisionRayTrace(World par1World, int x, int y, int z, Vec3 par5Vec3, Vec3 par6Vec3) {
@@ -137,8 +143,8 @@ public class BlockBrightLamp extends BlockAdvanced implements ItemBlockDesc.IBlo
     }
 
     @Override
-    public boolean onUseWrench(
-            World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
+    public boolean onUseWrench(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX,
+            float hitY, float hitZ) {
         if (!world.isRemote) {
             final TileEntity tile = world.getTileEntity(x, y, z);
             if (tile instanceof TileEntityArclamp) {

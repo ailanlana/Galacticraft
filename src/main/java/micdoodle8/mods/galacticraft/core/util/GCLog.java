@@ -1,10 +1,13 @@
 package micdoodle8.mods.galacticraft.core.util;
 
-import cpw.mods.fml.relauncher.FMLRelaunchLog;
 import micdoodle8.mods.galacticraft.core.Constants;
+
 import org.apache.logging.log4j.Level;
 
+import cpw.mods.fml.relauncher.FMLRelaunchLog;
+
 public class GCLog {
+
     public static void info(String message) {
         FMLRelaunchLog.log(Constants.MOD_NAME_SIMPLE, Level.INFO, message);
     }

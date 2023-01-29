@@ -1,9 +1,11 @@
 package micdoodle8.mods.galacticraft.core.command;
 
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -52,12 +54,14 @@ public class CommandGCAstroMiner extends CommandBase {
     @Override
     public void processCommand(ICommandSender icommandsender, String[] astring) {
         if (astring.length > 2) {
-            throw new WrongUsageException(GCCoreUtil.translateWithFormat(
-                    "commands.dimensiontp.tooMany", this.getCommandUsage(icommandsender)));
+            throw new WrongUsageException(
+                    GCCoreUtil
+                            .translateWithFormat("commands.dimensiontp.tooMany", this.getCommandUsage(icommandsender)));
         }
         if (astring.length < 1) {
-            throw new WrongUsageException(GCCoreUtil.translateWithFormat(
-                    "commands.ssinvite.wrongUsage", this.getCommandUsage(icommandsender)));
+            throw new WrongUsageException(
+                    GCCoreUtil
+                            .translateWithFormat("commands.ssinvite.wrongUsage", this.getCommandUsage(icommandsender)));
         }
 
         int type = 0;
@@ -73,8 +77,7 @@ public class CommandGCAstroMiner extends CommandBase {
                 if (newvalue > 0) {
                     type = 3;
                 }
-            } catch (final NumberFormatException ex) {
-            }
+            } catch (final NumberFormatException ex) {}
         }
 
         // Proceed if syntax of show|reset|set<number> was correct
@@ -84,32 +87,38 @@ public class CommandGCAstroMiner extends CommandBase {
                 if (astring.length == 2) {
                     playerBase = PlayerUtil.getPlayerBaseServerFromPlayerUsername(astring[1], true);
                 } else {
-                    playerBase = PlayerUtil.getPlayerBaseServerFromPlayerUsername(
-                            icommandsender.getCommandSenderName(), true);
+                    playerBase = PlayerUtil
+                            .getPlayerBaseServerFromPlayerUsername(icommandsender.getCommandSenderName(), true);
                 }
 
                 if (playerBase != null) {
                     final GCPlayerStats stats = GCPlayerStats.get(playerBase);
                     switch (type) {
                         case 1:
-                            icommandsender.addChatMessage(new ChatComponentText(GCCoreUtil.translateWithFormat(
-                                    "command.gcastrominer.count",
-                                    playerBase.getGameProfile().getName(),
-                                    "" + stats.astroMinerCount)));
+                            icommandsender.addChatMessage(
+                                    new ChatComponentText(
+                                            GCCoreUtil.translateWithFormat(
+                                                    "command.gcastrominer.count",
+                                                    playerBase.getGameProfile().getName(),
+                                                    "" + stats.astroMinerCount)));
                             break;
                         case 2:
                             stats.astroMinerCount = 0;
-                            icommandsender.addChatMessage(new ChatComponentText(GCCoreUtil.translateWithFormat(
-                                    "command.gcastrominer.count",
-                                    playerBase.getGameProfile().getName(),
-                                    "" + 0)));
+                            icommandsender.addChatMessage(
+                                    new ChatComponentText(
+                                            GCCoreUtil.translateWithFormat(
+                                                    "command.gcastrominer.count",
+                                                    playerBase.getGameProfile().getName(),
+                                                    "" + 0)));
                             break;
                         case 3:
                             stats.astroMinerCount = newvalue;
-                            icommandsender.addChatMessage(new ChatComponentText(GCCoreUtil.translateWithFormat(
-                                    "command.gcastrominer.count",
-                                    playerBase.getGameProfile().getName(),
-                                    "" + newvalue)));
+                            icommandsender.addChatMessage(
+                                    new ChatComponentText(
+                                            GCCoreUtil.translateWithFormat(
+                                                    "command.gcastrominer.count",
+                                                    playerBase.getGameProfile().getName(),
+                                                    "" + newvalue)));
                             break;
                     }
                 } else {

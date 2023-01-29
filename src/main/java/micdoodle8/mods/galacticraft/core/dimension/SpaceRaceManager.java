@@ -1,11 +1,10 @@
 package micdoodle8.mods.galacticraft.core.dimension;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
 import micdoodle8.mods.galacticraft.api.galaxies.GalaxyRegistry;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
@@ -16,6 +15,7 @@ import micdoodle8.mods.galacticraft.core.util.EnumColor;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
 import micdoodle8.mods.galacticraft.core.wrappers.FlagData;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,7 +25,11 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
+
 public class SpaceRaceManager {
+
     private static final Set<SpaceRace> spaceRaces = Sets.newHashSet();
 
     public static SpaceRace addSpaceRace(SpaceRace spaceRace) {
@@ -47,8 +51,8 @@ public class SpaceRaceManager {
                     final EntityPlayer player = (EntityPlayer) o;
 
                     if (race.getPlayerNames().contains(player.getGameProfile().getName())) {
-                        final CelestialBody body =
-                                GalaxyRegistry.getCelestialBodyFromDimensionID(player.worldObj.provider.dimensionId);
+                        final CelestialBody body = GalaxyRegistry
+                                .getCelestialBodyFromDimensionID(player.worldObj.provider.dimensionId);
 
                         if (body != null) {
                             if (!race.getCelestialBodyStatusList().containsKey(body)) {
@@ -117,16 +121,14 @@ public class SpaceRaceManager {
             objList.add(spaceRace.getTeamName());
             objList.add(spaceRace.getFlagData());
             objList.add(spaceRace.getTeamColor());
-            objList.add(spaceRace
-                    .getPlayerNames()
-                    .toArray(new String[spaceRace.getPlayerNames().size()]));
+            objList.add(spaceRace.getPlayerNames().toArray(new String[spaceRace.getPlayerNames().size()]));
 
             if (toPlayer != null) {
-                GalacticraftCore.packetPipeline.sendTo(
-                        new PacketSimple(EnumSimplePacket.C_UPDATE_SPACE_RACE_DATA, objList), toPlayer);
+                GalacticraftCore.packetPipeline
+                        .sendTo(new PacketSimple(EnumSimplePacket.C_UPDATE_SPACE_RACE_DATA, objList), toPlayer);
             } else {
-                GalacticraftCore.packetPipeline.sendToAll(
-                        new PacketSimple(EnumSimplePacket.C_UPDATE_SPACE_RACE_DATA, objList));
+                GalacticraftCore.packetPipeline
+                        .sendToAll(new PacketSimple(EnumSimplePacket.C_UPDATE_SPACE_RACE_DATA, objList));
             }
         }
     }
@@ -137,15 +139,16 @@ public class SpaceRaceManager {
 
     public static void onPlayerRemoval(String player, SpaceRace race) {
         for (final String member : race.getPlayerNames()) {
-            final EntityPlayerMP memberObj =
-                    PlayerUtil.getPlayerForUsernameVanilla(MinecraftServer.getServer(), member);
+            final EntityPlayerMP memberObj = PlayerUtil
+                    .getPlayerForUsernameVanilla(MinecraftServer.getServer(), member);
 
             if (memberObj != null) {
-                memberObj.addChatMessage(new ChatComponentText(EnumColor.DARK_AQUA
-                                + GCCoreUtil.translateWithFormat(
+                memberObj.addChatMessage(
+                        new ChatComponentText(
+                                EnumColor.DARK_AQUA + GCCoreUtil.translateWithFormat(
                                         "gui.spaceRace.chat.removeSuccess",
                                         EnumColor.RED + player + EnumColor.DARK_AQUA))
-                        .setChatStyle(new ChatStyle().setColor(EnumChatFormatting.DARK_AQUA)));
+                                                .setChatStyle(new ChatStyle().setColor(EnumChatFormatting.DARK_AQUA)));
             }
         }
 

@@ -6,6 +6,7 @@ import micdoodle8.mods.galacticraft.core.network.PacketSimple;
 import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -46,8 +47,8 @@ public class CommandGCEnergyUnits extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender icommandsender, String[] astring) {
-        final EntityPlayerMP playerBase =
-                PlayerUtil.getPlayerBaseServerFromPlayerUsername(icommandsender.getCommandSenderName(), true);
+        final EntityPlayerMP playerBase = PlayerUtil
+                .getPlayerBaseServerFromPlayerUsername(icommandsender.getCommandSenderName(), true);
         if (playerBase == null) {
             return;
         }
@@ -70,14 +71,16 @@ public class CommandGCEnergyUnits extends CommandBase {
 
                 if (paramvalue > 0) {
                     GalacticraftCore.packetPipeline.sendTo(
-                            new PacketSimple(EnumSimplePacket.C_UPDATE_ENERGYUNITS, new Object[] {paramvalue}),
+                            new PacketSimple(EnumSimplePacket.C_UPDATE_ENERGYUNITS, new Object[] { paramvalue }),
                             playerBase);
                     return;
                 }
             }
 
-            throw new WrongUsageException(GCCoreUtil.translateWithFormat(
-                    "commands.gcenergyunits.invalidUnits", this.getCommandUsage(icommandsender)));
+            throw new WrongUsageException(
+                    GCCoreUtil.translateWithFormat(
+                            "commands.gcenergyunits.invalidUnits",
+                            this.getCommandUsage(icommandsender)));
         }
 
         throw new WrongUsageException(

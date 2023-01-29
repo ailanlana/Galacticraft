@@ -1,8 +1,7 @@
 package micdoodle8.mods.galacticraft.planets.mars.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
@@ -21,6 +20,7 @@ import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityCryogenicChamber;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityLaunchController;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityTerraformer;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -39,7 +39,11 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockMachineMars extends BlockTileGC implements ItemBlockDesc.IBlockShiftDesc, IPartialSealableBlock {
+
     public static final int TERRAFORMER_METADATA = 0;
     public static final int CRYOGENIC_CHAMBER_METADATA = 4;
     public static final int LAUNCH_CONTROLLER_METADATA = 8;
@@ -160,14 +164,13 @@ public class BlockMachineMars extends BlockTileGC implements ItemBlockDesc.IBloc
             if (!this.canPlaceChamberAt(world, x, y, z, entityLiving)) {
                 if (entityLiving instanceof EntityPlayer) {
                     if (!world.isRemote) {
-                        ((EntityPlayer) entityLiving)
-                                .addChatMessage(new ChatComponentText(
-                                        EnumColor.RED + GCCoreUtil.translate("gui.warning.noroom")));
+                        ((EntityPlayer) entityLiving).addChatMessage(
+                                new ChatComponentText(EnumColor.RED + GCCoreUtil.translate("gui.warning.noroom")));
                     }
 
                     world.setBlockToAir(x, y, z);
-                    ((EntityPlayer) entityLiving)
-                            .inventory.addItemStackToInventory(new ItemStack(
+                    ((EntityPlayer) entityLiving).inventory.addItemStackToInventory(
+                            new ItemStack(
                                     Item.getItemFromBlock(MarsBlocks.machine),
                                     1,
                                     BlockMachineMars.CRYOGENIC_CHAMBER_METADATA));
@@ -213,33 +216,21 @@ public class BlockMachineMars extends BlockTileGC implements ItemBlockDesc.IBloc
             }
         }
 
-        if (var8 instanceof IChunkLoader
-                && !var8.getWorldObj().isRemote
+        if (var8 instanceof IChunkLoader && !var8.getWorldObj().isRemote
                 && ConfigManagerMars.launchControllerChunkLoad
                 && entityLiving instanceof EntityPlayer) {
-            ((IChunkLoader) var8)
-                    .setOwnerName(((EntityPlayer) entityLiving).getGameProfile().getName());
-            ((IChunkLoader) var8)
-                    .onTicketLoaded(
-                            ForgeChunkManager.requestTicket(GalacticraftCore.instance, var8.getWorldObj(), Type.NORMAL),
-                            true);
+            ((IChunkLoader) var8).setOwnerName(((EntityPlayer) entityLiving).getGameProfile().getName());
+            ((IChunkLoader) var8).onTicketLoaded(
+                    ForgeChunkManager.requestTicket(GalacticraftCore.instance, var8.getWorldObj(), Type.NORMAL),
+                    true);
         } else if (var8 instanceof TileEntityLaunchController && entityLiving instanceof EntityPlayer) {
-            ((TileEntityLaunchController) var8)
-                    .setOwnerName(((EntityPlayer) entityLiving).getGameProfile().getName());
+            ((TileEntityLaunchController) var8).setOwnerName(((EntityPlayer) entityLiving).getGameProfile().getName());
         }
     }
 
     @Override
-    public boolean onUseWrench(
-            World par1World,
-            int x,
-            int y,
-            int z,
-            EntityPlayer par5EntityPlayer,
-            int side,
-            float hitX,
-            float hitY,
-            float hitZ) {
+    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ) {
         final int metadata = par1World.getBlockMetadata(x, y, z);
         int original = metadata;
 
@@ -287,16 +278,8 @@ public class BlockMachineMars extends BlockTileGC implements ItemBlockDesc.IBloc
      * Called when the block is right clicked by the player
      */
     @Override
-    public boolean onMachineActivated(
-            World world,
-            int x,
-            int y,
-            int z,
-            EntityPlayer par5EntityPlayer,
-            int side,
-            float hitX,
-            float hitY,
-            float hitZ) {
+    public boolean onMachineActivated(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ) {
         final int metadata = world.getBlockMetadata(x, y, z);
 
         if (metadata >= BlockMachineMars.LAUNCH_CONTROLLER_METADATA
@@ -360,7 +343,7 @@ public class BlockMachineMars extends BlockTileGC implements ItemBlockDesc.IBloc
         return new ItemStack(this, 1, BlockMachineMars.LAUNCH_CONTROLLER_METADATA);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
         par3List.add(this.getTerraformer());
@@ -373,8 +356,7 @@ public class BlockMachineMars extends BlockTileGC implements ItemBlockDesc.IBloc
             final Block blockAt = world.getBlock(x0, y0 + y, z0);
             final int metaAt = world.getBlockMetadata(x0, y0 + y, z0);
 
-            if (y == 0
-                    && blockAt == MarsBlocks.machine
+            if (y == 0 && blockAt == MarsBlocks.machine
                     && metaAt >= BlockMachineMars.CRYOGENIC_CHAMBER_METADATA
                     && metaAt < BlockMachineMars.LAUNCH_CONTROLLER_METADATA) {
                 continue;
@@ -421,8 +403,8 @@ public class BlockMachineMars extends BlockTileGC implements ItemBlockDesc.IBloc
         }
     }
 
-    public static ChunkCoordinates getNearestEmptyChunkCoordinates(
-            World par0World, int par1, int par2, int par3, int par4) {
+    public static ChunkCoordinates getNearestEmptyChunkCoordinates(World par0World, int par1, int par2, int par3,
+            int par4) {
         for (int k1 = 0; k1 <= 1; ++k1) {
             final int l1 = par1 - 1;
             final int i2 = par3 - 1;
@@ -433,10 +415,7 @@ public class BlockMachineMars extends BlockTileGC implements ItemBlockDesc.IBloc
                 for (int i3 = i2; i3 <= k2; ++i3) {
                     if (World.doesBlockHaveSolidTopSurface(par0World, l2, par2 - 1, i3)
                             && !par0World.getBlock(l2, par2, i3).getMaterial().isOpaque()
-                            && !par0World
-                                    .getBlock(l2, par2 + 1, i3)
-                                    .getMaterial()
-                                    .isOpaque()) {
+                            && !par0World.getBlock(l2, par2 + 1, i3).getMaterial().isOpaque()) {
                         if (par4 <= 0) {
                             return new ChunkCoordinates(l2, par2, i3);
                         }

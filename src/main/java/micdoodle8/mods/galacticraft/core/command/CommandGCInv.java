@@ -5,10 +5,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
 import micdoodle8.mods.galacticraft.core.inventory.InventoryExtended;
 import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -19,6 +21,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
 public class CommandGCInv extends CommandBase {
+
     protected static final Map<String, ItemStack[]> savedata = new HashMap<>();
     private static final Set<String> dontload = new HashSet<>();
     private static boolean firstuse = true;
@@ -86,14 +89,16 @@ public class CommandGCInv extends CommandBase {
                         CommandGCInv.savedata.put(astring[1].toLowerCase(), saveinv);
                         CommandGCInv.dontload.add(astring[1].toLowerCase());
                         CommandGCInv.writefile();
-                        System.out.println("[GCInv] Saving and clearing GC inventory slots of "
-                                + thePlayer.getGameProfile().getName());
+                        System.out.println(
+                                "[GCInv] Saving and clearing GC inventory slots of "
+                                        + thePlayer.getGameProfile().getName());
                     } else if (astring[0].equalsIgnoreCase("restore")) {
                         final ItemStack[] saveinv = CommandGCInv.savedata.get(astring[1].toLowerCase());
                         CommandGCInv.dontload.remove(astring[1].toLowerCase());
                         if (saveinv == null) {
-                            System.out.println("[GCInv] Tried to restore but player "
-                                    + thePlayer.getGameProfile().getName() + " had no saved GC inventory items.");
+                            System.out.println(
+                                    "[GCInv] Tried to restore but player " + thePlayer.getGameProfile().getName()
+                                            + " had no saved GC inventory items.");
                             return;
                         }
 
@@ -114,8 +119,9 @@ public class CommandGCInv extends CommandBase {
                     if (astring[0].equalsIgnoreCase("restore")) {
                         final ItemStack[] saveinv = CommandGCInv.savedata.get(astring[1].toLowerCase());
                         if (saveinv != null) {
-                            System.out.println("[GCInv] Restore command for offline player " + astring[1]
-                                    + ", setting to restore GCInv on next login.");
+                            System.out.println(
+                                    "[GCInv] Restore command for offline player " + astring[1]
+                                            + ", setting to restore GCInv on next login.");
                             CommandGCInv.dontload.remove(astring[1].toLowerCase());
                             // Now it can autoload on next player logon
                             return;
@@ -123,8 +129,7 @@ public class CommandGCInv extends CommandBase {
                     }
 
                     // No player found, and not a 'restore' command
-                    if (astring[0].equalsIgnoreCase("clear")
-                            || astring[0].equalsIgnoreCase("save")
+                    if (astring[0].equalsIgnoreCase("clear") || astring[0].equalsIgnoreCase("save")
                             || astring[0].equalsIgnoreCase("drop")) {
                         System.out.println("GCInv command: player " + astring[1] + " not found.");
                     } else {
@@ -157,12 +162,12 @@ public class CommandGCInv extends CommandBase {
             }
             CommandGCInv.savedata.remove(theName);
             CommandGCInv.writefile();
-            System.out.println("[GCInv] Restored GC inventory slots of "
-                    + thePlayer.getGameProfile().getName());
+            System.out.println("[GCInv] Restored GC inventory slots of " + thePlayer.getGameProfile().getName());
 
         } else {
-            System.out.println("[GCInv] Player " + thePlayer.getGameProfile().getName()
-                    + " was spawned without restoring the GCInv save.  Run /gcinv restore playername to restore it.");
+            System.out.println(
+                    "[GCInv] Player " + thePlayer.getGameProfile().getName()
+                            + " was spawned without restoring the GCInv save.  Run /gcinv restore playername to restore it.");
         }
     }
 

@@ -1,17 +1,21 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.items.ItemCanisterGeneric;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class ItemCanisterMethane extends ItemCanisterGeneric {
+
     protected IIcon[] icons = new IIcon[7];
 
     public ItemCanisterMethane(String assetName) {
@@ -52,13 +56,14 @@ public class ItemCanisterMethane extends ItemCanisterGeneric {
         return super.getIconFromDamage(damage);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
         if (par1ItemStack.getMaxDamage() - par1ItemStack.getItemDamage() > 0) {
-            par3List.add(GCCoreUtil.translate("item.canister.gas.name") + ": "
-                    + (par1ItemStack.getMaxDamage() - par1ItemStack.getItemDamage()));
+            par3List.add(
+                    GCCoreUtil.translate("item.canister.gas.name") + ": "
+                            + (par1ItemStack.getMaxDamage() - par1ItemStack.getItemDamage()));
         }
     }
 }

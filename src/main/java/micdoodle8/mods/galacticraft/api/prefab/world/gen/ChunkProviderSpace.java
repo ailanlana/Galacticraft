@@ -3,9 +3,11 @@ package micdoodle8.mods.galacticraft.api.prefab.world.gen;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.prefab.core.BlockMetaPair;
 import micdoodle8.mods.galacticraft.core.perlin.generator.Gradient;
 import micdoodle8.mods.galacticraft.core.world.gen.EnumCraterSize;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.entity.EnumCreatureType;
@@ -22,6 +24,7 @@ import net.minecraft.world.gen.ChunkProviderGenerate;
  * Do not include this prefab class in your released mod download.
  */
 public abstract class ChunkProviderSpace extends ChunkProviderGenerate {
+
     protected final Random rand;
 
     private final Gradient noiseGen1;
@@ -78,10 +81,10 @@ public abstract class ChunkProviderSpace extends ChunkProviderGenerate {
 
         for (int x = 0; x < ChunkProviderSpace.CHUNK_SIZE_X; x++) {
             for (int z = 0; z < ChunkProviderSpace.CHUNK_SIZE_Z; z++) {
-                final double baseHeight =
-                        this.noiseGen1.getNoise(chunkX * 16 + x, chunkZ * 16 + z) * this.TERRAIN_HEIGHT_MOD;
-                final double smallHillHeight =
-                        this.noiseGen2.getNoise(chunkX * 16 + x, chunkZ * 16 + z) * this.SMALL_FEATURE_HEIGHT_MOD;
+                final double baseHeight = this.noiseGen1.getNoise(chunkX * 16 + x, chunkZ * 16 + z)
+                        * this.TERRAIN_HEIGHT_MOD;
+                final double smallHillHeight = this.noiseGen2.getNoise(chunkX * 16 + x, chunkZ * 16 + z)
+                        * this.SMALL_FEATURE_HEIGHT_MOD;
                 double mountainHeight = Math.abs(this.noiseGen3.getNoise(chunkX * 16 + x, chunkZ * 16 + z));
                 double valleyHeight = Math.abs(this.noiseGen4.getNoise(chunkX * 16 + x, chunkZ * 16 + z));
                 final double featureFilter = this.noiseGen5.getNoise(chunkX * 16 + x, chunkZ * 16 + z)
@@ -89,8 +92,7 @@ public abstract class ChunkProviderSpace extends ChunkProviderGenerate {
                 final double largeFilter = this.noiseGen6.getNoise(chunkX * 16 + x, chunkZ * 16 + z)
                         * ChunkProviderSpace.LARGE_FEATURE_FILTER_MOD;
                 final double smallFilter = this.noiseGen7.getNoise(chunkX * 16 + x, chunkZ * 16 + z)
-                                * ChunkProviderSpace.SMALL_FEATURE_FILTER_MOD
-                        - 0.5;
+                        * ChunkProviderSpace.SMALL_FEATURE_FILTER_MOD - 0.5;
                 mountainHeight = this.lerp(
                         smallHillHeight,
                         mountainHeight * this.MOUNTAIN_HEIGHT_MOD,
@@ -139,15 +141,14 @@ public abstract class ChunkProviderSpace extends ChunkProviderGenerate {
     }
 
     @Override
-    public void replaceBlocksForBiome(
-            int par1, int par2, Block[] arrayOfIDs, byte[] arrayOfMeta, BiomeGenBase[] par4ArrayOfBiomeGenBase) {
+    public void replaceBlocksForBiome(int par1, int par2, Block[] arrayOfIDs, byte[] arrayOfMeta,
+            BiomeGenBase[] par4ArrayOfBiomeGenBase) {
         final int var5 = 20;
         final float var6 = 0.03125F;
         this.noiseGen4.setFrequency(var6 * 2);
         for (int var8 = 0; var8 < 16; ++var8) {
             for (int var9 = 0; var9 < 16; ++var9) {
-                final int var12 = (int) (this.noiseGen4.getNoise(par1 * 16 + var8, par2 * 16 + var9) / 3.0D
-                        + 3.0D
+                final int var12 = (int) (this.noiseGen4.getNoise(par1 * 16 + var8, par2 * 16 + var9) / 3.0D + 3.0D
                         + this.rand.nextDouble() * 0.25D);
                 int var13 = -1;
                 Block var14 = this.getGrassBlock().getBlock();
@@ -209,8 +210,7 @@ public abstract class ChunkProviderSpace extends ChunkProviderGenerate {
         final byte[] meta = new byte[32768 * 2];
         this.generateTerrain(par1, par2, ids, meta);
         this.createCraters(par1, par2, ids, meta);
-        this.biomesForGeneration = this.worldObj
-                .getWorldChunkManager()
+        this.biomesForGeneration = this.worldObj.getWorldChunkManager()
                 .loadBlockGeneratorData(this.biomesForGeneration, par1 * 16, par2 * 16, 16, 16);
         this.replaceBlocksForBiome(par1, par2, ids, meta, this.biomesForGeneration);
 
@@ -244,11 +244,17 @@ public abstract class ChunkProviderSpace extends ChunkProviderGenerate {
                         if (Math.abs(this.randFromPoint(cx * 16 + x, (cz * 16 + z) * 1000))
                                 < this.noiseGen5.getNoise(cx * 16 + x, cz * 16 + z) / this.CRATER_PROB) {
                             final Random random = new Random(cx * 16 + x + (cz * 16 + z) * 5000);
-                            final EnumCraterSize cSize =
-                                    EnumCraterSize.sizeArray[random.nextInt(EnumCraterSize.sizeArray.length)];
+                            final EnumCraterSize cSize = EnumCraterSize.sizeArray[random
+                                    .nextInt(EnumCraterSize.sizeArray.length)];
                             final int size = random.nextInt(cSize.MAX_SIZE - cSize.MIN_SIZE) + cSize.MIN_SIZE + 15;
                             this.makeCrater(
-                                    cx * 16 + x, cz * 16 + z, chunkX * 16, chunkZ * 16, size, chunkArray, metaArray);
+                                    cx * 16 + x,
+                                    cz * 16 + z,
+                                    chunkX * 16,
+                                    chunkZ * 16,
+                                    size,
+                                    chunkArray,
+                                    metaArray);
                         }
                     }
                 }
@@ -256,8 +262,8 @@ public abstract class ChunkProviderSpace extends ChunkProviderGenerate {
         }
     }
 
-    public void makeCrater(
-            int craterX, int craterZ, int chunkX, int chunkZ, int size, Block[] chunkArray, byte[] metaArray) {
+    public void makeCrater(int craterX, int craterZ, int chunkX, int chunkZ, int size, Block[] chunkArray,
+            byte[] metaArray) {
         for (int x = 0; x < ChunkProviderSpace.CHUNK_SIZE_X; x++) {
             for (int z = 0; z < ChunkProviderSpace.CHUNK_SIZE_Z; z++) {
                 double xDev = craterX - (chunkX + x);
@@ -335,7 +341,7 @@ public abstract class ChunkProviderSpace extends ChunkProviderGenerate {
         return "RandomLevelSource";
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public List getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int i, int j, int k) {
         if (par1EnumCreatureType == EnumCreatureType.monster) {
@@ -362,8 +368,7 @@ public abstract class ChunkProviderSpace extends ChunkProviderGenerate {
     /**
      * Do not return null
      *
-     * @return The biome generator for this world, handles ore, flower, etc
-     * generation. See GCBiomeDecoratorBase.
+     * @return The biome generator for this world, handles ore, flower, etc generation. See GCBiomeDecoratorBase.
      */
     protected abstract BiomeDecoratorSpace getBiomeGenerator();
 

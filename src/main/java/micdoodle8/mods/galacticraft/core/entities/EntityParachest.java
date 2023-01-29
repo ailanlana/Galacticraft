@@ -3,6 +3,7 @@ package micdoodle8.mods.galacticraft.core.entities;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityParaChest;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -15,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidRegistry;
 
 public class EntityParachest extends Entity {
+
     public ItemStack[] cargo;
 
     public int fuelLevel;
@@ -94,8 +96,12 @@ public class EntityParachest extends Entity {
                             return;
                         } else if (this.cargo != null) {
                             for (final ItemStack stack : this.cargo) {
-                                final EntityItem e =
-                                        new EntityItem(this.worldObj, this.posX, this.posY, this.posZ, stack);
+                                final EntityItem e = new EntityItem(
+                                        this.worldObj,
+                                        this.posX,
+                                        this.posY,
+                                        this.posZ,
+                                        stack);
                                 this.worldObj.spawnEntityInWorld(e);
                             }
 
@@ -132,8 +138,7 @@ public class EntityParachest extends Entity {
             }
 
             chest.fuelTank.fill(
-                    FluidRegistry.getFluidStack(
-                            GalacticraftCore.fluidFuel.getName().toLowerCase(), this.fuelLevel),
+                    FluidRegistry.getFluidStack(GalacticraftCore.fluidFuel.getName().toLowerCase(), this.fuelLevel),
                     true);
 
             return true;

@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 public class ItemBlockCargoLoader extends ItemBlockDesc {
+
     public ItemBlockCargoLoader(Block block) {
         super(block);
         this.setMaxDamage(0);

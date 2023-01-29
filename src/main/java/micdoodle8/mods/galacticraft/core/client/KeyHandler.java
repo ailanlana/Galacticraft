@@ -1,17 +1,20 @@
 package micdoodle8.mods.galacticraft.core.client;
 
+import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.settings.KeyBinding;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.Type;
 import cpw.mods.fml.relauncher.Side;
-import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.settings.KeyBinding;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 
 public abstract class KeyHandler {
+
     private final KeyBinding[] keyBindings;
     private KeyBinding[] vKeyBindings;
     private boolean[] keyDown;
@@ -19,8 +22,8 @@ public abstract class KeyHandler {
     private boolean[] vRepeatings;
     public boolean isDummy;
 
-    public KeyHandler(
-            KeyBinding[] keyBindings, boolean[] repeatings, KeyBinding[] vanillaKeys, boolean[] vanillaRepeatings) {
+    public KeyHandler(KeyBinding[] keyBindings, boolean[] repeatings, KeyBinding[] vanillaKeys,
+            boolean[] vanillaRepeatings) {
         assert keyBindings.length == repeatings.length : "You need to pass two arrays of identical length";
         assert vanillaKeys.length == vanillaRepeatings.length : "You need to pass two arrays of identical length";
         this.keyBindings = keyBindings;
@@ -55,8 +58,8 @@ public abstract class KeyHandler {
             if (keyCode == Keyboard.CHAR_NONE || keyCode > 255) {
                 continue;
             }
-            final boolean state =
-                    !inChat && (keyCode < 0 ? Mouse.isButtonDown(keyCode + 100) : Keyboard.isKeyDown(keyCode));
+            final boolean state = !inChat
+                    && (keyCode < 0 ? Mouse.isButtonDown(keyCode + 100) : Keyboard.isKeyDown(keyCode));
             if (state != this.keyDown[i] || state && this.repeatings[i]) {
                 if (state) {
                     this.keyDown(type, keyBinding, tickEnd, state != this.keyDown[i]);

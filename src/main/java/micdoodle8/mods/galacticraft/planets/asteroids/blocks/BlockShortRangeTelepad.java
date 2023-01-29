@@ -1,9 +1,8 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
@@ -15,6 +14,7 @@ import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.planets.GalacticraftPlanets;
 import micdoodle8.mods.galacticraft.planets.asteroids.dimension.ShortRangeTelepadHandler;
 import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityShortRangeTelepad;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -29,7 +29,11 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockShortRangeTelepad extends BlockTileGC implements ItemBlockDesc.IBlockShiftDesc {
+
     protected BlockShortRangeTelepad(String assetName) {
         super(Material.iron);
         this.blockHardness = 3.0F;
@@ -71,15 +75,15 @@ public class BlockShortRangeTelepad extends BlockTileGC implements ItemBlockDesc
 
     @SuppressWarnings("rawtypes")
     @Override
-    public void addCollisionBoxesToList(
-            World world, int x, int y, int z, AxisAlignedBB axisalignedbb, List list, Entity entity) {
+    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisalignedbb, List list,
+            Entity entity) {
         this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.45F, 1.0F);
         super.addCollisionBoxesToList(world, x, y, z, axisalignedbb, list, entity);
     }
 
     @Override
-    public void onBlockPlacedBy(
-            World world, int x0, int y0, int z0, EntityLivingBase entityLiving, ItemStack itemStack) {
+    public void onBlockPlacedBy(World world, int x0, int y0, int z0, EntityLivingBase entityLiving,
+            ItemStack itemStack) {
         super.onBlockPlacedBy(world, x0, y0, z0, entityLiving, itemStack);
 
         final TileEntity tile = world.getTileEntity(x0, y0, z0);
@@ -105,12 +109,11 @@ public class BlockShortRangeTelepad extends BlockTileGC implements ItemBlockDesc
 
             if (entityLiving instanceof EntityPlayer) {
                 if (!world.isRemote) {
-                    ((EntityPlayer) entityLiving)
-                            .addChatMessage(
-                                    new ChatComponentText(EnumColor.RED + GCCoreUtil.translate("gui.warning.noroom")));
+                    ((EntityPlayer) entityLiving).addChatMessage(
+                            new ChatComponentText(EnumColor.RED + GCCoreUtil.translate("gui.warning.noroom")));
                 }
-                ((EntityPlayer) entityLiving)
-                        .inventory.addItemStackToInventory(new ItemStack(Item.getItemFromBlock(this), 1, 0));
+                ((EntityPlayer) entityLiving).inventory
+                        .addItemStackToInventory(new ItemStack(Item.getItemFromBlock(this), 1, 0));
             }
 
             return;
@@ -118,22 +121,13 @@ public class BlockShortRangeTelepad extends BlockTileGC implements ItemBlockDesc
 
         if (tile instanceof TileEntityShortRangeTelepad) {
             ((TileEntityShortRangeTelepad) tile).onCreate(new BlockVec3(x0, y0, z0));
-            ((TileEntityShortRangeTelepad) tile)
-                    .setOwner(((EntityPlayer) entityLiving).getGameProfile().getName());
+            ((TileEntityShortRangeTelepad) tile).setOwner(((EntityPlayer) entityLiving).getGameProfile().getName());
         }
     }
 
     @Override
-    public boolean onMachineActivated(
-            World world,
-            int x,
-            int y,
-            int z,
-            EntityPlayer par5EntityPlayer,
-            int side,
-            float hitX,
-            float hitY,
-            float hitZ) {
+    public boolean onMachineActivated(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ) {
         return ((IMultiBlock) world.getTileEntity(x, y, z)).onActivated(par5EntityPlayer);
     }
 

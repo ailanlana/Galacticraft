@@ -3,10 +3,12 @@ package micdoodle8.mods.galacticraft.api.transmission.grid;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
 import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
 import micdoodle8.mods.galacticraft.api.transmission.tile.INetworkConnection;
 import micdoodle8.mods.galacticraft.api.transmission.tile.ITransmitter;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -17,12 +19,11 @@ import net.minecraftforge.common.util.ForgeDirection;
  * @author Calclavia
  */
 public class PathfinderChecker extends Pathfinder {
-    public PathfinderChecker(
-            final World world,
-            final INetworkConnection targetConnector,
-            final NetworkType networkType,
+
+    public PathfinderChecker(final World world, final INetworkConnection targetConnector, final NetworkType networkType,
             final INetworkConnection... ignoreConnector) {
         super(new IPathCallBack() {
+
             @Override
             public Set<BlockVec3> getConnectedNodes(Pathfinder finder, BlockVec3 currentNode) {
                 final Set<BlockVec3> neighbors = new HashSet<>();

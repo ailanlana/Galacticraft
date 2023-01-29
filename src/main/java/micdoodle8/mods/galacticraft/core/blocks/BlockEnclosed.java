@@ -1,12 +1,9 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import appeng.api.AEApi;
-import appeng.api.parts.IPartHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
 import micdoodle8.mods.galacticraft.api.transmission.tile.IConductor;
 import micdoodle8.mods.galacticraft.api.transmission.tile.INetworkConnection;
@@ -16,6 +13,7 @@ import micdoodle8.mods.galacticraft.core.tile.TileEntityAluminumWire;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenPipe;
 import micdoodle8.mods.galacticraft.core.util.CompatibilityManager;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.ITileEntityProvider;
@@ -29,14 +27,21 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import appeng.api.AEApi;
+import appeng.api.parts.IPartHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockEnclosed extends BlockContainer
         implements IPartialSealableBlock, ITileEntityProvider, ItemBlockDesc.IBlockShiftDesc {
+
     private IIcon[] enclosedIcons;
     public static Item[] pipeItemsBC = new Item[6];
     public static BlockContainer blockPipeBC = null;
     public static Method onBlockNeighbourChangeIC2 = null;
 
     public enum EnumEnclosedBlock {
+
         TE_CONDUIT(4, 2, null, "enclosed_te_conduit"), // CURRENTLY UNUSED
         OXYGEN_PIPE(1, -1, null, "enclosed_oxygen_pipe"),
         IC2_COPPER_CABLE(2, 0, null, "enclosed_copper_cable"),
@@ -102,7 +107,7 @@ public class BlockEnclosed extends BlockContainer
         this.setBlockName(assetName);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @SideOnly(Side.CLIENT)
     @Override
     public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
@@ -182,12 +187,12 @@ public class BlockEnclosed extends BlockContainer
         this.enclosedIcons = new IIcon[16];
 
         for (int i = 0; i < EnumEnclosedBlock.values().length; i++) {
-            this.enclosedIcons[EnumEnclosedBlock.values()[i].getMetadata()] = par1IconRegister.registerIcon(
-                    GalacticraftCore.TEXTURE_PREFIX + EnumEnclosedBlock.values()[i].getTexture());
+            this.enclosedIcons[EnumEnclosedBlock.values()[i].getMetadata()] = par1IconRegister
+                    .registerIcon(GalacticraftCore.TEXTURE_PREFIX + EnumEnclosedBlock.values()[i].getTexture());
         }
 
-        this.blockIcon = par1IconRegister.registerIcon(
-                GalacticraftCore.TEXTURE_PREFIX + "" + EnumEnclosedBlock.OXYGEN_PIPE.getTexture());
+        this.blockIcon = par1IconRegister
+                .registerIcon(GalacticraftCore.TEXTURE_PREFIX + "" + EnumEnclosedBlock.OXYGEN_PIPE.getTexture());
     }
 
     @Override
@@ -233,11 +238,11 @@ public class BlockEnclosed extends BlockContainer
             }
         } else if (metadata <= EnumEnclosedBlock.ALUMINUM_WIRE.getMetadata()
                 || metadata <= EnumEnclosedBlock.ALUMINUM_WIRE_HEAVY.getMetadata()) {
-            super.onNeighborBlockChange(world, x, y, z, block);
-            if (tileEntity instanceof IConductor) {
-                ((IConductor) tileEntity).refresh();
-            }
-        }
+                    super.onNeighborBlockChange(world, x, y, z, block);
+                    if (tileEntity instanceof IConductor) {
+                        ((IConductor) tileEntity).refresh();
+                    }
+                }
     }
 
     @Override
@@ -263,8 +268,8 @@ public class BlockEnclosed extends BlockContainer
 
                     constructor.setAccessible(true);
 
-                    return (TileEntity) constructor.newInstance(
-                            (short) BlockEnclosed.getTypeFromMeta(metadata).getSubMetaValue());
+                    return (TileEntity) constructor
+                            .newInstance((short) BlockEnclosed.getTypeFromMeta(metadata).getSubMetaValue());
                 } catch (final Exception e) {
                     e.printStackTrace();
                 }
@@ -283,8 +288,7 @@ public class BlockEnclosed extends BlockContainer
                 try {
                     final IPartHelper apiPart = AEApi.instance().partHelper();
                     final Class<?> clazzApiPart = Class.forName("appeng.core.api.ApiPart");
-                    final Class clazz = (Class) clazzApiPart
-                            .getDeclaredMethod("getCombinedInstance", String.class)
+                    final Class clazz = (Class) clazzApiPart.getDeclaredMethod("getCombinedInstance", String.class)
                             .invoke(apiPart, "appeng.tile.networking.TileCableBus");
                     // Needs to be: appeng.parts.layers.LayerITileStorageMonitorable_TileCableBus
                     return (TileEntity) clazz.newInstance();
@@ -356,8 +360,7 @@ public class BlockEnclosed extends BlockContainer
                     Method m = null;
                     try {
                         m = clazzTilePipe.getMethod("sendUpdateToClient");
-                    } catch (final Exception e) {
-                    }
+                    } catch (final Exception e) {}
                     if (m != null) {
                         m.invoke(tilePipe);
                     }

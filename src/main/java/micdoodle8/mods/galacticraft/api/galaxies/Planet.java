@@ -1,6 +1,7 @@
 package micdoodle8.mods.galacticraft.api.galaxies;
 
 public class Planet extends CelestialBody {
+
     protected SolarSystem parentSolarSystem = null;
 
     public Planet(String planetName) {

@@ -1,13 +1,16 @@
 package micdoodle8.mods.galacticraft.core.client.gui.element;
 
 import micdoodle8.mods.galacticraft.core.util.ColorUtil;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.OpenGlHelper;
+
 import org.lwjgl.opengl.GL11;
 
 public class GuiElementGradientButton extends GuiButton {
+
     public GuiElementGradientButton(int id, int x, int y, int width, int height, String buttonText) {
         super(id, x, y, width, height, buttonText);
     }
@@ -17,8 +20,7 @@ public class GuiElementGradientButton extends GuiButton {
         if (this.visible) {
             final FontRenderer fontrenderer = mc.fontRenderer;
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            this.field_146123_n = mouseX >= this.xPosition
-                    && mouseY >= this.yPosition
+            this.field_146123_n = mouseX >= this.xPosition && mouseY >= this.yPosition
                     && mouseX < this.xPosition + this.width
                     && mouseY < this.yPosition + this.height;
             GL11.glEnable(GL11.GL_BLEND);

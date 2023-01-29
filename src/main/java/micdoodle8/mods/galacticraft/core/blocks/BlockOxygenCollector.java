@@ -1,14 +1,14 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical;
 import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenCollector;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -22,7 +22,11 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockOxygenCollector extends BlockAdvancedTile implements ItemBlockDesc.IBlockShiftDesc {
+
     @SideOnly(Side.CLIENT)
     private IIcon[] collectorIcons;
 
@@ -57,16 +61,8 @@ public class BlockOxygenCollector extends BlockAdvancedTile implements ItemBlock
     }
 
     @Override
-    public boolean onUseWrench(
-            World par1World,
-            int x,
-            int y,
-            int z,
-            EntityPlayer par5EntityPlayer,
-            int side,
-            float hitX,
-            float hitY,
-            float hitZ) {
+    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ) {
         int change = 0;
 
         // Re-orient the block
@@ -95,8 +91,8 @@ public class BlockOxygenCollector extends BlockAdvancedTile implements ItemBlock
     }
 
     @Override
-    public boolean onMachineActivated(
-            World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
+    public boolean onMachineActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX,
+            float hitY, float hitZ) {
         entityPlayer.openGui(GalacticraftCore.instance, -1, world, x, y, z);
         return true;
     }
@@ -110,8 +106,7 @@ public class BlockOxygenCollector extends BlockAdvancedTile implements ItemBlock
     public IIcon getIcon(int side, int metadata) {
         if (side == metadata + 2) {
             return this.iconOutput;
-        } else if (side
-                == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) {
+        } else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) {
             return this.iconInput;
         }
 
@@ -169,9 +164,10 @@ public class BlockOxygenCollector extends BlockAdvancedTile implements ItemBlock
                     }
 
                     GalacticraftCore.proxy.spawnParticle(
-                            "oxygen", new Vector3(x2, y2, z2), new Vector3(mX, mY, mZ), new Object[] {
-                                new Vector3(0.7D, 0.7D, 1.0D)
-                            });
+                            "oxygen",
+                            new Vector3(x2, y2, z2),
+                            new Vector3(mX, mY, mZ),
+                            new Object[] { new Vector3(0.7D, 0.7D, 1.0D) });
                 }
             }
         }

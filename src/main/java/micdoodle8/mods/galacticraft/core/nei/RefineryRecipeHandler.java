@@ -1,24 +1,30 @@
 package micdoodle8.mods.galacticraft.core.nei;
 
-import codechicken.lib.gui.GuiDraw;
-import codechicken.nei.NEIServerUtils;
-import codechicken.nei.PositionedStack;
-import codechicken.nei.recipe.TemplateRecipeHandler;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.items.GCItems;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
+import codechicken.lib.gui.GuiDraw;
+import codechicken.nei.NEIServerUtils;
+import codechicken.nei.PositionedStack;
+import codechicken.nei.recipe.TemplateRecipeHandler;
+
 public class RefineryRecipeHandler extends TemplateRecipeHandler {
-    private static final ResourceLocation refineryGuiTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/refinery.png");
+
+    private static final ResourceLocation refineryGuiTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/gui/refinery.png");
     int ticksPassed;
 
     public String getRecipeId() {
@@ -93,10 +99,11 @@ public class RefineryRecipeHandler extends TemplateRecipeHandler {
     public ArrayList<PositionedStack> getIngredientStacks(int recipe) {
         if (this.ticksPassed % 144 > 20) {
             final ArrayList<PositionedStack> stacks = new ArrayList<>();
-            stacks.add(new PositionedStack(
-                    new ItemStack(GCItems.oilCanister, 1, GCItems.oilCanister.getMaxDamage()),
-                    this.arecipes.get(recipe).getIngredients().get(0).relx,
-                    this.arecipes.get(recipe).getIngredients().get(0).rely));
+            stacks.add(
+                    new PositionedStack(
+                            new ItemStack(GCItems.oilCanister, 1, GCItems.oilCanister.getMaxDamage()),
+                            this.arecipes.get(recipe).getIngredients().get(0).relx,
+                            this.arecipes.get(recipe).getIngredients().get(0).rely));
             return stacks;
         } else {
             return (ArrayList<PositionedStack>) this.arecipes.get(recipe).getIngredients();
@@ -116,6 +123,7 @@ public class RefineryRecipeHandler extends TemplateRecipeHandler {
     }
 
     public class CachedRefineryRecipe extends TemplateRecipeHandler.CachedRecipe {
+
         public PositionedStack input;
         public PositionedStack output;
 

@@ -1,23 +1,23 @@
 package micdoodle8.mods.galacticraft.api.world;
 
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 /**
- * Implement into WorldProvider for customizing spawning players and other
- * entities into space dimension
+ * Implement into WorldProvider for customizing spawning players and other entities into space dimension
  * <p/>
- * You can also create a separate class, implement it there, then register it
- * in @GalacticraftRegistry
+ * You can also create a separate class, implement it there, then register it in @GalacticraftRegistry
  */
 public interface ITeleportType {
+
     /**
-     * This method is used to determine if a player will open parachute upon
-     * entering the dimension
+     * This method is used to determine if a player will open parachute upon entering the dimension
      *
      * @return whether player will set parachute open upon entering this dimension
      */
@@ -28,8 +28,7 @@ public interface ITeleportType {
      *
      * @param world  The world to be spawned into
      * @param player The player to be teleported
-     * @return a vector3 object containing the coordinates to be spawned into the
-     * world with
+     * @return a vector3 object containing the coordinates to be spawned into the world with
      */
     Vector3 getPlayerSpawnLocation(WorldServer world, EntityPlayerMP player);
 
@@ -38,19 +37,16 @@ public interface ITeleportType {
      *
      * @param world  The world to be spawned into
      * @param entity the non-player entity to be teleported
-     * @return a vector3 object containing the coordinates to be spawned into the
-     * world with
+     * @return a vector3 object containing the coordinates to be spawned into the world with
      */
     Vector3 getEntitySpawnLocation(WorldServer world, Entity entity);
 
     /**
-     * Gets the parachest spawn location when entering this dimension. Return null
-     * for no parachest spawn
+     * Gets the parachest spawn location when entering this dimension. Return null for no parachest spawn
      *
      * @param world The world to be spawned into
      * @param chest the parachest to be teleported
-     * @return a vector3 object containing the coordinates to be spawned into the
-     * world with. Return null for no spawn
+     * @return a vector3 object containing the coordinates to be spawned into the world with. Return null for no spawn
      */
     Vector3 getParaChestSpawnLocation(WorldServer world, EntityPlayerMP player, Random rand);
 
@@ -59,8 +55,7 @@ public interface ITeleportType {
      *
      * @param newWorld         The world object of the entered world
      * @param player           The player that has transferred dimensions
-     * @param ridingAutoRocket If the player is riding an auto rocket. Do not spawn
-     *                         in landers if so.
+     * @param ridingAutoRocket If the player is riding an auto rocket. Do not spawn in landers if so.
      */
     void onSpaceDimensionChanged(World newWorld, EntityPlayerMP player, boolean ridingAutoRocket);
 

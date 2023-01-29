@@ -1,10 +1,9 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.dimension;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.TreeMap;
+
 import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
 import micdoodle8.mods.galacticraft.api.prefab.world.gen.WorldProviderSpace;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
@@ -17,13 +16,18 @@ import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
 import micdoodle8.mods.galacticraft.planets.asteroids.entities.EntityAstroMiner;
 import micdoodle8.mods.galacticraft.planets.asteroids.world.gen.ChunkProviderAsteroids;
 import micdoodle8.mods.galacticraft.planets.asteroids.world.gen.WorldChunkManagerAsteroids;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.chunk.IChunkProvider;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class WorldProviderAsteroids extends WorldProviderSpace implements ISolarLevel {
+
     // Used to list asteroid centres to external code that needs to know them
     private final HashSet<AsteroidData> asteroids = new HashSet();
     private boolean dataNotLoaded = true;
@@ -209,8 +213,8 @@ public class WorldProviderAsteroids extends WorldProviderSpace implements ISolar
     }
 
     private void loadAsteroidSavedData() {
-        this.datafile =
-                (AsteroidSaveData) this.worldObj.loadItemData(AsteroidSaveData.class, AsteroidSaveData.saveDataID);
+        this.datafile = (AsteroidSaveData) this.worldObj
+                .loadItemData(AsteroidSaveData.class, AsteroidSaveData.saveDataID);
 
         if (this.datafile == null) {
             this.datafile = new AsteroidSaveData("");
@@ -396,6 +400,7 @@ public class WorldProviderAsteroids extends WorldProviderSpace implements ISolar
     }
 
     private static class AsteroidData {
+
         protected BlockVec3 centre;
         protected int sizeAndLandedFlag = 15;
         protected int coreAndSpawnedFlag = -2;

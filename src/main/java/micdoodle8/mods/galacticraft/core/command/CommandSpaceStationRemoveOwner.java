@@ -1,15 +1,16 @@
 package micdoodle8.mods.galacticraft.core.command;
 
-import com.google.common.collect.Sets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import micdoodle8.mods.galacticraft.core.dimension.SpaceStationWorldData;
 import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -18,7 +19,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 
+import com.google.common.collect.Sets;
+
 public class CommandSpaceStationRemoveOwner extends CommandBase {
+
     @Override
     public String getCommandUsage(ICommandSender var1) {
         return "/" + this.getCommandName() + " <player>";
@@ -48,8 +52,8 @@ public class CommandSpaceStationRemoveOwner extends CommandBase {
             var3 = astring[0];
 
             try {
-                playerBase =
-                        PlayerUtil.getPlayerBaseServerFromPlayerUsername(icommandsender.getCommandSenderName(), false);
+                playerBase = PlayerUtil
+                        .getPlayerBaseServerFromPlayerUsername(icommandsender.getCommandSenderName(), false);
 
                 if (playerBase != null) {
                     final GCPlayerStats stats = GCPlayerStats.get(playerBase);
@@ -58,8 +62,8 @@ public class CommandSpaceStationRemoveOwner extends CommandBase {
                         throw new WrongUsageException(GCCoreUtil.translate("commands.ssinvite.notFound"));
                     } else {
                         for (final Map.Entry<Integer, Integer> e : stats.spaceStationDimensionData.entrySet()) {
-                            final SpaceStationWorldData data =
-                                    SpaceStationWorldData.getStationData(playerBase.worldObj, e.getValue(), playerBase);
+                            final SpaceStationWorldData data = SpaceStationWorldData
+                                    .getStationData(playerBase.worldObj, e.getValue(), playerBase);
 
                             String str = null;
                             for (final String name : data.getAllowedPlayers()) {
@@ -73,8 +77,10 @@ public class CommandSpaceStationRemoveOwner extends CommandBase {
                                 data.getAllowedPlayers().remove(str);
                                 data.markDirty();
                             } else {
-                                throw new CommandException(GCCoreUtil.translateWithFormat(
-                                        "commands.ssuninvite.noPlayer", "\"" + var3 + "\""));
+                                throw new CommandException(
+                                        GCCoreUtil.translateWithFormat(
+                                                "commands.ssuninvite.noPlayer",
+                                                "\"" + var3 + "\""));
                             }
                         }
                     }
@@ -84,8 +90,9 @@ public class CommandSpaceStationRemoveOwner extends CommandBase {
             }
 
         } else {
-            throw new WrongUsageException(GCCoreUtil.translateWithFormat(
-                    "commands.ssinvite.wrongUsage", this.getCommandUsage(icommandsender)));
+            throw new WrongUsageException(
+                    GCCoreUtil
+                            .translateWithFormat("commands.ssinvite.wrongUsage", this.getCommandUsage(icommandsender)));
         }
 
         if (playerBase != null) {
@@ -102,8 +109,8 @@ public class CommandSpaceStationRemoveOwner extends CommandBase {
     }
 
     protected String[] getPlayers(ICommandSender icommandsender) {
-        final EntityPlayerMP playerBase =
-                PlayerUtil.getPlayerBaseServerFromPlayerUsername(icommandsender.getCommandSenderName(), false);
+        final EntityPlayerMP playerBase = PlayerUtil
+                .getPlayerBaseServerFromPlayerUsername(icommandsender.getCommandSenderName(), false);
 
         if (playerBase != null) {
             final GCPlayerStats stats = GCPlayerStats.get(playerBase);
@@ -114,8 +121,8 @@ public class CommandSpaceStationRemoveOwner extends CommandBase {
                 final HashSet<String> allowedNames = Sets.newHashSet();
 
                 for (final Map.Entry<Integer, Integer> e : stats.spaceStationDimensionData.entrySet()) {
-                    final SpaceStationWorldData data =
-                            SpaceStationWorldData.getStationData(playerBase.worldObj, e.getValue(), playerBase);
+                    final SpaceStationWorldData data = SpaceStationWorldData
+                            .getStationData(playerBase.worldObj, e.getValue(), playerBase);
                     allowedNames.addAll(data.getAllowedPlayers());
                 }
 
@@ -137,7 +144,7 @@ public class CommandSpaceStationRemoveOwner extends CommandBase {
             }
         }
 
-        final String[] returnvalue = {""};
+        final String[] returnvalue = { "" };
         return returnvalue;
     }
 

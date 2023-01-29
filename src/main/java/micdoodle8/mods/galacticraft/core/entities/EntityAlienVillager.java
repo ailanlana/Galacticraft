@@ -1,8 +1,7 @@
 package micdoodle8.mods.galacticraft.core.entities;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.api.entity.IEntityBreathable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
@@ -29,7 +28,11 @@ import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.village.Village;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class EntityAlienVillager extends EntityAgeable implements IEntityBreathable {
+
     private int randomTickDivider;
     private boolean isMating;
     private boolean isPlaying;
@@ -94,8 +97,11 @@ public class EntityAlienVillager extends EntityAgeable implements IEntityBreatha
                 this.detachHome();
             } else {
                 final ChunkCoordinates chunkcoordinates = this.villageObj.getCenter();
-                this.setHomeArea(chunkcoordinates.posX, chunkcoordinates.posY, chunkcoordinates.posZ, (int)
-                        (this.villageObj.getVillageRadius() * 0.6F));
+                this.setHomeArea(
+                        chunkcoordinates.posX,
+                        chunkcoordinates.posY,
+                        chunkcoordinates.posZ,
+                        (int) (this.villageObj.getVillageRadius() * 0.6F));
 
                 if (this.field_82190_bM) {
                     this.field_82190_bM = false;

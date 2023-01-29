@@ -1,8 +1,7 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.dimension.SpinManager;
@@ -10,6 +9,7 @@ import micdoodle8.mods.galacticraft.core.dimension.WorldProviderSpaceStation;
 import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityThruster;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -23,7 +23,11 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockSpinThruster extends BlockAdvanced implements ItemBlockDesc.IBlockShiftDesc {
+
     public static IIcon thrusterIcon;
 
     protected BlockSpinThruster(String assetName) {
@@ -34,8 +38,8 @@ public class BlockSpinThruster extends BlockAdvanced implements ItemBlockDesc.IB
         this.setBlockName(assetName);
     }
 
-    private static boolean isBlockSolidOnSide(
-            World world, int x, int y, int z, ForgeDirection direction, boolean nope) {
+    private static boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection direction,
+            boolean nope) {
         return world.getBlock(x, y, z).isSideSolid(world, x, y, z, direction);
     }
 
@@ -92,8 +96,8 @@ public class BlockSpinThruster extends BlockAdvanced implements ItemBlockDesc.IB
     }
 
     @Override
-    public int onBlockPlaced(
-            World par1World, int x, int y, int z, int par5, float par6, float par7, float par8, int par9) {
+    public int onBlockPlaced(World par1World, int x, int y, int z, int par5, float par6, float par7, float par8,
+            int par9) {
         if (par5 == 2 && BlockSpinThruster.isBlockSolidOnSide(par1World, x, y, z + 1, ForgeDirection.NORTH, true)) {}
 
         if (par5 == 3 && BlockSpinThruster.isBlockSolidOnSide(par1World, x, y, z - 1, ForgeDirection.SOUTH, true)) {}
@@ -155,17 +159,14 @@ public class BlockSpinThruster extends BlockAdvanced implements ItemBlockDesc.IB
 
         if (!par1World.isRemote) {
             if (par1World.provider instanceof WorldProviderSpaceStation) {
-                ((WorldProviderSpaceStation) par1World.provider)
-                        .getSpinManager()
-                        .checkSS(baseBlock, true);
+                ((WorldProviderSpaceStation) par1World.provider).getSpinManager().checkSS(baseBlock, true);
             }
         }
     }
 
     /**
-     * Lets the block know when one of its neighbor changes. Doesn't know which
-     * neighbor changed (coordinates passed are their own) Args: x, y, z, neighbor
-     * blockID
+     * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed (coordinates passed are
+     * their own) Args: x, y, z, neighbor blockID
      */
     @Override
     public void onNeighborBlockChange(World par1World, int x, int y, int z, Block par5) {
@@ -199,17 +200,14 @@ public class BlockSpinThruster extends BlockAdvanced implements ItemBlockDesc.IB
 
         if (!par1World.isRemote) {
             if (par1World.provider instanceof WorldProviderSpaceStation) {
-                ((WorldProviderSpaceStation) par1World.provider)
-                        .getSpinManager()
-                        .checkSS(new BlockVec3(x, y, z), true);
+                ((WorldProviderSpaceStation) par1World.provider).getSpinManager().checkSS(new BlockVec3(x, y, z), true);
             }
         }
     }
 
     /**
-     * Tests if the block can remain at its current location and will drop as an
-     * item if it is unable to stay. Returns True if it can stay and False if it
-     * drops. Args: world, x, y, z
+     * Tests if the block can remain at its current location and will drop as an item if it is unable to stay. Returns
+     * True if it can stay and False if it drops. Args: world, x, y, z
      */
     private boolean dropTorchIfCantStay(World par1World, int x, int y, int z) {
         if (!this.canPlaceBlockAt(par1World, x, y, z)) {
@@ -225,8 +223,8 @@ public class BlockSpinThruster extends BlockAdvanced implements ItemBlockDesc.IB
     }
 
     /**
-     * Ray traces through the blocks collision from start vector to end vector
-     * returning a ray trace hit. Args: world, x, y, z, startVec, endVec
+     * Ray traces through the blocks collision from start vector to end vector returning a ray trace hit. Args: world,
+     * x, y, z, startVec, endVec
      */
     @Override
     public MovingObjectPosition collisionRayTrace(World par1World, int x, int y, int z, Vec3 par5Vec3, Vec3 par6Vec3) {
@@ -249,8 +247,7 @@ public class BlockSpinThruster extends BlockAdvanced implements ItemBlockDesc.IB
     @Override
     @SideOnly(Side.CLIENT)
     /**
-     * A randomly called display update to be able to add particles or other items
-     * for display
+     * A randomly called display update to be able to add particles or other items for display
      */
     public void randomDisplayTick(World par1World, int x, int y, int z, Random par5Random) {
         // TODO this is torch code as a placeholder, still need to adjust positioning
@@ -280,8 +277,8 @@ public class BlockSpinThruster extends BlockAdvanced implements ItemBlockDesc.IB
     }
 
     @Override
-    public boolean onUseWrench(
-            World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
+    public boolean onUseWrench(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX,
+            float hitY, float hitZ) {
         final int metadata = world.getBlockMetadata(x, y, z);
         final int change = 8 + metadata & 15;
         world.setBlockMetadataWithNotify(x, y, z, change, 2);

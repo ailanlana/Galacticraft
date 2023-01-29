@@ -1,29 +1,15 @@
 package micdoodle8.mods.galacticraft.core;
 
-import api.player.server.ServerPlayerAPI;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppedEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
+
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.api.client.IGameScreen;
 import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
@@ -140,6 +126,7 @@ import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 import micdoodle8.mods.galacticraft.core.world.ChunkLoadingCallback;
 import micdoodle8.mods.galacticraft.core.world.gen.OreGenOtherMods;
 import micdoodle8.mods.galacticraft.core.world.gen.OverworldGenerator;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -158,16 +145,33 @@ import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import api.player.server.ServerPlayerAPI;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppedEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
+
 @Mod(
         modid = Constants.MOD_ID_CORE,
         name = GalacticraftCore.NAME,
         version = Constants.VERSION,
         acceptedMinecraftVersions = "[1.7.10]",
         useMetadata = true,
-        dependencies =
-                "required-after:Forge@[10.12.2.1147,); required-after:FML@[7.2.217.1147,); before:GalaxySpace; after:IC2; after:TConstruct; after:Mantle; after:BuildCraft|Core; after:BuildCraft|Energy; after:PlayerAPI@[1.3,)",
+        dependencies = "required-after:Forge@[10.12.2.1147,); required-after:FML@[7.2.217.1147,); before:GalaxySpace; after:IC2; after:TConstruct; after:Mantle; after:BuildCraft|Core; after:BuildCraft|Energy; after:PlayerAPI@[1.3,)",
         guiFactory = "micdoodle8.mods.galacticraft.core.client.gui.screen.ConfigGuiFactoryCore")
 public class GalacticraftCore {
+
     public static final String NAME = "Galacticraft Core";
 
     @SidedProxy(
@@ -259,70 +263,60 @@ public class GalacticraftCore {
 
         // Allow canisters to be filled from other mods' tanks containing fuel / oil
         // fluids
-        FluidContainerRegistry.registerFluidContainer(new FluidContainerData(
-                new FluidStack(fluidFuel, 1000),
-                new ItemStack(GCItems.fuelCanister, 1, 1),
-                new ItemStack(GCItems.oilCanister, 1, ItemCanisterGeneric.EMPTY)));
-        FluidContainerRegistry.registerFluidContainer(new FluidContainerData(
-                new FluidStack(fluidOil, 1000),
-                new ItemStack(GCItems.oilCanister, 1, 1),
-                new ItemStack(GCItems.oilCanister, 1, ItemCanisterGeneric.EMPTY)));
+        FluidContainerRegistry.registerFluidContainer(
+                new FluidContainerData(
+                        new FluidStack(fluidFuel, 1000),
+                        new ItemStack(GCItems.fuelCanister, 1, 1),
+                        new ItemStack(GCItems.oilCanister, 1, ItemCanisterGeneric.EMPTY)));
+        FluidContainerRegistry.registerFluidContainer(
+                new FluidContainerData(
+                        new FluidStack(fluidOil, 1000),
+                        new ItemStack(GCItems.oilCanister, 1, 1),
+                        new ItemStack(GCItems.oilCanister, 1, ItemCanisterGeneric.EMPTY)));
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new GCGlobalVariableWorldSavedData(""));
         galacticraftBlocksTab = new CreativeTabGC(
-                CreativeTabs.getNextID(), "GalacticraftBlocks", Item.getItemFromBlock(GCBlocks.machineBase2), 0);
+                CreativeTabs.getNextID(),
+                "GalacticraftBlocks",
+                Item.getItemFromBlock(GCBlocks.machineBase2),
+                0);
         galacticraftItemsTab = new CreativeTabGC(CreativeTabs.getNextID(), "GalacticraftItems", GCItems.rocketTier1, 0);
         proxy.init(event);
 
         packetPipeline = GalacticraftChannelHandler.init();
 
         solarSystemSol = new SolarSystem("sol", "milkyWay").setMapPosition(new Vector3(0.0F, 0.0F));
-        final Star starSol =
-                (Star) new Star("sol").setParentSolarSystem(solarSystemSol).setTierRequired(-1);
+        final Star starSol = (Star) new Star("sol").setParentSolarSystem(solarSystemSol).setTierRequired(-1);
         starSol.setBodyIcon(new ResourceLocation(ASSET_PREFIX, "textures/gui/celestialbodies/sun.png"));
         solarSystemSol.setMainStar(starSol);
 
-        planetOverworld = (Planet) new Planet("overworld")
-                .setParentSolarSystem(solarSystemSol)
-                .setRingColorRGB(0.1F, 0.9F, 0.6F)
-                .setPhaseShift(0.0F);
+        planetOverworld = (Planet) new Planet("overworld").setParentSolarSystem(solarSystemSol)
+                .setRingColorRGB(0.1F, 0.9F, 0.6F).setPhaseShift(0.0F);
         planetOverworld.setBodyIcon(new ResourceLocation(ASSET_PREFIX, "textures/gui/celestialbodies/earth.png"));
-        planetOverworld
-                .setDimensionInfo(ConfigManagerCore.idDimensionOverworld, WorldProvider.class, false)
-                .setTierRequired(1)
-                .setAllowSatellite(true);
-        planetOverworld
-                .atmosphereComponent(IAtmosphericGas.NITROGEN)
-                .atmosphereComponent(IAtmosphericGas.OXYGEN)
-                .atmosphereComponent(IAtmosphericGas.ARGON)
-                .atmosphereComponent(IAtmosphericGas.WATER);
+        planetOverworld.setDimensionInfo(ConfigManagerCore.idDimensionOverworld, WorldProvider.class, false)
+                .setTierRequired(1).setAllowSatellite(true);
+        planetOverworld.atmosphereComponent(IAtmosphericGas.NITROGEN).atmosphereComponent(IAtmosphericGas.OXYGEN)
+                .atmosphereComponent(IAtmosphericGas.ARGON).atmosphereComponent(IAtmosphericGas.WATER);
 
-        moonMoon = (Moon) new Moon("moon")
-                .setParentPlanet(planetOverworld)
-                .setRelativeSize(0.2667F)
+        moonMoon = (Moon) new Moon("moon").setParentPlanet(planetOverworld).setRelativeSize(0.2667F)
                 .setRelativeDistanceFromCenter(new CelestialBody.ScalableDistance(13F, 13F))
                 .setRelativeOrbitTime(1 / 0.01F);
-        moonMoon.setDimensionInfo(ConfigManagerCore.idDimensionMoon, WorldProviderMoon.class)
-                .setTierRequired(1);
+        moonMoon.setDimensionInfo(ConfigManagerCore.idDimensionMoon, WorldProviderMoon.class).setTierRequired(1);
         moonMoon.setBodyIcon(new ResourceLocation(ASSET_PREFIX, "textures/gui/celestialbodies/moon.png"));
 
         // Satellites must always have a WorldProvider implementing IOrbitDimension
-        satelliteSpaceStation = (Satellite) new Satellite("spaceStation.overworld")
-                .setParentBody(planetOverworld)
-                .setRelativeSize(0.2667F)
-                .setRelativeDistanceFromCenter(new CelestialBody.ScalableDistance(9F, 9F))
+        satelliteSpaceStation = (Satellite) new Satellite("spaceStation.overworld").setParentBody(planetOverworld)
+                .setRelativeSize(0.2667F).setRelativeDistanceFromCenter(new CelestialBody.ScalableDistance(9F, 9F))
                 .setRelativeOrbitTime(1 / 0.05F);
+        satelliteSpaceStation.setDimensionInfo(
+                ConfigManagerCore.idDimensionOverworldOrbit,
+                ConfigManagerCore.idDimensionOverworldOrbitStatic,
+                WorldProviderOrbit.class).setTierRequired(1);
         satelliteSpaceStation
-                .setDimensionInfo(
-                        ConfigManagerCore.idDimensionOverworldOrbit,
-                        ConfigManagerCore.idDimensionOverworldOrbitStatic,
-                        WorldProviderOrbit.class)
-                .setTierRequired(1);
-        satelliteSpaceStation.setBodyIcon(
-                new ResourceLocation(ASSET_PREFIX, "textures/gui/celestialbodies/spaceStation.png"));
+                .setBodyIcon(new ResourceLocation(ASSET_PREFIX, "textures/gui/celestialbodies/spaceStation.png"));
 
         ForgeChunkManager.setForcedChunkLoadingCallback(instance, new ChunkLoadingCallback());
         FMLCommonHandler.instance().bus().register(new ConnectionEvents());
@@ -342,19 +336,22 @@ public class GalacticraftCore {
         GalaxyRegistry.registerPlanet(planetOverworld);
         GalaxyRegistry.registerMoon(moonMoon);
         GalaxyRegistry.registerSatellite(satelliteSpaceStation);
-        GalacticraftRegistry.registerProvider(
-                ConfigManagerCore.idDimensionOverworldOrbit, WorldProviderOrbit.class, false, 0);
-        GalacticraftRegistry.registerProvider(
-                ConfigManagerCore.idDimensionOverworldOrbitStatic, WorldProviderOrbit.class, true, 0);
+        GalacticraftRegistry
+                .registerProvider(ConfigManagerCore.idDimensionOverworldOrbit, WorldProviderOrbit.class, false, 0);
+        GalacticraftRegistry
+                .registerProvider(ConfigManagerCore.idDimensionOverworldOrbitStatic, WorldProviderOrbit.class, true, 0);
         GalacticraftRegistry.registerTeleportType(WorldProviderSurface.class, new TeleportTypeOverworld());
         GalacticraftRegistry.registerTeleportType(WorldProviderOrbit.class, new TeleportTypeOrbit());
         GalacticraftRegistry.registerTeleportType(WorldProviderMoon.class, new TeleportTypeMoon());
         GalacticraftRegistry.registerRocketGui(
-                WorldProviderOrbit.class, new ResourceLocation(ASSET_PREFIX, "textures/gui/overworldRocketGui.png"));
+                WorldProviderOrbit.class,
+                new ResourceLocation(ASSET_PREFIX, "textures/gui/overworldRocketGui.png"));
         GalacticraftRegistry.registerRocketGui(
-                WorldProviderSurface.class, new ResourceLocation(ASSET_PREFIX, "textures/gui/overworldRocketGui.png"));
+                WorldProviderSurface.class,
+                new ResourceLocation(ASSET_PREFIX, "textures/gui/overworldRocketGui.png"));
         GalacticraftRegistry.registerRocketGui(
-                WorldProviderMoon.class, new ResourceLocation(ASSET_PREFIX, "textures/gui/moonRocketGui.png"));
+                WorldProviderMoon.class,
+                new ResourceLocation(ASSET_PREFIX, "textures/gui/moonRocketGui.png"));
         GalacticraftRegistry.addDungeonLoot(1, new ItemStack(GCItems.schematic, 1, 0));
         GalacticraftRegistry.addDungeonLoot(1, new ItemStack(GCItems.schematic, 1, 1));
 
@@ -381,22 +378,25 @@ public class GalacticraftCore {
         // GC's appropriate canisters to be
         // fillable with that one as well
         if (ConfigManagerCore.useOldFuelFluidID && FluidRegistry.isFluidRegistered("fuel")) {
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerData(
-                    new FluidStack(FluidRegistry.getFluid("fuel"), 1000),
-                    new ItemStack(GCItems.fuelCanister, 1, 1),
-                    new ItemStack(GCItems.oilCanister, 1, ItemCanisterGeneric.EMPTY)));
+            FluidContainerRegistry.registerFluidContainer(
+                    new FluidContainerData(
+                            new FluidStack(FluidRegistry.getFluid("fuel"), 1000),
+                            new ItemStack(GCItems.fuelCanister, 1, 1),
+                            new ItemStack(GCItems.oilCanister, 1, ItemCanisterGeneric.EMPTY)));
         }
         if (ConfigManagerCore.useOldOilFluidID && FluidRegistry.isFluidRegistered("oil")) {
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerData(
-                    new FluidStack(FluidRegistry.getFluid("oil"), 1000),
-                    new ItemStack(GCItems.oilCanister, 1, 1),
-                    new ItemStack(GCItems.oilCanister, 1, ItemCanisterGeneric.EMPTY)));
+            FluidContainerRegistry.registerFluidContainer(
+                    new FluidContainerData(
+                            new FluidStack(FluidRegistry.getFluid("oil"), 1000),
+                            new ItemStack(GCItems.oilCanister, 1, 1),
+                            new ItemStack(GCItems.oilCanister, 1, ItemCanisterGeneric.EMPTY)));
             // And allow Buildcraft oil buckets to be filled with oilgc
             if (CompatibilityManager.isBCraftEnergyLoaded()) {
-                FluidContainerRegistry.registerFluidContainer(new FluidContainerData(
-                        new FluidStack(fluidOil, 1000),
-                        GameRegistry.findItemStack("BuildCraft|Core", "bucketOil", 1),
-                        new ItemStack(Items.bucket)));
+                FluidContainerRegistry.registerFluidContainer(
+                        new FluidContainerData(
+                                new FluidStack(fluidOil, 1000),
+                                GameRegistry.findItemStack("BuildCraft|Core", "bucketOil", 1),
+                                new ItemStack(Items.bucket)));
             }
         }
 
@@ -517,58 +517,43 @@ public class GalacticraftCore {
     public void postInit(FMLPostInitializationEvent event) {
         planetMercury = this.makeUnreachablePlanet("mercury", solarSystemSol);
         if (planetMercury != null) {
-            planetMercury
-                    .setRingColorRGB(0.1F, 0.9F, 0.6F)
-                    .setPhaseShift(1.45F)
+            planetMercury.setRingColorRGB(0.1F, 0.9F, 0.6F).setPhaseShift(1.45F)
                     .setRelativeDistanceFromCenter(new CelestialBody.ScalableDistance(0.5F, 0.5F))
                     .setRelativeOrbitTime(0.24096385542168674698795180722892F);
         }
         planetVenus = this.makeUnreachablePlanet("venus", solarSystemSol);
         if (planetVenus != null) {
-            planetVenus
-                    .setRingColorRGB(0.1F, 0.9F, 0.6F)
-                    .setPhaseShift(2.0F)
+            planetVenus.setRingColorRGB(0.1F, 0.9F, 0.6F).setPhaseShift(2.0F)
                     .setRelativeDistanceFromCenter(new CelestialBody.ScalableDistance(0.75F, 0.75F))
                     .setRelativeOrbitTime(0.61527929901423877327491785323111F);
         }
         planetMars = this.makeUnreachablePlanet("mars", solarSystemSol);
         if (planetMars != null) {
-            planetMars
-                    .setRingColorRGB(0.67F, 0.1F, 0.1F)
-                    .setPhaseShift(0.1667F)
-                    .setRelativeSize(0.5319F)
+            planetMars.setRingColorRGB(0.67F, 0.1F, 0.1F).setPhaseShift(0.1667F).setRelativeSize(0.5319F)
                     .setRelativeDistanceFromCenter(new CelestialBody.ScalableDistance(1.25F, 1.25F))
                     .setRelativeOrbitTime(1.8811610076670317634173055859803F);
         }
         planetJupiter = this.makeUnreachablePlanet("jupiter", solarSystemSol);
         if (planetJupiter != null) {
-            planetJupiter
-                    .setRingColorRGB(0.1F, 0.9F, 0.6F)
-                    .setPhaseShift((float) Math.PI)
+            planetJupiter.setRingColorRGB(0.1F, 0.9F, 0.6F).setPhaseShift((float) Math.PI)
                     .setRelativeDistanceFromCenter(new CelestialBody.ScalableDistance(1.5F, 1.5F))
                     .setRelativeOrbitTime(11.861993428258488499452354874042F);
         }
         planetSaturn = this.makeUnreachablePlanet("saturn", solarSystemSol);
         if (planetSaturn != null) {
-            planetSaturn
-                    .setRingColorRGB(0.1F, 0.9F, 0.6F)
-                    .setPhaseShift(5.45F)
+            planetSaturn.setRingColorRGB(0.1F, 0.9F, 0.6F).setPhaseShift(5.45F)
                     .setRelativeDistanceFromCenter(new CelestialBody.ScalableDistance(1.75F, 1.75F))
                     .setRelativeOrbitTime(29.463307776560788608981380065717F);
         }
         planetUranus = this.makeUnreachablePlanet("uranus", solarSystemSol);
         if (planetUranus != null) {
-            planetUranus
-                    .setRingColorRGB(0.1F, 0.9F, 0.6F)
-                    .setPhaseShift(1.38F)
+            planetUranus.setRingColorRGB(0.1F, 0.9F, 0.6F).setPhaseShift(1.38F)
                     .setRelativeDistanceFromCenter(new CelestialBody.ScalableDistance(2.0F, 2.0F))
                     .setRelativeOrbitTime(84.063526834611171960569550930997F);
         }
         planetNeptune = this.makeUnreachablePlanet("neptune", solarSystemSol);
         if (planetNeptune != null) {
-            planetNeptune
-                    .setRingColorRGB(0.1F, 0.9F, 0.6F)
-                    .setPhaseShift(1.0F)
+            planetNeptune.setRingColorRGB(0.1F, 0.9F, 0.6F).setPhaseShift(1.0F)
                     .setRelativeDistanceFromCenter(new CelestialBody.ScalableDistance(2.25F, 2.25F))
                     .setRelativeOrbitTime(164.84118291347207009857612267251F);
         }
@@ -588,7 +573,10 @@ public class GalacticraftCore {
                 // by
                 // WorldUtil.registerPlanet();
                 if (!GalacticraftRegistry.registerProvider(
-                        body.getDimensionID(), body.getWorldProvider(), body.getForceStaticLoad() || id < 0, 0)) {
+                        body.getDimensionID(),
+                        body.getWorldProvider(),
+                        body.getForceStaticLoad() || id < 0,
+                        0)) {
                     body.setUnreachable();
                 }
             }
@@ -640,11 +628,9 @@ public class GalacticraftCore {
         event.registerServerCommand(new CommandGCSpaceProjectTeamAdd());
 
         WorldUtil.initialiseDimensionNames();
-        WorldUtil.registerSpaceStations(event.getServer()
-                .worldServerForDimension(0)
-                .getSaveHandler()
-                .getMapFileFromName("dummy")
-                .getParentFile());
+        WorldUtil.registerSpaceStations(
+                event.getServer().worldServerForDimension(0).getSaveHandler().getMapFileFromName("dummy")
+                        .getParentFile());
 
         final ArrayList<CelestialBody> cBodyList = new ArrayList<>();
         cBodyList.addAll(GalaxyRegistry.getRegisteredPlanets().values());
@@ -721,8 +707,7 @@ public class GalacticraftCore {
                         clazzbm.getConstructor(Block.class, int.class).newInstance(GCBlocks.blockMoon, 14),
                         "tile.moonBlock.bricks");
             }
-        } catch (final Exception e) {
-        }
+        } catch (final Exception e) {}
     }
 
     public void registerTileEntities() {
@@ -775,7 +760,10 @@ public class GalacticraftCore {
         GCCoreUtil.registerGalacticraftCreature(EntityEvolvedSkeleton.class, "EvolvedSkeleton", 12698049, 4802889);
         GCCoreUtil.registerGalacticraftCreature(EntitySkeletonBoss.class, "EvolvedSkeletonBoss", 12698049, 4802889);
         GCCoreUtil.registerGalacticraftCreature(
-                EntityAlienVillager.class, "AlienVillager", ColorUtil.to32BitColor(255, 103, 145, 181), 12422002);
+                EntityAlienVillager.class,
+                "AlienVillager",
+                ColorUtil.to32BitColor(255, 103, 145, 181),
+                12422002);
     }
 
     public void registerOtherEntities() {

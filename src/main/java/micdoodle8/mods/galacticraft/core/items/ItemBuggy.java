@@ -1,13 +1,13 @@
 package micdoodle8.mods.galacticraft.core.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.item.IHoldableItem;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.entities.EntityBuggy;
 import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,7 +23,11 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class ItemBuggy extends Item implements IHoldableItem {
+
     public ItemBuggy(String assetName) {
         super();
         this.setUnlocalizedName(assetName);
@@ -42,7 +46,7 @@ public class ItemBuggy extends Item implements IHoldableItem {
         return ClientProxyCore.galacticraftItem;
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
         for (int i = 0; i < 4; i++) {
@@ -58,8 +62,7 @@ public class ItemBuggy extends Item implements IHoldableItem {
         final float var6 = par3EntityPlayer.prevRotationYaw
                 + (par3EntityPlayer.rotationYaw - par3EntityPlayer.prevRotationYaw) * var4;
         final double var7 = par3EntityPlayer.prevPosX + (par3EntityPlayer.posX - par3EntityPlayer.prevPosX) * var4;
-        final double var9 = par3EntityPlayer.prevPosY
-                + (par3EntityPlayer.posY - par3EntityPlayer.prevPosY) * var4
+        final double var9 = par3EntityPlayer.prevPosY + (par3EntityPlayer.posY - par3EntityPlayer.prevPosY) * var4
                 + 1.62D
                 - par3EntityPlayer.yOffset;
         final double var11 = par3EntityPlayer.prevPosZ + (par3EntityPlayer.posZ - par3EntityPlayer.prevPosZ) * var4;
@@ -82,8 +85,7 @@ public class ItemBuggy extends Item implements IHoldableItem {
             final float var27 = 1.0F;
             final List<?> var28 = par2World.getEntitiesWithinAABBExcludingEntity(
                     par3EntityPlayer,
-                    par3EntityPlayer
-                            .boundingBox
+                    par3EntityPlayer.boundingBox
                             .addCoord(var25.xCoord * var21, var25.yCoord * var21, var25.zCoord * var21)
                             .expand(var27, var27, var27));
             int var29;
@@ -114,19 +116,22 @@ public class ItemBuggy extends Item implements IHoldableItem {
                     }
 
                     final EntityBuggy var35 = new EntityBuggy(
-                            par2World, var29 + 0.5F, var33 + 1.0F, var34 + 0.5F, par1ItemStack.getItemDamage());
+                            par2World,
+                            var29 + 0.5F,
+                            var33 + 1.0F,
+                            var34 + 0.5F,
+                            par1ItemStack.getItemDamage());
 
-                    if (!par2World
-                            .getCollidingBoundingBoxes(var35, var35.boundingBox.expand(-0.1D, -0.1D, -0.1D))
+                    if (!par2World.getCollidingBoundingBoxes(var35, var35.boundingBox.expand(-0.1D, -0.1D, -0.1D))
                             .isEmpty()) {
                         return par1ItemStack;
                     }
 
-                    if (par1ItemStack.hasTagCompound()
-                            && par1ItemStack.getTagCompound().hasKey("BuggyFuel")) {
-                        var35.buggyFuelTank.setFluid(new FluidStack(
-                                GalacticraftCore.fluidFuel,
-                                par1ItemStack.getTagCompound().getInteger("BuggyFuel")));
+                    if (par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("BuggyFuel")) {
+                        var35.buggyFuelTank.setFluid(
+                                new FluidStack(
+                                        GalacticraftCore.fluidFuel,
+                                        par1ItemStack.getTagCompound().getInteger("BuggyFuel")));
                     }
 
                     if (!par2World.isRemote) {
@@ -143,7 +148,7 @@ public class ItemBuggy extends Item implements IHoldableItem {
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack par1ItemStack, EntityPlayer player, List par2List, boolean b) {
@@ -152,8 +157,11 @@ public class ItemBuggy extends Item implements IHoldableItem {
         }
 
         if (par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("BuggyFuel")) {
-            par2List.add(GCCoreUtil.translate("gui.message.fuel.name") + ": "
-                    + par1ItemStack.getTagCompound().getInteger("BuggyFuel") + " / " + EntityBuggy.tankCapacity);
+            par2List.add(
+                    GCCoreUtil.translate("gui.message.fuel.name") + ": "
+                            + par1ItemStack.getTagCompound().getInteger("BuggyFuel")
+                            + " / "
+                            + EntityBuggy.tankCapacity);
         }
     }
 

@@ -1,14 +1,17 @@
 package micdoodle8.mods.galacticraft.core.client.fx;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
+
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 @SideOnly(Side.CLIENT)
 public class EntityFXEntityOxygen extends EntityFX {
+
     private final float portalParticleScale;
     private final double portalPosX;
     private final double portalPosY;
@@ -32,8 +35,8 @@ public class EntityFXEntityOxygen extends EntityFX {
     }
 
     @Override
-    public void renderParticle(
-            Tessellator par1Tessellator, float par2, float par3, float par4, float par5, float par6, float par7) {
+    public void renderParticle(Tessellator par1Tessellator, float par2, float par3, float par4, float par5, float par6,
+            float par7) {
         float var8 = (this.particleAge + par2) / this.particleMaxAge;
         var8 = 1.0F - var8;
         var8 *= var8;

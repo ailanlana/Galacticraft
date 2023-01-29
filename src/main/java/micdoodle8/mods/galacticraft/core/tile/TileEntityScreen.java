@@ -1,10 +1,8 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.Iterator;
+
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
@@ -12,11 +10,17 @@ import micdoodle8.mods.galacticraft.core.client.gui.screen.DrawGameScreen;
 import micdoodle8.mods.galacticraft.core.network.PacketSimple;
 import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
 import micdoodle8.mods.galacticraft.core.tick.TickHandlerClient;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class TileEntityScreen extends TileEntity {
+
     public static float FRAMEBORDER = 0.098F; // used for rendering
     public int imageType;
     public DrawGameScreen screen;
@@ -41,9 +45,11 @@ public class TileEntityScreen extends TileEntity {
         super.validate();
         if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
             this.screen = new DrawGameScreen(1.0F, 1.0F, this);
-            GalacticraftCore.packetPipeline.sendToServer(new PacketSimple(
-                    EnumSimplePacket.S_UPDATE_VIEWSCREEN_REQUEST,
-                    new Object[] {this.worldObj.provider.dimensionId, this.xCoord, this.yCoord, this.zCoord}));
+            GalacticraftCore.packetPipeline.sendToServer(
+                    new PacketSimple(
+                            EnumSimplePacket.S_UPDATE_VIEWSCREEN_REQUEST,
+                            new Object[] { this.worldObj.provider.dimensionId, this.xCoord, this.yCoord,
+                                    this.zCoord }));
         }
     }
 
@@ -64,7 +70,7 @@ public class TileEntityScreen extends TileEntity {
         GalacticraftCore.packetPipeline.sendToDimension(
                 new PacketSimple(
                         EnumSimplePacket.C_UPDATE_VIEWSCREEN,
-                        new Object[] {this.xCoord, this.yCoord, this.zCoord, this.imageType, connectedFlags}),
+                        new Object[] { this.xCoord, this.yCoord, this.zCoord, this.imageType, connectedFlags }),
                 this.worldObj.provider.dimensionId);
     }
 
@@ -76,8 +82,7 @@ public class TileEntityScreen extends TileEntity {
     }
 
     /**
-     * Call when a screen (which maybe part of a multiscreen) is either broken or
-     * rotated.
+     * Call when a screen (which maybe part of a multiscreen) is either broken or rotated.
      *
      * @param meta The meta of the screen prior to breaking or rotation
      */
@@ -101,8 +106,7 @@ public class TileEntityScreen extends TileEntity {
                 if (x == 0 && z == 0) {
                     this.resetToSingle();
                 } else {
-                    final BlockVec3 newVec = vec.clone()
-                            .modifyPositionFromSide(ForgeDirection.getOrientation(side), x)
+                    final BlockVec3 newVec = vec.clone().modifyPositionFromSide(ForgeDirection.getOrientation(side), x)
                             .modifyPositionFromSide(ForgeDirection.DOWN, z);
                     tile = newVec.getTileEntity(this.worldObj);
                     if (tile instanceof TileEntityScreen && tile.getBlockMetadata() == meta) {
@@ -171,8 +175,8 @@ public class TileEntityScreen extends TileEntity {
     }
 
     /**
-     * Check whether the screen can sustain 'multi-screen' connections on each of
-     * its 4 sides (note: this can be called recursively from inside itself)
+     * Check whether the screen can sustain 'multi-screen' connections on each of its 4 sides (note: this can be called
+     * recursively from inside itself)
      *
      * @param doScreen If true, build a new multi-screen if connections are found
      */
@@ -195,30 +199,27 @@ public class TileEntityScreen extends TileEntity {
         // First, basic check that a neighbour is there and in the same orientation
         if (this.connectedUp) {
             tileUp = vec.getTileEntityOnSide(this.worldObj, 1);
-            this.connectedUp =
-                    tileUp instanceof TileEntityScreen && tileUp.getBlockMetadata() == meta && !tileUp.isInvalid();
+            this.connectedUp = tileUp instanceof TileEntityScreen && tileUp.getBlockMetadata() == meta
+                    && !tileUp.isInvalid();
         }
 
         if (this.connectedDown) {
             tileDown = vec.getTileEntityOnSide(this.worldObj, 0);
-            this.connectedDown = tileDown instanceof TileEntityScreen
-                    && tileDown.getBlockMetadata() == meta
+            this.connectedDown = tileDown instanceof TileEntityScreen && tileDown.getBlockMetadata() == meta
                     && !tileDown.isInvalid();
         }
 
         if (this.connectedLeft) {
             final int side = this.getLeft(meta);
             tileLeft = vec.getTileEntityOnSide(this.worldObj, side);
-            this.connectedLeft = tileLeft instanceof TileEntityScreen
-                    && tileLeft.getBlockMetadata() == meta
+            this.connectedLeft = tileLeft instanceof TileEntityScreen && tileLeft.getBlockMetadata() == meta
                     && !tileLeft.isInvalid();
         }
 
         if (this.connectedRight) {
             final int side = this.getRight(meta);
             tileRight = vec.getTileEntityOnSide(this.worldObj, side);
-            this.connectedRight = tileRight instanceof TileEntityScreen
-                    && tileRight.getBlockMetadata() == meta
+            this.connectedRight = tileRight instanceof TileEntityScreen && tileRight.getBlockMetadata() == meta
                     && !tileRight.isInvalid();
         }
 
@@ -473,19 +474,15 @@ public class TileEntityScreen extends TileEntity {
     }
 
     /**
-     * After figuring out the screen edges (overall screen dimensions) check that
-     * the screen is a whole A x B rectangle with no tiles missing
+     * After figuring out the screen edges (overall screen dimensions) check that the screen is a whole A x B rectangle
+     * with no tiles missing
      * <p>
      * If it is whole, set all tiles in the screen to match this screen type
      *
-     * @param up    Number of blocks the screen edge is away from this in the up
-     *              direction
-     * @param down  Number of blocks the screen edge is away from this in the down
-     *              direction
-     * @param left  Number of blocks the screen edge is away from this in the left
-     *              direction
-     * @param right Number of blocks the screen edge is away from this in the right
-     *              direction
+     * @param up    Number of blocks the screen edge is away from this in the up direction
+     * @param down  Number of blocks the screen edge is away from this in the down direction
+     * @param left  Number of blocks the screen edge is away from this in the left direction
+     * @param right Number of blocks the screen edge is away from this in the right direction
      * @return True if the screen was whole
      */
     private boolean checkWholeScreen(int up, int down, int left, int right) {
@@ -513,8 +510,7 @@ public class TileEntityScreen extends TileEntity {
 
         for (int x = -left; x <= right; x++) {
             for (int z = -up; z <= down; z++) {
-                final BlockVec3 newVec = vec.clone()
-                        .modifyPositionFromSide(ForgeDirection.getOrientation(side), x)
+                final BlockVec3 newVec = vec.clone().modifyPositionFromSide(ForgeDirection.getOrientation(side), x)
                         .modifyPositionFromSide(ForgeDirection.DOWN, z);
                 final TileEntity tile = newVec.getTileEntity(this.worldObj);
                 if (tile instanceof TileEntityScreen && tile.getBlockMetadata() == meta && !tile.isInvalid()) {
@@ -559,10 +555,8 @@ public class TileEntityScreen extends TileEntity {
 
         DrawGameScreen newScreen = null;
         boolean serverside = true;
-        final TileEntity bottomLeft = vec.clone()
-                .modifyPositionFromSide(ForgeDirection.getOrientation(side), -left)
-                .modifyPositionFromSide(ForgeDirection.DOWN, down)
-                .getTileEntity(this.worldObj);
+        final TileEntity bottomLeft = vec.clone().modifyPositionFromSide(ForgeDirection.getOrientation(side), -left)
+                .modifyPositionFromSide(ForgeDirection.DOWN, down).getTileEntity(this.worldObj);
         if (this.worldObj.isRemote) {
             if (bottomLeft instanceof TileEntityScreen) // It always will be if reached this far
             {
@@ -624,8 +618,7 @@ public class TileEntityScreen extends TileEntity {
     }
 
     /**
-     * Get the Minecraft direction which is on the left side for the block
-     * orientation given by metadata
+     * Get the Minecraft direction which is on the left side for the block orientation given by metadata
      */
     private int getLeft(int meta) {
         switch (meta) {
@@ -642,8 +635,7 @@ public class TileEntityScreen extends TileEntity {
     }
 
     /**
-     * Get the Minecraft direction which is on the right side for the block
-     * orientation given by metadata
+     * Get the Minecraft direction which is on the right side for the block orientation given by metadata
      */
     private int getRight(int meta) {
         switch (meta) {

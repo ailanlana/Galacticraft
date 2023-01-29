@@ -2,6 +2,7 @@ package micdoodle8.mods.galacticraft.planets.asteroids.inventory;
 
 import micdoodle8.mods.galacticraft.core.inventory.SlotRocketBenchResult;
 import micdoodle8.mods.galacticraft.planets.mars.util.RecipeUtilMars;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -12,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class ContainerSchematicAstroMiner extends Container {
+
     public InventorySchematicAstroMiner craftMatrix = new InventorySchematicAstroMiner(this);
     public IInventory craftResult = new InventoryCraftResult();
     private final World worldObj;
@@ -27,8 +29,16 @@ public class ContainerSchematicAstroMiner extends Container {
         // top & bottom
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 4; j++) {
-                this.addSlotToContainer(new SlotSchematicAstroMiner(
-                        this.craftMatrix, 1 + i * 4 + j, 44 + j * 18, 19 + i * 72, x, y, z, inventory.player));
+                this.addSlotToContainer(
+                        new SlotSchematicAstroMiner(
+                                this.craftMatrix,
+                                1 + i * 4 + j,
+                                44 + j * 18,
+                                19 + i * 72,
+                                x,
+                                y,
+                                z,
+                                inventory.player));
             }
         }
         // poles

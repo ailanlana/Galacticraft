@@ -1,11 +1,9 @@
 package micdoodle8.mods.galacticraft.core.entities;
 
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.api.entity.IEntityBreathable;
 import micdoodle8.mods.galacticraft.api.entity.IIgnoreShift;
@@ -19,6 +17,7 @@ import micdoodle8.mods.galacticraft.core.tile.TileEntityDungeonSpawner;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityTreasureChest;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -51,8 +50,13 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ChestGenHooks;
 
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class EntitySkeletonBoss extends EntityMob
         implements IEntityBreathable, IBossDisplayData, IRangedAttackMob, IBoss, IIgnoreShift {
+
     protected long ticks = 0;
     private static final ItemStack defaultHeldItem = new ItemStack(Items.bow, 1);
     // private static final AttributeModifier skeleBossEnrage = new
@@ -128,8 +132,7 @@ public class EntitySkeletonBoss extends EntityMob
 
     @Override
     public void onCollideWithPlayer(EntityPlayer par1EntityPlayer) {
-        if (this.riddenByEntity == null
-                && this.postThrowDelay == 0
+        if (this.riddenByEntity == null && this.postThrowDelay == 0
                 && this.throwTimer == 0
                 && par1EntityPlayer.equals(this.targetEntity)
                 && this.deathTicks == 0) {
@@ -185,7 +188,13 @@ public class EntitySkeletonBoss extends EntityMob
             final float f1 = (this.rand.nextFloat() - 0.5F) * 2.0F;
             final float f2 = (this.rand.nextFloat() - 0.5F) * 1.5F;
             this.worldObj.spawnParticle(
-                    "hugeexplosion", this.posX + f, this.posY + 2.0D + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
+                    "hugeexplosion",
+                    this.posX + f,
+                    this.posY + 2.0D + f1,
+                    this.posZ + f2,
+                    0.0D,
+                    0.0D,
+                    0.0D);
         }
 
         int i;
@@ -204,8 +213,8 @@ public class EntitySkeletonBoss extends EntityMob
                 while (i > 0) {
                     j = EntityXPOrb.getXPSplit(i);
                     i -= j;
-                    this.worldObj.spawnEntityInWorld(
-                            new EntityXPOrb(this.worldObj, this.posX, this.posY, this.posZ, j));
+                    this.worldObj
+                            .spawnEntityInWorld(new EntityXPOrb(this.worldObj, this.posX, this.posY, this.posZ, j));
                 }
             }
 
@@ -250,9 +259,15 @@ public class EntitySkeletonBoss extends EntityMob
 
                             // Generate twice, since it's an extra special chest
                             WeightedRandomChestContent.generateChestContents(
-                                    this.rand, info.getItems(this.rand), chest, info.getCount(this.rand));
+                                    this.rand,
+                                    info.getItems(this.rand),
+                                    chest,
+                                    info.getCount(this.rand));
                             WeightedRandomChestContent.generateChestContents(
-                                    this.rand, info.getItems(this.rand), chest, info.getCount(this.rand));
+                                    this.rand,
+                                    info.getItems(this.rand),
+                                    chest,
+                                    info.getCount(this.rand));
 
                             final ItemStack schematic = this.getGuaranteedLoot(this.rand);
                             final int slot = this.rand.nextInt(chest.getSizeInventory());
@@ -404,9 +419,8 @@ public class EntitySkeletonBoss extends EntityMob
             double d0 = this.posX - this.thrownEntity.posX;
             double d1;
 
-            for (d1 = this.posZ - this.thrownEntity.posZ;
-                    d0 * d0 + d1 * d1 < 1.0E-4D;
-                    d1 = (Math.random() - Math.random()) * 0.01D) {
+            for (d1 = this.posZ - this.thrownEntity.posZ; d0 * d0 + d1 * d1
+                    < 1.0E-4D; d1 = (Math.random() - Math.random()) * 0.01D) {
                 d0 = (Math.random() - Math.random()) * 0.01D;
             }
 
@@ -415,8 +429,8 @@ public class EntitySkeletonBoss extends EntityMob
                         new PacketSimple(EnumSimplePacket.C_PLAY_SOUND_BOW, new Object[] {}),
                         new TargetPoint(this.worldObj.provider.dimensionId, this.posX, this.posY, this.posZ, 40.0D));
             }
-            ((EntityPlayer) this.thrownEntity).attackedAtYaw =
-                    (float) (Math.atan2(d1, d0) * 180.0D / Math.PI) - this.rotationYaw;
+            ((EntityPlayer) this.thrownEntity).attackedAtYaw = (float) (Math.atan2(d1, d0) * 180.0D / Math.PI)
+                    - this.rotationYaw;
 
             this.thrownEntity.isAirBorne = true;
             final float f = MathHelper.sqrt_double(d0 * d0 + d1 * d1);
@@ -462,8 +476,12 @@ public class EntitySkeletonBoss extends EntityMob
 
     @Override
     public EntityItem entityDropItem(ItemStack par1ItemStack, float par2) {
-        final EntityItem entityitem =
-                new EntityItem(this.worldObj, this.posX, this.posY + par2, this.posZ, par1ItemStack);
+        final EntityItem entityitem = new EntityItem(
+                this.worldObj,
+                this.posX,
+                this.posY + par2,
+                this.posZ,
+                par1ItemStack);
         entityitem.motionY = -2.0D;
         entityitem.delayBeforeCanPickup = 10;
         if (this.captureDrops) {
@@ -544,8 +562,7 @@ public class EntitySkeletonBoss extends EntityMob
             var1 = new EntityArrow(this.worldObj, this, entitylivingbase, 1.6F, 12.0F);
         }
 
-        this.worldObj.playSoundAtEntity(
-                this, "random.bow", 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+        this.worldObj.playSoundAtEntity(this, "random.bow", 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
         this.worldObj.spawnEntityInWorld(var1);
     }
 

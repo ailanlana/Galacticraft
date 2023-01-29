@@ -1,14 +1,18 @@
 package micdoodle8.mods.galacticraft.planets.mars.client.model;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.util.ResourceLocation;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class ModelBalloonParachute extends ModelBase {
-    private static final ResourceLocation grayParachuteTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/model/parachute/gray.png");
+
+    private static final ResourceLocation grayParachuteTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/model/parachute/gray.png");
 
     public ModelRenderer[] parachute = new ModelRenderer[3];
     public ModelRenderer[] parachuteStrings = new ModelRenderer[4];

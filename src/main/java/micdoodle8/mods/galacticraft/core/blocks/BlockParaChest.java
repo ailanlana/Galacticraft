@@ -1,13 +1,13 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Iterator;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityParaChest;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.ITileEntityProvider;
@@ -27,7 +27,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockParaChest extends BlockContainer implements ITileEntityProvider, ItemBlockDesc.IBlockShiftDesc {
+
     private final Random random = new Random();
 
     protected BlockParaChest(String assetName) {
@@ -65,16 +69,8 @@ public class BlockParaChest extends BlockContainer implements ITileEntityProvide
     }
 
     @Override
-    public boolean onBlockActivated(
-            World par1World,
-            int par2,
-            int par3,
-            int par4,
-            EntityPlayer par5EntityPlayer,
-            int par6,
-            float par7,
-            float par8,
-            float par9) {
+    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer,
+            int par6, float par7, float par8, float par9) {
         if (par1World.isRemote) {
             return true;
         } else {
@@ -89,12 +85,7 @@ public class BlockParaChest extends BlockContainer implements ITileEntityProvide
     }
 
     @Override
-    public void onBlockPlacedBy(
-            World par1World,
-            int par2,
-            int par3,
-            int par4,
-            EntityLivingBase par5EntityLivingBase,
+    public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase,
             ItemStack par6ItemStack) {
         super.onBlockPlacedBy(par1World, par2, par3, par4, par5EntityLivingBase, par6ItemStack);
     }
@@ -126,9 +117,8 @@ public class BlockParaChest extends BlockContainer implements ITileEntityProvide
                     final float f1 = this.random.nextFloat() * 0.8F + 0.1F;
                     EntityItem entityitem;
 
-                    for (final float f2 = this.random.nextFloat() * 0.8F + 0.1F;
-                            itemstack.stackSize > 0;
-                            par1World.spawnEntityInWorld(entityitem)) {
+                    for (final float f2 = this.random.nextFloat() * 0.8F + 0.1F; itemstack.stackSize > 0; par1World
+                            .spawnEntityInWorld(entityitem)) {
                         int k1 = this.random.nextInt(21) + 10;
 
                         if (k1 > itemstack.stackSize) {
@@ -148,8 +138,8 @@ public class BlockParaChest extends BlockContainer implements ITileEntityProvide
                         entityitem.motionZ = (float) this.random.nextGaussian() * f3;
 
                         if (itemstack.hasTagCompound()) {
-                            entityitem.getEntityItem().setTagCompound((NBTTagCompound)
-                                    itemstack.getTagCompound().copy());
+                            entityitem.getEntityItem()
+                                    .setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
                         }
                     }
                 }
@@ -164,8 +154,7 @@ public class BlockParaChest extends BlockContainer implements ITileEntityProvide
     public IInventory getInventory(World par1World, int par2, int par3, int par4) {
         final Object object = par1World.getTileEntity(par2, par3, par4);
 
-        if (object == null
-                || par1World.isSideSolid(par2, par3 + 1, par4, ForgeDirection.DOWN)
+        if (object == null || par1World.isSideSolid(par2, par3 + 1, par4, ForgeDirection.DOWN)
                 || BlockParaChest.isOcelotBlockingChest(par1World, par2, par3, par4)) {
             return null;
         } else {
@@ -174,11 +163,9 @@ public class BlockParaChest extends BlockContainer implements ITileEntityProvide
     }
 
     public static boolean isOcelotBlockingChest(World par0World, int par1, int par2, int par3) {
-        final Iterator<?> iterator = par0World
-                .getEntitiesWithinAABB(
-                        EntityOcelot.class,
-                        AxisAlignedBB.getBoundingBox(par1, par2 + 1, par3, par1 + 1, par2 + 2, par3 + 1))
-                .iterator();
+        final Iterator<?> iterator = par0World.getEntitiesWithinAABB(
+                EntityOcelot.class,
+                AxisAlignedBB.getBoundingBox(par1, par2 + 1, par3, par1 + 1, par2 + 2, par3 + 1)).iterator();
         EntityOcelot entityocelot;
 
         do {

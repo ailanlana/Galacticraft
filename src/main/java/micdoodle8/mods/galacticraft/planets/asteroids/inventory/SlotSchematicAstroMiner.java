@@ -1,6 +1,5 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.inventory;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import micdoodle8.mods.galacticraft.core.Constants;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.items.GCItems;
@@ -10,6 +9,7 @@ import micdoodle8.mods.galacticraft.core.util.RecipeUtil;
 import micdoodle8.mods.galacticraft.planets.asteroids.blocks.AsteroidBlocks;
 import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
 import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
@@ -17,13 +17,16 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+
 public class SlotSchematicAstroMiner extends Slot {
+
     private final int index;
     private final int x, y, z;
     private final EntityPlayer player;
 
-    public SlotSchematicAstroMiner(
-            IInventory par2IInventory, int par3, int par4, int par5, int x, int y, int z, EntityPlayer player) {
+    public SlotSchematicAstroMiner(IInventory par2IInventory, int par3, int par4, int par5, int x, int y, int z,
+            EntityPlayer player) {
         super(par2IInventory, par3, par4, par5);
         this.index = par3;
         this.x = x;
@@ -47,7 +50,7 @@ public class SlotSchematicAstroMiner extends Slot {
                         GalacticraftCore.packetPipeline.sendTo(
                                 new PacketSimple(
                                         EnumSimplePacket.C_SPAWN_SPARK_PARTICLES,
-                                        new Object[] {this.x, this.y, this.z}),
+                                        new Object[] { this.x, this.y, this.z }),
                                 var13);
                     }
                 }
@@ -67,7 +70,7 @@ public class SlotSchematicAstroMiner extends Slot {
             return itemStack.getItem() == AsteroidsItems.orionDrive;
         } else if (this.index == 18 && GalacticraftCore.isGalaxySpaceLoaded) {
             return itemStack.getItem()
-                            == GameRegistry.findItem(Constants.MOD_ID_GALAXYSPACE, "item.RocketControlComputer")
+                    == GameRegistry.findItem(Constants.MOD_ID_GALAXYSPACE, "item.RocketControlComputer")
                     && itemStack.getItemDamage() == 102;
         } else if (this.index == 19 || this.index == 20) {
             return itemStack.getItem() == GCItems.basicItem && itemStack.getItemDamage() == 14;
@@ -89,8 +92,8 @@ public class SlotSchematicAstroMiner extends Slot {
     }
 
     /**
-     * Returns the maximum stack size for a given slot (usually the same as
-     * getInventoryStackLimit(), but 1 in the case of armor slots)
+     * Returns the maximum stack size for a given slot (usually the same as getInventoryStackLimit(), but 1 in the case
+     * of armor slots)
      */
     @Override
     public int getSlotStackLimit() {

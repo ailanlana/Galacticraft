@@ -1,13 +1,13 @@
 package micdoodle8.mods.galacticraft.core.util;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import ic2.api.item.IC2Items;
 import java.util.HashMap;
+
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.api.recipe.INasaWorkbenchRecipe;
 import micdoodle8.mods.galacticraft.core.inventory.InventoryBuggyBench;
 import micdoodle8.mods.galacticraft.core.inventory.InventoryRocketBench;
 import micdoodle8.mods.galacticraft.core.recipe.NasaWorkbenchRecipe;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -16,7 +16,11 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+import ic2.api.item.IC2Items;
+
 public class RecipeUtil {
+
     public static ItemStack findMatchingBuggy(InventoryBuggyBench benchStacks) {
         for (final INasaWorkbenchRecipe recipe : GalacticraftRegistry.getBuggyBenchRecipes()) {
             if (recipe.matches(benchStacks)) {
@@ -44,9 +48,8 @@ public class RecipeUtil {
 
     public static void addBlockRecipe(ItemStack result, String oreDictIngot, ItemStack gcIngot) {
         if (OreDictionary.getOres(oreDictIngot).size() > 1) {
-            CraftingManager.getInstance()
-                    .getRecipeList()
-                    .add(new ShapelessOreRecipe(
+            CraftingManager.getInstance().getRecipeList().add(
+                    new ShapelessOreRecipe(
                             result,
                             gcIngot,
                             oreDictIngot,
@@ -58,7 +61,7 @@ public class RecipeUtil {
                             oreDictIngot,
                             oreDictIngot));
         } else {
-            RecipeUtil.addRecipe(result, new Object[] {"XXX", "XXX", "XXX", 'X', gcIngot});
+            RecipeUtil.addRecipe(result, new Object[] { "XXX", "XXX", "XXX", 'X', gcIngot });
         }
     }
 

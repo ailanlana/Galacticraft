@@ -1,11 +1,10 @@
 package micdoodle8.mods.galacticraft.core.entities;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
 import micdoodle8.mods.galacticraft.core.inventory.IInventorySettable;
@@ -13,6 +12,7 @@ import micdoodle8.mods.galacticraft.core.network.PacketDynamic;
 import micdoodle8.mods.galacticraft.core.network.PacketDynamicInventory;
 import micdoodle8.mods.galacticraft.core.util.FluidUtil;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -26,7 +26,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import io.netty.buffer.ByteBuf;
+
 public abstract class EntityLanderBase extends EntityAdvancedMotion implements IInventorySettable, IScaleableFuelLevel {
+
     private final int FUEL_TANK_CAPACITY = 5000;
     public FluidTank fuelTank = new FluidTank(this.FUEL_TANK_CAPACITY);
     protected boolean hasReceivedPacket;
@@ -46,7 +50,9 @@ public abstract class EntityLanderBase extends EntityAdvancedMotion implements I
     public void updateRiderPosition() {
         if (this.riddenByEntity != null) {
             this.riddenByEntity.setPosition(
-                    this.posX, this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset(), this.posZ);
+                    this.posX,
+                    this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset(),
+                    this.posZ);
         }
     }
 
@@ -326,14 +332,8 @@ public abstract class EntityLanderBase extends EntityAdvancedMotion implements I
                                     e = WorldUtil.forceRespawnClient(
                                             this.dimension,
                                             e.worldObj.difficultySetting.getDifficultyId(),
-                                            e.worldObj
-                                                    .getWorldInfo()
-                                                    .getTerrainType()
-                                                    .getWorldTypeName(),
-                                            ((EntityPlayerMP) e)
-                                                    .theItemInWorldManager
-                                                    .getGameType()
-                                                    .getID());
+                                            e.worldObj.getWorldInfo().getTerrainType().getWorldTypeName(),
+                                            ((EntityPlayerMP) e).theItemInWorldManager.getGameType().getID());
                                     e.mountEntity(this);
                                 }
                             } else {
@@ -352,14 +352,8 @@ public abstract class EntityLanderBase extends EntityAdvancedMotion implements I
                                     e = WorldUtil.forceRespawnClient(
                                             this.dimension,
                                             e.worldObj.difficultySetting.getDifficultyId(),
-                                            e.worldObj
-                                                    .getWorldInfo()
-                                                    .getTerrainType()
-                                                    .getWorldTypeName(),
-                                            ((EntityPlayerMP) e)
-                                                    .theItemInWorldManager
-                                                    .getGameType()
-                                                    .getID());
+                                            e.worldObj.getWorldInfo().getTerrainType().getWorldTypeName(),
+                                            ((EntityPlayerMP) e).theItemInWorldManager.getGameType().getID());
                                     e.mountEntity(this);
                                 }
                             } else {

@@ -2,11 +2,13 @@ package micdoodle8.mods.galacticraft.core.mixins.minecraft;
 
 import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Vec3;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,11 +31,10 @@ public class EntityRendererMixin {
 
     @Redirect(
             method = "updateLightmap",
-            at =
-                    @At(
-                            value = "INVOKE",
-                            target = "Lnet/minecraft/client/multiplayer/WorldClient;getSunBrightness(F)F",
-                            ordinal = 0),
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/multiplayer/WorldClient;getSunBrightness(F)F",
+                    ordinal = 0),
             require = 1)
     private float onUpdateLightmap(WorldClient world, float constOne) {
         return WorldUtil.getWorldBrightness(world);
@@ -41,11 +42,9 @@ public class EntityRendererMixin {
 
     @Redirect(
             method = "updateFogColor",
-            at =
-                    @At(
-                            value = "INVOKE",
-                            target =
-                                    "Lnet/minecraft/client/multiplayer/WorldClient;getSkyColor(Lnet/minecraft/entity/Entity;F)Lnet/minecraft/util/Vec3;"),
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/multiplayer/WorldClient;getSkyColor(Lnet/minecraft/entity/Entity;F)Lnet/minecraft/util/Vec3;"),
             require = 1)
     private Vec3 onUpdateSkyColor(WorldClient world, Entity entity, float v) {
         return WorldUtil.getSkyColorHook(world);

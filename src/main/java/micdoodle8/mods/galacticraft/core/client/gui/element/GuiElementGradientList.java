@@ -1,15 +1,21 @@
 package micdoodle8.mods.galacticraft.core.client.gui.element;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import java.util.ArrayList;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.util.ColorUtil;
+
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+
 import org.lwjgl.input.Mouse;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class GuiElementGradientList extends Gui {
+
     public static class ListElement {
+
         public String value;
         public int color;
 
@@ -50,8 +56,7 @@ public class GuiElementGradientList extends Gui {
     public void draw(int mousePosX, int mousePosY) {
         if (this.sliderEnabled) {
             if (this.sliderGrabbed
-                    || mousePosX >= this.xPosition + this.width - 9
-                            && mousePosX < this.xPosition + this.width
+                    || mousePosX >= this.xPosition + this.width - 9 && mousePosX < this.xPosition + this.width
                             && mousePosY >= this.yPosition
                             && mousePosY < this.yPosition + this.height) {
                 if (Mouse.isButtonDown(0)) {
@@ -76,12 +81,10 @@ public class GuiElementGradientList extends Gui {
         }
 
         if (Mouse.isButtonDown(0)) {
-            if (mousePosX >= this.xPosition
-                    && mousePosX < this.xPosition + this.width - 10
+            if (mousePosX >= this.xPosition && mousePosX < this.xPosition + this.width - 10
                     && mousePosY >= this.yPosition
                     && mousePosY < this.yPosition + this.height) {
-                final int clickPosY = mousePosY
-                        - this.yPosition
+                final int clickPosY = mousePosY - this.yPosition
                         + (int) Math.floor(
                                 (this.listContents.size() * GuiElementGradientList.BUTTON_HEIGHT - this.height)
                                         * this.getSliderPercentage());
@@ -109,8 +112,8 @@ public class GuiElementGradientList extends Gui {
                 this.yPosition + this.height,
                 ColorUtil.to32BitColor(255, 50, 50, 50),
                 ColorUtil.to32BitColor(255, 50, 50, 50));
-        int sliderColor =
-                this.sliderEnabled ? ColorUtil.to32BitColor(255, 90, 90, 90) : ColorUtil.to32BitColor(255, 40, 40, 40);
+        int sliderColor = this.sliderEnabled ? ColorUtil.to32BitColor(255, 90, 90, 90)
+                : ColorUtil.to32BitColor(255, 40, 40, 40);
         this.drawGradientRect(
                 this.xPosition + this.width - 9,
                 this.sliderPos,
@@ -150,8 +153,7 @@ public class GuiElementGradientList extends Gui {
                 this.yPosition + this.height,
                 ColorUtil.to32BitColor(255, 0, 0, 0));
 
-        sliderColor = this.sliderEnabled
-                ? ColorUtil.to32BitColor(255, 120, 120, 120)
+        sliderColor = this.sliderEnabled ? ColorUtil.to32BitColor(255, 120, 120, 120)
                 : ColorUtil.to32BitColor(255, 60, 60, 60);
         Gui.drawRect(
                 this.xPosition + this.width - 9,
@@ -178,10 +180,10 @@ public class GuiElementGradientList extends Gui {
                 this.sliderPos + 14,
                 sliderColor);
 
-        int currentDrawHeight = this.yPosition
-                + 1
-                - (int) Math.floor((this.listContents.size() * GuiElementGradientList.BUTTON_HEIGHT - this.height)
-                        * this.getSliderPercentage());
+        int currentDrawHeight = this.yPosition + 1
+                - (int) Math.floor(
+                        (this.listContents.size() * GuiElementGradientList.BUTTON_HEIGHT - this.height)
+                                * this.getSliderPercentage());
         final FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
 
         for (int i = 0; i < this.listContents.size(); i++) {
@@ -195,25 +197,20 @@ public class GuiElementGradientList extends Gui {
                     yCoord0 = Math.max(this.yPosition + 1, yCoord0);
                     yCoord1 = Math.min(this.yPosition + this.height - 1, yCoord1);
 
-                    final int color = i == this.selectedIndex
-                            ? ColorUtil.to32BitColor(255, 35, 35, 35)
+                    final int color = i == this.selectedIndex ? ColorUtil.to32BitColor(255, 35, 35, 35)
                             : ColorUtil.to32BitColor(255, 25, 25, 25);
 
                     Gui.drawRect(this.xPosition + 1, yCoord0, this.xPosition + this.width - 10, yCoord1, color);
 
                     if (currentDrawHeight + GuiElementGradientList.BUTTON_HEIGHT / 2 - fontRenderer.FONT_HEIGHT / 2
-                                    > this.yPosition
-                            && currentDrawHeight
-                                            + GuiElementGradientList.BUTTON_HEIGHT / 2
-                                            + fontRenderer.FONT_HEIGHT / 2
-                                    < this.yPosition + this.height) {
+                            > this.yPosition
+                            && currentDrawHeight + GuiElementGradientList.BUTTON_HEIGHT / 2
+                                    + fontRenderer.FONT_HEIGHT / 2 < this.yPosition + this.height) {
                         fontRenderer.drawString(
                                 displayButton.value,
-                                this.xPosition
-                                        + (this.width - 10) / 2
+                                this.xPosition + (this.width - 10) / 2
                                         - fontRenderer.getStringWidth(displayButton.value) / 2,
-                                currentDrawHeight
-                                        + GuiElementGradientList.BUTTON_HEIGHT / 2
+                                currentDrawHeight + GuiElementGradientList.BUTTON_HEIGHT / 2
                                         - fontRenderer.FONT_HEIGHT / 2,
                                 displayButton.color);
                     }

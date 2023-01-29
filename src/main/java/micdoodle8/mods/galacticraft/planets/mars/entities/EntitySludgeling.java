@@ -5,6 +5,7 @@ import micdoodle8.mods.galacticraft.core.entities.EntityEvolvedCreeper;
 import micdoodle8.mods.galacticraft.core.entities.EntityEvolvedSkeleton;
 import micdoodle8.mods.galacticraft.core.entities.EntityEvolvedSpider;
 import micdoodle8.mods.galacticraft.core.entities.EntityEvolvedZombie;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -19,19 +20,20 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 public class EntitySludgeling extends EntityMob implements IEntityBreathable {
+
     public EntitySludgeling(World par1World) {
         super(par1World);
         this.setSize(0.3F, 0.2F);
         this.tasks.addTask(1, new EntityAIAttackOnCollide(this, 0.25F, true));
         this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, false, true));
-        this.targetTasks.addTask(
-                2, new EntityAINearestAttackableTarget(this, EntityEvolvedZombie.class, 0, false, true));
-        this.targetTasks.addTask(
-                2, new EntityAINearestAttackableTarget(this, EntityEvolvedSkeleton.class, 0, false, true));
-        this.targetTasks.addTask(
-                2, new EntityAINearestAttackableTarget(this, EntityEvolvedSpider.class, 0, false, true));
-        this.targetTasks.addTask(
-                2, new EntityAINearestAttackableTarget(this, EntityEvolvedCreeper.class, 0, false, true));
+        this.targetTasks
+                .addTask(2, new EntityAINearestAttackableTarget(this, EntityEvolvedZombie.class, 0, false, true));
+        this.targetTasks
+                .addTask(2, new EntityAINearestAttackableTarget(this, EntityEvolvedSkeleton.class, 0, false, true));
+        this.targetTasks
+                .addTask(2, new EntityAINearestAttackableTarget(this, EntityEvolvedSpider.class, 0, false, true));
+        this.targetTasks
+                .addTask(2, new EntityAINearestAttackableTarget(this, EntityEvolvedCreeper.class, 0, false, true));
         this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntitySlimeling.class, 200, false));
     }
 
@@ -97,8 +99,7 @@ public class EntitySludgeling extends EntityMob implements IEntityBreathable {
 
     @Override
     protected void attackEntity(Entity par1Entity, float par2) {
-        if (this.attackTime <= 0
-                && par2 < 1.2F
+        if (this.attackTime <= 0 && par2 < 1.2F
                 && par1Entity.boundingBox.maxY > this.boundingBox.minY
                 && par1Entity.boundingBox.minY < this.boundingBox.maxY) {
             this.attackTime = 20;

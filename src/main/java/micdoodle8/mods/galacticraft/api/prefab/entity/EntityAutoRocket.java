@@ -1,14 +1,9 @@
 package micdoodle8.mods.galacticraft.api.prefab.entity;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.entity.IEntityNoisy;
 import micdoodle8.mods.galacticraft.api.entity.ILandable;
 import micdoodle8.mods.galacticraft.api.tile.IFuelDock;
@@ -29,6 +24,7 @@ import micdoodle8.mods.galacticraft.core.util.FluidUtil;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.core.util.GCLog;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -49,10 +45,18 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidStack;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
+
 /**
  * Do not include this prefab class in your released mod download.
  */
 public abstract class EntityAutoRocket extends EntitySpaceshipBase implements ILandable, IInventory, IEntityNoisy {
+
     public int destinationFrequency = -1;
     public BlockVec3 targetVec;
     public int targetDimension;
@@ -77,8 +81,8 @@ public abstract class EntityAutoRocket extends EntitySpaceshipBase implements IL
 
     static {
         try {
-            controllerClass =
-                    Class.forName("micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityLaunchController");
+            controllerClass = Class
+                    .forName("micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityLaunchController");
         } catch (final ClassNotFoundException e) {
             GCLog.info("Galacticraft-Planets' LaunchController not present, rockets will not be launch controlled.");
         }
@@ -145,12 +149,11 @@ public abstract class EntityAutoRocket extends EntitySpaceshipBase implements IL
             final TileEntity launchController = this.activeLaunchController.getTileEntity(this.worldObj);
             if (controllerClass.isInstance(launchController)) {
                 try {
-                    final Boolean b = (Boolean)
-                            controllerClass.getMethod("validFrequency").invoke(launchController);
+                    final Boolean b = (Boolean) controllerClass.getMethod("validFrequency").invoke(launchController);
 
                     if (b != null && b) {
-                        final int controllerFrequency =
-                                controllerClass.getField("destFrequency").getInt(launchController);
+                        final int controllerFrequency = controllerClass.getField("destFrequency")
+                                .getInt(launchController);
                         final boolean foundPad = this.setTarget(false, controllerFrequency);
 
                         if (foundPad) {
@@ -196,14 +199,12 @@ public abstract class EntityAutoRocket extends EntitySpaceshipBase implements IL
                         continue;
                     }
 
-                    final int controllerFrequency =
-                            controllerClass.getField("frequency").getInt(tile);
+                    final int controllerFrequency = controllerClass.getField("frequency").getInt(tile);
 
                     if (destFreq == controllerFrequency) {
                         boolean targetSet = false;
 
-                        blockLoop:
-                        for (int x = -2; x <= 2; x++) {
+                        blockLoop: for (int x = -2; x <= 2; x++) {
                             for (int z = -2; z <= 2; z++) {
                                 final Block block = world.getBlock(tile.xCoord + x, tile.yCoord, tile.zCoord + z);
 
@@ -289,7 +290,9 @@ public abstract class EntityAutoRocket extends EntitySpaceshipBase implements IL
 
                 if (yDiff > 1D && yDiff < 4D) {
                     for (final Object o : this.worldObj.getEntitiesWithinAABBExcludingEntity(
-                            this, this.boundingBox.copy().offset(0D, -3D, 0D), EntitySpaceshipBase.rocketSelector)) {
+                            this,
+                            this.boundingBox.copy().offset(0D, -3D, 0D),
+                            EntitySpaceshipBase.rocketSelector)) {
                         if (o instanceof EntitySpaceshipBase) {
                             ((EntitySpaceshipBase) o).dropShipAsItem();
                             ((EntitySpaceshipBase) o).setDead();
@@ -297,14 +300,13 @@ public abstract class EntityAutoRocket extends EntitySpaceshipBase implements IL
                     }
                 }
                 if (yDiff < 0.04) {
-                    final int yMin =
-                            MathHelper.floor_double(this.boundingBox.minY - this.getOnPadYOffset() - 0.45D) - 2;
+                    final int yMin = MathHelper.floor_double(this.boundingBox.minY - this.getOnPadYOffset() - 0.45D)
+                            - 2;
                     final int yMax = MathHelper.floor_double(this.boundingBox.maxY) + 1;
                     final int zMin = MathHelper.floor_double(this.posZ) - 1;
                     final int zMax = MathHelper.floor_double(this.posZ) + 1;
-                    for (int x = MathHelper.floor_double(this.posX) - 1;
-                            x <= MathHelper.floor_double(this.posX) + 1;
-                            x++) {
+                    for (int x = MathHelper.floor_double(this.posX) - 1; x
+                            <= MathHelper.floor_double(this.posX) + 1; x++) {
                         for (int z = zMin; z <= zMax; z++) {
                             // Doing y as the inner loop may help with cacheing of chunks
                             for (int y = yMin; y <= yMax; y++) {
@@ -365,8 +367,7 @@ public abstract class EntityAutoRocket extends EntitySpaceshipBase implements IL
             if (this.launchPhase == EnumLaunchPhase.LAUNCHED.ordinal()) {
                 this.setPad(null);
             } else {
-                if (this.launchPhase == EnumLaunchPhase.UNIGNITED.ordinal()
-                        && this.landingPad != null
+                if (this.launchPhase == EnumLaunchPhase.UNIGNITED.ordinal() && this.landingPad != null
                         && this.ticks % 17 == 0) {
                     this.updateControllerSettings(this.landingPad);
                 }
@@ -406,10 +407,8 @@ public abstract class EntityAutoRocket extends EntitySpaceshipBase implements IL
                 if (controllerClass.isInstance(tile)) {
                     Boolean autoLaunchEnabled = null;
                     try {
-                        autoLaunchEnabled =
-                                controllerClass.getField("controlEnabled").getBoolean(tile);
-                    } catch (final Exception e) {
-                    }
+                        autoLaunchEnabled = controllerClass.getField("controlEnabled").getBoolean(tile);
+                    } catch (final Exception e) {}
 
                     if (autoLaunchEnabled != null && autoLaunchEnabled) {
                         if (this.fuelTank.getFluidAmount() >= this.fuelToDrain()) {
@@ -489,16 +488,14 @@ public abstract class EntityAutoRocket extends EntitySpaceshipBase implements IL
                     // This includes a check for whether it has enough energy to run (if it doesn't,
                     // then a launch would
                     // not go to the destination frequency and the rocket would be lost!)
-                    final Boolean autoLaunchEnabled =
-                            controllerClass.getField("controlEnabled").getBoolean(updatedTile);
+                    final Boolean autoLaunchEnabled = controllerClass.getField("controlEnabled")
+                            .getBoolean(updatedTile);
 
                     this.activeLaunchController = new BlockVec3((TileEntity) updatedTile);
 
                     if (autoLaunchEnabled) {
-                        this.autoLaunchSetting = EnumAutoLaunch.values()[
-                                controllerClass
-                                        .getField("launchDropdownSelection")
-                                        .getInt(updatedTile)];
+                        this.autoLaunchSetting = EnumAutoLaunch.values()[controllerClass
+                                .getField("launchDropdownSelection").getInt(updatedTile)];
 
                         switch (this.autoLaunchSetting) {
                             case INSTANT:
@@ -507,12 +504,12 @@ public abstract class EntityAutoRocket extends EntitySpaceshipBase implements IL
                                     this.autoLaunchCountdown = 12;
                                 }
                                 break;
-                                // The other settings set time to count down AFTER player mounts rocket but
-                                // BEFORE
-                                // engine ignition
-                                // TODO: if autoLaunchCountdown > 0 add some smoke (but not flame) particle
-                                // effects or
-                                // other pre-flight test feedback so the player knows something is happening
+                            // The other settings set time to count down AFTER player mounts rocket but
+                            // BEFORE
+                            // engine ignition
+                            // TODO: if autoLaunchCountdown > 0 add some smoke (but not flame) particle
+                            // effects or
+                            // other pre-flight test feedback so the player knows something is happening
                             case TIME_10_SECONDS:
                                 if (this.autoLaunchCountdown <= 0 || this.autoLaunchCountdown > 200) {
                                     this.autoLaunchCountdown = 200;
@@ -608,14 +605,8 @@ public abstract class EntityAutoRocket extends EntitySpaceshipBase implements IL
                                 e = WorldUtil.forceRespawnClient(
                                         this.dimension,
                                         e.worldObj.difficultySetting.getDifficultyId(),
-                                        e.worldObj
-                                                .getWorldInfo()
-                                                .getTerrainType()
-                                                .getWorldTypeName(),
-                                        ((EntityPlayerMP) e)
-                                                .theItemInWorldManager
-                                                .getGameType()
-                                                .getID());
+                                        e.worldObj.getWorldInfo().getTerrainType().getWorldTypeName(),
+                                        ((EntityPlayerMP) e).theItemInWorldManager.getGameType().getID());
                                 e.mountEntity(this);
                             }
                         } else {
@@ -634,14 +625,8 @@ public abstract class EntityAutoRocket extends EntitySpaceshipBase implements IL
                                 e = WorldUtil.forceRespawnClient(
                                         this.dimension,
                                         e.worldObj.difficultySetting.getDifficultyId(),
-                                        e.worldObj
-                                                .getWorldInfo()
-                                                .getTerrainType()
-                                                .getWorldTypeName(),
-                                        ((EntityPlayerMP) e)
-                                                .theItemInWorldManager
-                                                .getGameType()
-                                                .getID());
+                                        e.worldObj.getWorldInfo().getTerrainType().getWorldTypeName(),
+                                        ((EntityPlayerMP) e).theItemInWorldManager.getGameType().getID());
                                 e.mountEntity(this);
                             }
                         } else {
@@ -705,22 +690,18 @@ public abstract class EntityAutoRocket extends EntitySpaceshipBase implements IL
             // already a rocket on the
             // target pad
             for (int i = -3; i <= 3; i++) {
-                if (this.landing
-                        && this.targetVec != null
+                if (this.landing && this.targetVec != null
                         && this.worldObj.getTileEntity(
-                                        (int) Math.floor(this.posX), (int) Math.floor(this.posY + i), (int)
-                                                Math.floor(this.posZ))
-                                instanceof IFuelDock
+                                (int) Math.floor(this.posX),
+                                (int) Math.floor(this.posY + i),
+                                (int) Math.floor(this.posZ)) instanceof IFuelDock
                         && this.posY - this.targetVec.y < 5) {
-                    for (int x = MathHelper.floor_double(this.posX) - 1;
-                            x <= MathHelper.floor_double(this.posX) + 1;
-                            x++) {
-                        for (int y = MathHelper.floor_double(this.posY - 3.0D);
-                                y <= MathHelper.floor_double(this.posY) + 1;
-                                y++) {
-                            for (int z = MathHelper.floor_double(this.posZ) - 1;
-                                    z <= MathHelper.floor_double(this.posZ) + 1;
-                                    z++) {
+                    for (int x = MathHelper.floor_double(this.posX) - 1; x
+                            <= MathHelper.floor_double(this.posX) + 1; x++) {
+                        for (int y = MathHelper.floor_double(this.posY - 3.0D); y
+                                <= MathHelper.floor_double(this.posY) + 1; y++) {
+                            for (int z = MathHelper.floor_double(this.posZ) - 1; z
+                                    <= MathHelper.floor_double(this.posZ) + 1; z++) {
                                 final TileEntity tile = this.worldObj.getTileEntity(x, y, z);
 
                                 if (tile instanceof IFuelDock) {
@@ -804,12 +785,11 @@ public abstract class EntityAutoRocket extends EntitySpaceshipBase implements IL
 
             int amountRemoved = 0;
 
-            PADSEARCH:
-            for (int x = MathHelper.floor_double(this.posX) - 1; x <= MathHelper.floor_double(this.posX) + 1; x++) {
+            PADSEARCH: for (int x = MathHelper.floor_double(this.posX) - 1; x
+                    <= MathHelper.floor_double(this.posX) + 1; x++) {
                 for (int y = MathHelper.floor_double(this.posY) - 3; y <= MathHelper.floor_double(this.posY) + 1; y++) {
-                    for (int z = MathHelper.floor_double(this.posZ) - 1;
-                            z <= MathHelper.floor_double(this.posZ) + 1;
-                            z++) {
+                    for (int z = MathHelper.floor_double(this.posZ) - 1; z
+                            <= MathHelper.floor_double(this.posZ) + 1; z++) {
                         final Block block = this.worldObj.getBlock(x, y, z);
 
                         if (block != null && block instanceof BlockLandingPadFull) {
@@ -978,8 +958,7 @@ public abstract class EntityAutoRocket extends EntitySpaceshipBase implements IL
         for (count = 0; count < this.cargoItems.length - 2; count++) {
             final ItemStack stackAt = this.cargoItems[count];
 
-            if (stackAt != null
-                    && stackAt.getItem() == stack.getItem()
+            if (stackAt != null && stackAt.getItem() == stack.getItem()
                     && stackAt.getItemDamage() == stack.getItemDamage()
                     && stackAt.stackSize < stackAt.getMaxStackSize()) {
                 if (stackAt.stackSize + stack.stackSize <= stackAt.getMaxStackSize()) {
@@ -1176,6 +1155,7 @@ public abstract class EntityAutoRocket extends EntitySpaceshipBase implements IL
     }
 
     public enum EnumAutoLaunch {
+
         CARGO_IS_UNLOADED(0, "cargoUnloaded"),
         CARGO_IS_FULL(1, "cargoFull"),
         ROCKET_IS_FUELED(2, "fullyFueled"),

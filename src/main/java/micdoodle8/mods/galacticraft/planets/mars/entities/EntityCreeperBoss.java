@@ -1,9 +1,9 @@
 package micdoodle8.mods.galacticraft.planets.mars.entities;
 
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.api.entity.IEntityBreathable;
 import micdoodle8.mods.galacticraft.api.recipe.ISchematicPage;
@@ -20,6 +20,7 @@ import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.planets.asteroids.ConfigManagerAsteroids;
 import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityTreasureChestMars;
+
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -50,8 +51,11 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ChestGenHooks;
 
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+
 public class EntityCreeperBoss extends EntityMob
         implements IEntityBreathable, IBossDisplayData, IRangedAttackMob, IBoss {
+
     protected long ticks = 0;
     private TileEntityDungeonSpawner spawner;
 
@@ -158,7 +162,13 @@ public class EntityCreeperBoss extends EntityMob
             final float f1 = (this.rand.nextFloat() - 0.5F) * 2.0F;
             final float f2 = (this.rand.nextFloat() - 0.5F) * 1.5F;
             this.worldObj.spawnParticle(
-                    "hugeexplosion", this.posX + f, this.posY + 2.0D + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
+                    "hugeexplosion",
+                    this.posX + f,
+                    this.posY + 2.0D + f1,
+                    this.posZ + f2,
+                    0.0D,
+                    0.0D,
+                    0.0D);
         }
 
         int i;
@@ -181,8 +191,8 @@ public class EntityCreeperBoss extends EntityMob
                 while (i > 0) {
                     j = EntityXPOrb.getXPSplit(i);
                     i -= j;
-                    this.worldObj.spawnEntityInWorld(
-                            new EntityXPOrb(this.worldObj, this.posX, this.posY, this.posZ, j));
+                    this.worldObj
+                            .spawnEntityInWorld(new EntityXPOrb(this.worldObj, this.posX, this.posY, this.posZ, j));
                 }
             }
 
@@ -230,14 +240,24 @@ public class EntityCreeperBoss extends EntityMob
 
                         // Generate three times, since it's an extra extra special chest
                         WeightedRandomChestContent.generateChestContents(
-                                this.rand, info.getItems(this.rand), chest, info.getCount(this.rand));
+                                this.rand,
+                                info.getItems(this.rand),
+                                chest,
+                                info.getCount(this.rand));
                         WeightedRandomChestContent.generateChestContents(
-                                this.rand, info.getItems(this.rand), chest, info.getCount(this.rand));
+                                this.rand,
+                                info.getItems(this.rand),
+                                chest,
+                                info.getCount(this.rand));
                         WeightedRandomChestContent.generateChestContents(
-                                this.rand, info.getItems(this.rand), chest, info.getCount(this.rand));
+                                this.rand,
+                                info.getItems(this.rand),
+                                chest,
+                                info.getCount(this.rand));
 
                         chest.setInventorySlotContents(
-                                this.rand.nextInt(chest.getSizeInventory()), this.getGuaranteedLoot(this.rand));
+                                this.rand.nextInt(chest.getSizeInventory()),
+                                this.getGuaranteedLoot(this.rand));
 
                         break;
                     }
@@ -351,8 +371,12 @@ public class EntityCreeperBoss extends EntityMob
 
     @Override
     public EntityItem entityDropItem(ItemStack par1ItemStack, float par2) {
-        final EntityItem entityitem =
-                new EntityItem(this.worldObj, this.posX, this.posY + par2, this.posZ, par1ItemStack);
+        final EntityItem entityitem = new EntityItem(
+                this.worldObj,
+                this.posX,
+                this.posY + par2,
+                this.posZ,
+                par1ItemStack);
         entityitem.motionY = -2.0D;
         entityitem.delayBeforeCanPickup = 10;
         if (this.captureDrops) {
@@ -471,8 +495,12 @@ public class EntityCreeperBoss extends EntityMob
         final double d6 = par2 - d3;
         final double d7 = par4 - d4;
         final double d8 = par6 - d5;
-        final EntityProjectileTNT entitywitherskull =
-                new EntityProjectileTNT(this.worldObj, this, d6 * 0.5D, d7 * 0.5D, d8 * 0.5D);
+        final EntityProjectileTNT entitywitherskull = new EntityProjectileTNT(
+                this.worldObj,
+                this,
+                d6 * 0.5D,
+                d7 * 0.5D,
+                d8 * 0.5D);
 
         entitywitherskull.posY = d4;
         entitywitherskull.posX = d3;

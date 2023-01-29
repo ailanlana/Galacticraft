@@ -3,8 +3,10 @@ package micdoodle8.mods.galacticraft.core.world.gen.dungeon;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 import micdoodle8.mods.galacticraft.core.util.OxygenUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ChunkCoordinates;
@@ -12,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class MapGenDungeon {
+
     public ArrayList<DungeonRoom> bossRooms = new ArrayList<>();
     public ArrayList<DungeonRoom> treasureRooms = new ArrayList<>();
     public ArrayList<DungeonRoom> otherRooms = new ArrayList<>();
@@ -36,8 +39,8 @@ public class MapGenDungeon {
         this.HALLWAY_HEIGHT = hallwayHeight;
     }
 
-    public void generateUsingArrays(
-            World world, long seed, int x, int y, int z, int chunkX, int chunkZ, Block[] blocks, byte[] metas) {
+    public void generateUsingArrays(World world, long seed, int x, int y, int z, int chunkX, int chunkZ, Block[] blocks,
+            byte[] metas) {
         this.worldObj = world;
         final ChunkCoordinates dungeonCoords = this.getDungeonNear(seed, chunkX, chunkZ);
         if (dungeonCoords != null) {
@@ -72,17 +75,8 @@ public class MapGenDungeon {
         }
     }
 
-    public void generate(
-            World world,
-            Random rand,
-            int x,
-            int y,
-            int z,
-            int chunkX,
-            int chunkZ,
-            Block[] blocks,
-            byte[] metas,
-            boolean useArrays) {
+    public void generate(World world, Random rand, int x, int y, int z, int chunkX, int chunkZ, Block[] blocks,
+            byte[] metas, boolean useArrays) {
         MapGenDungeon.useArrays = useArrays;
         this.worldObj = world;
 
@@ -96,7 +90,13 @@ public class MapGenDungeon {
         final DungeonBoundingBox cbb = currentRoom.getBoundingBox();
         boundingBoxes.add(cbb);
         this.generateEntranceCrater(
-                blocks, metas, x + (cbb.maxX - cbb.minX) / 2, y, z + (cbb.maxZ - cbb.minZ) / 2, chunkX, chunkZ);
+                blocks,
+                metas,
+                x + (cbb.maxX - cbb.minX) / 2,
+                y,
+                z + (cbb.maxZ - cbb.minZ) / 2,
+                chunkX,
+                chunkZ);
 
         for (int i = 0; i <= length; i++) {
             for (int j = 0; j < 8; j++) {
@@ -207,25 +207,36 @@ public class MapGenDungeon {
                         {
                             case EAST: // East z++
                                 corridor1 = new DungeonBoundingBox(
-                                        corridorX - 1, currentRoomBb.maxZ, corridorX, possibleRoomBb.minZ - 1);
+                                        corridorX - 1,
+                                        currentRoomBb.maxZ,
+                                        corridorX,
+                                        possibleRoomBb.minZ - 1);
                                 break;
                             case NORTH: // North x++
                                 corridor1 = new DungeonBoundingBox(
-                                        currentRoomBb.maxX, corridorZ - 1, possibleRoomBb.minX - 1, corridorZ);
+                                        currentRoomBb.maxX,
+                                        corridorZ - 1,
+                                        possibleRoomBb.minX - 1,
+                                        corridorZ);
                                 break;
                             case SOUTH: // South x--
                                 corridor1 = new DungeonBoundingBox(
-                                        possibleRoomBb.maxX, corridorZ - 1, currentRoomBb.minX - 1, corridorZ);
+                                        possibleRoomBb.maxX,
+                                        corridorZ - 1,
+                                        currentRoomBb.minX - 1,
+                                        corridorZ);
                                 break;
                             case WEST: // West z--
                                 corridor1 = new DungeonBoundingBox(
-                                        corridorX - 1, possibleRoomBb.maxZ, corridorX, currentRoomBb.minZ - 1);
+                                        corridorX - 1,
+                                        possibleRoomBb.maxZ,
+                                        corridorX,
+                                        currentRoomBb.minZ - 1);
                                 break;
                             default:
                                 break;
                         }
-                        if (corridor1 != null
-                                && !this.isIntersecting(corridor1, boundingBoxes)
+                        if (corridor1 != null && !this.isIntersecting(corridor1, boundingBoxes)
                                 && !corridor1.isOverlapping(possibleRoomBb)) {
                             boundingBoxes.add(possibleRoomBb);
                             boundingBoxes.add(corridor1);
@@ -233,7 +244,15 @@ public class MapGenDungeon {
                             currentRoom.generate(blocks, metas, chunkX, chunkZ);
                             this.rooms.add(currentRoom);
                             this.genCorridor(
-                                    corridor1, rand, possibleRoom.posY, chunkX, chunkZ, dir, blocks, metas, false);
+                                    corridor1,
+                                    rand,
+                                    possibleRoom.posY,
+                                    chunkX,
+                                    chunkZ,
+                                    dir,
+                                    blocks,
+                                    metas,
+                                    false);
                             break;
                         }
                     } else
@@ -251,7 +270,10 @@ public class MapGenDungeon {
                         {
                             case EAST: // East z++
                                 corridor1 = new DungeonBoundingBox(
-                                        curCenterX - 1, currentRoomBb.maxZ, curCenterX + 1, possibleCenterZ - 1);
+                                        curCenterX - 1,
+                                        currentRoomBb.maxZ,
+                                        curCenterX + 1,
+                                        possibleCenterZ - 1);
                                 if (offsetX > 0) // x++
                                 {
                                     corridor2 = new DungeonBoundingBox(
@@ -273,7 +295,10 @@ public class MapGenDungeon {
                                 break;
                             case NORTH: // North x++
                                 corridor1 = new DungeonBoundingBox(
-                                        currentRoomBb.maxX, curCenterZ - 1, possibleCenterX - 1, curCenterZ + 1);
+                                        currentRoomBb.maxX,
+                                        curCenterZ - 1,
+                                        possibleCenterX - 1,
+                                        curCenterZ + 1);
                                 if (offsetZ > 0) // z++
                                 {
                                     corridor2 = new DungeonBoundingBox(
@@ -295,7 +320,10 @@ public class MapGenDungeon {
                                 break;
                             case SOUTH: // South x--
                                 corridor1 = new DungeonBoundingBox(
-                                        possibleCenterX + 1, curCenterZ - 1, currentRoomBb.minX - 1, curCenterZ + 1);
+                                        possibleCenterX + 1,
+                                        curCenterZ - 1,
+                                        currentRoomBb.minX - 1,
+                                        curCenterZ + 1);
                                 if (offsetZ > 0) // z++
                                 {
                                     corridor2 = new DungeonBoundingBox(
@@ -317,7 +345,10 @@ public class MapGenDungeon {
                                 break;
                             case WEST: // West z--
                                 corridor1 = new DungeonBoundingBox(
-                                        curCenterX - 1, possibleCenterZ + 1, curCenterX + 1, currentRoomBb.minZ - 1);
+                                        curCenterX - 1,
+                                        possibleCenterZ + 1,
+                                        curCenterX + 1,
+                                        currentRoomBb.minZ - 1);
                                 if (offsetX > 0) // x++
                                 {
                                     corridor2 = new DungeonBoundingBox(
@@ -340,8 +371,7 @@ public class MapGenDungeon {
                             default:
                                 break;
                         }
-                        if (corridor1 != null
-                                && corridor2 != null
+                        if (corridor1 != null && corridor2 != null
                                 && !this.isIntersecting(corridor1, boundingBoxes)
                                 && !this.isIntersecting(corridor2, boundingBoxes)
                                 && !corridor1.isOverlapping(possibleRoomBb)
@@ -353,33 +383,38 @@ public class MapGenDungeon {
                             currentRoom.generate(blocks, metas, chunkX, chunkZ);
                             this.rooms.add(currentRoom);
                             this.genCorridor(
-                                    corridor2, rand, possibleRoom.posY, chunkX, chunkZ, dir2, blocks, metas, true);
+                                    corridor2,
+                                    rand,
+                                    possibleRoom.posY,
+                                    chunkX,
+                                    chunkZ,
+                                    dir2,
+                                    blocks,
+                                    metas,
+                                    true);
                             this.genCorridor(
-                                    corridor1, rand, possibleRoom.posY, chunkX, chunkZ, dir, blocks, metas, false);
+                                    corridor1,
+                                    rand,
+                                    possibleRoom.posY,
+                                    chunkX,
+                                    chunkZ,
+                                    dir,
+                                    blocks,
+                                    metas,
+                                    false);
                             break;
-                        } else {
-                        }
+                        } else {}
                     }
-                } else {
-                }
+                } else {}
             }
         }
     }
 
-    private void genCorridor(
-            DungeonBoundingBox corridor,
-            Random rand,
-            int y,
-            int cx,
-            int cz,
-            ForgeDirection dir,
-            Block[] blocks,
-            byte[] metas,
-            boolean doubleCorridor) {
+    private void genCorridor(DungeonBoundingBox corridor, Random rand, int y, int cx, int cz, ForgeDirection dir,
+            Block[] blocks, byte[] metas, boolean doubleCorridor) {
         for (int i = corridor.minX - 1; i <= corridor.maxX + 1; i++) {
             for (int k = corridor.minZ - 1; k <= corridor.maxZ + 1; k++) {
-                loopj:
-                for (int j = y - 1; j <= y + this.HALLWAY_HEIGHT; j++) {
+                loopj: for (int j = y - 1; j <= y + this.HALLWAY_HEIGHT; j++) {
                     boolean flag = false;
                     int flag2 = -1;
 
@@ -391,8 +426,7 @@ public class MapGenDungeon {
                             if (doubleCorridor && k == corridor.minZ - 1) {
                                 flag = true;
                             }
-                            if (i == corridor.minX - 1
-                                    || i == corridor.maxX + 1
+                            if (i == corridor.minX - 1 || i == corridor.maxX + 1
                                     || j == y - 1
                                     || j == y + this.HALLWAY_HEIGHT) {
                                 flag = true;
@@ -408,8 +442,7 @@ public class MapGenDungeon {
                             if (doubleCorridor && k == corridor.maxX + 1) {
                                 flag = true;
                             }
-                            if (i == corridor.minX - 1
-                                    || i == corridor.maxX + 1
+                            if (i == corridor.minX - 1 || i == corridor.maxX + 1
                                     || j == y - 1
                                     || j == y + this.HALLWAY_HEIGHT) {
                                 flag = true;
@@ -425,8 +458,7 @@ public class MapGenDungeon {
                             if (i == corridor.minX - 1) {
                                 flag = true;
                             }
-                            if (k == corridor.minZ - 1
-                                    || k == corridor.maxZ + 1
+                            if (k == corridor.minZ - 1 || k == corridor.maxZ + 1
                                     || j == y - 1
                                     || j == y + this.HALLWAY_HEIGHT) {
                                 flag = true;
@@ -442,8 +474,7 @@ public class MapGenDungeon {
                             if (i == corridor.maxX + 1) {
                                 flag = true;
                             }
-                            if (k == corridor.minZ - 1
-                                    || k == corridor.maxZ + 1
+                            if (k == corridor.minZ - 1 || k == corridor.maxZ + 1
                                     || j == y - 1
                                     || j == y + this.HALLWAY_HEIGHT) {
                                 flag = true;
@@ -501,8 +532,7 @@ public class MapGenDungeon {
 
         int randX = i / numChunks;
         int randZ = j / numChunks;
-        final long dungeonSeed = randX * 341873128712L
-                + randZ * 132897987541L
+        final long dungeonSeed = randX * 341873128712L + randZ * 132897987541L
                 + worldSeed
                 + 4291754
                 + this.worldObj.provider.dimensionId;
@@ -547,8 +577,7 @@ public class MapGenDungeon {
                 int helper = 0;
                 for (int j = maxLevel + 3; j > 0; j--) {
                     if ((Blocks.air != this.getBlock(blocks, i, j - 1, k, cx, cz)
-                                    || this.getBlock(blocks, i, j, k, cx, cz) == this.DUNGEON_WALL_ID)
-                            && helper <= depth) {
+                            || this.getBlock(blocks, i, j, k, cx, cz) == this.DUNGEON_WALL_ID) && helper <= depth) {
                         this.placeBlock(blocks, meta, i, j, k, cx, cz, Blocks.air, 0);
                         helper++;
                     }

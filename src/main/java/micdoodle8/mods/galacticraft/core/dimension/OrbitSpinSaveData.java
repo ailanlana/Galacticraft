@@ -5,6 +5,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 
 public class OrbitSpinSaveData extends WorldSavedData {
+
     public static final String saveDataID = "GCSpinData";
     public NBTTagCompound datacompound;
     private NBTTagCompound alldata;
@@ -30,8 +31,8 @@ public class OrbitSpinSaveData extends WorldSavedData {
     }
 
     public static OrbitSpinSaveData initWorldData(World world) {
-        OrbitSpinSaveData worldData =
-                (OrbitSpinSaveData) world.loadItemData(OrbitSpinSaveData.class, OrbitSpinSaveData.saveDataID);
+        OrbitSpinSaveData worldData = (OrbitSpinSaveData) world
+                .loadItemData(OrbitSpinSaveData.class, OrbitSpinSaveData.saveDataID);
 
         if (worldData == null) {
             worldData = new OrbitSpinSaveData("");

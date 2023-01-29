@@ -2,13 +2,17 @@ package micdoodle8.mods.galacticraft.api.galaxies;
 
 import java.util.ArrayList;
 import java.util.Locale;
+
 import micdoodle8.mods.galacticraft.api.world.IAtmosphericGas;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.WorldProvider;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
 public abstract class CelestialBody implements Comparable<CelestialBody> {
+
     protected final String bodyName;
     protected String unlocalizedName;
 
@@ -59,8 +63,7 @@ public abstract class CelestialBody implements Comparable<CelestialBody> {
     /**
      * Used for rendering planet's location on the map.
      * <p/>
-     * Value of 2.0F would result in the planet being rendered twice as large as
-     * earth.
+     * Value of 2.0F would result in the planet being rendered twice as large as earth.
      *
      * @return Size of the planet/moon relative to earth.
      */
@@ -71,8 +74,7 @@ public abstract class CelestialBody implements Comparable<CelestialBody> {
     /**
      * Used for rendering planet's location on the map.
      * <p/>
-     * Value of 2.0F would result in an ellipse with twice the radius of the
-     * overworld.
+     * Value of 2.0F would result in an ellipse with twice the radius of the overworld.
      *
      * @return Distance from the center of the map relative to earth.
      */
@@ -83,11 +85,9 @@ public abstract class CelestialBody implements Comparable<CelestialBody> {
     /**
      * Used for rendering planet's location on the map.
      * <p/>
-     * Value of 1π would result in the planet being rendered directly accross from
-     * the original position
+     * Value of 1π would result in the planet being rendered directly accross from the original position
      * <p/>
-     * Value of 2π is a full rotation and therefore would be rendered at the same
-     * spot as the original position
+     * Value of 2π is a full rotation and therefore would be rendered at the same spot as the original position
      *
      * @return Phase shift of planet for planet's revolution around the sun.
      */
@@ -96,11 +96,10 @@ public abstract class CelestialBody implements Comparable<CelestialBody> {
     }
 
     /**
-     * Multiplier for length of time relative to earth that this planet takes to
-     * orbit fully.
+     * Multiplier for length of time relative to earth that this planet takes to orbit fully.
      * <p/>
-     * Value of 2.0F would result in the planet rotating twice as slow (and
-     * therefore take twice as long) as the earth takes to revolve around the sun.
+     * Value of 2.0F would result in the planet rotating twice as slow (and therefore take twice as long) as the earth
+     * takes to revolve around the sun.
      *
      * @return Multiple value for planet's revolution around the sun.
      */
@@ -141,8 +140,8 @@ public abstract class CelestialBody implements Comparable<CelestialBody> {
         return this.setDimensionInfo(dimID, providerClass, true);
     }
 
-    public CelestialBody setDimensionInfo(
-            int providerId, Class<? extends WorldProvider> providerClass, boolean autoRegister) {
+    public CelestialBody setDimensionInfo(int providerId, Class<? extends WorldProvider> providerClass,
+            boolean autoRegister) {
         this.dimensionID = providerId;
         this.providerClass = providerClass;
         this.autoRegisterDimension = autoRegister;
@@ -176,9 +175,8 @@ public abstract class CelestialBody implements Comparable<CelestialBody> {
     }
 
     /*
-     * Use this to list the atmospheric gases on the celestial body, starting with
-     * the most abundant Do not include trace gases (anything less than 0.25%) (Do
-     * not use for stars!)
+     * Use this to list the atmospheric gases on the celestial body, starting with the most abundant Do not include
+     * trace gases (anything less than 0.25%) (Do not use for stars!)
      */
     public CelestialBody atmosphereComponent(IAtmosphericGas gas) {
         this.atmosphere.add(gas);
@@ -230,8 +228,7 @@ public abstract class CelestialBody implements Comparable<CelestialBody> {
     @Override
     public boolean equals(Object other) {
         if (other instanceof CelestialBody) {
-            return new EqualsBuilder()
-                    .append(this.getUnlocalizedName(), ((CelestialBody) other).getUnlocalizedName())
+            return new EqualsBuilder().append(this.getUnlocalizedName(), ((CelestialBody) other).getUnlocalizedName())
                     .isEquals();
         }
 
@@ -242,12 +239,12 @@ public abstract class CelestialBody implements Comparable<CelestialBody> {
     public int compareTo(CelestialBody other) {
         final ScalableDistance thisDistance = this.getRelativeDistanceFromCenter();
         final ScalableDistance otherDistance = other.getRelativeDistanceFromCenter();
-        return otherDistance.unScaledDistance < thisDistance.unScaledDistance
-                ? 1
+        return otherDistance.unScaledDistance < thisDistance.unScaledDistance ? 1
                 : otherDistance.unScaledDistance > thisDistance.unScaledDistance ? -1 : 0;
     }
 
     public static class ScalableDistance {
+
         public final float unScaledDistance;
         public final float scaledDistance;
 

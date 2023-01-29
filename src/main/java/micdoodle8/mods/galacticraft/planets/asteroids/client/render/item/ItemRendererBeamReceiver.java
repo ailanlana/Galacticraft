@@ -1,29 +1,26 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.client.render.item;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.planets.asteroids.client.render.tile.TileEntityBeamReceiverRenderer;
+
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class ItemRendererBeamReceiver implements IItemRenderer {
-    private void renderBeamReceiver(
-            ItemRenderType type,
-            RenderBlocks render,
-            ItemStack item,
-            float translateX,
-            float translateY,
-            float translateZ) {
+
+    private void renderBeamReceiver(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX,
+            float translateY, float translateZ) {
         GL11.glPushMatrix();
         this.transform(type);
 
         GL11.glColor3f(1.0F, 1.0F, 1.0F);
 
-        FMLClientHandler.instance()
-                .getClient()
-                .renderEngine
+        FMLClientHandler.instance().getClient().renderEngine
                 .bindTexture(TileEntityBeamReceiverRenderer.receiverTexture);
         TileEntityBeamReceiverRenderer.receiverModel.renderPart("Main");
         TileEntityBeamReceiverRenderer.receiverModel.renderPart("Ring");

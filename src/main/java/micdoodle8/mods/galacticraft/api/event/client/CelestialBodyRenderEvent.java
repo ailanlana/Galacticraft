@@ -1,12 +1,16 @@
 package micdoodle8.mods.galacticraft.api.event.client;
 
-import cpw.mods.fml.common.eventhandler.Cancelable;
-import cpw.mods.fml.common.eventhandler.Event;
 import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
+
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.util.vector.Vector3f;
 
+import cpw.mods.fml.common.eventhandler.Cancelable;
+import cpw.mods.fml.common.eventhandler.Event;
+
 public abstract class CelestialBodyRenderEvent extends Event {
+
     public final CelestialBody celestialBody;
 
     public CelestialBodyRenderEvent(CelestialBody celestialBody) {
@@ -14,12 +18,14 @@ public abstract class CelestialBodyRenderEvent extends Event {
     }
 
     public static class CelestialRingRenderEvent extends CelestialBodyRenderEvent {
+
         public CelestialRingRenderEvent(CelestialBody celestialBody) {
             super(celestialBody);
         }
 
         @Cancelable
         public static class Pre extends CelestialBodyRenderEvent {
+
             public final Vector3f parentOffset;
 
             public Pre(CelestialBody celestialBody, Vector3f parentOffset) {
@@ -29,6 +35,7 @@ public abstract class CelestialBodyRenderEvent extends Event {
         }
 
         public static class Post extends CelestialBodyRenderEvent {
+
             public Post(CelestialBody celestialBody) {
                 super(celestialBody);
             }
@@ -37,6 +44,7 @@ public abstract class CelestialBodyRenderEvent extends Event {
 
     @Cancelable
     public static class Pre extends CelestialBodyRenderEvent {
+
         public ResourceLocation celestialBodyTexture;
         public int textureSize;
 
@@ -48,6 +56,7 @@ public abstract class CelestialBodyRenderEvent extends Event {
     }
 
     public static class Post extends CelestialBodyRenderEvent {
+
         public Post(CelestialBody celestialBody) {
             super(celestialBody);
         }

@@ -1,9 +1,11 @@
 package micdoodle8.mods.galacticraft.core.client;
 
 import java.awt.image.BufferedImage;
+
 import net.minecraft.client.renderer.texture.DynamicTexture;
 
 public class DynamicTextureProper extends DynamicTexture {
+
     private boolean updateFlag = false;
     private final int width; // We could transform these in the base class to protected
     private final int height; // but whatever.

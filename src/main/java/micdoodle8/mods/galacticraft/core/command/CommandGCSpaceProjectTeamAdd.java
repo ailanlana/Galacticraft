@@ -2,7 +2,9 @@ package micdoodle8.mods.galacticraft.core.command;
 
 import java.util.List;
 import java.util.UUID;
+
 import micdoodle8.mods.galacticraft.api.spaceprojects.SpaceProject;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
@@ -51,8 +53,12 @@ public class CommandGCSpaceProjectTeamAdd extends CommandBase {
                     sender.addChatMessage(
                             new ChatComponentText("User " + formatted_username_0 + " has no space project network."));
                 } else {
-                    sender.addChatMessage(new ChatComponentText("User " + formatted_username_0 + " and "
-                            + formatted_username_1 + " have no space project networks."));
+                    sender.addChatMessage(
+                            new ChatComponentText(
+                                    "User " + formatted_username_0
+                                            + " and "
+                                            + formatted_username_1
+                                            + " have no space project networks."));
                 }
                 return;
             }
@@ -71,18 +77,23 @@ public class CommandGCSpaceProjectTeamAdd extends CommandBase {
 
             if (uuid_0.equals(uuid_1)) {
                 SpaceProject.joinUserNetwork(uuid_0, uuid_1);
-                sender.addChatMessage(new ChatComponentText(
-                        "User " + formatted_username_0 + " has rejoined their own space project network."));
+                sender.addChatMessage(
+                        new ChatComponentText(
+                                "User " + formatted_username_0 + " has rejoined their own space project network."));
                 return;
             }
 
             SpaceProject.joinUserNetwork(uuid_0, uuid_1);
 
-            sender.addChatMessage(new ChatComponentText(
-                    "Success! " + formatted_username_0 + " has joined " + formatted_username_1 + "."));
             sender.addChatMessage(
-                    new ChatComponentText("To undo this simply join your own network again with /spinvite "
-                            + formatted_username_0 + " " + formatted_username_0 + "."));
+                    new ChatComponentText(
+                            "Success! " + formatted_username_0 + " has joined " + formatted_username_1 + "."));
+            sender.addChatMessage(
+                    new ChatComponentText(
+                            "To undo this simply join your own network again with /spinvite " + formatted_username_0
+                                    + " "
+                                    + formatted_username_0
+                                    + "."));
         }
     }
 

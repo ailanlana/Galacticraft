@@ -1,12 +1,12 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.block.IDetectableResource;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.items.GCItems;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -18,10 +18,12 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
- * Metadata: 3 = Tin Decoration Block 1 4 = Tin Decoration Block 2 5 = Copper
- * Ore 6 = Tin Ore 7 = Aluminium Ore 8 = Silicon Ore 9 = Copper Block 10 = Tin
- * Block 11 = Aluminium Block 12 = Meteoric Iron Block
+ * Metadata: 3 = Tin Decoration Block 1 4 = Tin Decoration Block 2 5 = Copper Ore 6 = Tin Ore 7 = Aluminium Ore 8 =
+ * Silicon Ore 9 = Copper Block 10 = Tin Block 11 = Aluminium Block 12 = Meteoric Iron Block
  */
 public class BlockBasic extends Block implements IDetectableResource {
 
@@ -133,15 +135,8 @@ public class BlockBasic extends Block implements IDetectableResource {
     }
 
     @Override
-    public float getExplosionResistance(
-            Entity par1Entity,
-            World world,
-            int x,
-            int y,
-            int z,
-            double explosionX,
-            double explosionY,
-            double explosionZ) {
+    public float getExplosionResistance(Entity par1Entity, World world, int x, int y, int z, double explosionX,
+            double explosionY, double explosionZ) {
         final int metadata = world.getBlockMetadata(x, y, z);
 
         if (metadata < 5) {
@@ -177,7 +172,7 @@ public class BlockBasic extends Block implements IDetectableResource {
         return this.blockHardness;
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @SideOnly(Side.CLIENT)
     @Override
     public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {

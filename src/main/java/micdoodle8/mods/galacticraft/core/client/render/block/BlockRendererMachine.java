@@ -1,13 +1,16 @@
 package micdoodle8.mods.galacticraft.core.client.render.block;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.IBlockAccess;
+
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+
 public class BlockRendererMachine implements ISimpleBlockRenderingHandler {
+
     final int renderID;
 
     public BlockRendererMachine(int var1) {
@@ -15,8 +18,8 @@ public class BlockRendererMachine implements ISimpleBlockRenderingHandler {
     }
 
     @Override
-    public boolean renderWorldBlock(
-            IBlockAccess var1, int x, int y, int z, Block block, int var6, RenderBlocks renderBlocks) {
+    public boolean renderWorldBlock(IBlockAccess var1, int x, int y, int z, Block block, int var6,
+            RenderBlocks renderBlocks) {
         renderBlocks.renderStandardBlock(block, x, y, z);
         return true;
     }

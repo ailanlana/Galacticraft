@@ -1,19 +1,23 @@
 package micdoodle8.mods.galacticraft.core.client.gui.screen;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
 import micdoodle8.mods.galacticraft.api.client.IGameScreen;
 import micdoodle8.mods.galacticraft.api.client.IScreenManager;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.render.RenderPlanet;
 import micdoodle8.mods.galacticraft.core.network.PacketSimple;
 import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
+
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
+
 public class GameScreenBasic implements IGameScreen {
+
     private TextureManager renderEngine;
 
     private float frameA;
@@ -80,11 +84,15 @@ public class GameScreenBasic implements IGameScreen {
                             45F);
                     GL11.glPopMatrix();
                 } else {
-                    this.renderEngine.bindTexture(new ResourceLocation(
-                            GalacticraftCore.ASSET_PREFIX, "textures/gui/celestialbodies/earth.png"));
+                    this.renderEngine.bindTexture(
+                            new ResourceLocation(
+                                    GalacticraftCore.ASSET_PREFIX,
+                                    "textures/gui/celestialbodies/earth.png"));
                     if (!ClientProxyCore.overworldTextureRequestSent) {
-                        GalacticraftCore.packetPipeline.sendToServer(new PacketSimple(
-                                PacketSimple.EnumSimplePacket.S_REQUEST_OVERWORLD_IMAGE, new Object[] {}));
+                        GalacticraftCore.packetPipeline.sendToServer(
+                                new PacketSimple(
+                                        PacketSimple.EnumSimplePacket.S_REQUEST_OVERWORLD_IMAGE,
+                                        new Object[] {}));
                         ClientProxyCore.overworldTextureRequestSent = true;
                     }
                     this.draw2DTexture();

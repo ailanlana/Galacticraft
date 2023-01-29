@@ -15,14 +15,13 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.util.ForgeDirection;
 
-/* BlockVec3 is similar to galacticraft.api.vector.Vector3?
- *
- * But for speed it uses integer arithmetic not doubles, for block coordinates
- * This reduces unnecessary type conversion between integers and doubles and back again.
- * (Minecraft block coordinates are always integers, only entity coordinates are doubles.)
- *
+/*
+ * BlockVec3 is similar to galacticraft.api.vector.Vector3? But for speed it uses integer arithmetic not doubles, for
+ * block coordinates This reduces unnecessary type conversion between integers and doubles and back again. (Minecraft
+ * block coordinates are always integers, only entity coordinates are doubles.)
  */
 public class BlockVec3 implements Cloneable {
+
     public int x;
     public int y;
     public int z;
@@ -65,16 +64,14 @@ public class BlockVec3 implements Cloneable {
     }
 
     /**
-     * Get block ID at the BlockVec3 coordinates, with a forced chunk load if the
-     * coordinates are unloaded.
+     * Get block ID at the BlockVec3 coordinates, with a forced chunk load if the coordinates are unloaded.
      *
      * @param world
-     * @return the block ID, or null if the y-coordinate is less than 0 or greater
-     * than 256 or the x or z is outside the Minecraft worldmap.
+     * @return the block ID, or null if the y-coordinate is less than 0 or greater than 256 or the x or z is outside the
+     *         Minecraft worldmap.
      */
     public Block getBlockID(World world) {
-        if (this.y < 0
-                || this.y >= 256
+        if (this.y < 0 || this.y >= 256
                 || this.x < -30000000
                 || this.z < -30000000
                 || this.x >= 30000000
@@ -87,8 +84,7 @@ public class BlockVec3 implements Cloneable {
         try {
             // In a typical inner loop, 80% of the time consecutive calls to
             // this will be within the same chunk
-            if (BlockVec3.chunkCacheX == chunkx
-                    && BlockVec3.chunkCacheZ == chunkz
+            if (BlockVec3.chunkCacheX == chunkx && BlockVec3.chunkCacheZ == chunkz
                     && BlockVec3.chunkCacheDim == world.provider.dimensionId
                     && BlockVec3.chunkCached.isChunkLoaded) {
                 return BlockVec3.chunkCached.getBlock(this.x & 15, this.y, this.z & 15);
@@ -102,11 +98,11 @@ public class BlockVec3 implements Cloneable {
                 return chunk.getBlock(this.x & 15, this.y, this.z & 15);
             }
         } catch (final Throwable throwable) {
-            final CrashReport crashreport = CrashReport.makeCrashReport(
-                    throwable, "Oxygen Sealer thread: Exception getting block type in world");
+            final CrashReport crashreport = CrashReport
+                    .makeCrashReport(throwable, "Oxygen Sealer thread: Exception getting block type in world");
             final CrashReportCategory crashreportcategory = crashreport.makeCategory("Requested block coordinates");
-            crashreportcategory.addCrashSection(
-                    "Location", CrashReportCategory.getLocationInfo(this.x, this.y, this.z));
+            crashreportcategory
+                    .addCrashSection("Location", CrashReportCategory.getLocationInfo(this.x, this.y, this.z));
             throw new ReportedException(crashreport);
         }
     }
@@ -115,14 +111,11 @@ public class BlockVec3 implements Cloneable {
      * Get block ID at the BlockVec3 coordinates without forcing a chunk load.
      *
      * @param world
-     * @return the block ID, or null if the y-coordinate is less than 0 or greater
-     * than 256 or the x or z is outside the Minecraft worldmap. Returns
-     * Blocks.bedrock if the coordinates being checked are in an unloaded
-     * chunk
+     * @return the block ID, or null if the y-coordinate is less than 0 or greater than 256 or the x or z is outside the
+     *         Minecraft worldmap. Returns Blocks.bedrock if the coordinates being checked are in an unloaded chunk
      */
     public Block getBlockID_noChunkLoad(World world) {
-        if (this.y < 0
-                || this.y >= 256
+        if (this.y < 0 || this.y >= 256
                 || this.x < -30000000
                 || this.z < -30000000
                 || this.x >= 30000000
@@ -136,8 +129,7 @@ public class BlockVec3 implements Cloneable {
             if (world.getChunkProvider().chunkExists(chunkx, chunkz)) {
                 // In a typical inner loop, 80% of the time consecutive calls to
                 // this will be within the same chunk
-                if (BlockVec3.chunkCacheX == chunkx
-                        && BlockVec3.chunkCacheZ == chunkz
+                if (BlockVec3.chunkCacheX == chunkx && BlockVec3.chunkCacheZ == chunkz
                         && BlockVec3.chunkCacheDim == world.provider.dimensionId
                         && BlockVec3.chunkCached.isChunkLoaded) {
                     return BlockVec3.chunkCached.getBlock(this.x & 15, this.y, this.z & 15);
@@ -154,11 +146,11 @@ public class BlockVec3 implements Cloneable {
             // Chunk doesn't exist - meaning, it is not loaded
             return Blocks.bedrock;
         } catch (final Throwable throwable) {
-            final CrashReport crashreport = CrashReport.makeCrashReport(
-                    throwable, "Oxygen Sealer thread: Exception getting block type in world");
+            final CrashReport crashreport = CrashReport
+                    .makeCrashReport(throwable, "Oxygen Sealer thread: Exception getting block type in world");
             final CrashReportCategory crashreportcategory = crashreport.makeCategory("Requested block coordinates");
-            crashreportcategory.addCrashSection(
-                    "Location", CrashReportCategory.getLocationInfo(this.x, this.y, this.z));
+            crashreportcategory
+                    .addCrashSection("Location", CrashReportCategory.getLocationInfo(this.x, this.y, this.z));
             throw new ReportedException(crashreport);
         }
     }
@@ -168,14 +160,12 @@ public class BlockVec3 implements Cloneable {
     }
 
     /**
-     * Get block ID at the BlockVec3 coordinates without forcing a chunk load. Only
-     * call this 'safe' version if x and z coordinates are within the Minecraft
-     * world map (-30m to +30m)
+     * Get block ID at the BlockVec3 coordinates without forcing a chunk load. Only call this 'safe' version if x and z
+     * coordinates are within the Minecraft world map (-30m to +30m)
      *
      * @param world
-     * @return the block ID, or null if the y-coordinate is less than 0 or greater
-     * than 256. Returns Blocks.bedrock if the coordinates being checked are
-     * in an unloaded chunk
+     * @return the block ID, or null if the y-coordinate is less than 0 or greater than 256. Returns Blocks.bedrock if
+     *         the coordinates being checked are in an unloaded chunk
      */
     public Block getBlockIDsafe_noChunkLoad(World world) {
         if (this.y < 0 || this.y >= 256) {
@@ -188,8 +178,7 @@ public class BlockVec3 implements Cloneable {
             if (world.getChunkProvider().chunkExists(chunkx, chunkz)) {
                 // In a typical inner loop, 80% of the time consecutive calls to
                 // this will be within the same chunk
-                if (BlockVec3.chunkCacheX == chunkx
-                        && BlockVec3.chunkCacheZ == chunkz
+                if (BlockVec3.chunkCacheX == chunkx && BlockVec3.chunkCacheZ == chunkz
                         && BlockVec3.chunkCacheDim == world.provider.dimensionId
                         && BlockVec3.chunkCached.isChunkLoaded) {
                     return BlockVec3.chunkCached.getBlock(this.x & 15, this.y, this.z & 15);
@@ -206,11 +195,11 @@ public class BlockVec3 implements Cloneable {
             // Chunk doesn't exist - meaning, it is not loaded
             return Blocks.bedrock;
         } catch (final Throwable throwable) {
-            final CrashReport crashreport = CrashReport.makeCrashReport(
-                    throwable, "Oxygen Sealer thread: Exception getting block type in world");
+            final CrashReport crashreport = CrashReport
+                    .makeCrashReport(throwable, "Oxygen Sealer thread: Exception getting block type in world");
             final CrashReportCategory crashreportcategory = crashreport.makeCategory("Requested block coordinates");
-            crashreportcategory.addCrashSection(
-                    "Location", CrashReportCategory.getLocationInfo(this.x, this.y, this.z));
+            crashreportcategory
+                    .addCrashSection("Location", CrashReportCategory.getLocationInfo(this.x, this.y, this.z));
             throw new ReportedException(crashreport);
         }
     }

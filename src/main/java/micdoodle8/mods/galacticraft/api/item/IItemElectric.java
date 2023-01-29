@@ -3,9 +3,10 @@ package micdoodle8.mods.galacticraft.api.item;
 import net.minecraft.item.ItemStack;
 
 public interface IItemElectric {
+
     /**
-     * Adds energy to an item. Returns the quantity of energy that was accepted.
-     * This should always return 0 if the item cannot be externally charged.
+     * Adds energy to an item. Returns the quantity of energy that was accepted. This should always return 0 if the item
+     * cannot be externally charged.
      *
      * @param itemStack  ItemStack to be charged.
      * @param energy     Maximum amount of energy to be sent into the item.
@@ -15,8 +16,8 @@ public interface IItemElectric {
     float recharge(ItemStack itemStack, float energy, boolean doRecharge);
 
     /**
-     * Removes energy from an item. Returns the quantity of energy that was removed.
-     * This should always return 0 if the item cannot be externally discharged.
+     * Removes energy from an item. Returns the quantity of energy that was removed. This should always return 0 if the
+     * item cannot be externally discharged.
      *
      * @param itemStack   ItemStack to be discharged.
      * @param energy      Maximum amount of energy to be removed from the item.

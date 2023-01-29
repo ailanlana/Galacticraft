@@ -3,6 +3,7 @@ package micdoodle8.mods.galacticraft.core.entities.player;
 import net.minecraft.client.entity.EntityPlayerSP;
 
 public interface IPlayerClient {
+
     void moveEntity(EntityPlayerSP player, double par1, double par3, double par5);
 
     void onUpdate(EntityPlayerSP player);

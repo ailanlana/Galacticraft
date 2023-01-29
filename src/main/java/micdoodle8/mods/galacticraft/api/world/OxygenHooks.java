@@ -1,6 +1,7 @@
 package micdoodle8.mods.galacticraft.api.world;
 
 import java.lang.reflect.Method;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -9,6 +10,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 
 public class OxygenHooks {
+
     private static Class<?> oxygenUtilClass;
     private static Method combusionTestMethod;
     private static Method breathableAirBlockMethod;
@@ -18,8 +20,7 @@ public class OxygenHooks {
     private static Method validOxygenSetupMethod;
 
     /**
-     * Test whether fire can burn in this world's atmosphere (outside any oxygen
-     * bubble).
+     * Test whether fire can burn in this world's atmosphere (outside any oxygen bubble).
      *
      * @param provider The WorldProvider for this dimension
      * @return False if fire burns normally True if fire cannot burn in this world
@@ -41,22 +42,18 @@ public class OxygenHooks {
     }
 
     /**
-     * Test whether a bounding box (normally a block but it could be an entity) is
-     * inside an oxygen bubble or oxygen sealed space, on an otherwise oxygen-free
-     * world. (Do not use this on the Overworld or other oxygen-rich world,, it will
-     * return false negatives!!)
+     * Test whether a bounding box (normally a block but it could be an entity) is inside an oxygen bubble or oxygen
+     * sealed space, on an otherwise oxygen-free world. (Do not use this on the Overworld or other oxygen-rich world,,
+     * it will return false negatives!!)
      * <p>
-     * NOTE: In a complex build where this block is surrounded by air-permeable
-     * blocks on all sides (for example torches, ladders, signs, wires, chests etc
-     * etc) then it may have to look quite far to find whether it is in oxygen or
-     * not - it will check up to 5 blocks in each direction. This can impose a
-     * performance load in the unlikely event there are permeable blocks in all
-     * directions. It is therefore advisable not to call this every tick: 1 tick in
-     * 5 should be plenty.
+     * NOTE: In a complex build where this block is surrounded by air-permeable blocks on all sides (for example
+     * torches, ladders, signs, wires, chests etc etc) then it may have to look quite far to find whether it is in
+     * oxygen or not - it will check up to 5 blocks in each direction. This can impose a performance load in the
+     * unlikely event there are permeable blocks in all directions. It is therefore advisable not to call this every
+     * tick: 1 tick in 5 should be plenty.
      *
      * @param world The World
-     * @param bb    AxisAligned BB representing the block (e.g. a torch), or maybe
-     *              the side of a block
+     * @param bb    AxisAligned BB representing the block (e.g. a torch), or maybe the side of a block
      * @return True if the bb is in oxygen, otherwise false.
      */
     public static boolean isAABBInBreathableAirBlock(World world, AxisAlignedBB bb) {
@@ -65,8 +62,8 @@ public class OxygenHooks {
                 if (oxygenUtilClass == null) {
                     oxygenUtilClass = Class.forName("micdoodle8.mods.galacticraft.core.util.OxygenUtil");
                 }
-                breathableAirBlockMethod = oxygenUtilClass.getDeclaredMethod(
-                        "isAABBInBreathableAirBlock", World.class, AxisAlignedBB.class);
+                breathableAirBlockMethod = oxygenUtilClass
+                        .getDeclaredMethod("isAABBInBreathableAirBlock", World.class, AxisAlignedBB.class);
             }
             return (Boolean) breathableAirBlockMethod.invoke(null, world, bb);
         } catch (final Exception e) {
@@ -77,14 +74,12 @@ public class OxygenHooks {
     }
 
     /**
-     * Special version of the oxygen AABB check for living entities. This is based
-     * on checking the oxygen contact of a small box centred at the entity's eye
-     * height. The small box has sides equal to half the width of the entity. This
+     * Special version of the oxygen AABB check for living entities. This is based on checking the oxygen contact of a
+     * small box centred at the entity's eye height. The small box has sides equal to half the width of the entity. This
      * is a good approximation to head size and position for most types of mobs.
      *
      * @param entity
-     * @return True if the entity's head is in an oxygen bubble or block, false
-     * otherwise
+     * @return True if the entity's head is in an oxygen bubble or block, false otherwise
      */
     public static boolean isAABBInBreathableAirBlock(EntityLivingBase entity) {
         try {
@@ -92,8 +87,8 @@ public class OxygenHooks {
                 if (oxygenUtilClass == null) {
                     oxygenUtilClass = Class.forName("micdoodle8.mods.galacticraft.core.util.OxygenUtil");
                 }
-                breathableAirBlockEntityMethod =
-                        oxygenUtilClass.getDeclaredMethod("isAABBInBreathableAirBlock", EntityLivingBase.class);
+                breathableAirBlockEntityMethod = oxygenUtilClass
+                        .getDeclaredMethod("isAABBInBreathableAirBlock", EntityLivingBase.class);
             }
             return (Boolean) breathableAirBlockEntityMethod.invoke(null, entity);
         } catch (final Exception e) {
@@ -104,12 +99,10 @@ public class OxygenHooks {
     }
 
     /**
-     * Simplified (better performance) version of the block oxygen check for use
-     * with torch blocks and other oxygen-requiring blocks which can access oxygen
-     * on any side.
+     * Simplified (better performance) version of the block oxygen check for use with torch blocks and other
+     * oxygen-requiring blocks which can access oxygen on any side.
      * <p>
-     * NOTE: this does not run an inOxygenBubble() check, you will need to do that
-     * also.
+     * NOTE: this does not run an inOxygenBubble() check, you will need to do that also.
      *
      * @param world
      * @param block The block type of this torch being checked - currently unused
@@ -125,7 +118,12 @@ public class OxygenHooks {
                     oxygenUtilClass = Class.forName("micdoodle8.mods.galacticraft.core.util.OxygenUtil");
                 }
                 torchHasOxygenMethod = oxygenUtilClass.getDeclaredMethod(
-                        "checkTorchHasOxygen", World.class, Block.class, int.class, int.class, int.class);
+                        "checkTorchHasOxygen",
+                        World.class,
+                        Block.class,
+                        int.class,
+                        int.class,
+                        int.class);
             }
             return (Boolean) torchHasOxygenMethod.invoke(null, world, block, x, y, z);
         } catch (final Exception e) {
@@ -139,8 +137,7 @@ public class OxygenHooks {
      * Test whether a location is inside an Oxygen Bubble from an Oxygen Distributor
      *
      * @param worldObj World
-     * @param avgX     avg X, avgY, avgZ are the average co-ordinates of the
-     *                 location
+     * @param avgX     avg X, avgY, avgZ are the average co-ordinates of the location
      * @param avgY     (for example, the central point of a block being tested
      * @param avgZ     or the average position of the centre of a living entity)
      * @return True if it is in an oxygen bubble, otherwise false
@@ -151,8 +148,8 @@ public class OxygenHooks {
                 if (oxygenUtilClass == null) {
                     oxygenUtilClass = Class.forName("micdoodle8.mods.galacticraft.core.util.OxygenUtil");
                 }
-                oxygenBubbleMethod = oxygenUtilClass.getDeclaredMethod(
-                        "inOxygenBubble", World.class, double.class, double.class, double.class);
+                oxygenBubbleMethod = oxygenUtilClass
+                        .getDeclaredMethod("inOxygenBubble", World.class, double.class, double.class, double.class);
             }
             return (Boolean) oxygenBubbleMethod.invoke(null, worldObj, avgX, avgY, avgZ);
         } catch (final Exception e) {
@@ -163,8 +160,7 @@ public class OxygenHooks {
     }
 
     /**
-     * Test whether a player is wearing a working set of Galacticraft
-     * oxygen-breathing apparatus (mask, gear + tank)
+     * Test whether a player is wearing a working set of Galacticraft oxygen-breathing apparatus (mask, gear + tank)
      *
      * @param player
      * @return True if the setup is valid, otherwise false

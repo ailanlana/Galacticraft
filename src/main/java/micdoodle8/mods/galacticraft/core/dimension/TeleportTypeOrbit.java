@@ -1,14 +1,17 @@
 package micdoodle8.mods.galacticraft.core.dimension;
 
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.api.world.ITeleportType;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 public class TeleportTypeOrbit implements ITeleportType {
+
     @Override
     public boolean useParachute() {
         return false;

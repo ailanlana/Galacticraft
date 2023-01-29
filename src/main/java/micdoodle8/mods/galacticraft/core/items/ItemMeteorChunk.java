@@ -1,12 +1,12 @@
 package micdoodle8.mods.galacticraft.core.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.entities.EntityMeteorChunk;
 import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,8 +16,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class ItemMeteorChunk extends Item {
-    public static final String[] names = {"meteorChunk", "meteorChunkHot"};
+
+    public static final String[] names = { "meteorChunk", "meteorChunkHot" };
 
     public static final int METEOR_BURN_TIME = 45 * 20;
 
@@ -68,7 +72,7 @@ public class ItemMeteorChunk extends Item {
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @SideOnly(Side.CLIENT)
     @Override
     public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
@@ -77,7 +81,7 @@ public class ItemMeteorChunk extends Item {
     }
 
     @SideOnly(Side.CLIENT)
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void addInformation(ItemStack itemstack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
         if (itemstack.getItemDamage() > 0) {
@@ -90,8 +94,10 @@ public class ItemMeteorChunk extends Item {
                 burnTime = 45.0F;
             }
 
-            par3List.add(GCCoreUtil.translate("item.hotDescription.name") + " " + burnTime
-                    + GCCoreUtil.translate("gui.seconds"));
+            par3List.add(
+                    GCCoreUtil.translate("item.hotDescription.name") + " "
+                            + burnTime
+                            + GCCoreUtil.translate("gui.seconds"));
         }
     }
 

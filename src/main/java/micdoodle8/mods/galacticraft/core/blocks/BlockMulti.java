@@ -1,13 +1,13 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityMulti;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockDirectional;
@@ -28,7 +28,11 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockMulti extends BlockContainer implements IPartialSealableBlock, ITileEntityProvider {
+
     private IIcon[] fakeIcons;
 
     // Meta values:
@@ -62,8 +66,7 @@ public class BlockMulti extends BlockContainer implements IPartialSealableBlock,
         if (GalacticraftCore.isPlanetsLoaded) {
             try {
                 final Class<?> c = Class.forName("micdoodle8.mods.galacticraft.planets.mars.MarsModule");
-                final String texturePrefix =
-                        (String) c.getField("TEXTURE_PREFIX").get(null);
+                final String texturePrefix = (String) c.getField("TEXTURE_PREFIX").get(null);
                 this.fakeIcons[3] = par1IconRegister.registerIcon(texturePrefix + "cryoDummy");
             } catch (final Exception e) {
                 this.fakeIcons[3] = this.fakeIcons[2];
@@ -108,8 +111,7 @@ public class BlockMulti extends BlockContainer implements IPartialSealableBlock,
             this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.2F, 1.0F);
         }
         /*
-         * else if (meta == 7) { this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.38F,
-         * 1.0F); }
+         * else if (meta == 7) { this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.38F, 1.0F); }
          */
         else {
             this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
@@ -118,8 +120,8 @@ public class BlockMulti extends BlockContainer implements IPartialSealableBlock,
 
     @SuppressWarnings("rawtypes")
     @Override
-    public void addCollisionBoxesToList(
-            World world, int x, int y, int z, AxisAlignedBB axisalignedbb, List list, Entity entity) {
+    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisalignedbb, List list,
+            Entity entity) {
         final int meta = world.getBlockMetadata(x, y, z);
 
         if (meta == 2 || meta == 6) {
@@ -127,9 +129,8 @@ public class BlockMulti extends BlockContainer implements IPartialSealableBlock,
             super.addCollisionBoxesToList(world, x, y, z, axisalignedbb, list, entity);
         }
         /*
-         * else if (meta == 7) { this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.38F,
-         * 1.0F); super.addCollisionBoxesToList(world, x, y, z, axisalignedbb, list,
-         * entity); }
+         * else if (meta == 7) { this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.38F, 1.0F);
+         * super.addCollisionBoxesToList(world, x, y, z, axisalignedbb, list, entity); }
          */
         else {
             super.addCollisionBoxesToList(world, x, y, z, axisalignedbb, list, entity);
@@ -208,22 +209,13 @@ public class BlockMulti extends BlockContainer implements IPartialSealableBlock,
     }
 
     /**
-     * Called when the block is right clicked by the player. This modified version
-     * detects electric items and wrench actions on your machine block. Do not
-     * override this function. Use machineActivated instead! (It does the same
+     * Called when the block is right clicked by the player. This modified version detects electric items and wrench
+     * actions on your machine block. Do not override this function. Use machineActivated instead! (It does the same
      * thing)
      */
     @Override
-    public boolean onBlockActivated(
-            World par1World,
-            int x,
-            int y,
-            int z,
-            EntityPlayer par5EntityPlayer,
-            int par6,
-            float par7,
-            float par8,
-            float par9) {
+    public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6,
+            float par7, float par8, float par9) {
         final TileEntityMulti tileEntity = (TileEntityMulti) par1World.getTileEntity(x, y, z);
         return tileEntity.onBlockActivated(par1World, x, y, z, par5EntityPlayer);
     }
@@ -261,8 +253,8 @@ public class BlockMulti extends BlockContainer implements IPartialSealableBlock,
                 final Block mainBlockID = world.getBlock(mainBlockPosition.x, mainBlockPosition.y, mainBlockPosition.z);
 
                 if (Blocks.air != mainBlockID) {
-                    return mainBlockID.getPickBlock(
-                            target, world, mainBlockPosition.x, mainBlockPosition.y, mainBlockPosition.z);
+                    return mainBlockID
+                            .getPickBlock(target, world, mainBlockPosition.x, mainBlockPosition.y, mainBlockPosition.z);
                 }
             }
         }
@@ -277,8 +269,7 @@ public class BlockMulti extends BlockContainer implements IPartialSealableBlock,
             final BlockVec3 mainBlockPosition = ((TileEntityMulti) tileEntity).mainBlockPosition;
 
             if (mainBlockPosition != null && !mainBlockPosition.equals(new BlockVec3(x, y, z))) {
-                return mainBlockPosition
-                        .getBlock(world)
+                return mainBlockPosition.getBlock(world)
                         .getBedDirection(world, mainBlockPosition.x, mainBlockPosition.y, mainBlockPosition.z);
             }
         }
@@ -293,8 +284,7 @@ public class BlockMulti extends BlockContainer implements IPartialSealableBlock,
             final BlockVec3 mainBlockPosition = ((TileEntityMulti) tileEntity).mainBlockPosition;
 
             if (mainBlockPosition != null && !mainBlockPosition.equals(new BlockVec3(x, y, z))) {
-                return mainBlockPosition
-                        .getBlock(world)
+                return mainBlockPosition.getBlock(world)
                         .isBed(world, mainBlockPosition.x, mainBlockPosition.y, mainBlockPosition.z, player);
             }
         }
@@ -308,10 +298,13 @@ public class BlockMulti extends BlockContainer implements IPartialSealableBlock,
         final BlockVec3 mainBlockPosition = ((TileEntityMulti) tileEntity).mainBlockPosition;
 
         if (mainBlockPosition != null && !mainBlockPosition.equals(new BlockVec3(x, y, z))) {
-            mainBlockPosition
-                    .getBlock(world)
-                    .setBedOccupied(
-                            world, mainBlockPosition.x, mainBlockPosition.y, mainBlockPosition.z, player, occupied);
+            mainBlockPosition.getBlock(world).setBedOccupied(
+                    world,
+                    mainBlockPosition.x,
+                    mainBlockPosition.y,
+                    mainBlockPosition.z,
+                    player,
+                    occupied);
         } else {
             super.setBedOccupied(world, x, y, z, player, occupied);
         }
@@ -327,8 +320,8 @@ public class BlockMulti extends BlockContainer implements IPartialSealableBlock,
 
             if (mainBlockPosition != null
                     && !mainBlockPosition.equals(new BlockVec3(target.blockX, target.blockY, target.blockZ))) {
-                effectRenderer.addBlockHitEffects(
-                        mainBlockPosition.x, mainBlockPosition.y, mainBlockPosition.z, target);
+                effectRenderer
+                        .addBlockHitEffects(mainBlockPosition.x, mainBlockPosition.y, mainBlockPosition.z, target);
             }
         }
 

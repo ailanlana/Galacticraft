@@ -1,11 +1,13 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
 import java.util.EnumSet;
+
 import micdoodle8.mods.galacticraft.api.item.IItemOxygenSupply;
 import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
 import micdoodle8.mods.galacticraft.core.items.ItemOxygenTank;
 import micdoodle8.mods.galacticraft.core.util.FluidUtil;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -15,6 +17,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityOxygenCompressor extends TileEntityOxygen implements IInventory, ISidedInventory {
+
     private ItemStack[] containingItems = new ItemStack[3];
 
     public static final int TANK_TRANSFER_SPEED = 2;
@@ -171,7 +174,7 @@ public class TileEntityOxygenCompressor extends TileEntityOxygen implements IInv
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        return new int[] {0, 1, 2};
+        return new int[] { 0, 1, 2 };
     }
 
     @Override

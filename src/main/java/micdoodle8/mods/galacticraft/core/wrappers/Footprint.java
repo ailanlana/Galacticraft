@@ -3,6 +3,7 @@ package micdoodle8.mods.galacticraft.core.wrappers;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 
 public class Footprint {
+
     public static final short MAX_AGE = 3200;
     public final int dimension;
     public final float rotation;

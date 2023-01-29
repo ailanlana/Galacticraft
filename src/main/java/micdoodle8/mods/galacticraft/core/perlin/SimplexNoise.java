@@ -3,9 +3,10 @@ package micdoodle8.mods.galacticraft.core.perlin;
 import java.util.Random;
 
 public class SimplexNoise {
+
     int[] perm = new int[512];
 
-    public int[][] grad2d = new int[][] {{0, 0}, {0, 1}, {1, 1}, {1, 0}};
+    public int[][] grad2d = new int[][] { { 0, 0 }, { 0, 1 }, { 1, 1 }, { 1, 0 } };
 
     public SimplexNoise(long seed) {
         final Random rand = new Random(seed);

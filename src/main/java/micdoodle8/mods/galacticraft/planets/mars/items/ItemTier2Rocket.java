@@ -1,9 +1,7 @@
 package micdoodle8.mods.galacticraft.planets.mars.items;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.entity.IRocketType;
 import micdoodle8.mods.galacticraft.api.entity.IRocketType.EnumRocketType;
 import micdoodle8.mods.galacticraft.api.item.IHoldableItem;
@@ -17,6 +15,7 @@ import micdoodle8.mods.galacticraft.core.util.EnumColor;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.planets.mars.entities.EntityCargoRocket;
 import micdoodle8.mods.galacticraft.planets.mars.entities.EntityTier2Rocket;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -28,7 +27,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class ItemTier2Rocket extends Item implements IHoldableItem {
+
     public ItemTier2Rocket() {
         super();
         this.setMaxDamage(0);
@@ -49,17 +53,8 @@ public class ItemTier2Rocket extends Item implements IHoldableItem {
     }
 
     @Override
-    public boolean onItemUse(
-            ItemStack par1ItemStack,
-            EntityPlayer par2EntityPlayer,
-            World par3World,
-            int par4,
-            int par5,
-            int par6,
-            int par7,
-            float par8,
-            float par9,
-            float par10) {
+    public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4,
+            int par5, int par6, int par7, float par8, float par9, float par10) {
         boolean padFound = false;
         TileEntity tile = null;
 
@@ -123,8 +118,7 @@ public class ItemTier2Rocket extends Item implements IHoldableItem {
                 rocket.setPosition(rocket.posX, rocket.posY + rocket.getOnPadYOffset(), rocket.posZ);
                 par3World.spawnEntityInWorld(rocket);
 
-                if (par1ItemStack.hasTagCompound()
-                        && par1ItemStack.getTagCompound().hasKey("RocketFuel")) {
+                if (par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("RocketFuel")) {
                     rocket.fuelTank.fill(
                             new FluidStack(
                                     GalacticraftCore.fluidFuel,
@@ -154,7 +148,7 @@ public class ItemTier2Rocket extends Item implements IHoldableItem {
         return true;
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
         for (int i = 0; i < EnumRocketType.values().length; i++) {
@@ -166,7 +160,7 @@ public class ItemTier2Rocket extends Item implements IHoldableItem {
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack par1ItemStack, EntityPlayer player, List par2List, boolean b) {
@@ -205,8 +199,11 @@ public class ItemTier2Rocket extends Item implements IHoldableItem {
                         EnumRocketType.values()[par1ItemStack.getItemDamage() - 10]);
             }
 
-            par2List.add(GCCoreUtil.translate("gui.message.fuel.name") + ": "
-                    + par1ItemStack.getTagCompound().getInteger("RocketFuel") + " / " + rocket.fuelTank.getCapacity());
+            par2List.add(
+                    GCCoreUtil.translate("gui.message.fuel.name") + ": "
+                            + par1ItemStack.getTagCompound().getInteger("RocketFuel")
+                            + " / "
+                            + rocket.fuelTank.getCapacity());
         }
 
         if (par1ItemStack.getItemDamage() >= 10) {

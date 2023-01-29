@@ -1,23 +1,25 @@
 package micdoodle8.mods.galacticraft.api.galaxies;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import net.minecraftforge.common.MinecraftForge;
+
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import cpw.mods.fml.common.eventhandler.Event;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import net.minecraftforge.common.MinecraftForge;
 
 /**
- * Credits to KingLemming and CovertJaguar, since this is based on the
- * Liquid/Fluid API
+ * Credits to KingLemming and CovertJaguar, since this is based on the Liquid/Fluid API
  */
 public class GalaxyRegistry {
+
     static int maxSolarSystemID = 0;
     static int maxPlanetID = 0;
     static int maxMoonID = 0;
@@ -71,8 +73,7 @@ public class GalaxyRegistry {
             GalaxyRegistry.moonList.put(planet, listOfMoons);
         }
 
-        for (final Satellite satellite :
-                GalaxyRegistry.getRegisteredSatellites().values()) {
+        for (final Satellite satellite : GalaxyRegistry.getRegisteredSatellites().values()) {
             final CelestialBody celestialBody = satellite.getParentPlanet();
             List<Satellite> satelliteList1 = GalaxyRegistry.satelliteList.get(celestialBody);
             if (satelliteList1 == null) {
@@ -147,8 +148,8 @@ public class GalaxyRegistry {
         GalaxyRegistry.solarSystems.put(solarSystem.getName(), solarSystem);
         GalaxyRegistry.solarSystemIDs.put(solarSystem.getName(), ++GalaxyRegistry.maxSolarSystemID);
 
-        MinecraftForge.EVENT_BUS.post(
-                new SolarSystemRegisterEvent(solarSystem.getName(), GalaxyRegistry.maxSolarSystemID));
+        MinecraftForge.EVENT_BUS
+                .post(new SolarSystemRegisterEvent(solarSystem.getName(), GalaxyRegistry.maxSolarSystemID));
         return true;
     }
 
@@ -193,16 +194,14 @@ public class GalaxyRegistry {
     }
 
     /**
-     * Returns a read-only map containing Solar System Names and their associated
-     * Solar Systems.
+     * Returns a read-only map containing Solar System Names and their associated Solar Systems.
      */
     public static Map<String, SolarSystem> getRegisteredSolarSystems() {
         return ImmutableMap.copyOf(GalaxyRegistry.solarSystems);
     }
 
     /**
-     * Returns a read-only map containing Solar System Names and their associated
-     * IDs.
+     * Returns a read-only map containing Solar System Names and their associated IDs.
      */
     public static Map<String, Integer> getRegisteredSolarSystemIDs() {
         return ImmutableMap.copyOf(GalaxyRegistry.solarSystemIDs);
@@ -237,8 +236,7 @@ public class GalaxyRegistry {
     }
 
     /**
-     * Returns a read-only map containing Satellite Names and their associated
-     * Satellite.
+     * Returns a read-only map containing Satellite Names and their associated Satellite.
      */
     public static Map<String, Satellite> getRegisteredSatellites() {
         return ImmutableMap.copyOf(GalaxyRegistry.satellites);
@@ -268,6 +266,7 @@ public class GalaxyRegistry {
     }
 
     public static class SolarSystemRegisterEvent extends Event {
+
         public final String solarSystemName;
         public final int solarSystemID;
 
@@ -278,6 +277,7 @@ public class GalaxyRegistry {
     }
 
     public static class PlanetRegisterEvent extends Event {
+
         public final String planetName;
         public final int planetID;
 
@@ -288,6 +288,7 @@ public class GalaxyRegistry {
     }
 
     public static class MoonRegisterEvent extends Event {
+
         public final String moonName;
         public final int moonID;
 
@@ -298,6 +299,7 @@ public class GalaxyRegistry {
     }
 
     public static class SatelliteRegisterEvent extends Event {
+
         public final String satelliteName;
         public final int satelliteID;
 

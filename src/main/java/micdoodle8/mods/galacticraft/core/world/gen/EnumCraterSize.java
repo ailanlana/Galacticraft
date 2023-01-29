@@ -1,6 +1,7 @@
 package micdoodle8.mods.galacticraft.core.world.gen;
 
 public enum EnumCraterSize {
+
     SMALL(8, 12, 14),
     MEDIUM(13, 17, 8),
     LARGE(18, 25, 2),

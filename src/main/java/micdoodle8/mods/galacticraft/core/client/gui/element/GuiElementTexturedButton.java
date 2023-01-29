@@ -4,14 +4,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
 public class GuiElementTexturedButton extends GuiButton {
+
     private final ResourceLocation texture;
     private final int bWidth, bHeight;
 
-    public GuiElementTexturedButton(
-            int par1, int par2, int par3, int par4, int par5, ResourceLocation texture, int width, int height) {
+    public GuiElementTexturedButton(int par1, int par2, int par3, int par4, int par5, ResourceLocation texture,
+            int width, int height) {
         super(par1, par2, par3, par4, par5, "");
         this.texture = texture;
         this.bWidth = width;
@@ -23,8 +25,7 @@ public class GuiElementTexturedButton extends GuiButton {
         if (this.visible) {
             final FontRenderer var4 = par1Minecraft.fontRenderer;
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            this.field_146123_n = par2 >= this.xPosition
-                    && par3 >= this.yPosition
+            this.field_146123_n = par2 >= this.xPosition && par3 >= this.yPosition
                     && par2 < this.xPosition + this.width
                     && par3 < this.yPosition + this.height;
             this.getHoverState(this.field_146123_n);

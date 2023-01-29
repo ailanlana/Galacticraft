@@ -1,15 +1,19 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import cpw.mods.fml.relauncher.Side;
 import java.util.ArrayList;
+
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+
 public class TileEntityMulti extends TileEntityAdvanced {
+
     // The the position of the main block
     @NetworkedField(targetSide = Side.CLIENT)
     public BlockVec3 mainBlockPosition;
@@ -24,8 +28,8 @@ public class TileEntityMulti extends TileEntityAdvanced {
 
     public void onBlockRemoval() {
         if (this.mainBlockPosition != null) {
-            final TileEntity tileEntity = this.worldObj.getTileEntity(
-                    this.mainBlockPosition.x, this.mainBlockPosition.y, this.mainBlockPosition.z);
+            final TileEntity tileEntity = this.worldObj
+                    .getTileEntity(this.mainBlockPosition.x, this.mainBlockPosition.y, this.mainBlockPosition.z);
 
             if (tileEntity instanceof IMultiBlock) {
                 final IMultiBlock mainBlock = (IMultiBlock) tileEntity;
@@ -36,8 +40,8 @@ public class TileEntityMulti extends TileEntityAdvanced {
 
     public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer) {
         if (this.mainBlockPosition != null) {
-            final TileEntity tileEntity = this.worldObj.getTileEntity(
-                    this.mainBlockPosition.x, this.mainBlockPosition.y, this.mainBlockPosition.z);
+            final TileEntity tileEntity = this.worldObj
+                    .getTileEntity(this.mainBlockPosition.x, this.mainBlockPosition.y, this.mainBlockPosition.z);
 
             if (tileEntity instanceof IMultiBlock) {
                 return ((IMultiBlock) tileEntity).onActivated(par5EntityPlayer);
@@ -49,8 +53,8 @@ public class TileEntityMulti extends TileEntityAdvanced {
 
     public TileEntity getMainBlockTile() {
         if (this.mainBlockPosition != null) {
-            return this.worldObj.getTileEntity(
-                    this.mainBlockPosition.x, this.mainBlockPosition.y, this.mainBlockPosition.z);
+            return this.worldObj
+                    .getTileEntity(this.mainBlockPosition.x, this.mainBlockPosition.y, this.mainBlockPosition.z);
         }
 
         return null;

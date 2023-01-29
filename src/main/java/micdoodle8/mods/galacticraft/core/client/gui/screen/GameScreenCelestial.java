@@ -1,8 +1,7 @@
 package micdoodle8.mods.galacticraft.core.client.gui.screen;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
 import java.nio.DoubleBuffer;
+
 import micdoodle8.mods.galacticraft.api.client.IGameScreen;
 import micdoodle8.mods.galacticraft.api.client.IScreenManager;
 import micdoodle8.mods.galacticraft.api.event.client.CelestialBodyRenderEvent;
@@ -16,15 +15,21 @@ import micdoodle8.mods.galacticraft.api.galaxies.Star;
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.render.RenderPlanet;
+
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.world.WorldProvider;
 import net.minecraftforge.common.MinecraftForge;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
+
 public class GameScreenCelestial implements IGameScreen {
+
     private TextureManager renderEngine;
 
     private float frameA;
@@ -166,8 +171,7 @@ public class GameScreenCelestial implements IGameScreen {
             }
         }
 
-        for (final Satellite satellite :
-                GalaxyRegistry.getRegisteredSatellites().values()) {
+        for (final Satellite satellite : GalaxyRegistry.getRegisteredSatellites().values()) {
             if (satellite.getParentPlanet() == planet) {
                 final Vector3f pos = this.getCelestialBodyPosition(satellite, ticks);
                 this.drawCircle(satellite);
@@ -199,8 +203,10 @@ public class GameScreenCelestial implements IGameScreen {
 
         final float alpha = 1.0F;
 
-        final CelestialBodyRenderEvent.Pre preEvent =
-                new CelestialBodyRenderEvent.Pre(planet, planet.getBodyIcon(), 12);
+        final CelestialBodyRenderEvent.Pre preEvent = new CelestialBodyRenderEvent.Pre(
+                planet,
+                planet.getBodyIcon(),
+                12);
         MinecraftForge.EVENT_BUS.post(preEvent);
 
         GL11.glColor4f(1, 1, 1, alpha);
@@ -234,8 +240,9 @@ public class GameScreenCelestial implements IGameScreen {
         GL11.glLineWidth(0.002F);
 
         GL11.glScalef(sd, sd, sd);
-        final CelestialBodyRenderEvent.CelestialRingRenderEvent.Pre preEvent =
-                new CelestialBodyRenderEvent.CelestialRingRenderEvent.Pre(cBody, new Vector3f(0.0F, 0.0F, 0.0F));
+        final CelestialBodyRenderEvent.CelestialRingRenderEvent.Pre preEvent = new CelestialBodyRenderEvent.CelestialRingRenderEvent.Pre(
+                cBody,
+                new Vector3f(0.0F, 0.0F, 0.0F));
         MinecraftForge.EVENT_BUS.post(preEvent);
 
         if (!preEvent.isCanceled()) {
@@ -253,8 +260,8 @@ public class GameScreenCelestial implements IGameScreen {
             GL11.glEnd();
         }
 
-        final CelestialBodyRenderEvent.CelestialRingRenderEvent.Post postEvent =
-                new CelestialBodyRenderEvent.CelestialRingRenderEvent.Post(cBody);
+        final CelestialBodyRenderEvent.CelestialRingRenderEvent.Post postEvent = new CelestialBodyRenderEvent.CelestialRingRenderEvent.Post(
+                cBody);
         MinecraftForge.EVENT_BUS.post(postEvent);
 
         GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -284,8 +291,8 @@ public class GameScreenCelestial implements IGameScreen {
         return 1 / 140.0F * distance * (celestialBody instanceof Planet ? 25.0F : 3.5F);
     }
 
-    private void planeEquation(
-            float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3) {
+    private void planeEquation(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3,
+            float z3) {
         final double[] result = new double[4];
         result[0] = y1 * (z2 - z3) + y2 * (z3 - z1) + y3 * (z1 - z2);
         result[1] = z1 * (x2 - x3) + z2 * (x3 - x1) + z3 * (x1 - x2);

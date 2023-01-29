@@ -1,12 +1,12 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,18 +15,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class ItemBasicAsteroids extends Item {
-    public static String[] names = {
-        "reinforcedPlateT3",
-        "engineT2",
-        "rocketFinsT2",
-        "shardIron",
-        "shardTitanium",
-        "ingotTitanium",
-        "compressedTitanium",
-        "thermalCloth",
-        "beamCore"
-    };
+
+    public static String[] names = { "reinforcedPlateT3", "engineT2", "rocketFinsT2", "shardIron", "shardTitanium",
+            "ingotTitanium", "compressedTitanium", "thermalCloth", "beamCore" };
     protected IIcon[] icons = new IIcon[ItemBasicAsteroids.names.length];
 
     public ItemBasicAsteroids() {
@@ -67,7 +62,7 @@ public class ItemBasicAsteroids extends Item {
         return super.getIconFromDamage(damage);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
         for (int i = 0; i < ItemBasicAsteroids.names.length; i++) {
@@ -84,7 +79,7 @@ public class ItemBasicAsteroids extends Item {
         return "unnamed";
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {

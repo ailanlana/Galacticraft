@@ -1,9 +1,7 @@
 package micdoodle8.mods.galacticraft.core.client.gui.overlay;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.core.util.ClientUtil;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.ScaledResolution;
@@ -13,10 +11,16 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class OverlayRocket extends Overlay {
+
     private static final Minecraft minecraft = FMLClientHandler.instance().getClient();
 
     /**
@@ -28,7 +32,9 @@ public class OverlayRocket extends Overlay {
         }
 
         final ScaledResolution scaledresolution = ClientUtil.getScaledRes(
-                OverlayRocket.minecraft, OverlayRocket.minecraft.displayWidth, OverlayRocket.minecraft.displayHeight);
+                OverlayRocket.minecraft,
+                OverlayRocket.minecraft.displayWidth,
+                OverlayRocket.minecraft.displayHeight);
         scaledresolution.getScaledWidth();
         final int height = scaledresolution.getScaledHeight();
         OverlayRocket.minecraft.entityRenderer.setupOverlayRendering();
@@ -52,18 +58,21 @@ public class OverlayRocket extends Overlay {
         var9.startDrawingQuads();
         var9.addVertexWithUV(var1 + 0, var2 + 242.0F * sizeScale, 0.0, (var3 + 0) * var7, (var4 + var6) * var8);
         var9.addVertexWithUV(
-                var1 + 20.0F * sizeScale, var2 + 242.0F * sizeScale, 0.0, (var3 + var5) * var7, (var4 + var6) * var8);
+                var1 + 20.0F * sizeScale,
+                var2 + 242.0F * sizeScale,
+                0.0,
+                (var3 + var5) * var7,
+                (var4 + var6) * var8);
         var9.addVertexWithUV(var1 + 20.0F * sizeScale, var2 + 0, 0.0, (var3 + var5) * var7, (var4 + 0) * var8);
         var9.addVertexWithUV(var1 + 0, var2 + 0, 0.0, (var3 + 0) * var7, (var4 + 0) * var8);
         var9.draw();
 
         GL11.glColor3f(1.0F, 1.0F, 1.0F);
 
-        final Render spaceshipRender = (Render)
-                RenderManager.instance.entityRenderMap.get(OverlayRocket.minecraft.thePlayer.ridingEntity.getClass());
+        final Render spaceshipRender = (Render) RenderManager.instance.entityRenderMap
+                .get(OverlayRocket.minecraft.thePlayer.ridingEntity.getClass());
 
-        final int y1 = height / 2
-                + 60
+        final int y1 = height / 2 + 60
                 - (int) Math.floor(Overlay.getPlayerPositionY(OverlayRocket.minecraft.thePlayer) / 10.5F);
         var1 = 2.5F;
         var2 = y1;
@@ -89,11 +98,7 @@ public class OverlayRocket extends Overlay {
 
         try {
             spaceshipRender.doRender(
-                    OverlayRocket.minecraft
-                            .thePlayer
-                            .ridingEntity
-                            .getClass()
-                            .getConstructor(World.class)
+                    OverlayRocket.minecraft.thePlayer.ridingEntity.getClass().getConstructor(World.class)
                             .newInstance(OverlayRocket.minecraft.thePlayer.worldObj),
                     0,
                     0,
@@ -107,11 +112,10 @@ public class OverlayRocket extends Overlay {
         GL11.glPopMatrix();
 
         ResourceLocation resourcelocation = AbstractClientPlayer.locationStevePng;
-        resourcelocation = AbstractClientPlayer.getLocationSkin(
-                OverlayRocket.minecraft.thePlayer.getGameProfile().getName());
-        AbstractClientPlayer.getDownloadImageSkin(
-                resourcelocation,
-                OverlayRocket.minecraft.thePlayer.getGameProfile().getName());
+        resourcelocation = AbstractClientPlayer
+                .getLocationSkin(OverlayRocket.minecraft.thePlayer.getGameProfile().getName());
+        AbstractClientPlayer
+                .getDownloadImageSkin(resourcelocation, OverlayRocket.minecraft.thePlayer.getGameProfile().getName());
 
         FMLClientHandler.instance().getClient().renderEngine.bindTexture(resourcelocation);
 

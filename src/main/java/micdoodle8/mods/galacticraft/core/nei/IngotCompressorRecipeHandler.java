@@ -1,25 +1,31 @@
 package micdoodle8.mods.galacticraft.core.nei;
 
-import codechicken.lib.gui.GuiDraw;
-import codechicken.nei.NEIServerUtils;
-import codechicken.nei.PositionedStack;
-import codechicken.nei.recipe.FurnaceRecipeHandler;
-import codechicken.nei.recipe.TemplateRecipeHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
+import codechicken.lib.gui.GuiDraw;
+import codechicken.nei.NEIServerUtils;
+import codechicken.nei.PositionedStack;
+import codechicken.nei.recipe.FurnaceRecipeHandler;
+import codechicken.nei.recipe.TemplateRecipeHandler;
+
 public class IngotCompressorRecipeHandler extends TemplateRecipeHandler {
-    private static final ResourceLocation ingotCompressorTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/ingotCompressor.png");
+
+    private static final ResourceLocation ingotCompressorTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/gui/ingotCompressor.png");
     private static int ticksPassed;
 
     public String getRecipeId() {
@@ -34,12 +40,11 @@ public class IngotCompressorRecipeHandler extends TemplateRecipeHandler {
     public Set<Entry<ArrayList<PositionedStack>, PositionedStack>> getRecipes() {
         final HashMap<ArrayList<PositionedStack>, PositionedStack> recipes = new HashMap<>();
 
-        for (final Entry<HashMap<Integer, PositionedStack>, PositionedStack> stack :
-                NEIGalacticraftConfig.getIngotCompressorRecipes()) {
+        for (final Entry<HashMap<Integer, PositionedStack>, PositionedStack> stack : NEIGalacticraftConfig
+                .getIngotCompressorRecipes()) {
             final ArrayList<PositionedStack> inputStacks = new ArrayList<>();
 
-            for (final Map.Entry<Integer, PositionedStack> input :
-                    stack.getKey().entrySet()) {
+            for (final Map.Entry<Integer, PositionedStack> input : stack.getKey().entrySet()) {
                 inputStacks.add(input.getValue());
             }
 
@@ -61,8 +66,8 @@ public class IngotCompressorRecipeHandler extends TemplateRecipeHandler {
 
         GuiDraw.drawTexturedModalRect(79, 44, 176, 13, Math.min(IngotCompressorRecipeHandler.ticksPassed % 70, 53), 17);
 
-        final int yOffset =
-                (int) Math.floor(IngotCompressorRecipeHandler.ticksPassed % 48 * 0.29166666666666666666666666666667D);
+        final int yOffset = (int) Math
+                .floor(IngotCompressorRecipeHandler.ticksPassed % 48 * 0.29166666666666666666666666666667D);
 
         GuiDraw.drawTexturedModalRect(83, 35 + yOffset, 176, 30 + yOffset, 14, 14 - yOffset);
     }
@@ -128,13 +133,14 @@ public class IngotCompressorRecipeHandler extends TemplateRecipeHandler {
     }
 
     public class CompressorRecipe extends TemplateRecipeHandler.CachedRecipe {
+
         public ArrayList<PositionedStack> input;
         public PositionedStack output;
 
         @Override
         public ArrayList<PositionedStack> getIngredients() {
-            return (ArrayList<PositionedStack>)
-                    this.getCycledIngredients(IngotCompressorRecipeHandler.this.cycleticks / 20, this.input);
+            return (ArrayList<PositionedStack>) this
+                    .getCycledIngredients(IngotCompressorRecipeHandler.this.cycleticks / 20, this.input);
         }
 
         @Override
@@ -164,9 +170,8 @@ public class IngotCompressorRecipeHandler extends TemplateRecipeHandler {
 
         @Override
         public PositionedStack getOtherStack() {
-            return FurnaceRecipeHandler.afuels.get(
-                            IngotCompressorRecipeHandler.ticksPassed / 48 % FurnaceRecipeHandler.afuels.size())
-                    .stack;
+            return FurnaceRecipeHandler.afuels
+                    .get(IngotCompressorRecipeHandler.ticksPassed / 48 % FurnaceRecipeHandler.afuels.size()).stack;
         }
     }
 

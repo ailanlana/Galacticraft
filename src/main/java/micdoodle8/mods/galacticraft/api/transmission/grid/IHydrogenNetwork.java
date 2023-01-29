@@ -1,6 +1,7 @@
 package micdoodle8.mods.galacticraft.api.transmission.grid;
 
 import micdoodle8.mods.galacticraft.api.transmission.tile.ITransmitter;
+
 import net.minecraft.tileentity.TileEntity;
 
 /**
@@ -9,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
  * @author Calclavia
  */
 public interface IHydrogenNetwork extends IGridNetwork<IHydrogenNetwork, ITransmitter, TileEntity> {
+
     /**
      * Produces hydrogen in this hydrogen network.
      *
@@ -19,8 +21,7 @@ public interface IHydrogenNetwork extends IGridNetwork<IHydrogenNetwork, ITransm
     /**
      * Gets the total amount of hydrogen requested/needed in the network.
      *
-     * @param ignoreTiles The TileEntities to ignore during this calculation
-     *                    (optional).
+     * @param ignoreTiles The TileEntities to ignore during this calculation (optional).
      */
     float getRequest(TileEntity... ignoreTiles);
 }

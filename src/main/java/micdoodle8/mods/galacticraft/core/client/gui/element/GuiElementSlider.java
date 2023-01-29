@@ -3,36 +3,31 @@ package micdoodle8.mods.galacticraft.core.client.gui.element;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.client.gui.screen.SmallFontRenderer;
 import micdoodle8.mods.galacticraft.core.util.ColorUtil;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 public class GuiElementSlider extends GuiButton {
+
     private final SmallFontRenderer customFontRenderer;
     private final Vector3 firstColor;
     private final Vector3 lastColor;
     private final boolean isVertical;
     private int sliderPos;
 
-    public GuiElementSlider(
-            int id, int x, int y, int width, int height, boolean vertical, Vector3 firstColor, Vector3 lastColor) {
+    public GuiElementSlider(int id, int x, int y, int width, int height, boolean vertical, Vector3 firstColor,
+            Vector3 lastColor) {
         this(id, x, y, width, height, vertical, firstColor, lastColor, "");
     }
 
-    public GuiElementSlider(
-            int id,
-            int x,
-            int y,
-            int width,
-            int height,
-            boolean vertical,
-            Vector3 firstColor,
-            Vector3 lastColor,
-            String displayString) {
+    public GuiElementSlider(int id, int x, int y, int width, int height, boolean vertical, Vector3 firstColor,
+            Vector3 lastColor, String displayString) {
         super(id, x, y, width, height, displayString);
         this.isVertical = vertical;
         this.firstColor = firstColor;
@@ -47,8 +42,7 @@ public class GuiElementSlider extends GuiButton {
     @Override
     public void drawButton(Minecraft par1Minecraft, int par2, int par3) {
         if (this.visible) {
-            this.field_146123_n = par2 >= this.xPosition
-                    && par3 >= this.yPosition
+            this.field_146123_n = par2 >= this.xPosition && par3 >= this.yPosition
                     && par2 < this.xPosition + this.width
                     && par3 < this.yPosition + this.height;
 
@@ -75,19 +69,27 @@ public class GuiElementSlider extends GuiButton {
                 tessellator.addVertex(this.xPosition, this.yPosition, this.zLevel);
                 tessellator.addVertex(this.xPosition, (double) this.yPosition + this.height, this.zLevel);
                 tessellator.addVertex(
-                        (double) this.xPosition + this.width, (double) this.yPosition + this.height, this.zLevel);
+                        (double) this.xPosition + this.width,
+                        (double) this.yPosition + this.height,
+                        this.zLevel);
                 tessellator.draw();
 
                 tessellator.startDrawingQuads();
                 tessellator.setColorRGBA_F(
-                        this.firstColor.floatX(), this.firstColor.floatY(), this.firstColor.floatZ(), 1.0F);
-                tessellator.addVertex(
-                        (double) this.xPosition + this.width - 1, (double) this.yPosition + 1, this.zLevel);
+                        this.firstColor.floatX(),
+                        this.firstColor.floatY(),
+                        this.firstColor.floatZ(),
+                        1.0F);
+                tessellator
+                        .addVertex((double) this.xPosition + this.width - 1, (double) this.yPosition + 1, this.zLevel);
                 tessellator.addVertex((double) this.xPosition + 1, (double) this.yPosition + 1, this.zLevel);
                 tessellator.setColorRGBA_F(
-                        this.lastColor.floatX(), this.lastColor.floatY(), this.lastColor.floatZ(), 1.0F);
-                tessellator.addVertex(
-                        (double) this.xPosition + 1, (double) this.yPosition + this.height - 1, this.zLevel);
+                        this.lastColor.floatX(),
+                        this.lastColor.floatY(),
+                        this.lastColor.floatZ(),
+                        1.0F);
+                tessellator
+                        .addVertex((double) this.xPosition + 1, (double) this.yPosition + this.height - 1, this.zLevel);
                 tessellator.addVertex(
                         (double) this.xPosition + this.width - 1,
                         (double) this.yPosition + this.height - 1,
@@ -114,21 +116,32 @@ public class GuiElementSlider extends GuiButton {
                 tessellator.addVertex(this.xPosition, this.yPosition, this.zLevel);
                 tessellator.addVertex(this.xPosition, (double) this.yPosition + this.height, this.zLevel);
                 tessellator.addVertex(
-                        (double) this.xPosition + this.width, (double) this.yPosition + this.height, this.zLevel);
+                        (double) this.xPosition + this.width,
+                        (double) this.yPosition + this.height,
+                        this.zLevel);
                 tessellator.draw();
 
                 tessellator.startDrawingQuads();
                 tessellator.setColorRGBA_F(
-                        this.lastColor.floatX(), this.lastColor.floatY(), this.lastColor.floatZ(), 1.0F);
-                tessellator.addVertex(
-                        (double) this.xPosition + this.width - 1, (double) this.yPosition + 1, this.zLevel);
+                        this.lastColor.floatX(),
+                        this.lastColor.floatY(),
+                        this.lastColor.floatZ(),
+                        1.0F);
+                tessellator
+                        .addVertex((double) this.xPosition + this.width - 1, (double) this.yPosition + 1, this.zLevel);
                 tessellator.setColorRGBA_F(
-                        this.firstColor.floatX(), this.firstColor.floatY(), this.firstColor.floatZ(), 1.0F);
+                        this.firstColor.floatX(),
+                        this.firstColor.floatY(),
+                        this.firstColor.floatZ(),
+                        1.0F);
                 tessellator.addVertex((double) this.xPosition + 1, (double) this.yPosition + 1, this.zLevel);
-                tessellator.addVertex(
-                        (double) this.xPosition + 1, (double) this.yPosition + this.height - 1, this.zLevel);
+                tessellator
+                        .addVertex((double) this.xPosition + 1, (double) this.yPosition + this.height - 1, this.zLevel);
                 tessellator.setColorRGBA_F(
-                        this.lastColor.floatX(), this.lastColor.floatY(), this.lastColor.floatZ(), 1.0F);
+                        this.lastColor.floatX(),
+                        this.lastColor.floatY(),
+                        this.lastColor.floatZ(),
+                        1.0F);
                 tessellator.addVertex(
                         (double) this.xPosition + this.width - 1,
                         (double) this.yPosition + this.height - 1,
@@ -145,11 +158,12 @@ public class GuiElementSlider extends GuiButton {
                     GL11.glTranslatef(this.xPosition + this.width / 2, this.yPosition + this.height / 2, 0.0F);
                     GL11.glScalef(0.5F, 0.5F, 1.0F);
                     GL11.glTranslatef(
-                            -1 * (this.xPosition + this.width / 2), -1 * (this.yPosition + this.height / 2), 0.0F);
+                            -1 * (this.xPosition + this.width / 2),
+                            -1 * (this.yPosition + this.height / 2),
+                            0.0F);
                     this.customFontRenderer.drawString(
                             this.displayString,
-                            this.xPosition
-                                    + this.width / 2
+                            this.xPosition + this.width / 2
                                     - this.customFontRenderer.getStringWidth(this.displayString) / 2,
                             this.yPosition + this.height / 2 - 3,
                             ColorUtil.to32BitColor(255, 240, 240, 240));

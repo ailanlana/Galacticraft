@@ -1,15 +1,20 @@
 package micdoodle8.mods.galacticraft.planets.mars;
 
-import cpw.mods.fml.common.FMLLog;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.Constants;
+
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+
 import org.apache.logging.log4j.Level;
 
+import cpw.mods.fml.common.FMLLog;
+
 public class ConfigManagerMars {
+
     public static boolean loaded;
 
     public static Configuration config;
@@ -67,8 +72,7 @@ public class ConfigManagerMars {
             //
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "launchControllerChunkLoad", true);
-            prop.comment =
-                    "Whether or not the launch controller acts as a chunk loader. Will cause issues if disabled!";
+            prop.comment = "Whether or not the launch controller acts as a chunk loader. Will cause issues if disabled!";
             prop.setLanguageKey("gc.configgui.launchControllerChunkLoad");
             launchControllerChunkLoad = prop.getBoolean(true);
 

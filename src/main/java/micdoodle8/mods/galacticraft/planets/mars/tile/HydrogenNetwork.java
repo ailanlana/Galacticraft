@@ -1,6 +1,5 @@
 package micdoodle8.mods.galacticraft.planets.mars.tile;
 
-import cpw.mods.fml.common.FMLLog;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
 import micdoodle8.mods.galacticraft.api.transmission.grid.IHydrogenNetwork;
 import micdoodle8.mods.galacticraft.api.transmission.grid.Pathfinder;
@@ -18,10 +18,14 @@ import micdoodle8.mods.galacticraft.api.transmission.tile.INetworkConnection;
 import micdoodle8.mods.galacticraft.api.transmission.tile.INetworkProvider;
 import micdoodle8.mods.galacticraft.api.transmission.tile.ITransmitter;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.common.FMLLog;
+
 public class HydrogenNetwork implements IHydrogenNetwork {
+
     public Map<TileEntity, ForgeDirection> hydrogenTiles = new HashMap<>();
 
     private final Set<ITransmitter> pipes = new HashSet<>();
@@ -54,13 +58,12 @@ public class HydrogenNetwork implements IHydrogenNetwork {
                                             && this.pipes.contains(tile)) {
                                         final float hydrogenToSend = Math.max(
                                                 totalHydrogen,
-                                                totalHydrogen
-                                                        * (hydrogenTile.getHydrogenRequest(direction)
-                                                                / totalHydrogenRequest));
+                                                totalHydrogen * (hydrogenTile.getHydrogenRequest(direction)
+                                                        / totalHydrogenRequest));
 
                                         if (hydrogenToSend > 0) {
-                                            remainingUsableHydrogen -=
-                                                    hydrogenTile.receiveHydrogen(direction, hydrogenToSend, true);
+                                            remainingUsableHydrogen -= hydrogenTile
+                                                    .receiveHydrogen(direction, hydrogenToSend, true);
                                         }
                                     }
                                 }
@@ -160,17 +163,16 @@ public class HydrogenNetwork implements IHydrogenNetwork {
             while (it.hasNext()) {
                 final ITransmitter transmitter = it.next();
 
-                if (transmitter == null
-                        || ((TileEntity) transmitter).isInvalid()
+                if (transmitter == null || ((TileEntity) transmitter).isInvalid()
                         || ((TileEntity) transmitter).getWorldObj() == null) {
                     it.remove();
                     continue;
                 }
 
                 /*
-                 * if (!(((TileEntity) transmitter).getWorldObj().getBlock(((TileEntity)
-                 * transmitter).xCoord, ((TileEntity) transmitter).yCoord, ((TileEntity)
-                 * transmitter).zCoord) instanceof BlockTransmitter)) { it.remove(); continue; }
+                 * if (!(((TileEntity) transmitter).getWorldObj().getBlock(((TileEntity) transmitter).xCoord,
+                 * ((TileEntity) transmitter).yCoord, ((TileEntity) transmitter).zCoord) instanceof BlockTransmitter)) {
+                 * it.remove(); continue; }
                  */
                 for (int i = 0; i < transmitter.getAdjacentConnections().length; i++) {
                     final TileEntity acceptor = transmitter.getAdjacentConnections()[i];
@@ -210,8 +212,8 @@ public class HydrogenNetwork implements IHydrogenNetwork {
             this.pipes.remove(splitPoint);
 
             /**
-             * Loop through the connected blocks and attempt to see if there are connections
-             * between the two points elsewhere.
+             * Loop through the connected blocks and attempt to see if there are connections between the two points
+             * elsewhere.
              */
             final TileEntity[] connectedBlocks = splitPoint.getAdjacentConnections();
 
@@ -228,12 +230,12 @@ public class HydrogenNetwork implements IHydrogenNetwork {
 
                             if (finder.results.size() > 0) {
                                 /**
-                                 * The connections A and B are still intact elsewhere. Set all references of
-                                 * wire connection into one network.
+                                 * The connections A and B are still intact elsewhere. Set all references of wire
+                                 * connection into one network.
                                  */
                                 for (final BlockVec3 node : finder.closedSet) {
-                                    final TileEntity nodeTile =
-                                            node.getTileEntity(((TileEntity) splitPoint).getWorldObj());
+                                    final TileEntity nodeTile = node
+                                            .getTileEntity(((TileEntity) splitPoint).getWorldObj());
 
                                     if (nodeTile instanceof INetworkProvider) {
                                         if (nodeTile != splitPoint) {
@@ -243,14 +245,13 @@ public class HydrogenNetwork implements IHydrogenNetwork {
                                 }
                             } else {
                                 /**
-                                 * The connections A and B are not connected anymore. Give both of them a new
-                                 * network.
+                                 * The connections A and B are not connected anymore. Give both of them a new network.
                                  */
                                 final IHydrogenNetwork newNetwork = new HydrogenNetwork();
 
                                 for (final BlockVec3 node : finder.closedSet) {
-                                    final TileEntity nodeTile =
-                                            node.getTileEntity(((TileEntity) splitPoint).getWorldObj());
+                                    final TileEntity nodeTile = node
+                                            .getTileEntity(((TileEntity) splitPoint).getWorldObj());
 
                                     if (nodeTile instanceof INetworkProvider) {
                                         if (nodeTile != splitPoint) {
@@ -270,7 +271,7 @@ public class HydrogenNetwork implements IHydrogenNetwork {
 
     @Override
     public String toString() {
-        return "HydrogenNetwork[" + this.hashCode() + "|Pipes:" + this.pipes.size() + "|Acceptors:"
-                + this.hydrogenTiles.size() + "]";
+        return "HydrogenNetwork[" + this
+                .hashCode() + "|Pipes:" + this.pipes.size() + "|Acceptors:" + this.hydrogenTiles.size() + "]";
     }
 }

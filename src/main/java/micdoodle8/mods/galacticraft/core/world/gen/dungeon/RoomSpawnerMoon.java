@@ -2,6 +2,7 @@ package micdoodle8.mods.galacticraft.core.world.gen.dungeon;
 
 import java.util.ArrayList;
 import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityMobSpawner;
@@ -9,6 +10,7 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class RoomSpawnerMoon extends DungeonRoom {
+
     int sizeX;
     int sizeY;
     int sizeZ;
@@ -31,8 +33,7 @@ public class RoomSpawnerMoon extends DungeonRoom {
         for (int i = this.posX - 1; i <= this.posX + this.sizeX; i++) {
             for (int j = this.posY - 1; j <= this.posY + this.sizeY; j++) {
                 for (int k = this.posZ - 1; k <= this.posZ + this.sizeZ; k++) {
-                    if (i == this.posX - 1
-                            || i == this.posX + this.sizeX
+                    if (i == this.posX - 1 || i == this.posX + this.sizeX
                             || j == this.posY - 1
                             || j == this.posY + this.sizeY
                             || k == this.posZ - 1
@@ -69,8 +70,8 @@ public class RoomSpawnerMoon extends DungeonRoom {
                 cz,
                 Blocks.mob_spawner,
                 0)) {
-            this.spawners.add(
-                    new ChunkCoordinates(this.posX + this.sizeX - 1, this.posY - 1, this.posZ + this.sizeZ - 1));
+            this.spawners
+                    .add(new ChunkCoordinates(this.posX + this.sizeX - 1, this.posY - 1, this.posZ + this.sizeZ - 1));
         }
     }
 
@@ -89,8 +90,8 @@ public class RoomSpawnerMoon extends DungeonRoom {
         for (final ChunkCoordinates spawnerCoords : this.spawners) {
             if (this.worldObj.getBlock(spawnerCoords.posX, spawnerCoords.posY, spawnerCoords.posZ)
                     == Blocks.mob_spawner) {
-                final TileEntityMobSpawner spawner = (TileEntityMobSpawner)
-                        this.worldObj.getTileEntity(spawnerCoords.posX, spawnerCoords.posY, spawnerCoords.posZ);
+                final TileEntityMobSpawner spawner = (TileEntityMobSpawner) this.worldObj
+                        .getTileEntity(spawnerCoords.posX, spawnerCoords.posY, spawnerCoords.posZ);
                 if (spawner != null) {
                     spawner.func_145881_a().setEntityName(RoomSpawnerMoon.getMob(rand));
                 }

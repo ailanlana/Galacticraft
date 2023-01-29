@@ -2,6 +2,7 @@ package micdoodle8.mods.galacticraft.core.world.gen.dungeon;
 
 import java.util.ArrayList;
 import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
@@ -11,6 +12,7 @@ import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class RoomChestsMoon extends DungeonRoom {
+
     int sizeX;
     int sizeY;
     int sizeZ;
@@ -32,8 +34,7 @@ public class RoomChestsMoon extends DungeonRoom {
         for (int i = this.posX - 1; i <= this.posX + this.sizeX; i++) {
             for (int j = this.posY - 1; j <= this.posY + this.sizeY; j++) {
                 for (int k = this.posZ - 1; k <= this.posZ + this.sizeZ; k++) {
-                    if (i == this.posX - 1
-                            || i == this.posX + this.sizeX
+                    if (i == this.posX - 1 || i == this.posX + this.sizeX
                             || j == this.posY - 1
                             || j == this.posY + this.sizeY
                             || k == this.posZ - 1
@@ -75,9 +76,14 @@ public class RoomChestsMoon extends DungeonRoom {
     protected void handleTileEntities(Random rand) {
         if (!this.chests.isEmpty()) {
             this.worldObj.setBlock(
-                    this.chests.get(0).posX, this.chests.get(0).posY, this.chests.get(0).posZ, Blocks.chest, 0, 2);
-            final TileEntityChest chest = (TileEntityChest) this.worldObj.getTileEntity(
-                    this.chests.get(0).posX, this.chests.get(0).posY, this.chests.get(0).posZ);
+                    this.chests.get(0).posX,
+                    this.chests.get(0).posY,
+                    this.chests.get(0).posZ,
+                    Blocks.chest,
+                    0,
+                    2);
+            final TileEntityChest chest = (TileEntityChest) this.worldObj
+                    .getTileEntity(this.chests.get(0).posX, this.chests.get(0).posY, this.chests.get(0).posZ);
 
             if (chest != null) {
                 for (int i = 0; i < chest.getSizeInventory(); i++) {

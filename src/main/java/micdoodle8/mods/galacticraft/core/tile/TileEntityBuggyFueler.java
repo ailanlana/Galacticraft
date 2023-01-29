@@ -1,8 +1,8 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import java.util.HashSet;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.entity.ICargoEntity;
 import micdoodle8.mods.galacticraft.api.entity.IDockable;
 import micdoodle8.mods.galacticraft.api.entity.IFuelable;
@@ -11,6 +11,7 @@ import micdoodle8.mods.galacticraft.api.tile.ILandingPadAttachable;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.blocks.BlockMulti;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -19,7 +20,10 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fluids.FluidStack;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class TileEntityBuggyFueler extends TileEntityMulti implements IMultiBlock, IFuelable, IFuelDock, ICargoEntity {
+
     private IDockable dockedEntity;
 
     @Override
@@ -98,15 +102,12 @@ public class TileEntityBuggyFueler extends TileEntityMulti implements IMultiBloc
         for (int x = -1; x < 2; x++) {
             for (int z = -1; z < 2; z++) {
                 if (this.worldObj.isRemote && this.worldObj.rand.nextDouble() < 0.1D) {
-                    FMLClientHandler.instance()
-                            .getClient()
-                            .effectRenderer
-                            .addBlockDestroyEffects(
-                                    thisBlock.x + x,
-                                    thisBlock.y,
-                                    thisBlock.z + z,
-                                    GCBlocks.landingPad,
-                                    Block.getIdFromBlock(GCBlocks.landingPad) >> 12 & 255);
+                    FMLClientHandler.instance().getClient().effectRenderer.addBlockDestroyEffects(
+                            thisBlock.x + x,
+                            thisBlock.y,
+                            thisBlock.z + z,
+                            GCBlocks.landingPad,
+                            Block.getIdFromBlock(GCBlocks.landingPad) >> 12 & 255);
                 }
 
                 this.worldObj.func_147480_a(thisBlock.x + x, thisBlock.y, thisBlock.z + z, false);
@@ -163,11 +164,10 @@ public class TileEntityBuggyFueler extends TileEntityMulti implements IMultiBloc
             for (int z = -2; z < 3; z++) {
                 if (x == -2 || x == 2 || z == -2 || z == 2) {
                     if (Math.abs(x) != Math.abs(z)) {
-                        final TileEntity tile =
-                                this.worldObj.getTileEntity(this.xCoord + x, this.yCoord, this.zCoord + z);
+                        final TileEntity tile = this.worldObj
+                                .getTileEntity(this.xCoord + x, this.yCoord, this.zCoord + z);
 
-                        if (tile != null
-                                && tile instanceof ILandingPadAttachable
+                        if (tile != null && tile instanceof ILandingPadAttachable
                                 && ((ILandingPadAttachable) tile)
                                         .canAttachToLandingPad(this.worldObj, this.xCoord, this.yCoord, this.zCoord)) {
                             connectedTiles.add((ILandingPadAttachable) tile);

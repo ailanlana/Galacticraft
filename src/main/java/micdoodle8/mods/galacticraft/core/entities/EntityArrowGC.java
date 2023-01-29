@@ -1,10 +1,10 @@
 package micdoodle8.mods.galacticraft.core.entities;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Iterator;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -22,7 +22,11 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class EntityArrowGC extends Entity {
+
     private int xTile = -1;
     private int yTile = -1;
     private int zTile = -1;
@@ -66,12 +70,8 @@ public class EntityArrowGC extends Entity {
         this.yOffset = 0.0F;
     }
 
-    public EntityArrowGC(
-            World par1World,
-            EntityLivingBase par2EntityLiving,
-            EntityLivingBase par3EntityLiving,
-            float par4,
-            float par5) {
+    public EntityArrowGC(World par1World, EntityLivingBase par2EntityLiving, EntityLivingBase par3EntityLiving,
+            float par4, float par5) {
         super(par1World);
         this.shootingEntity = par2EntityLiving;
 
@@ -91,7 +91,11 @@ public class EntityArrowGC extends Entity {
             final double var16 = var6 / var12;
             final double var18 = var10 / var12;
             this.setLocationAndAngles(
-                    par2EntityLiving.posX + var16, this.posY, par2EntityLiving.posZ + var18, var14, var15);
+                    par2EntityLiving.posX + var16,
+                    this.posY,
+                    par2EntityLiving.posZ + var18,
+                    var14,
+                    var15);
             this.yOffset = 0.0F;
             final float var20 = (float) var12 * 0.2F;
             this.setArrowHeading(var6, var8 + var20, var10, par4, par5);
@@ -132,9 +136,8 @@ public class EntityArrowGC extends Entity {
     }
 
     /**
-     * Uses the provided coordinates as a heading and determines the velocity from
-     * it with the set force and random variance. Args: x, y, z, force,
-     * forceVariation
+     * Uses the provided coordinates as a heading and determines the velocity from it with the set force and random
+     * variance. Args: x, y, z, force, forceVariation
      */
     public void setArrowHeading(double par1, double par3, double par5, float par7, float par8) {
         final float var9 = MathHelper.sqrt_double(par1 * par1 + par3 * par3 + par5 * par5);
@@ -159,8 +162,8 @@ public class EntityArrowGC extends Entity {
     @Override
     @SideOnly(Side.CLIENT)
     /**
-     * Sets the position and rotation. Only difference from the other one is no
-     * bounding on the rotation. Args: posX, posY, posZ, yaw, pitch
+     * Sets the position and rotation. Only difference from the other one is no bounding on the rotation. Args: posX,
+     * posY, posZ, yaw, pitch
      */
     public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9) {
         this.setPosition(par1, par3, par5);
@@ -197,8 +200,8 @@ public class EntityArrowGC extends Entity {
 
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F) {
             final float var1 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
-            this.prevRotationYaw =
-                    this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
+            this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D
+                    / Math.PI);
             this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(this.motionY, var1) * 180.0D / Math.PI);
         }
 
@@ -206,8 +209,8 @@ public class EntityArrowGC extends Entity {
 
         if (block.getMaterial() != Material.air) {
             block.setBlockBoundsBasedOnState(this.worldObj, this.xTile, this.yTile, this.zTile);
-            final AxisAlignedBB axisalignedbb =
-                    block.getCollisionBoundingBoxFromPool(this.worldObj, this.xTile, this.yTile, this.zTile);
+            final AxisAlignedBB axisalignedbb = block
+                    .getCollisionBoundingBoxFromPool(this.worldObj, this.xTile, this.yTile, this.zTile);
 
             if (axisalignedbb != null
                     && axisalignedbb.isVecInside(Vec3.createVectorHelper(this.posX, this.posY, this.posZ))) {
@@ -239,12 +242,12 @@ public class EntityArrowGC extends Entity {
         } else {
             ++this.ticksInAir;
             Vec3 var17 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
-            Vec3 var3 = Vec3.createVectorHelper(
-                    this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+            Vec3 var3 = Vec3
+                    .createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
             MovingObjectPosition var4 = this.worldObj.func_147447_a(var17, var3, false, true, false);
             var17 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
-            var3 = Vec3.createVectorHelper(
-                    this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+            var3 = Vec3
+                    .createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
             if (var4 != null) {
                 var3 = Vec3.createVectorHelper(var4.hitVec.xCoord, var4.hitVec.yCoord, var4.hitVec.zCoord);
@@ -253,9 +256,7 @@ public class EntityArrowGC extends Entity {
             Entity var5 = null;
             final List<?> var6 = this.worldObj.getEntitiesWithinAABBExcludingEntity(
                     this,
-                    this.boundingBox
-                            .addCoord(this.motionX, this.motionY, this.motionZ)
-                            .expand(1.0D, 1.0D, 1.0D));
+                    this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
             double var7 = 0.0D;
             final Iterator<?> var9 = var6.iterator();
             float var11;
@@ -312,8 +313,8 @@ public class EntityArrowGC extends Entity {
                             ++((EntityLiving) var4.entityHit).arrowHitTimer;
 
                             if (this.knockbackStrength > 0) {
-                                final float var25 = MathHelper.sqrt_double(
-                                        this.motionX * this.motionX + this.motionZ * this.motionZ);
+                                final float var25 = MathHelper
+                                        .sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
 
                                 if (var25 > 0.0F) {
                                     var4.entityHit.addVelocity(
@@ -325,7 +326,10 @@ public class EntityArrowGC extends Entity {
                         }
 
                         this.worldObj.playSoundAtEntity(
-                                this, "random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
+                                this,
+                                "random.bowhit",
+                                1.0F,
+                                1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
                         this.setDead();
                     } else {
                         this.motionX *= -0.10000000149011612D;
@@ -350,7 +354,10 @@ public class EntityArrowGC extends Entity {
                     this.posY -= this.motionY / var20 * 0.05000000074505806D;
                     this.posZ -= this.motionZ / var20 * 0.05000000074505806D;
                     this.worldObj.playSoundAtEntity(
-                            this, "random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
+                            this,
+                            "random.bowhit",
+                            1.0F,
+                            1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
                     this.inGround = true;
                     this.arrowShake = 7;
                     this.setIsCritical(false);
@@ -473,8 +480,8 @@ public class EntityArrowGC extends Entity {
     @Override
     public void onCollideWithPlayer(EntityPlayer par1EntityPlayer) {
         if (!this.worldObj.isRemote && this.inGround && this.arrowShake <= 0) {
-            boolean var2 =
-                    this.canBePickedUp == 1 || this.canBePickedUp == 2 && par1EntityPlayer.capabilities.isCreativeMode;
+            boolean var2 = this.canBePickedUp == 1
+                    || this.canBePickedUp == 2 && par1EntityPlayer.capabilities.isCreativeMode;
 
             if (this.canBePickedUp == 1
                     && !par1EntityPlayer.inventory.addItemStackToInventory(new ItemStack(Items.arrow, 1))) {

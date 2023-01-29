@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
  * Do not include this prefab class in your released mod download.
  */
 public class BlockMetaPair {
+
     private final Block block;
     private final byte metadata;
 

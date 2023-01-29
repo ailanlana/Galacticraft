@@ -1,22 +1,24 @@
 package micdoodle8.mods.galacticraft.api.recipe;
 
-import cpw.mods.fml.common.FMLLog;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import cpw.mods.fml.common.FMLLog;
+
 public class SpaceStationRecipe {
+
     private final HashMap<Object, Integer> input = new HashMap<>();
 
     /**
-     * @param objMap a map of the items required. Each entry should be an object of
-     *               ItemStack, Item/Block or String(OreDict) and the amount of that
-     *               item required
+     * @param objMap a map of the items required. Each entry should be an object of ItemStack, Item/Block or
+     *               String(OreDict) and the amount of that item required
      */
     public SpaceStationRecipe(HashMap<Object, Integer> objMap) {
         for (final Object obj : objMap.keySet()) {
@@ -29,8 +31,10 @@ public class SpaceStationRecipe {
             } else if (obj instanceof Block) {
                 this.input.put(new ItemStack((Block) obj), amount);
             } else if (obj instanceof String) {
-                FMLLog.info("While registering space station recipe, found "
-                        + OreDictionary.getOres((String) obj).size() + " type(s) of " + obj);
+                FMLLog.info(
+                        "While registering space station recipe, found " + OreDictionary.getOres((String) obj).size()
+                                + " type(s) of "
+                                + obj);
                 this.input.put(OreDictionary.getOres((String) obj), amount);
             } else if (obj instanceof ArrayList) {
                 this.input.put(obj, amount);
@@ -140,14 +144,13 @@ public class SpaceStationRecipe {
     }
 
     public static boolean checkItemEquals(ItemStack target, ItemStack input) {
-        return target.getItem() == input.getItem()
-                && (target.getItemDamage() == OreDictionary.WILDCARD_VALUE
-                        || target.getItemDamage() == input.getItemDamage());
+        return target.getItem() == input.getItem() && (target.getItemDamage() == OreDictionary.WILDCARD_VALUE
+                || target.getItemDamage() == input.getItemDamage());
     }
 
     /**
-     * Returns the input for this recipe, any mod accessing this value should never
-     * manipulate the values in this array as it will effect the recipe itself.
+     * Returns the input for this recipe, any mod accessing this value should never manipulate the values in this array
+     * as it will effect the recipe itself.
      *
      * @return The recipes input vales.
      */

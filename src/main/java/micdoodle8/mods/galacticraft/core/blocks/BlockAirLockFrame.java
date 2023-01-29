@@ -1,14 +1,14 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityAirLock;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityAirLockController;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -23,7 +23,11 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockAirLockFrame extends BlockAdvancedTile implements ItemBlockDesc.IBlockShiftDesc {
+
     @SideOnly(Side.CLIENT)
     private IIcon[] airLockIcons;
 
@@ -38,7 +42,7 @@ public class BlockAirLockFrame extends BlockAdvancedTile implements ItemBlockDes
         this.setBlockName(assetName);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @SideOnly(Side.CLIENT)
     @Override
     public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
@@ -63,8 +67,7 @@ public class BlockAirLockFrame extends BlockAdvancedTile implements ItemBlockDes
         final TileEntity tile = world.getTileEntity(x, y, z);
 
         if (tile instanceof TileEntityAirLockController && entityLiving instanceof EntityPlayer) {
-            ((TileEntityAirLockController) tile).ownerName =
-                    ((EntityPlayer) entityLiving).getGameProfile().getName();
+            ((TileEntityAirLockController) tile).ownerName = ((EntityPlayer) entityLiving).getGameProfile().getName();
         }
     }
 
@@ -226,8 +229,8 @@ public class BlockAirLockFrame extends BlockAdvancedTile implements ItemBlockDes
     }
 
     @Override
-    public boolean onMachineActivated(
-            World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
+    public boolean onMachineActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX,
+            float hitY, float hitZ) {
         final int metadata = world.getBlockMetadata(x, y, z);
         final TileEntity tile = world.getTileEntity(x, y, z);
 

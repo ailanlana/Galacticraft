@@ -7,6 +7,7 @@ import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.energy.tile.EnergyStorage;
 
 public class TileEntityBeamReflector extends TileEntityBeamOutput implements ILaserNode {
+
     public Vector3 color = new Vector3(0, 1, 0);
     private final EnergyStorage storage = new EnergyStorage(10, 1);
 

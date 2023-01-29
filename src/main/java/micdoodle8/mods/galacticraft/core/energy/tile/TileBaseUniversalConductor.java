@@ -1,5 +1,19 @@
 package micdoodle8.mods.galacticraft.core.energy.tile;
 
+import java.lang.reflect.Constructor;
+
+import mekanism.api.energy.IStrictEnergyAcceptor;
+import micdoodle8.mods.galacticraft.api.transmission.tile.IConductor;
+import micdoodle8.mods.galacticraft.api.transmission.tile.IElectrical;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.core.energy.EnergyConfigHandler;
+import micdoodle8.mods.galacticraft.core.energy.EnergyUtil;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.common.Optional.Interface;
 import cpw.mods.fml.common.Optional.InterfaceList;
@@ -7,26 +21,14 @@ import cpw.mods.fml.common.eventhandler.Event;
 import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
-import java.lang.reflect.Constructor;
-import mekanism.api.energy.IStrictEnergyAcceptor;
-import micdoodle8.mods.galacticraft.api.transmission.tile.IConductor;
-import micdoodle8.mods.galacticraft.api.transmission.tile.IElectrical;
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.core.energy.EnergyConfigHandler;
-import micdoodle8.mods.galacticraft.core.energy.EnergyUtil;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
 
-@InterfaceList({
-    @Interface(modid = "IC2API", iface = "ic2.api.energy.tile.IEnergySink"),
-    @Interface(modid = "IC2API", iface = "ic2.api.energy.tile.IEnergyEmitter"),
-    @Interface(modid = "CoFHAPI|energy", iface = "cofh.api.energy.IEnergyHandler"),
-    @Interface(modid = "MekanismAPI|energy", iface = "mekanism.api.energy.IStrictEnergyAcceptor"),
-})
+@InterfaceList({ @Interface(modid = "IC2API", iface = "ic2.api.energy.tile.IEnergySink"),
+        @Interface(modid = "IC2API", iface = "ic2.api.energy.tile.IEnergyEmitter"),
+        @Interface(modid = "CoFHAPI|energy", iface = "cofh.api.energy.IEnergyHandler"),
+        @Interface(modid = "MekanismAPI|energy", iface = "mekanism.api.energy.IStrictEnergyAcceptor"), })
 public abstract class TileBaseUniversalConductor extends TileBaseConductor
         implements IEnergySink, IEnergyEmitter, IEnergyHandler, IStrictEnergyAcceptor {
+
     protected boolean isAddedToEnergyNet;
     protected Object powerHandlerBC;
 
@@ -226,8 +228,7 @@ public abstract class TileBaseUniversalConductor extends TileBaseConductor
             if (EnergyUtil.clazzEnderIOCable != null && EnergyUtil.clazzEnderIOCable.isInstance(tile)) {
                 return false;
             }
-        } catch (final Exception e) {
-        }
+        } catch (final Exception e) {}
         return true;
     }
 
@@ -251,9 +252,8 @@ public abstract class TileBaseUniversalConductor extends TileBaseConductor
             return 0;
         }
 
-        return amount
-                - this.getNetwork().produce((float) amount * EnergyConfigHandler.MEKANISM_RATIO, true, 1, this)
-                        / EnergyConfigHandler.MEKANISM_RATIO;
+        return amount - this.getNetwork().produce((float) amount * EnergyConfigHandler.MEKANISM_RATIO, true, 1, this)
+                / EnergyConfigHandler.MEKANISM_RATIO;
     }
 
     @Override

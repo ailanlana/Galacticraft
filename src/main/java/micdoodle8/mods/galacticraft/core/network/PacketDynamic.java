@@ -1,13 +1,10 @@
 package micdoodle8.mods.galacticraft.core.network;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.relauncher.Side;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -15,7 +12,14 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.relauncher.Side;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+
 public class PacketDynamic implements IPacket {
+
     private int type;
     private int dimID;
     private Object[] data;
@@ -27,7 +31,7 @@ public class PacketDynamic implements IPacket {
         assert entity instanceof IPacketReceiver : "Entity does not implement " + IPacketReceiver.class.getSimpleName();
         this.type = 0;
         this.dimID = entity.worldObj.provider.dimensionId;
-        this.data = new Object[] {entity.getEntityId()};
+        this.data = new Object[] { entity.getEntityId() };
         this.sendData = new ArrayList<>();
         ((IPacketReceiver) entity).getNetworkedData(this.sendData);
     }
@@ -37,7 +41,7 @@ public class PacketDynamic implements IPacket {
                 : "TileEntity does not implement " + IPacketReceiver.class.getSimpleName();
         this.type = 1;
         this.dimID = tile.getWorldObj().provider.dimensionId;
-        this.data = new Object[] {tile.xCoord, tile.yCoord, tile.zCoord};
+        this.data = new Object[] { tile.xCoord, tile.yCoord, tile.zCoord };
         this.sendData = new ArrayList<>();
         ((IPacketReceiver) tile).getNetworkedData(this.sendData);
     }
@@ -101,8 +105,8 @@ public class PacketDynamic implements IPacket {
                 this.data[2] = buffer.readInt();
 
                 if (world != null) {
-                    final TileEntity tile =
-                            world.getTileEntity((Integer) this.data[0], (Integer) this.data[1], (Integer) this.data[2]);
+                    final TileEntity tile = world
+                            .getTileEntity((Integer) this.data[0], (Integer) this.data[1], (Integer) this.data[2]);
 
                     if (tile instanceof IPacketReceiver) {
                         ((IPacketReceiver) tile).decodePacketdata(buffer);
@@ -141,8 +145,8 @@ public class PacketDynamic implements IPacket {
 
                 break;
             case 1:
-                final TileEntity tile = player.worldObj.getTileEntity(
-                        (Integer) this.data[0], (Integer) this.data[1], (Integer) this.data[2]);
+                final TileEntity tile = player.worldObj
+                        .getTileEntity((Integer) this.data[0], (Integer) this.data[1], (Integer) this.data[2]);
 
                 if (tile instanceof IPacketReceiver) {
                     ((IPacketReceiver) tile).handlePacketData(side, player);

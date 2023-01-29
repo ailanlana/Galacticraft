@@ -1,20 +1,19 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.client.render.item;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.planets.asteroids.client.render.tile.TileEntityShortRangeTelepadRenderer;
+
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class ItemRendererShortRangeTelepad implements IItemRenderer {
-    private void renderBeamReceiver(
-            ItemRenderType type,
-            RenderBlocks render,
-            ItemStack item,
-            float translateX,
-            float translateY,
-            float translateZ) {
+
+    private void renderBeamReceiver(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX,
+            float translateY, float translateZ) {
         GL11.glPushMatrix();
         this.transform(type);
 
@@ -22,18 +21,14 @@ public class ItemRendererShortRangeTelepad implements IItemRenderer {
 
         GL11.glColor3f(1.0F, 1.0F, 1.0F);
 
-        FMLClientHandler.instance()
-                .getClient()
-                .renderEngine
+        FMLClientHandler.instance().getClient().renderEngine
                 .bindTexture(TileEntityShortRangeTelepadRenderer.telepadTexture);
 
         if (type == ItemRenderType.INVENTORY) {
             TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("Base");
             TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("Top");
 
-            FMLClientHandler.instance()
-                    .getClient()
-                    .renderEngine
+            FMLClientHandler.instance().getClient().renderEngine
                     .bindTexture(TileEntityShortRangeTelepadRenderer.telepadTexture0);
             TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopMidxNegz");
             TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopPosxNegz");
@@ -50,9 +45,7 @@ public class ItemRendererShortRangeTelepad implements IItemRenderer {
             TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("Base");
             TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("Top");
 
-            FMLClientHandler.instance()
-                    .getClient()
-                    .renderEngine
+            FMLClientHandler.instance().getClient().renderEngine
                     .bindTexture(TileEntityShortRangeTelepadRenderer.telepadTexture0);
             TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopMidxNegz");
             TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopPosxNegz");

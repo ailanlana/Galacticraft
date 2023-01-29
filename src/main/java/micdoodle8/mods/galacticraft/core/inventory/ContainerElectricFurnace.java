@@ -2,6 +2,7 @@ package micdoodle8.mods.galacticraft.core.inventory;
 
 import micdoodle8.mods.galacticraft.api.item.IItemElectric;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityElectricFurnace;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -11,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 
 public class ContainerElectricFurnace extends Container {
+
     private final TileEntityElectricFurnace tileEntity;
 
     public ContainerElectricFurnace(InventoryPlayer par1InventoryPlayer, TileEntityElectricFurnace tileEntity) {
@@ -52,8 +54,7 @@ public class ContainerElectricFurnace extends Container {
     }
 
     /**
-     * Called to transfer a stack from one inventory to the other eg. when shift
-     * clicking.
+     * Called to transfer a stack from one inventory to the other eg. when shift clicking.
      */
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1) {

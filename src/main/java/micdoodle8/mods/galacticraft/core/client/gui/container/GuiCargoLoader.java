@@ -2,6 +2,7 @@ package micdoodle8.mods.galacticraft.core.client.gui.container;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementInfoRegion;
 import micdoodle8.mods.galacticraft.core.energy.EnergyDisplayHelper;
@@ -11,14 +12,18 @@ import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityCargoLoader;
 import micdoodle8.mods.galacticraft.core.util.EnumColor;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
 public class GuiCargoLoader extends GuiContainerGC {
-    public static final ResourceLocation loaderTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/cargo_loader.png");
+
+    public static final ResourceLocation loaderTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/gui/cargo_loader.png");
 
     private final TileEntityCargoLoader cargoLoader;
 
@@ -43,9 +48,11 @@ public class GuiCargoLoader extends GuiContainerGC {
     protected void actionPerformed(GuiButton par1GuiButton) {
         switch (par1GuiButton.id) {
             case 0:
-                GalacticraftCore.packetPipeline.sendToServer(new PacketSimple(
-                        EnumSimplePacket.S_UPDATE_DISABLEABLE_BUTTON,
-                        new Object[] {this.cargoLoader.xCoord, this.cargoLoader.yCoord, this.cargoLoader.zCoord, 0}));
+                GalacticraftCore.packetPipeline.sendToServer(
+                        new PacketSimple(
+                                EnumSimplePacket.S_UPDATE_DISABLEABLE_BUTTON,
+                                new Object[] { this.cargoLoader.xCoord, this.cargoLoader.yCoord,
+                                        this.cargoLoader.zCoord, 0 }));
                 break;
         }
     }
@@ -56,10 +63,10 @@ public class GuiCargoLoader extends GuiContainerGC {
         super.initGui();
         final List<String> electricityDesc = new ArrayList<>();
         electricityDesc.add(GCCoreUtil.translate("gui.energyStorage.desc.0"));
-        electricityDesc.add(EnumColor.YELLOW
-                + GCCoreUtil.translate("gui.energyStorage.desc.1")
-                + ((int) Math.floor(this.cargoLoader.getEnergyStoredGC()) + " / "
-                        + (int) Math.floor(this.cargoLoader.getMaxEnergyStoredGC())));
+        electricityDesc.add(
+                EnumColor.YELLOW + GCCoreUtil.translate("gui.energyStorage.desc.1")
+                        + ((int) Math.floor(this.cargoLoader.getEnergyStoredGC()) + " / "
+                                + (int) Math.floor(this.cargoLoader.getMaxEnergyStoredGC())));
         this.electricInfoRegion.tooltipStrings = electricityDesc;
         this.electricInfoRegion.xPosition = (this.width - this.xSize) / 2 + 107;
         this.electricInfoRegion.yPosition = (this.height - this.ySize) / 2 + 101;
@@ -69,15 +76,16 @@ public class GuiCargoLoader extends GuiContainerGC {
         final List<String> batterySlotDesc = new ArrayList<>();
         batterySlotDesc.add(GCCoreUtil.translate("gui.batterySlot.desc.0"));
         batterySlotDesc.add(GCCoreUtil.translate("gui.batterySlot.desc.1"));
-        this.infoRegions.add(new GuiElementInfoRegion(
-                (this.width - this.xSize) / 2 + 9,
-                (this.height - this.ySize) / 2 + 26,
-                18,
-                18,
-                batterySlotDesc,
-                this.width,
-                this.height,
-                this));
+        this.infoRegions.add(
+                new GuiElementInfoRegion(
+                        (this.width - this.xSize) / 2 + 9,
+                        (this.height - this.ySize) / 2 + 26,
+                        18,
+                        18,
+                        batterySlotDesc,
+                        this.width,
+                        this.height,
+                        this));
         this.buttonList.add(
                 this.buttonLoadItems = new GuiButton(
                         0,
@@ -139,7 +147,9 @@ public class GuiCargoLoader extends GuiContainerGC {
         final List<String> electricityDesc = new ArrayList<>();
         electricityDesc.add(GCCoreUtil.translate("gui.energyStorage.desc.0"));
         EnergyDisplayHelper.getEnergyDisplayTooltip(
-                this.cargoLoader.getEnergyStoredGC(), this.cargoLoader.getMaxEnergyStoredGC(), electricityDesc);
+                this.cargoLoader.getEnergyStoredGC(),
+                this.cargoLoader.getMaxEnergyStoredGC(),
+                electricityDesc);
         // electricityDesc.add(EnumColor.YELLOW +
         // GCCoreUtil.translate("gui.energyStorage.desc.1") + ((int)
         // Math.floor(this.cargoLoader.getEnergyStoredGC()) + " / " + (int)
@@ -151,6 +161,11 @@ public class GuiCargoLoader extends GuiContainerGC {
         }
 
         this.drawTexturedModalRect(
-                var5 + 108, var6 + 102, 187, 0, Math.min(this.cargoLoader.getScaledElecticalLevel(54), 54), 7);
+                var5 + 108,
+                var6 + 102,
+                187,
+                0,
+                Math.min(this.cargoLoader.getScaledElecticalLevel(54), 54),
+                7);
     }
 }

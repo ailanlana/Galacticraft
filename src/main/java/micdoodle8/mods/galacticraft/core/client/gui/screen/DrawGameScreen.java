@@ -1,11 +1,12 @@
 package micdoodle8.mods.galacticraft.core.client.gui.screen;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import java.nio.FloatBuffer;
+
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.api.client.IScreenManager;
 import micdoodle8.mods.galacticraft.core.util.GCLog;
 import micdoodle8.mods.galacticraft.core.util.MapUtil;
+
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.Render;
@@ -15,9 +16,13 @@ import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldProvider;
+
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class DrawGameScreen extends IScreenManager {
+
     private final TextureManager renderEngine = FMLClientHandler.instance().getClient().renderEngine;
     private static final FloatBuffer colorBuffer = GLAllocation.createDirectFloatBuffer(16);
     private static int texCount = 1;
@@ -63,11 +68,11 @@ public class DrawGameScreen extends IScreenManager {
             return;
         }
         this.localMap = new int[MapUtil.SIZE_STD2 * MapUtil.SIZE_STD2];
-        final boolean result =
-                MapUtil.getMap(this.localMap, this.driver.getWorldObj(), this.driver.xCoord, this.driver.zCoord);
+        final boolean result = MapUtil
+                .getMap(this.localMap, this.driver.getWorldObj(), this.driver.xCoord, this.driver.zCoord);
         if (result) {
-            TextureUtil.uploadTexture(
-                    reusableMap.getGlTextureId(), this.localMap, MapUtil.SIZE_STD2, MapUtil.SIZE_STD2);
+            TextureUtil
+                    .uploadTexture(reusableMap.getGlTextureId(), this.localMap, MapUtil.SIZE_STD2, MapUtil.SIZE_STD2);
             this.mapDone = true;
             GCLog.debug("Created texture no:" + texCount++);
         }

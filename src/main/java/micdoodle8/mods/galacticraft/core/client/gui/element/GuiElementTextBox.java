@@ -1,16 +1,20 @@
 package micdoodle8.mods.galacticraft.core.client.gui.element;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.core.util.ColorUtil;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatAllowedCharacters;
+
 import org.lwjgl.input.Keyboard;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class GuiElementTextBox extends GuiButton {
+
     public String text;
     public boolean numericOnly;
     public boolean centered;
@@ -26,17 +30,8 @@ public class GuiElementTextBox extends GuiButton {
 
     private final Minecraft mc = FMLClientHandler.instance().getClient();
 
-    public GuiElementTextBox(
-            int id,
-            ITextBoxCallback parentGui,
-            int x,
-            int y,
-            int width,
-            int height,
-            String initialText,
-            boolean numericOnly,
-            int maxLength,
-            boolean centered) {
+    public GuiElementTextBox(int id, ITextBoxCallback parentGui, int x, int y, int width, int height,
+            String initialText, boolean numericOnly, int maxLength, boolean centered) {
         super(id, x, y, width, height, initialText);
         this.parentGui = parentGui;
         this.numericOnly = numericOnly;
@@ -124,7 +119,7 @@ public class GuiElementTextBox extends GuiButton {
             if (this.timeBackspacePressed > 0) {
                 if (Keyboard.isKeyDown(Keyboard.KEY_BACK) && this.text.length() > 0) {
                     if (System.currentTimeMillis() - this.timeBackspacePressed
-                                    > 200 / (1 + this.backspacePressed * 0.3F)
+                            > 200 / (1 + this.backspacePressed * 0.3F)
                             && this.parentGui.canPlayerEdit(this, this.mc.thePlayer)) {
                         final String toBeParsed = this.text.substring(0, this.text.length() - 1);
 
@@ -162,8 +157,7 @@ public class GuiElementTextBox extends GuiButton {
                     this.text + (this.cursorPulse / 24 % 2 == 0 && this.isTextFocused ? "_" : ""),
                     xPos,
                     this.yPosition + this.height / 2 - 4,
-                    this.incorrectUseTimer > 0
-                            ? ColorUtil.to32BitColor(255, 255, 20, 20)
+                    this.incorrectUseTimer > 0 ? ColorUtil.to32BitColor(255, 255, 20, 20)
                             : this.parentGui.getTextColor(this));
         }
     }
@@ -221,6 +215,7 @@ public class GuiElementTextBox extends GuiButton {
     }
 
     public interface ITextBoxCallback {
+
         boolean canPlayerEdit(GuiElementTextBox textBox, EntityPlayer player);
 
         void onTextChanged(GuiElementTextBox textBox, String newText);

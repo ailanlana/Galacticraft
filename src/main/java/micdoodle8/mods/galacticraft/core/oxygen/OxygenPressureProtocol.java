@@ -3,6 +3,7 @@ package micdoodle8.mods.galacticraft.core.oxygen;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
 import micdoodle8.mods.galacticraft.api.vector.BlockTuple;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
@@ -10,6 +11,7 @@ import micdoodle8.mods.galacticraft.core.tick.TickHandlerServer;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenSealer;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.GCLog;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEnchantmentTable;
 import net.minecraft.block.BlockFarmland;
@@ -26,6 +28,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class OxygenPressureProtocol {
+
     public static final Map<Block, ArrayList<Integer>> nonPermeableBlocks = new HashMap<>();
 
     static {
@@ -51,8 +54,9 @@ public class OxygenPressureProtocol {
                     OxygenPressureProtocol.nonPermeableBlocks.put(bt.block, list);
                 }
             } catch (final Exception e) {
-                GCLog.severe("[config] External Sealable IDs: error parsing '" + s
-                        + "'. Must be in the form Blockname or BlockName:metadata");
+                GCLog.severe(
+                        "[config] External Sealable IDs: error parsing '" + s
+                                + "'. Must be in the form Blockname or BlockName:metadata");
             }
         }
     }
@@ -89,8 +93,7 @@ public class OxygenPressureProtocol {
         }
 
         if (block.isOpaqueCube()) {
-            return block instanceof BlockGravel
-                    || block.getMaterial() == Material.cloth
+            return block instanceof BlockGravel || block.getMaterial() == Material.cloth
                     || block instanceof BlockSponge;
         }
 

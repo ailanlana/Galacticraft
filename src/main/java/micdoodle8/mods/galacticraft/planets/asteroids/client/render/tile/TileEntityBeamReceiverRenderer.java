@@ -1,35 +1,38 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.client.render.tile;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.core.tile.ReceiverMode;
 import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
 import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityBeamReceiver;
+
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class TileEntityBeamReceiverRenderer extends TileEntitySpecialRenderer {
-    public static final ResourceLocation receiverTexture =
-            new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "textures/model/beamReceiver.png");
+
+    public static final ResourceLocation receiverTexture = new ResourceLocation(
+            AsteroidsModule.ASSET_PREFIX,
+            "textures/model/beamReceiver.png");
     public static IModelCustom receiverModel;
 
     public TileEntityBeamReceiverRenderer() {
-        TileEntityBeamReceiverRenderer.receiverModel = AdvancedModelLoader.loadModel(
-                new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "models/receiver.obj"));
+        TileEntityBeamReceiverRenderer.receiverModel = AdvancedModelLoader
+                .loadModel(new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "models/receiver.obj"));
     }
 
     public void renderModelAt(TileEntityBeamReceiver tileEntity, double d, double d1, double d2, float f) {
         // Texture file
-        FMLClientHandler.instance()
-                .getClient()
-                .renderEngine
+        FMLClientHandler.instance().getClient().renderEngine
                 .bindTexture(TileEntityBeamReceiverRenderer.receiverTexture);
 
         GL11.glPushMatrix();

@@ -1,14 +1,14 @@
 package micdoodle8.mods.galacticraft.api.power;
 
 public interface IEnergyHandlerGC {
+
     /**
      * Add energy from an external source
      *
      * @param from     Energy Source that is providing power
      * @param amount   Maximum amount of energy to receive
      * @param simulate If true, the transfer will only be simulated.
-     * @return The amount of energy that was successfully received (or would have
-     * been, if simulated).
+     * @return The amount of energy that was successfully received (or would have been, if simulated).
      */
     float receiveEnergyGC(EnergySource from, float amount, boolean simulate);
 
@@ -18,8 +18,7 @@ public interface IEnergyHandlerGC {
      * @param from     Energy Source that is extracting power
      * @param amount   Maximum amount of energy to extract
      * @param simulate If true, the transfer will only be simulated.
-     * @return The amount of energy that was successfully extracted (or would have
-     * been, if simulated).
+     * @return The amount of energy that was successfully extracted (or would have been, if simulated).
      */
     float extractEnergyGC(EnergySource from, float amount, boolean simulate);
 
@@ -29,14 +28,12 @@ public interface IEnergyHandlerGC {
     boolean nodeAvailable(EnergySource from);
 
     /**
-     * Returns the amount of energy stored in this handler available to the provided
-     * source
+     * Returns the amount of energy stored in this handler available to the provided source
      */
     float getEnergyStoredGC(EnergySource from);
 
     /**
-     * Returns the maximum amount of energy stored in this handler available to the
-     * provided source
+     * Returns the maximum amount of energy stored in this handler available to the provided source
      */
     float getMaxEnergyStoredGC(EnergySource from);
 }

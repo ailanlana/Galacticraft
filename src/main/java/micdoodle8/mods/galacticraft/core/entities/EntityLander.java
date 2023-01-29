@@ -1,15 +1,15 @@
 package micdoodle8.mods.galacticraft.core.entities;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.entity.ICameraZoomEntity;
 import micdoodle8.mods.galacticraft.api.entity.IIgnoreShift;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.client.fx.EntityFXLanderFlame;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,7 +19,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class EntityLander extends EntityLanderBase implements IIgnoreShift, ICameraZoomEntity {
+
     private double lastMotionY;
 
     public EntityLander(World world) {
@@ -139,10 +143,10 @@ public class EntityLander extends EntityLanderBase implements IIgnoreShift, ICam
 
     @Override
     public Map<Vector3, Vector3> getParticleMap() {
-        final double x1 =
-                4 * Math.cos(this.rotationYaw * Math.PI / 180.0D) * Math.sin(this.rotationPitch * Math.PI / 180.0D);
-        final double z1 =
-                4 * Math.sin(this.rotationYaw * Math.PI / 180.0D) * Math.sin(this.rotationPitch * Math.PI / 180.0D);
+        final double x1 = 4 * Math.cos(this.rotationYaw * Math.PI / 180.0D)
+                * Math.sin(this.rotationPitch * Math.PI / 180.0D);
+        final double z1 = 4 * Math.sin(this.rotationYaw * Math.PI / 180.0D)
+                * Math.sin(this.rotationPitch * Math.PI / 180.0D);
         final double y1 = -4 * Math.abs(Math.cos(this.rotationPitch * Math.PI / 180.0D));
 
         new Vector3(this);

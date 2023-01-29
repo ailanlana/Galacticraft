@@ -4,6 +4,7 @@ import micdoodle8.mods.galacticraft.api.entity.IEntityBreathable;
 import micdoodle8.mods.galacticraft.core.items.GCItems;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
+
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntitySpider;
@@ -17,6 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 public class EntityEvolvedSpider extends EntitySpider implements IEntityBreathable {
+
     public EntityEvolvedSpider(World par1World) {
         super(par1World);
         this.setSize(1.5F, 1.0F);
@@ -55,9 +57,8 @@ public class EntityEvolvedSpider extends EntitySpider implements IEntityBreathab
         if (livingData == null) {
             livingData = new EntityEvolvedSpider.GroupData();
 
-            if (this.worldObj.difficultySetting == EnumDifficulty.HARD
-                    && this.worldObj.rand.nextFloat()
-                            < 0.1F * this.worldObj.func_147462_b(this.posX, this.posY, this.posZ)) {
+            if (this.worldObj.difficultySetting == EnumDifficulty.HARD && this.worldObj.rand.nextFloat()
+                    < 0.1F * this.worldObj.func_147462_b(this.posX, this.posY, this.posZ)) {
                 ((EntityEvolvedSpider.GroupData) livingData).func_111104_a(this.worldObj.rand);
             }
         }

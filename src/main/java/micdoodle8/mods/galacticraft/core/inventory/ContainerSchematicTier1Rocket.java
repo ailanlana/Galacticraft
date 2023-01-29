@@ -2,6 +2,7 @@ package micdoodle8.mods.galacticraft.core.inventory;
 
 import micdoodle8.mods.galacticraft.core.items.GCItems;
 import micdoodle8.mods.galacticraft.core.util.RecipeUtil;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
@@ -14,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class ContainerSchematicTier1Rocket extends Container {
+
     public InventoryRocketBench craftMatrix = new InventoryRocketBench(this);
     public IInventory craftResult = new InventoryCraftResult();
     private final World worldObj;
@@ -21,8 +23,14 @@ public class ContainerSchematicTier1Rocket extends Container {
     public ContainerSchematicTier1Rocket(InventoryPlayer par1InventoryPlayer, int x, int y, int z) {
         final int change = 27;
         this.worldObj = par1InventoryPlayer.player.worldObj;
-        this.addSlotToContainer(new SlotRocketBenchResult(
-                par1InventoryPlayer.player, this.craftMatrix, this.craftResult, 0, 142, 69 + change));
+        this.addSlotToContainer(
+                new SlotRocketBenchResult(
+                        par1InventoryPlayer.player,
+                        this.craftMatrix,
+                        this.craftResult,
+                        0,
+                        142,
+                        69 + change));
         int var6;
         int var7;
 
@@ -32,14 +40,30 @@ public class ContainerSchematicTier1Rocket extends Container {
 
         // Body
         for (var6 = 0; var6 < 4; ++var6) {
-            this.addSlotToContainer(new SlotRocketBench(
-                    this.craftMatrix, 2 + var6, 39, -6 + var6 * 18 + 16 + change, x, y, z, par1InventoryPlayer.player));
+            this.addSlotToContainer(
+                    new SlotRocketBench(
+                            this.craftMatrix,
+                            2 + var6,
+                            39,
+                            -6 + var6 * 18 + 16 + change,
+                            x,
+                            y,
+                            z,
+                            par1InventoryPlayer.player));
         }
 
         // Body Right
         for (var6 = 0; var6 < 4; ++var6) {
-            this.addSlotToContainer(new SlotRocketBench(
-                    this.craftMatrix, 6 + var6, 57, -6 + var6 * 18 + 16 + change, x, y, z, par1InventoryPlayer.player));
+            this.addSlotToContainer(
+                    new SlotRocketBench(
+                            this.craftMatrix,
+                            6 + var6,
+                            57,
+                            -6 + var6 * 18 + 16 + change,
+                            x,
+                            y,
+                            z,
+                            par1InventoryPlayer.player));
         }
 
         // Left fins
@@ -60,8 +84,16 @@ public class ContainerSchematicTier1Rocket extends Container {
 
         // Addons
         for (int var8 = 0; var8 < 3; var8++) {
-            this.addSlotToContainer(new SlotRocketBench(
-                    this.craftMatrix, 15 + var8, 93 + var8 * 26, -15 + change, x, y, z, par1InventoryPlayer.player));
+            this.addSlotToContainer(
+                    new SlotRocketBench(
+                            this.craftMatrix,
+                            15 + var8,
+                            93 + var8 * 26,
+                            -15 + change,
+                            x,
+                            y,
+                            z,
+                            par1InventoryPlayer.player));
         }
 
         // Player inv:
@@ -106,8 +138,7 @@ public class ContainerSchematicTier1Rocket extends Container {
     }
 
     /**
-     * Called to transfer a stack from one inventory to the other eg. when shift
-     * clicking.
+     * Called to transfer a stack from one inventory to the other eg. when shift clicking.
      */
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1) {

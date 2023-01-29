@@ -1,8 +1,7 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
@@ -15,6 +14,7 @@ import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.core.util.OxygenUtil;
 import micdoodle8.mods.galacticraft.planets.GalacticraftPlanets;
 import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -25,7 +25,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockWalkway extends BlockTransmitter implements ITileEntityProvider, ItemBlockDesc.IBlockShiftDesc {
+
     protected BlockWalkway(String assetName) {
         super(Material.iron);
         this.setHardness(1.0F);
@@ -80,21 +84,13 @@ public class BlockWalkway extends BlockTransmitter implements ITileEntityProvide
 
     public int getWalkwayOrientation(World world, int x, int y, int z) {
         final int connectedNorth = this.isBlockNormalCube(world.getBlock(x, y, z - 1))
-                        || world.getBlock(x, y, z - 1) instanceof BlockWalkway
-                ? 1
-                : 0;
+                || world.getBlock(x, y, z - 1) instanceof BlockWalkway ? 1 : 0;
         final int connectedEast = this.isBlockNormalCube(world.getBlock(x + 1, y, z))
-                        || world.getBlock(x + 1, y, z) instanceof BlockWalkway
-                ? 2
-                : 0;
+                || world.getBlock(x + 1, y, z) instanceof BlockWalkway ? 2 : 0;
         final int connectedSouth = this.isBlockNormalCube(world.getBlock(x, y, z + 1))
-                        || world.getBlock(x, y, z + 1) instanceof BlockWalkway
-                ? 4
-                : 0;
+                || world.getBlock(x, y, z + 1) instanceof BlockWalkway ? 4 : 0;
         final int connectedWest = this.isBlockNormalCube(world.getBlock(x - 1, y, z))
-                        || world.getBlock(x - 1, y, z) instanceof BlockWalkway
-                ? 8
-                : 0;
+                || world.getBlock(x - 1, y, z) instanceof BlockWalkway ? 8 : 0;
 
         return connectedNorth | connectedEast | connectedSouth | connectedWest;
     }
@@ -173,8 +169,8 @@ public class BlockWalkway extends BlockTransmitter implements ITileEntityProvide
 
     @SuppressWarnings("rawtypes")
     @Override
-    public void addCollisionBoxesToList(
-            World world, int x, int y, int z, AxisAlignedBB axisalignedbb, List list, Entity entity) {
+    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisalignedbb, List list,
+            Entity entity) {
         final TileEntity tileEntity = world.getTileEntity(x, y, z);
         TileEntity[] connectable = new TileEntity[6];
 

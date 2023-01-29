@@ -4,6 +4,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldSavedData;
 
 public class AsteroidSaveData extends WorldSavedData {
+
     public static final String saveDataID = "GCAsteroidData";
     public NBTTagCompound datacompound;
 

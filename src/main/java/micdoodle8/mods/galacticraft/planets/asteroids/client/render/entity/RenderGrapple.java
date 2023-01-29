@@ -2,16 +2,19 @@ package micdoodle8.mods.galacticraft.planets.asteroids.client.render.entity;
 
 import micdoodle8.mods.galacticraft.planets.asteroids.client.render.item.ItemRendererGrappleHook;
 import micdoodle8.mods.galacticraft.planets.asteroids.entities.EntityGrapple;
+
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 public class RenderGrapple extends Render {
+
     public void doRender(EntityGrapple grapple, double x, double y, double z, float par8, float partialTicks) {
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         GL11.glPushMatrix();
@@ -20,14 +23,11 @@ public class RenderGrapple extends Render {
         final EntityPlayer shootingEntity = grapple.getShootingEntity();
 
         if (shootingEntity != null && grapple.getPullingEntity()) {
-            final double d3 = shootingEntity.prevPosX
-                    + (shootingEntity.posX - shootingEntity.prevPosX) * partialTicks
+            final double d3 = shootingEntity.prevPosX + (shootingEntity.posX - shootingEntity.prevPosX) * partialTicks
                     + vec3.xCoord;
-            final double d4 = shootingEntity.prevPosY
-                    + (shootingEntity.posY - shootingEntity.prevPosY) * partialTicks
+            final double d4 = shootingEntity.prevPosY + (shootingEntity.posY - shootingEntity.prevPosY) * partialTicks
                     + vec3.yCoord;
-            final double d5 = shootingEntity.prevPosZ
-                    + (shootingEntity.posZ - shootingEntity.prevPosZ) * partialTicks
+            final double d5 = shootingEntity.prevPosZ + (shootingEntity.posZ - shootingEntity.prevPosZ) * partialTicks
                     + vec3.zCoord;
 
             final Tessellator tessellator = Tessellator.instance;

@@ -1,24 +1,30 @@
 package micdoodle8.mods.galacticraft.core.client;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.wrappers.Footprint;
+
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class FootprintRenderer {
+
     public Map<Long, List<Footprint>> footprints = new HashMap<>();
-    private static final ResourceLocation footprintTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/misc/footprint.png");
+    private static final ResourceLocation footprintTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/misc/footprint.png");
 
     public void renderFootprints(EntityPlayer player, float partialTicks) {
         GL11.glPushMatrix();
@@ -120,8 +126,7 @@ public class FootprintRenderer {
         final Iterator<Footprint> i = footprintList.iterator();
         while (i.hasNext()) {
             final Footprint print = i.next();
-            if (!print.owner.equals(
-                    FMLClientHandler.instance().getClient().thePlayer.getCommandSenderName())) {
+            if (!print.owner.equals(FMLClientHandler.instance().getClient().thePlayer.getCommandSenderName())) {
                 i.remove();
             }
         }

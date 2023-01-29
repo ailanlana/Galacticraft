@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.WorldSavedData;
 
 public class GCInvSaveData extends WorldSavedData {
+
     public static final String SAVE_ID = "GCInv_savefile";
 
     public GCInvSaveData() {

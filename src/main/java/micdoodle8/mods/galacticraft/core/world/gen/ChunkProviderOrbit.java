@@ -3,9 +3,11 @@ package micdoodle8.mods.galacticraft.core.world.gen;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 import micdoodle8.mods.galacticraft.core.tile.IMultiBlock;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.entity.EnumCreatureType;
@@ -18,6 +20,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderGenerate;
 
 public class ChunkProviderOrbit extends ChunkProviderGenerate {
+
     private final Random rand;
 
     private final World worldObj;

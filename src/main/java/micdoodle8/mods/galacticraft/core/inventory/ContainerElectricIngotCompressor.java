@@ -2,6 +2,7 @@ package micdoodle8.mods.galacticraft.core.inventory;
 
 import micdoodle8.mods.galacticraft.api.item.IItemElectric;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityElectricIngotCompressor;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -11,10 +12,11 @@ import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 
 public class ContainerElectricIngotCompressor extends Container {
+
     private final TileEntityElectricIngotCompressor tileEntity;
 
-    public ContainerElectricIngotCompressor(
-            InventoryPlayer par1InventoryPlayer, TileEntityElectricIngotCompressor tileEntity) {
+    public ContainerElectricIngotCompressor(InventoryPlayer par1InventoryPlayer,
+            TileEntityElectricIngotCompressor tileEntity) {
         this.tileEntity = tileEntity;
         tileEntity.compressingCraftMatrix.eventHandler = this;
 
@@ -63,8 +65,7 @@ public class ContainerElectricIngotCompressor extends Container {
     }
 
     /**
-     * Called to transfer a stack from one inventory to the other eg. when shift
-     * clicking.
+     * Called to transfer a stack from one inventory to the other eg. when shift clicking.
      */
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1) {

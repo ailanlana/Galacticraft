@@ -1,31 +1,32 @@
 package micdoodle8.mods.galacticraft.core.client.render.item;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
+
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class ItemRendererMeteorChunk implements IItemRenderer {
-    private static final ResourceLocation meteorChunkTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/model/meteorChunk.png");
-    private static final ResourceLocation meteorChunkHotTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/model/meteorChunkHot.png");
 
-    private final IModelCustom meteorChunkModel = AdvancedModelLoader.loadModel(
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "models/meteorChunk.obj"));
+    private static final ResourceLocation meteorChunkTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/model/meteorChunk.png");
+    private static final ResourceLocation meteorChunkHotTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/model/meteorChunkHot.png");
 
-    private void renderMeteorChunk(
-            ItemRenderType type,
-            RenderBlocks render,
-            ItemStack item,
-            float translateX,
-            float translateY,
-            float translateZ) {
+    private final IModelCustom meteorChunkModel = AdvancedModelLoader
+            .loadModel(new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "models/meteorChunk.obj"));
+
+    private void renderMeteorChunk(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX,
+            float translateY, float translateZ) {
         GL11.glPushMatrix();
 
         GL11.glScalef(0.7F, 0.7F, 0.7F);
@@ -40,14 +41,10 @@ public class ItemRendererMeteorChunk implements IItemRenderer {
         }
 
         if (item.getItemDamage() == 0) {
-            FMLClientHandler.instance()
-                    .getClient()
-                    .getTextureManager()
+            FMLClientHandler.instance().getClient().getTextureManager()
                     .bindTexture(ItemRendererMeteorChunk.meteorChunkTexture);
         } else {
-            FMLClientHandler.instance()
-                    .getClient()
-                    .getTextureManager()
+            FMLClientHandler.instance().getClient().getTextureManager()
                     .bindTexture(ItemRendererMeteorChunk.meteorChunkHotTexture);
         }
         this.meteorChunkModel.renderAll();

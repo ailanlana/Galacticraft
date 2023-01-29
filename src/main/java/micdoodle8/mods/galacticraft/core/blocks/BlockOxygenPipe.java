@@ -1,7 +1,5 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.api.tile.IColorable;
 import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
@@ -9,6 +7,7 @@ import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenPipe;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -26,7 +25,11 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockOxygenPipe extends BlockTransmitter implements ITileEntityProvider, ItemBlockDesc.IBlockShiftDesc {
+
     private IIcon[] pipeIcons = new IIcon[16];
 
     public BlockOxygenPipe(String assetName) {
@@ -47,7 +50,11 @@ public class BlockOxygenPipe extends BlockTransmitter implements ITileEntityProv
             final double d1 = par1World.rand.nextFloat() * f + (1.0F - f) * 0.2D + 0.6D;
             final double d2 = par1World.rand.nextFloat() * f + (1.0F - f) * 0.5D;
             final EntityItem entityitem = new EntityItem(
-                    par1World, par2 + d0, par3 + d1, par4 + d2, new ItemStack(Items.dye, 1, tile.getColor()));
+                    par1World,
+                    par2 + d0,
+                    par3 + d1,
+                    par4 + d2,
+                    new ItemStack(Items.dye, 1, tile.getColor()));
             entityitem.delayBeforeCanPickup = 10;
             par1World.spawnEntityInWorld(entityitem);
         }
@@ -84,16 +91,8 @@ public class BlockOxygenPipe extends BlockTransmitter implements ITileEntityProv
     }
 
     @Override
-    public boolean onBlockActivated(
-            World par1World,
-            int x,
-            int y,
-            int z,
-            EntityPlayer par5EntityPlayer,
-            int par6,
-            float par7,
-            float par8,
-            float par9) {
+    public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6,
+            float par7, float par8, float par9) {
         final TileEntityOxygenPipe tileEntity = (TileEntityOxygenPipe) par1World.getTileEntity(x, y, z);
 
         if (!par1World.isRemote) {
@@ -101,15 +100,13 @@ public class BlockOxygenPipe extends BlockTransmitter implements ITileEntityProv
 
             if (stack != null) {
                 if (stack.getItem() instanceof ItemDye) {
-                    final int dyeColor =
-                            par5EntityPlayer.inventory.getCurrentItem().getItemDamageForDisplay();
+                    final int dyeColor = par5EntityPlayer.inventory.getCurrentItem().getItemDamageForDisplay();
 
                     final byte colorBefore = tileEntity.getColor();
 
                     tileEntity.setColor((byte) dyeColor);
 
-                    if (colorBefore != (byte) dyeColor
-                            && !par5EntityPlayer.capabilities.isCreativeMode
+                    if (colorBefore != (byte) dyeColor && !par5EntityPlayer.capabilities.isCreativeMode
                             && --par5EntityPlayer.inventory.getCurrentItem().stackSize == 0) {
                         par5EntityPlayer.inventory.mainInventory[par5EntityPlayer.inventory.currentItem] = null;
                     }
@@ -120,7 +117,11 @@ public class BlockOxygenPipe extends BlockTransmitter implements ITileEntityProv
                         final double d1 = par1World.rand.nextFloat() * f + (1.0F - f) * 0.2D + 0.6D;
                         final double d2 = par1World.rand.nextFloat() * f + (1.0F - f) * 0.5D;
                         final EntityItem entityitem = new EntityItem(
-                                par1World, x + d0, y + d1, z + d2, new ItemStack(Items.dye, 1, colorBefore));
+                                par1World,
+                                x + d0,
+                                y + d1,
+                                z + d2,
+                                new ItemStack(Items.dye, 1, colorBefore));
                         entityitem.delayBeforeCanPickup = 10;
                         par1World.spawnEntityInWorld(entityitem);
                     }
@@ -157,8 +158,8 @@ public class BlockOxygenPipe extends BlockTransmitter implements ITileEntityProv
         this.pipeIcons = new IIcon[16];
 
         for (int count = 0; count < ItemDye.field_150923_a.length; count++) {
-            this.pipeIcons[count] = par1IconRegister.registerIcon(
-                    GalacticraftCore.TEXTURE_PREFIX + "pipe_oxygen_" + ItemDye.field_150923_a[count]);
+            this.pipeIcons[count] = par1IconRegister
+                    .registerIcon(GalacticraftCore.TEXTURE_PREFIX + "pipe_oxygen_" + ItemDye.field_150923_a[count]);
         }
 
         this.blockIcon = this.pipeIcons[15];

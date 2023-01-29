@@ -1,9 +1,5 @@
 package micdoodle8.mods.galacticraft.core.client.gui;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.api.prefab.entity.EntityTieredRocket;
 import micdoodle8.mods.galacticraft.api.recipe.ISchematicPage;
 import micdoodle8.mods.galacticraft.api.recipe.ISchematicResultPage;
@@ -74,6 +70,7 @@ import micdoodle8.mods.galacticraft.core.tile.TileEntityParaChest;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityRefinery;
 import micdoodle8.mods.galacticraft.core.tile.TileEntitySolar;
 import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
+
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -82,7 +79,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GuiHandler implements IGuiHandler {
+
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         final EntityPlayerMP playerBase = PlayerUtil.getPlayerBaseServerFromPlayer(player, false);
@@ -187,8 +190,9 @@ public class GuiHandler implements IGuiHandler {
 
         if (tile != null) {
             if (tile instanceof TileEntityRefinery) {
-                return new GuiRefinery(player.inventory, (TileEntityRefinery)
-                        world.getTileEntity(position.intX(), position.intY(), position.intZ()));
+                return new GuiRefinery(
+                        player.inventory,
+                        (TileEntityRefinery) world.getTileEntity(position.intX(), position.intY(), position.intZ()));
             } else if (tile instanceof TileEntityOxygenCollector) {
                 return new GuiOxygenCollector(player.inventory, (TileEntityOxygenCollector) tile);
             } else if (tile instanceof TileEntityOxygenDistributor) {
@@ -232,8 +236,8 @@ public class GuiHandler implements IGuiHandler {
             final GCPlayerStatsClient stats = GCPlayerStatsClient.get(playerClient);
             for (final ISchematicPage page : stats.unlockedSchematics) {
                 if (ID == page.getGuiID()) {
-                    final GuiScreen screen =
-                            page.getResultScreen(playerClient, position.intX(), position.intY(), position.intZ());
+                    final GuiScreen screen = page
+                            .getResultScreen(playerClient, position.intX(), position.intY(), position.intZ());
 
                     if (screen instanceof ISchematicResultPage) {
                         ((ISchematicResultPage) screen).setPageIndex(page.getPageID());

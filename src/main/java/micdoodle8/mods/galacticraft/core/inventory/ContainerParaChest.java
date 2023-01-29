@@ -7,6 +7,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerParaChest extends Container {
+
     private final IInventory parachestInventory;
     public int numRows;
 
@@ -24,26 +25,33 @@ public class ContainerParaChest extends Container {
             }
         }
 
-        this.addSlotToContainer(new Slot(
-                par2IInventory,
-                par2IInventory.getSizeInventory() - 3,
-                125 + 0 * 18,
-                (this.numRows == 0 ? 24 : 26) + this.numRows * 18));
-        this.addSlotToContainer(new Slot(
-                par2IInventory,
-                par2IInventory.getSizeInventory() - 2,
-                125 + 1 * 18,
-                (this.numRows == 0 ? 24 : 26) + this.numRows * 18));
-        this.addSlotToContainer(new Slot(
-                par2IInventory,
-                par2IInventory.getSizeInventory() - 1,
-                75,
-                (this.numRows == 0 ? 24 : 26) + this.numRows * 18));
+        this.addSlotToContainer(
+                new Slot(
+                        par2IInventory,
+                        par2IInventory.getSizeInventory() - 3,
+                        125 + 0 * 18,
+                        (this.numRows == 0 ? 24 : 26) + this.numRows * 18));
+        this.addSlotToContainer(
+                new Slot(
+                        par2IInventory,
+                        par2IInventory.getSizeInventory() - 2,
+                        125 + 1 * 18,
+                        (this.numRows == 0 ? 24 : 26) + this.numRows * 18));
+        this.addSlotToContainer(
+                new Slot(
+                        par2IInventory,
+                        par2IInventory.getSizeInventory() - 1,
+                        75,
+                        (this.numRows == 0 ? 24 : 26) + this.numRows * 18));
 
         for (j = 0; j < 3; ++j) {
             for (k = 0; k < 9; ++k) {
-                this.addSlotToContainer(new Slot(
-                        par1IInventory, k + j * 9 + 9, 8 + k * 18, (this.numRows == 0 ? 116 : 118) + j * 18 + i));
+                this.addSlotToContainer(
+                        new Slot(
+                                par1IInventory,
+                                k + j * 9 + 9,
+                                8 + k * 18,
+                                (this.numRows == 0 ? 116 : 118) + j * 18 + i));
             }
         }
 

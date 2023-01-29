@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.biome.BiomeCache;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -13,10 +14,10 @@ import net.minecraft.world.gen.layer.IntCache;
 /**
  * Do not include this prefab class in your released mod download.
  * <p/>
- * This chunk manager is used for single-biome dimensions, which is common on
- * basic planets.
+ * This chunk manager is used for single-biome dimensions, which is common on basic planets.
  */
 public abstract class WorldChunkManagerSpace extends WorldChunkManager {
+
     private final BiomeCache biomeCache;
     private final List<BiomeGenBase> biomesToSpawnIn;
 
@@ -52,8 +53,8 @@ public abstract class WorldChunkManagerSpace extends WorldChunkManager {
     }
 
     @Override
-    public BiomeGenBase[] getBiomesForGeneration(
-            BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5) {
+    public BiomeGenBase[] getBiomesForGeneration(BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4,
+            int par5) {
         IntCache.resetIntCache();
 
         if (par1ArrayOfBiomeGenBase == null || par1ArrayOfBiomeGenBase.length < par4 * par5) {
@@ -68,14 +69,14 @@ public abstract class WorldChunkManagerSpace extends WorldChunkManager {
     }
 
     @Override
-    public BiomeGenBase[] loadBlockGeneratorData(
-            BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5) {
+    public BiomeGenBase[] loadBlockGeneratorData(BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4,
+            int par5) {
         return this.getBiomeGenAt(par1ArrayOfBiomeGenBase, par2, par3, par4, par5, true);
     }
 
     @Override
-    public BiomeGenBase[] getBiomeGenAt(
-            BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5, boolean par6) {
+    public BiomeGenBase[] getBiomeGenAt(BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5,
+            boolean par6) {
         IntCache.resetIntCache();
 
         if (par1ArrayOfBiomeGenBase == null || par1ArrayOfBiomeGenBase.length < par4 * par5) {

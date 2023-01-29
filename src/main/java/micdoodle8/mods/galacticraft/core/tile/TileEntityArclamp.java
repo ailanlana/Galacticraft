@@ -3,12 +3,14 @@ package micdoodle8.mods.galacticraft.core.tile;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 import micdoodle8.mods.galacticraft.core.network.PacketSimple;
 import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
 import micdoodle8.mods.galacticraft.core.util.RedstoneUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.entity.Entity;
@@ -25,6 +27,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 public class TileEntityArclamp extends TileEntity {
+
     private int ticks = 0;
     private int sideRear = 0;
     public int facing = 0;
@@ -48,7 +51,7 @@ public class TileEntityArclamp extends TileEntity {
             GalacticraftCore.packetPipeline.sendToDimension(
                     new PacketSimple(
                             EnumSimplePacket.C_UPDATE_ARCLAMP_FACING,
-                            new Object[] {this.xCoord, this.yCoord, this.zCoord, this.facing}),
+                            new Object[] { this.xCoord, this.yCoord, this.zCoord, this.facing }),
                     this.worldObj.provider.dimensionId);
             this.updateClientFlag = false;
         }
@@ -155,8 +158,8 @@ public class TileEntityArclamp extends TileEntity {
             }
 
             if (this.worldObj.rand.nextInt(20) == 0) {
-                final List<Entity> moblist =
-                        this.worldObj.getEntitiesWithinAABBExcludingEntity(null, this.thisAABB, IMob.mobSelector);
+                final List<Entity> moblist = this.worldObj
+                        .getEntitiesWithinAABBExcludingEntity(null, this.thisAABB, IMob.mobSelector);
 
                 if (!moblist.isEmpty()) {
                     for (final Entity entry : moblist) {
@@ -169,8 +172,8 @@ public class TileEntityArclamp extends TileEntity {
                         // e.posY, e.posZ),
                         // true, true, false) != null) continue;
 
-                        final Vec3 vecNewTarget =
-                                RandomPositionGenerator.findRandomTargetBlockAwayFrom(e, 16, 7, this.thisPos);
+                        final Vec3 vecNewTarget = RandomPositionGenerator
+                                .findRandomTargetBlockAwayFrom(e, 16, 7, this.thisPos);
                         if (vecNewTarget == null) {
                             continue;
                         }
@@ -185,12 +188,13 @@ public class TileEntityArclamp extends TileEntity {
                         final double distanceNew = vecNewTarget.squareDistanceTo(this.xCoord, this.yCoord, this.zCoord);
 
                         if (distanceNew > e.getDistanceSq(this.xCoord, this.yCoord, this.zCoord)) {
-                            if (vecOldTarget == null
-                                    || distanceNew
-                                            > vecOldTarget.squareDistanceTo(this.xCoord, this.yCoord, this.zCoord)) {
-                                e.getNavigator()
-                                        .tryMoveToXYZ(
-                                                vecNewTarget.xCoord, vecNewTarget.yCoord, vecNewTarget.zCoord, 0.3D);
+                            if (vecOldTarget == null || distanceNew
+                                    > vecOldTarget.squareDistanceTo(this.xCoord, this.yCoord, this.zCoord)) {
+                                e.getNavigator().tryMoveToXYZ(
+                                        vecNewTarget.xCoord,
+                                        vecNewTarget.yCoord,
+                                        vecNewTarget.zCoord,
+                                        0.3D);
                                 // System.out.println("Debug: Arclamp repelling entity:
                                 // "+e.getClass().getSimpleName());
                             }
@@ -210,8 +214,10 @@ public class TileEntityArclamp extends TileEntity {
         this.ticks = 0;
         this.thisAABB = null;
         if (this.worldObj.isRemote) {
-            GalacticraftCore.packetPipeline.sendToServer(new PacketSimple(
-                    EnumSimplePacket.S_REQUEST_ARCLAMP_FACING, new Object[] {this.xCoord, this.yCoord, this.zCoord}));
+            GalacticraftCore.packetPipeline.sendToServer(
+                    new PacketSimple(
+                            EnumSimplePacket.S_REQUEST_ARCLAMP_FACING,
+                            new Object[] { this.xCoord, this.yCoord, this.zCoord }));
         } else {
             this.isActive = true;
         }
@@ -356,7 +362,7 @@ public class TileEntityArclamp extends TileEntity {
         GalacticraftCore.packetPipeline.sendToDimension(
                 new PacketSimple(
                         EnumSimplePacket.C_UPDATE_ARCLAMP_FACING,
-                        new Object[] {this.xCoord, this.yCoord, this.zCoord, this.facing}),
+                        new Object[] { this.xCoord, this.yCoord, this.zCoord, this.facing }),
                 this.worldObj.provider.dimensionId);
         this.thisAABB = null;
         this.revertAir();

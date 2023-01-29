@@ -1,13 +1,16 @@
 package micdoodle8.mods.galacticraft.core.client.render.block;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.IBlockAccess;
+
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+
 public class BlockRendererBreathableAir implements ISimpleBlockRenderingHandler {
+
     final int renderID;
 
     public BlockRendererBreathableAir(int var1) {
@@ -15,8 +18,8 @@ public class BlockRendererBreathableAir implements ISimpleBlockRenderingHandler 
     }
 
     @Override
-    public boolean renderWorldBlock(
-            IBlockAccess var1, int var2, int var3, int var4, Block var5, int var6, RenderBlocks var7) {
+    public boolean renderWorldBlock(IBlockAccess var1, int var2, int var3, int var4, Block var5, int var6,
+            RenderBlocks var7) {
         BlockRendererBreathableAir.renderBreathableAir(var7, var5, var1, var2, var3, var4);
         return true;
     }
@@ -67,8 +70,8 @@ public class BlockRendererBreathableAir implements ISimpleBlockRenderingHandler 
         var3.draw();
     }
 
-    public static void renderBreathableAir(
-            RenderBlocks renderBlocks, Block par1Block, IBlockAccess var1, int par2, int par3, int par4) {
+    public static void renderBreathableAir(RenderBlocks renderBlocks, Block par1Block, IBlockAccess var1, int par2,
+            int par3, int par4) {
         final Tessellator var5 = Tessellator.instance;
         final int var6 = par1Block.colorMultiplier(var1, par2, par3, par4);
         final float var7 = (var6 >> 16 & 255) / 255.0F;
@@ -76,12 +79,10 @@ public class BlockRendererBreathableAir implements ISimpleBlockRenderingHandler 
         final float var9 = (var6 & 255) / 255.0F;
         final boolean var10 = par1Block.shouldSideBeRendered(var1, par2, par3 + 1, par4, 1);
         final boolean var11 = par1Block.shouldSideBeRendered(var1, par2, par3 - 1, par4, 0);
-        final boolean[] var12 = new boolean[] {
-            par1Block.shouldSideBeRendered(var1, par2, par3, par4 - 1, 2),
-            par1Block.shouldSideBeRendered(var1, par2, par3, par4 + 1, 3),
-            par1Block.shouldSideBeRendered(var1, par2 - 1, par3, par4, 4),
-            par1Block.shouldSideBeRendered(var1, par2 + 1, par3, par4, 5)
-        };
+        final boolean[] var12 = new boolean[] { par1Block.shouldSideBeRendered(var1, par2, par3, par4 - 1, 2),
+                par1Block.shouldSideBeRendered(var1, par2, par3, par4 + 1, 3),
+                par1Block.shouldSideBeRendered(var1, par2 - 1, par3, par4, 4),
+                par1Block.shouldSideBeRendered(var1, par2 + 1, par3, par4, 5) };
 
         if (var10 || var11 || var12[0] || var12[1] || var12[2] || var12[3]) {
             final float var14 = 0.5F;

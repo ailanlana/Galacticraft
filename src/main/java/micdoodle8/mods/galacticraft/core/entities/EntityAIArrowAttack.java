@@ -7,6 +7,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.MathHelper;
 
 public class EntityAIArrowAttack extends EntityAIBase {
+
     private final EntityLiving entityHost;
 
     private final IRangedAttackMob rangedAttackEntityHost;
@@ -78,8 +79,8 @@ public class EntityAIArrowAttack extends EntityAIBase {
      */
     @Override
     public void updateTask() {
-        final double d0 = this.entityHost.getDistanceSq(
-                this.attackTarget.posX, this.attackTarget.boundingBox.minY, this.attackTarget.posZ);
+        final double d0 = this.entityHost
+                .getDistanceSq(this.attackTarget.posX, this.attackTarget.boundingBox.minY, this.attackTarget.posZ);
         final boolean flag = this.entityHost.getEntitySenses().canSee(this.attackTarget);
 
         this.entityHost.getNavigator().tryMoveToEntityLiving(this.attackTarget, this.entityMoveSpeed);
@@ -104,12 +105,12 @@ public class EntityAIArrowAttack extends EntityAIBase {
             }
 
             this.rangedAttackEntityHost.attackEntityWithRangedAttack(this.attackTarget, f1);
-            this.rangedAttackTime =
-                    MathHelper.floor_float(f * (this.maxRangedAttackTime - this.field_96561_g) + this.field_96561_g);
+            this.rangedAttackTime = MathHelper
+                    .floor_float(f * (this.maxRangedAttackTime - this.field_96561_g) + this.field_96561_g);
         } else if (this.rangedAttackTime < 0) {
             f = MathHelper.sqrt_double(d0) / this.field_96562_i;
-            this.rangedAttackTime =
-                    MathHelper.floor_float(f * (this.maxRangedAttackTime - this.field_96561_g) + this.field_96561_g);
+            this.rangedAttackTime = MathHelper
+                    .floor_float(f * (this.maxRangedAttackTime - this.field_96561_g) + this.field_96561_g);
         }
     }
 }

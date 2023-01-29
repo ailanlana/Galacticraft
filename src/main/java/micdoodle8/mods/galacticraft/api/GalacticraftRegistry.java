@@ -1,24 +1,28 @@
 package micdoodle8.mods.galacticraft.api;
 
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import micdoodle8.mods.galacticraft.api.client.IGameScreen;
 import micdoodle8.mods.galacticraft.api.recipe.INasaWorkbenchRecipe;
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import micdoodle8.mods.galacticraft.api.world.ITeleportType;
 import micdoodle8.mods.galacticraft.api.world.SpaceStationType;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldProviderSurface;
 import net.minecraftforge.common.DimensionManager;
 
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GalacticraftRegistry {
+
     private static final Map<Class<? extends WorldProvider>, ITeleportType> teleportTypeMap = new HashMap<>();
     private static final List<SpaceStationType> spaceStations = new ArrayList<>();
     private static final List<INasaWorkbenchRecipe> rocketBenchT1Recipes = new ArrayList<>();
@@ -36,10 +40,8 @@ public class GalacticraftRegistry {
     /**
      * Register a new Teleport type for the world provider passed
      *
-     * @param clazz the world provider class that you wish to customize
-     *              teleportation for
-     * @param type  an ITeleportType-implemented class that will be used for the
-     *              provided world type
+     * @param clazz the world provider class that you wish to customize teleportation for
+     * @param type  an ITeleportType-implemented class that will be used for the provided world type
      */
     public static void registerTeleportType(Class<? extends WorldProvider> clazz, ITeleportType type) {
         if (!GalacticraftRegistry.teleportTypeMap.containsKey(clazz)) {
@@ -48,8 +50,8 @@ public class GalacticraftRegistry {
     }
 
     /**
-     * Link a world provider to a gui texture. This texture will be shown on the
-     * left-side of the screen while the player is in the rocket.
+     * Link a world provider to a gui texture. This texture will be shown on the left-side of the screen while the
+     * player is in the rocket.
      *
      * @param clazz     The World Provider class
      * @param rocketGui Resource Location for the gui texture
@@ -61,11 +63,10 @@ public class GalacticraftRegistry {
     }
 
     /**
-     * Add loot to the list of items that can possibly spawn in dungeon chests, but
-     * it is guaranteed that one will always spawn
+     * Add loot to the list of items that can possibly spawn in dungeon chests, but it is guaranteed that one will
+     * always spawn
      *
-     * @param tier Tier of dungeon chest to add loot to. For example Moon is 1 and
-     *             Mars is 2
+     * @param tier Tier of dungeon chest to add loot to. For example Moon is 1 and Mars is 2
      * @param loot The itemstack to add to the possible list of items
      */
     public static void addDungeonLoot(int tier, ItemStack loot) {
@@ -169,17 +170,16 @@ public class GalacticraftRegistry {
     }
 
     /***
-     * Now returns a boolean to indicate whether registration of the WorldProvider
-     * type was successful. (If it failed, you should probably set the CelestialBody
-     * as unreachable.)
+     * Now returns a boolean to indicate whether registration of the WorldProvider type was successful. (If it failed,
+     * you should probably set the CelestialBody as unreachable.)
      *
      * @param id
      * @param provider
      * @param keepLoaded
      * @return <boolean> success
      */
-    public static boolean registerProvider(
-            int id, Class<? extends WorldProvider> provider, boolean keepLoaded, int defaultID) {
+    public static boolean registerProvider(int id, Class<? extends WorldProvider> provider, boolean keepLoaded,
+            int defaultID) {
         final boolean flag = DimensionManager.registerProviderType(id, provider, keepLoaded);
         if (flag) {
             GalacticraftRegistry.worldProviderIDs.add(id);
@@ -188,16 +188,16 @@ public class GalacticraftRegistry {
             GalacticraftRegistry.worldProviderIDs.add(defaultID); // Adding the 0 here preserves the order, important
             // for network compatibility between GC
             // versions
-            FMLLog.severe("Could not register dimension " + id
-                    + " - does it clash with another mod?  Change the ID in config.");
+            FMLLog.severe(
+                    "Could not register dimension " + id
+                            + " - does it clash with another mod?  Change the ID in config.");
             return false;
         }
     }
 
     /**
-     * You should now use GalacticraftRegistry.registerProvider(int id, Class<?
-     * extends WorldProvider> provider, boolean keepLoaded, int defaultID) which
-     * returns a boolean indicating if the Provider was registered OK.
+     * You should now use GalacticraftRegistry.registerProvider(int id, Class<? extends WorldProvider> provider, boolean
+     * keepLoaded, int defaultID) which returns a boolean indicating if the Provider was registered OK.
      *
      * @param id
      * @param provider

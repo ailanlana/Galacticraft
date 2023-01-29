@@ -1,11 +1,10 @@
 package micdoodle8.mods.galacticraft.core.items;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.EnumRarity;
@@ -19,7 +18,12 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.ItemFluidContainer;
 
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public abstract class ItemCanisterGeneric extends ItemFluidContainer {
+
     private String allowedFluid = null;
     public static final int EMPTY = FluidContainerRegistry.BUCKET_VOLUME + 1;
     private static final boolean isTELoaded = Loader.isModLoaded("ThermalExpansion");
@@ -44,7 +48,7 @@ public abstract class ItemCanisterGeneric extends ItemFluidContainer {
         return GalacticraftCore.galacticraftItemsTab;
     }
 
-    @SuppressWarnings({"unchecked"})
+    @SuppressWarnings({ "unchecked" })
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
@@ -94,8 +98,7 @@ public abstract class ItemCanisterGeneric extends ItemFluidContainer {
 
     @Override
     public int fill(ItemStack container, FluidStack resource, boolean doFill) {
-        if (resource == null
-                || resource.getFluid() == null
+        if (resource == null || resource.getFluid() == null
                 || resource.amount == 0
                 || container == null
                 || container.getItemDamage() <= 1

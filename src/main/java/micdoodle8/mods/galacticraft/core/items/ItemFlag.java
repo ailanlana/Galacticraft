@@ -1,12 +1,11 @@
 package micdoodle8.mods.galacticraft.core.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.api.item.IHoldableItem;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.entities.EntityFlag;
 import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +20,11 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class ItemFlag extends Item implements IHoldableItem {
+
     public int placeProgress;
 
     public ItemFlag(String assetName) {
@@ -38,8 +41,8 @@ public class ItemFlag extends Item implements IHoldableItem {
     }
 
     @Override
-    public void onPlayerStoppedUsing(
-            ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4) {
+    public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer,
+            int par4) {
         final int useTime = this.getMaxItemUseDuration(par1ItemStack) - par4;
 
         boolean placed = false;
@@ -60,12 +63,15 @@ public class ItemFlag extends Item implements IHoldableItem {
 
             if (!par2World.isRemote) {
                 final EntityFlag flag = new EntityFlag(
-                        par2World, x + 0.5F, y + 1.0F, z + 0.5F, (int) (par3EntityPlayer.rotationYaw - 90));
+                        par2World,
+                        x + 0.5F,
+                        y + 1.0F,
+                        z + 0.5F,
+                        (int) (par3EntityPlayer.rotationYaw - 90));
 
-                if (par2World
-                        .getEntitiesWithinAABB(
-                                EntityFlag.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 3, z + 1))
-                        .isEmpty()) {
+                if (par2World.getEntitiesWithinAABB(
+                        EntityFlag.class,
+                        AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 3, z + 1)).isEmpty()) {
                     par2World.spawnEntityInWorld(flag);
                     flag.setType(par1ItemStack.getItemDamage());
                     flag.setOwner(par3EntityPlayer.getGameProfile().getName());
@@ -78,8 +84,8 @@ public class ItemFlag extends Item implements IHoldableItem {
                             Block.soundTypeMetal.getPitch() + 2.0F);
                     placed = true;
                 } else {
-                    par3EntityPlayer.addChatMessage(
-                            new ChatComponentText(GCCoreUtil.translate("gui.flag.alreadyPlaced")));
+                    par3EntityPlayer
+                            .addChatMessage(new ChatComponentText(GCCoreUtil.translate("gui.flag.alreadyPlaced")));
                 }
             }
 

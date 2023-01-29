@@ -1,25 +1,19 @@
 package micdoodle8.mods.galacticraft.core.util;
 
-import com.google.common.collect.Maps;
-import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
-import cpw.mods.fml.common.versioning.VersionParser;
-import cpw.mods.fml.relauncher.FMLInjectionData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
 import micdoodle8.mods.galacticraft.core.Constants;
 import micdoodle8.mods.galacticraft.core.obfuscation.FieldObfuscationEntry;
 import micdoodle8.mods.galacticraft.core.obfuscation.MethodObfuscationEntry;
 import micdoodle8.mods.galacticraft.core.obfuscation.ObfuscationEntry;
 import micdoodle8.mods.galacticraft.planets.mars.entities.EntitySlimeling;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntitySlimelingEgg;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -37,7 +31,18 @@ import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import com.google.common.collect.Maps;
+import com.mojang.authlib.GameProfile;
+
+import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
+import cpw.mods.fml.common.versioning.VersionParser;
+import cpw.mods.fml.relauncher.FMLInjectionData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class VersionUtil {
+
     private static DefaultArtifactVersion mcVersion = null;
     public static boolean mcVersion1_7_2 = false;
     public static boolean mcVersion1_7_10 = false;
@@ -108,17 +113,20 @@ public class VersionUtil {
             // nodemap.put(KEY_CLASS_SCALED_RES, new
             // ObfuscationEntry("net/minecraft/client/gui/ScaledResolution", "bca"));
             nodemap.put(
-                    KEY_CLASS_COMPRESSED_STREAM_TOOLS, new ObfuscationEntry("net/minecraft/nbt/CompressedStreamTools"));
+                    KEY_CLASS_COMPRESSED_STREAM_TOOLS,
+                    new ObfuscationEntry("net/minecraft/nbt/CompressedStreamTools"));
             nodemap.put(KEY_CLASS_NBT_SIZE_TRACKER, new ObfuscationEntry("net/minecraft/nbt/NBTSizeTracker"));
             nodemap.put(
                     KEY_CLASS_YGG_CONVERTER,
                     new ObfuscationEntry("net/minecraft/server/management/PreYggdrasilConverter"));
             nodemap.put(
-                    KEY_CLASS_TEXTURE_UTIL, new ObfuscationEntry("net/minecraft/client/renderer/texture/TextureUtil"));
+                    KEY_CLASS_TEXTURE_UTIL,
+                    new ObfuscationEntry("net/minecraft/client/renderer/texture/TextureUtil"));
             nodemap.put(KEY_CLASS_COMMAND_BASE, new ObfuscationEntry("net/minecraft/command/CommandBase"));
             nodemap.put(KEY_CLASS_SCALED_RES, new ObfuscationEntry("net/minecraft/client/gui/ScaledResolution"));
             nodemap.put(
-                    KEY_CLASS_RENDER_PLAYER, new ObfuscationEntry("net/minecraft/client/renderer/entity/RenderPlayer"));
+                    KEY_CLASS_RENDER_PLAYER,
+                    new ObfuscationEntry("net/minecraft/client/renderer/entity/RenderPlayer"));
             nodemap.put(KEY_CLASS_ENTITYLIST, new ObfuscationEntry("net/minecraft/entity/EntityList"));
 
             // Method descriptions are empty, since they are not needed for reflection.
@@ -148,15 +156,18 @@ public class VersionUtil {
             // nodemap.put(KEY_CLASS_SCALED_RES, new
             // ObfuscationEntry("net/minecraft/client/gui/ScaledResolution", "bam"));
             nodemap.put(
-                    KEY_CLASS_COMPRESSED_STREAM_TOOLS, new ObfuscationEntry("net/minecraft/nbt/CompressedStreamTools"));
+                    KEY_CLASS_COMPRESSED_STREAM_TOOLS,
+                    new ObfuscationEntry("net/minecraft/nbt/CompressedStreamTools"));
             nodemap.put(KEY_CLASS_NBT_SIZE_TRACKER, new ObfuscationEntry("", "")); // Not part of 1.7.2
             nodemap.put(KEY_CLASS_YGG_CONVERTER, new ObfuscationEntry("", "")); // Not part of 1.7.2
             nodemap.put(
-                    KEY_CLASS_TEXTURE_UTIL, new ObfuscationEntry("net/minecraft/client/renderer/texture/TextureUtil"));
+                    KEY_CLASS_TEXTURE_UTIL,
+                    new ObfuscationEntry("net/minecraft/client/renderer/texture/TextureUtil"));
             nodemap.put(KEY_CLASS_COMMAND_BASE, new ObfuscationEntry("net/minecraft/command/CommandBase"));
             nodemap.put(KEY_CLASS_SCALED_RES, new ObfuscationEntry("net/minecraft/client/gui/ScaledResolution"));
             nodemap.put(
-                    KEY_CLASS_RENDER_PLAYER, new ObfuscationEntry("net/minecraft/client/renderer/entity/RenderPlayer"));
+                    KEY_CLASS_RENDER_PLAYER,
+                    new ObfuscationEntry("net/minecraft/client/renderer/entity/RenderPlayer"));
             nodemap.put(KEY_CLASS_ENTITYLIST, new ObfuscationEntry("net/minecraft/entity/EntityList"));
 
             nodemap.put(KEY_METHOD_SET_OWNER, new MethodObfuscationEntry("setOwner", "func_70910_a", ""));
@@ -166,7 +177,8 @@ public class VersionUtil {
             nodemap.put(KEY_METHOD_SET_MIPMAP, new MethodObfuscationEntry("func_147950_a", "func_147950_a", ""));
             nodemap.put(KEY_METHOD_NOTIFY_ADMINS, new MethodObfuscationEntry("notifyAdmins", "func_71522_a", ""));
             nodemap.put(
-                    KEY_METHOD_PLAYER_FOR_NAME, new MethodObfuscationEntry("getPlayerForUsername", "func_72361_f", ""));
+                    KEY_METHOD_PLAYER_FOR_NAME,
+                    new MethodObfuscationEntry("getPlayerForUsername", "func_72361_f", ""));
             nodemap.put(KEY_METHOD_PLAYER_IS_OPPED, new MethodObfuscationEntry("isPlayerOpped", "func_72353_e", ""));
             nodemap.put(KEY_METHOD_PLAYER_TEXTURE, new MethodObfuscationEntry("getEntityTexture", "func_110775_a", ""));
 
@@ -239,8 +251,7 @@ public class VersionUtil {
                     Method m = (Method) reflectionCache.get(2);
 
                     if (m == null) {
-                        final Class<?> c = Class.forName(
-                                getNameDynamic(KEY_CLASS_YGG_CONVERTER).replace('/', '.'));
+                        final Class<?> c = Class.forName(getNameDynamic(KEY_CLASS_YGG_CONVERTER).replace('/', '.'));
                         m = c.getMethod(getNameDynamic(KEY_METHOD_CONVERT_UUID), String.class);
                         reflectionCache.put(2, m);
                     }
@@ -265,14 +276,13 @@ public class VersionUtil {
                 Method m = (Method) reflectionCache.get(6);
 
                 if (c0 == null) {
-                    c0 = Class.forName(
-                            getNameDynamic(KEY_CLASS_NBT_SIZE_TRACKER).replace('/', '.'));
+                    c0 = Class.forName(getNameDynamic(KEY_CLASS_NBT_SIZE_TRACKER).replace('/', '.'));
                     reflectionCache.put(4, c0);
                 }
 
                 if (m == null) {
-                    final Class<?> c = Class.forName(
-                            getNameDynamic(KEY_CLASS_COMPRESSED_STREAM_TOOLS).replace('/', '.'));
+                    final Class<?> c = Class
+                            .forName(getNameDynamic(KEY_CLASS_COMPRESSED_STREAM_TOOLS).replace('/', '.'));
                     m = c.getMethod(getNameDynamic(KEY_METHOD_DECOMPRESS_NBT), byte[].class, c0);
                     reflectionCache.put(6, m);
                 }
@@ -283,8 +293,8 @@ public class VersionUtil {
                 Method m = (Method) reflectionCache.get(6);
 
                 if (m == null) {
-                    final Class<?> c = Class.forName(
-                            getNameDynamic(KEY_CLASS_COMPRESSED_STREAM_TOOLS).replace('/', '.'));
+                    final Class<?> c = Class
+                            .forName(getNameDynamic(KEY_CLASS_COMPRESSED_STREAM_TOOLS).replace('/', '.'));
                     m = c.getMethod(getNameDynamic(KEY_METHOD_DECOMPRESS_NBT), byte[].class);
                     reflectionCache.put(6, m);
                 }
@@ -304,8 +314,7 @@ public class VersionUtil {
                 Method m = (Method) reflectionCache.get(8);
 
                 if (m == null) {
-                    final Class<?> c =
-                            Class.forName(getNameDynamic(KEY_CLASS_TEXTURE_UTIL).replace('/', '.'));
+                    final Class<?> c = Class.forName(getNameDynamic(KEY_CLASS_TEXTURE_UTIL).replace('/', '.'));
                     m = c.getMethod(getNameDynamic(KEY_METHOD_SET_MIPMAP), boolean.class, boolean.class, float.class);
                     reflectionCache.put(8, m);
                 }
@@ -315,8 +324,7 @@ public class VersionUtil {
                 Method m = (Method) reflectionCache.get(8);
 
                 if (m == null) {
-                    final Class<?> c =
-                            Class.forName(getNameDynamic(KEY_CLASS_TEXTURE_UTIL).replace('/', '.'));
+                    final Class<?> c = Class.forName(getNameDynamic(KEY_CLASS_TEXTURE_UTIL).replace('/', '.'));
                     m = c.getMethod(getNameDynamic(KEY_METHOD_SET_MIPMAP), boolean.class, boolean.class);
                     reflectionCache.put(8, m);
                 }
@@ -334,8 +342,7 @@ public class VersionUtil {
                 Method m = (Method) reflectionCache.get(10);
 
                 if (m == null) {
-                    final Class<?> c =
-                            Class.forName(getNameDynamic(KEY_CLASS_COMMAND_BASE).replace('/', '.'));
+                    final Class<?> c = Class.forName(getNameDynamic(KEY_CLASS_COMMAND_BASE).replace('/', '.'));
                     m = c.getMethod(
                             getNameDynamic(KEY_METHOD_NOTIFY_ADMINS),
                             ICommandSender.class,
@@ -350,8 +357,7 @@ public class VersionUtil {
                 Method m = (Method) reflectionCache.get(10);
 
                 if (m == null) {
-                    final Class<?> c =
-                            Class.forName(getNameDynamic(KEY_CLASS_COMMAND_BASE).replace('/', '.'));
+                    final Class<?> c = Class.forName(getNameDynamic(KEY_CLASS_COMMAND_BASE).replace('/', '.'));
                     m = c.getMethod(
                             getNameDynamic(KEY_METHOD_NOTIFY_ADMINS),
                             ICommandSender.class,
@@ -406,9 +412,7 @@ public class VersionUtil {
                     reflectionCache.put(14, m);
                 }
 
-                return (Boolean) m.invoke(
-                        player.mcServer.getConfigurationManager(),
-                        player.getGameProfile().getName());
+                return (Boolean) m.invoke(player.mcServer.getConfigurationManager(), player.getGameProfile().getName());
             }
         } catch (final Throwable t) {
             t.printStackTrace();
@@ -424,8 +428,7 @@ public class VersionUtil {
                 Constructor m = (Constructor) reflectionCache.get(16);
 
                 if (m == null) {
-                    final Class<?> c =
-                            Class.forName(getNameDynamic(KEY_CLASS_SCALED_RES).replace('/', '.'));
+                    final Class<?> c = Class.forName(getNameDynamic(KEY_CLASS_SCALED_RES).replace('/', '.'));
                     m = c.getConstructor(Minecraft.class, int.class, int.class);
                     reflectionCache.put(16, m);
                 }
@@ -435,8 +438,7 @@ public class VersionUtil {
                 Constructor m = (Constructor) reflectionCache.get(16);
 
                 if (m == null) {
-                    final Class<?> c =
-                            Class.forName(getNameDynamic(KEY_CLASS_SCALED_RES).replace('/', '.'));
+                    final Class<?> c = Class.forName(getNameDynamic(KEY_CLASS_SCALED_RES).replace('/', '.'));
                     m = c.getConstructor(GameSettings.class, int.class, int.class);
                     reflectionCache.put(16, m);
                 }
@@ -455,8 +457,7 @@ public class VersionUtil {
             Method m = (Method) reflectionCache.get(18);
 
             if (m == null) {
-                final Class<?> c =
-                        Class.forName(getNameDynamic(KEY_CLASS_RENDER_PLAYER).replace('/', '.'));
+                final Class<?> c = Class.forName(getNameDynamic(KEY_CLASS_RENDER_PLAYER).replace('/', '.'));
                 m = c.getMethod(getNameDynamic(KEY_METHOD_PLAYER_TEXTURE), AbstractClientPlayer.class);
                 m.setAccessible(true);
                 reflectionCache.put(18, m);
@@ -474,8 +475,7 @@ public class VersionUtil {
         // Achieves this, with private field:
         // EntityList.classToIDMapping.put(mobClazz, id);
         try {
-            final Class<?> c =
-                    Class.forName(getNameDynamic(KEY_CLASS_ENTITYLIST).replace('/', '.'));
+            final Class<?> c = Class.forName(getNameDynamic(KEY_CLASS_ENTITYLIST).replace('/', '.'));
             final Field f = c.getDeclaredField(getNameDynamic(KEY_FIELD_CLASSTOIDMAPPING));
             f.setAccessible(true);
             final Map classToIDMapping = (Map) f.get(null);
@@ -493,8 +493,7 @@ public class VersionUtil {
         // Achieves this, with private field:
         // EntityList.classToIDMapping.put(mobClazz, id);
         try {
-            final Class<?> c =
-                    Class.forName(getNameDynamic(KEY_CLASS_ENTITYLIST).replace('/', '.'));
+            final Class<?> c = Class.forName(getNameDynamic(KEY_CLASS_ENTITYLIST).replace('/', '.'));
             final Field f = c.getDeclaredField(getNameDynamic(KEY_FIELD_CLASSTOIDMAPPING));
             f.setAccessible(true);
             final Map classToIDMapping = (Map) f.get(null);

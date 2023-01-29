@@ -1,14 +1,14 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical;
 import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityCargoLoader;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityCargoUnloader;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -23,7 +23,11 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockCargoLoader extends BlockAdvancedTile implements ItemBlockDesc.IBlockShiftDesc {
+
     private IIcon iconMachineSide;
     private IIcon iconInput;
     private IIcon iconFrontLoader;
@@ -47,7 +51,7 @@ public class BlockCargoLoader extends BlockAdvancedTile implements ItemBlockDesc
         return GalacticraftCore.proxy.getBlockRender(this);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @SideOnly(Side.CLIENT)
     @Override
     public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
@@ -81,15 +85,15 @@ public class BlockCargoLoader extends BlockAdvancedTile implements ItemBlockDesc
         this.iconInput = par1IconRegister.registerIcon(GalacticraftCore.TEXTURE_PREFIX + "machine_input");
         this.iconMachineSide = par1IconRegister.registerIcon(GalacticraftCore.TEXTURE_PREFIX + "machine_blank");
         this.iconFrontLoader = par1IconRegister.registerIcon(GalacticraftCore.TEXTURE_PREFIX + "machine_cargoloader");
-        this.iconFrontUnloader =
-                par1IconRegister.registerIcon(GalacticraftCore.TEXTURE_PREFIX + "machine_cargounloader");
+        this.iconFrontUnloader = par1IconRegister
+                .registerIcon(GalacticraftCore.TEXTURE_PREFIX + "machine_cargounloader");
         this.iconItemInput = par1IconRegister.registerIcon(GalacticraftCore.TEXTURE_PREFIX + "machine_item_input");
         this.iconItemOutput = par1IconRegister.registerIcon(GalacticraftCore.TEXTURE_PREFIX + "machine_item_output");
     }
 
     @Override
-    public boolean onMachineActivated(
-            World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
+    public boolean onMachineActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX,
+            float hitY, float hitZ) {
         entityPlayer.openGui(GalacticraftCore.instance, -1, world, x, y, z);
         return true;
     }
@@ -107,10 +111,7 @@ public class BlockCargoLoader extends BlockAdvancedTile implements ItemBlockDesc
 
             if (side == shiftedMeta + 2) {
                 return this.iconInput;
-            } else if (side
-                    == ForgeDirection.getOrientation(shiftedMeta + 2)
-                            .getOpposite()
-                            .ordinal()) {
+            } else if (side == ForgeDirection.getOrientation(shiftedMeta + 2).getOpposite().ordinal()) {
                 return metadata < 4 ? this.iconItemInput : this.iconItemOutput;
             } else {
                 return metadata < 4 ? this.iconFrontLoader : this.iconFrontUnloader;
@@ -120,10 +121,7 @@ public class BlockCargoLoader extends BlockAdvancedTile implements ItemBlockDesc
 
             if (side == shiftedMeta + 2) {
                 return this.iconInput;
-            } else if (side
-                    == ForgeDirection.getOrientation(shiftedMeta + 2)
-                            .getOpposite()
-                            .ordinal()) {
+            } else if (side == ForgeDirection.getOrientation(shiftedMeta + 2).getOpposite().ordinal()) {
                 return metadata < 4 ? this.iconItemInput : this.iconItemOutput;
             } else {
                 return metadata < 4 ? this.iconFrontLoader : this.iconFrontUnloader;
@@ -143,16 +141,8 @@ public class BlockCargoLoader extends BlockAdvancedTile implements ItemBlockDesc
     }
 
     @Override
-    public boolean onUseWrench(
-            World world,
-            int x,
-            int y,
-            int z,
-            EntityPlayer par5EntityPlayer,
-            int side,
-            float hitX,
-            float hitY,
-            float hitZ) {
+    public boolean onUseWrench(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX,
+            float hitY, float hitZ) {
         final int metadata = world.getBlockMetadata(x, y, z);
         int shiftedMeta = metadata;
         int baseMeta = 0;

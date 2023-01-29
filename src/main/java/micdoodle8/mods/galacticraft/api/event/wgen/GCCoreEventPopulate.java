@@ -1,16 +1,19 @@
 package micdoodle8.mods.galacticraft.api.event.wgen;
 
-import cpw.mods.fml.common.eventhandler.Event;
 import java.util.Random;
+
 import net.minecraft.world.World;
+
+import cpw.mods.fml.common.eventhandler.Event;
 
 /**
  * Event is thrown when a chunk is populated on planets.
  * <p/>
- * If you're adding your own dimensions, make sure you post these two events to
- * the forge event bus when decorating your planet/moon
+ * If you're adding your own dimensions, make sure you post these two events to the forge event bus when decorating your
+ * planet/moon
  */
 public class GCCoreEventPopulate extends Event {
+
     public final World worldObj;
     public final Random rand;
     public final int chunkX;
@@ -24,12 +27,14 @@ public class GCCoreEventPopulate extends Event {
     }
 
     public static class Pre extends GCCoreEventPopulate {
+
         public Pre(World world, Random rand, int worldX, int worldZ) {
             super(world, rand, worldX, worldZ);
         }
     }
 
     public static class Post extends GCCoreEventPopulate {
+
         public Post(World world, Random rand, int worldX, int worldZ) {
             super(world, rand, worldX, worldZ);
         }

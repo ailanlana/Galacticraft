@@ -1,10 +1,12 @@
 package micdoodle8.mods.galacticraft.core.inventory;
 
 import java.util.ArrayList;
+
 import micdoodle8.mods.galacticraft.api.item.IItemElectric;
 import micdoodle8.mods.galacticraft.api.recipe.CircuitFabricatorRecipes;
 import micdoodle8.mods.galacticraft.core.items.GCItems;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityCircuitFabricator;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
@@ -17,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class ContainerCircuitFabricator extends Container {
+
     private final TileEntityCircuitFabricator tileEntity;
 
     public ContainerCircuitFabricator(InventoryPlayer playerInv, TileEntityCircuitFabricator tileEntity) {
@@ -27,26 +30,51 @@ public class ContainerCircuitFabricator extends Container {
 
         // Diamond
         ArrayList<ItemStack> slotContentsList = CircuitFabricatorRecipes.slotValidItems.get(0);
-        this.addSlotToContainer(new SlotSpecific(
-                tileEntity, 1, 15, 17, slotContentsList.toArray(new ItemStack[slotContentsList.size()])));
+        this.addSlotToContainer(
+                new SlotSpecific(
+                        tileEntity,
+                        1,
+                        15,
+                        17,
+                        slotContentsList.toArray(new ItemStack[slotContentsList.size()])));
 
         // Silicon
         slotContentsList = CircuitFabricatorRecipes.slotValidItems.get(1);
-        this.addSlotToContainer(new SlotSpecific(
-                tileEntity, 2, 74, 46, slotContentsList.toArray(new ItemStack[slotContentsList.size()])));
+        this.addSlotToContainer(
+                new SlotSpecific(
+                        tileEntity,
+                        2,
+                        74,
+                        46,
+                        slotContentsList.toArray(new ItemStack[slotContentsList.size()])));
         slotContentsList = CircuitFabricatorRecipes.slotValidItems.get(2);
-        this.addSlotToContainer(new SlotSpecific(
-                tileEntity, 3, 74, 64, slotContentsList.toArray(new ItemStack[slotContentsList.size()])));
+        this.addSlotToContainer(
+                new SlotSpecific(
+                        tileEntity,
+                        3,
+                        74,
+                        64,
+                        slotContentsList.toArray(new ItemStack[slotContentsList.size()])));
 
         // Redstone
         slotContentsList = CircuitFabricatorRecipes.slotValidItems.get(3);
-        this.addSlotToContainer(new SlotSpecific(
-                tileEntity, 4, 122, 46, slotContentsList.toArray(new ItemStack[slotContentsList.size()])));
+        this.addSlotToContainer(
+                new SlotSpecific(
+                        tileEntity,
+                        4,
+                        122,
+                        46,
+                        slotContentsList.toArray(new ItemStack[slotContentsList.size()])));
 
         // Optional
         slotContentsList = CircuitFabricatorRecipes.slotValidItems.get(4);
-        this.addSlotToContainer(new SlotSpecific(
-                tileEntity, 5, 145, 20, slotContentsList.toArray(new ItemStack[slotContentsList.size()])));
+        this.addSlotToContainer(
+                new SlotSpecific(
+                        tileEntity,
+                        5,
+                        145,
+                        20,
+                        slotContentsList.toArray(new ItemStack[slotContentsList.size()])));
 
         // Smelting result
         this.addSlotToContainer(new SlotFurnace(playerInv.player, tileEntity, 6, 152, 86));
@@ -75,8 +103,7 @@ public class ContainerCircuitFabricator extends Container {
     }
 
     /**
-     * Called to transfer a stack from one inventory to the other eg. when shift
-     * clicking.
+     * Called to transfer a stack from one inventory to the other eg. when shift clicking.
      */
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1) {
@@ -114,19 +141,19 @@ public class ContainerCircuitFabricator extends Container {
                     if (!this.mergeItemStack(var4, 4, 5, false)) {
                         return null;
                     }
-                } else if (i == Items.repeater
-                        || i == new ItemStack(Blocks.redstone_torch).getItem()
+                } else if (i == Items.repeater || i == new ItemStack(Blocks.redstone_torch).getItem()
                         || i == Items.dye && i.getDamage(var4) == 4) {
-                    if (!this.mergeItemStack(var4, 5, 6, false)) {
+                            if (!this.mergeItemStack(var4, 5, 6, false)) {
+                                return null;
+                            }
+                        } else
+                    if (par1 < b - 9) {
+                        if (!this.mergeItemStack(var4, b - 9, b, false)) {
+                            return null;
+                        }
+                    } else if (!this.mergeItemStack(var4, b - 36, b - 9, false)) {
                         return null;
                     }
-                } else if (par1 < b - 9) {
-                    if (!this.mergeItemStack(var4, b - 9, b, false)) {
-                        return null;
-                    }
-                } else if (!this.mergeItemStack(var4, b - 36, b - 9, false)) {
-                    return null;
-                }
             }
 
             if (var4.stackSize == 0) {

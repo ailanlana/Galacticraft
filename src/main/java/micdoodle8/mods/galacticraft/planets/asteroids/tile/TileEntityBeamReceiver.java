@@ -1,7 +1,5 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.tile;
 
-import com.google.common.collect.Lists;
-import cpw.mods.fml.relauncher.Side;
 import micdoodle8.mods.galacticraft.api.power.EnergySource;
 import micdoodle8.mods.galacticraft.api.power.EnergySource.EnergySourceAdjacent;
 import micdoodle8.mods.galacticraft.api.power.EnergySource.EnergySourceWireless;
@@ -18,19 +16,24 @@ import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical
 import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectricalSource;
 import micdoodle8.mods.galacticraft.core.tile.ReceiverMode;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.google.common.collect.Lists;
+import cpw.mods.fml.relauncher.Side;
+
 @SuppressWarnings("unused")
 public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEnergyHandlerGC, ILaserNode {
+
     @NetworkedField(targetSide = Side.CLIENT)
     public int facing = ForgeDirection.UNKNOWN.ordinal();
 
     private int preLoadFacing = -1;
     private final float maxRate = 1500;
-    private final EnergyStorage storage =
-            new EnergyStorage(10 * this.maxRate, this.maxRate); // In broken circuits, Beam Receiver will
+    private final EnergyStorage storage = new EnergyStorage(10 * this.maxRate, this.maxRate); // In broken circuits,
+                                                                                              // Beam Receiver will
     // accept energy for 0.5s (15000gJ max)
     // then stop
 
@@ -49,8 +52,7 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
         }
 
         if (!this.worldObj.isRemote) {
-            if (this.getTarget() != null
-                    && this.modeReceive == ReceiverMode.EXTRACT.ordinal()
+            if (this.getTarget() != null && this.modeReceive == ReceiverMode.EXTRACT.ordinal()
                     && this.facing != ForgeDirection.UNKNOWN.ordinal()) {
                 final TileEntity tile = this.getAttachedTile();
 
@@ -59,10 +61,11 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
                     final TileBaseUniversalElectricalSource electricalTile = (TileBaseUniversalElectricalSource) tile;
 
                     if (electricalTile.storage.getEnergyStoredGC() > 0) {
-                        final EnergySourceAdjacent source =
-                                new EnergySourceAdjacent(ForgeDirection.getOrientation(this.facing ^ 1));
+                        final EnergySourceAdjacent source = new EnergySourceAdjacent(
+                                ForgeDirection.getOrientation(this.facing ^ 1));
                         final float toSend = Math.min(
-                                electricalTile.storage.getMaxExtract(), electricalTile.storage.getEnergyStoredGC());
+                                electricalTile.storage.getMaxExtract(),
+                                electricalTile.storage.getEnergyStoredGC());
                         final float transmitted = this.getTarget()
                                 .receiveEnergyGC(new EnergySourceWireless(Lists.newArrayList(this)), toSend, false);
                         electricalTile.extractEnergyGC(source, transmitted, false);
@@ -75,9 +78,10 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
                     final ForgeDirection inputAdj = ForgeDirection.getOrientation(this.facing);
                     final float availableToSend = EnergyUtil.otherModsEnergyExtract(tile, inputAdj, this.maxRate, true);
                     if (availableToSend > 0F) {
-                        final float transmitted = this.getTarget()
-                                .receiveEnergyGC(
-                                        new EnergySourceWireless(Lists.newArrayList(this)), availableToSend, false);
+                        final float transmitted = this.getTarget().receiveEnergyGC(
+                                new EnergySourceWireless(Lists.newArrayList(this)),
+                                availableToSend,
+                                false);
                         EnergyUtil.otherModsEnergyExtract(tile, inputAdj, transmitted, false);
                     }
                 }
@@ -95,17 +99,18 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
 
                     if (tileAdj instanceof TileBaseUniversalElectrical) {
                         final TileBaseUniversalElectrical electricalTile = (TileBaseUniversalElectrical) tileAdj;
-                        final EnergySourceAdjacent source =
-                                new EnergySourceAdjacent(ForgeDirection.getOrientation(this.facing ^ 1));
+                        final EnergySourceAdjacent source = new EnergySourceAdjacent(
+                                ForgeDirection.getOrientation(this.facing ^ 1));
                         this.storage.extractEnergyGCnoMax(
-                                electricalTile.receiveEnergyGC(source, maxTransfer, false), false);
+                                electricalTile.receiveEnergyGC(source, maxTransfer, false),
+                                false);
                     } else if (!(tileAdj instanceof EnergyStorageTile) && !(tileAdj instanceof TileBaseConductor))
                     // Dont use other mods methods to connect Beam Receivers to GC's own wires or
                     // machines
                     {
                         final ForgeDirection inputAdj = ForgeDirection.getOrientation(this.facing);
-                        final float otherModTransferred =
-                                EnergyUtil.otherModsEnergyTransfer(tileAdj, inputAdj, maxTransfer, false);
+                        final float otherModTransferred = EnergyUtil
+                                .otherModsEnergyTransfer(tileAdj, inputAdj, maxTransfer, false);
                         if (otherModTransferred > 0F) {
                             this.storage.extractEnergyGCnoMax(otherModTransferred, false);
                         }
@@ -261,8 +266,8 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
                 if (tile == null) {
                     this.modeReceive = ReceiverMode.UNDEFINED.ordinal();
                 } else if (tile instanceof EnergyStorageTile) {
-                    final ReceiverMode mode =
-                            ((EnergyStorageTile) tile).getModeFromDirection(newDirection.getOpposite());
+                    final ReceiverMode mode = ((EnergyStorageTile) tile)
+                            .getModeFromDirection(newDirection.getOpposite());
 
                     if (mode != null) {
                         this.modeReceive = mode.ordinal();

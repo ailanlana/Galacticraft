@@ -1,20 +1,24 @@
 package micdoodle8.mods.galacticraft.planets.mars.client.render.entity;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
 import micdoodle8.mods.galacticraft.planets.mars.client.model.ModelSludgeling;
 import micdoodle8.mods.galacticraft.planets.mars.entities.EntitySludgeling;
+
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 @SideOnly(Side.CLIENT)
 public class RenderSludgeling extends RenderLiving {
-    private static final ResourceLocation sludgelingTexture =
-            new ResourceLocation(MarsModule.ASSET_PREFIX, "textures/model/sludgeling.png");
+
+    private static final ResourceLocation sludgelingTexture = new ResourceLocation(
+            MarsModule.ASSET_PREFIX,
+            "textures/model/sludgeling.png");
 
     public RenderSludgeling() {
         super(new ModelSludgeling(), 0.3F);
@@ -29,8 +33,8 @@ public class RenderSludgeling extends RenderLiving {
         return this.func_110779_a((EntitySludgeling) par1Entity);
     }
 
-    public void renderSludgeling(
-            EntitySludgeling sludgeling, double par2, double par4, double par6, float par8, float par9) {
+    public void renderSludgeling(EntitySludgeling sludgeling, double par2, double par4, double par6, float par8,
+            float par9) {
         super.doRender(sludgeling, par2, par4, par6, par8, par9);
     }
 

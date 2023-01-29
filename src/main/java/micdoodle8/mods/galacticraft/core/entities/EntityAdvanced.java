@@ -1,24 +1,28 @@
 package micdoodle8.mods.galacticraft.core.entities;
 
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
-import cpw.mods.fml.relauncher.Side;
-import io.netty.buffer.ByteBuf;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.network.IPacketReceiver;
 import micdoodle8.mods.galacticraft.core.network.NetworkUtil;
 import micdoodle8.mods.galacticraft.core.network.PacketDynamic;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import cpw.mods.fml.relauncher.Side;
+import io.netty.buffer.ByteBuf;
+
 public abstract class EntityAdvanced extends Entity implements IPacketReceiver {
+
     protected long ticks = 0;
     private LinkedHashSet<Field> fieldCacheClient;
     private LinkedHashSet<Field> fieldCacheServer;
@@ -47,15 +51,13 @@ public abstract class EntityAdvanced extends Entity implements IPacketReceiver {
      * Get the amount of ticks between each packet send
      *
      * @param side The target side.
-     * @return The amount of ticks to wait before sending another packet to this
-     * target
+     * @return The amount of ticks to wait before sending another packet to this target
      */
     public abstract int getPacketCooldown(Side side);
 
     /**
-     * Add any additional data to the stream (only effective if there are both
-     * CLIENT and SERVER targeted regular networked fields ... currently nothing in
-     * GC uses this)
+     * Add any additional data to the stream (only effective if there are both CLIENT and SERVER targeted regular
+     * networked fields ... currently nothing in GC uses this)
      *
      * @param networkedList List of additional data
      */

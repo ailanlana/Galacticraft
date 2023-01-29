@@ -1,6 +1,7 @@
 package micdoodle8.mods.galacticraft.core.inventory;
 
 import micdoodle8.mods.galacticraft.api.recipe.ISchematicItem;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -11,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class ContainerSchematic extends Container {
+
     public InventorySchematic craftMatrix = new InventorySchematic(this);
     public IInventory craftResult = new InventoryCraftResult();
     private final World worldObj;

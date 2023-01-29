@@ -1,10 +1,9 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
+
 import micdoodle8.mods.galacticraft.api.entity.ITelemetry;
 import micdoodle8.mods.galacticraft.api.prefab.entity.EntitySpaceshipBase;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
@@ -15,6 +14,7 @@ import micdoodle8.mods.galacticraft.core.network.PacketSimple;
 import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
 import micdoodle8.mods.galacticraft.core.util.GCLog;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -32,9 +32,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.WorldProvider;
 
+import com.mojang.authlib.GameProfile;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+
 public class TileEntityTelemetry extends TileEntity {
+
     public Class clientClass;
-    public int[] clientData = {-1};
+    public int[] clientData = { -1 };
     public String clientName;
     public GameProfile clientGameProfile = null;
 
@@ -70,7 +74,7 @@ public class TileEntityTelemetry extends TileEntity {
             }
 
             String name;
-            final int[] data = {-1, -1, -1, -1, -1};
+            final int[] data = { -1, -1, -1, -1, -1 };
             String strUUID = "";
 
             if (this.linkedEntity != null) {
@@ -87,8 +91,9 @@ public class TileEntityTelemetry extends TileEntity {
                     }
 
                     if (name == null) {
-                        GCLog.info("Telemetry Unit: Error finding name for "
-                                + this.linkedEntity.getClass().getSimpleName());
+                        GCLog.info(
+                                "Telemetry Unit: Error finding name for "
+                                        + this.linkedEntity.getClass().getSimpleName());
                         name = "";
                     }
 
@@ -97,8 +102,8 @@ public class TileEntityTelemetry extends TileEntity {
                             ? this.linkedEntity.motionY + 0.078D
                             : this.linkedEntity.motionY;
                     final double zmotion = this.linkedEntity.motionZ;
-                    data[2] = (int)
-                            (MathHelper.sqrt_double(xmotion * xmotion + ymotion * ymotion + zmotion * zmotion) * 2000D);
+                    data[2] = (int) (MathHelper.sqrt_double(xmotion * xmotion + ymotion * ymotion + zmotion * zmotion)
+                            * 2000D);
 
                     if (this.linkedEntity instanceof ITelemetry) {
                         ((ITelemetry) this.linkedEntity).transmitData(data);
@@ -161,18 +166,10 @@ public class TileEntityTelemetry extends TileEntity {
                 name = "";
             }
             GalacticraftCore.packetPipeline.sendToAllAround(
-                    new PacketSimple(EnumSimplePacket.C_UPDATE_TELEMETRY, new Object[] {
-                        this.xCoord,
-                        this.yCoord,
-                        this.zCoord,
-                        name,
-                        data[0],
-                        data[1],
-                        data[2],
-                        data[3],
-                        data[4],
-                        strUUID
-                    }),
+                    new PacketSimple(
+                            EnumSimplePacket.C_UPDATE_TELEMETRY,
+                            new Object[] { this.xCoord, this.yCoord, this.zCoord, name, data[0], data[1], data[2],
+                                    data[3], data[4], strUUID }),
                     new TargetPoint(this.worldObj.provider.dimensionId, this.xCoord, this.yCoord, this.zCoord, 320D));
         }
     }
@@ -256,8 +253,7 @@ public class TileEntityTelemetry extends TileEntity {
     }
 
     /**
-     * Call this when a player wears a frequency module to check whether it has been
-     * linked with a Telemetry Unit.
+     * Call this when a player wears a frequency module to check whether it has been linked with a Telemetry Unit.
      *
      * @param ItemStack The frequency module
      * @param player

@@ -1,6 +1,7 @@
 package micdoodle8.mods.galacticraft.core.obfuscation;
 
 public class ObfuscationEntry {
+
     public String name;
     public String obfuscatedName;
 

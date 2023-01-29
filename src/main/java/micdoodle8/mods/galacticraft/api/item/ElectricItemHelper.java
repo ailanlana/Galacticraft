@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
  * @author Calclavia
  */
 public class ElectricItemHelper {
+
     /**
      * Recharges an electric item.
      *
@@ -18,11 +19,10 @@ public class ElectricItemHelper {
     public static float chargeItem(ItemStack itemStack, float joules) {
         if (itemStack != null) {
             if (itemStack.getItem() instanceof IItemElectric) {
-                return ((IItemElectric) itemStack.getItem())
-                        .recharge(
-                                itemStack,
-                                Math.min(((IItemElectric) itemStack.getItem()).getTransfer(itemStack), joules),
-                                true);
+                return ((IItemElectric) itemStack.getItem()).recharge(
+                        itemStack,
+                        Math.min(((IItemElectric) itemStack.getItem()).getTransfer(itemStack), joules),
+                        true);
             }
         }
 
@@ -38,13 +38,10 @@ public class ElectricItemHelper {
     public static float dischargeItem(ItemStack itemStack, float joules) {
         if (itemStack != null) {
             if (itemStack.getItem() instanceof IItemElectric) {
-                return ((IItemElectric) itemStack.getItem())
-                        .discharge(
-                                itemStack,
-                                Math.min(
-                                        ((IItemElectric) itemStack.getItem()).getMaxElectricityStored(itemStack),
-                                        joules),
-                                true);
+                return ((IItemElectric) itemStack.getItem()).discharge(
+                        itemStack,
+                        Math.min(((IItemElectric) itemStack.getItem()).getMaxElectricityStored(itemStack), joules),
+                        true);
             }
         }
 
@@ -52,9 +49,8 @@ public class ElectricItemHelper {
     }
 
     /**
-     * Returns an uncharged version of the electric item. Use this if you want the
-     * crafting recipe to use a charged version of the electric item instead of an
-     * empty version of the electric item
+     * Returns an uncharged version of the electric item. Use this if you want the crafting recipe to use a charged
+     * version of the electric item instead of an empty version of the electric item
      *
      * @return An electrical ItemStack with a specific charge.
      */

@@ -1,10 +1,10 @@
 package micdoodle8.mods.galacticraft.core.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumRarity;
@@ -12,12 +12,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class ItemBuggyMaterial extends Item {
-    public static final String[] names = {
-        "wheel", // 0
-        "seat", // 1
-        "storage"
-    }; // 2
+
+    public static final String[] names = { "wheel", // 0
+            "seat", // 1
+            "storage" }; // 2
 
     protected IIcon[] icons = new IIcon[256];
 
@@ -65,7 +67,7 @@ public class ItemBuggyMaterial extends Item {
         return super.getIconFromDamage(damage);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
         for (int i = 0; i < ItemBuggyMaterial.names.length; i++) {

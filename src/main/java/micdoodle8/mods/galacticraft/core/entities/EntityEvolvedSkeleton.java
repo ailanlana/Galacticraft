@@ -5,6 +5,7 @@ import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 import micdoodle8.mods.galacticraft.core.items.GCItems;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
+
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -30,6 +31,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 public class EntityEvolvedSkeleton extends EntitySkeleton implements IEntityBreathable {
+
     public EntityEvolvedSkeleton(World par1World) {
         super(par1World);
         this.tasks.addTask(1, new EntityAISwimming(this));
@@ -66,9 +68,9 @@ public class EntityEvolvedSkeleton extends EntitySkeleton implements IEntityBrea
                 17 - this.worldObj.difficultySetting.getDifficultyId() * 4);
         final int i = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, this.getHeldItem());
         final int j = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, this.getHeldItem());
-        entityarrow.setDamage(par2 * 2.0F
-                + this.rand.nextGaussian() * 0.25D
-                + this.worldObj.difficultySetting.getDifficultyId() * 0.11F);
+        entityarrow.setDamage(
+                par2 * 2.0F + this.rand.nextGaussian() * 0.25D
+                        + this.worldObj.difficultySetting.getDifficultyId() * 0.11F);
 
         if (i > 0) {
             entityarrow.setDamage(entityarrow.getDamage() + i * 0.5D + 0.5D);

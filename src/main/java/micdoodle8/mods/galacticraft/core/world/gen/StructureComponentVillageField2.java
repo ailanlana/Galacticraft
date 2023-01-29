@@ -2,6 +2,7 @@ package micdoodle8.mods.galacticraft.core.world.gen;
 
 import java.util.List;
 import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,6 +12,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
 public class StructureComponentVillageField2 extends StructureComponentVillage {
+
     private int averageGroundLevel = -1;
 
     private Block cropTypeA;
@@ -20,12 +22,8 @@ public class StructureComponentVillageField2 extends StructureComponentVillage {
 
     public StructureComponentVillageField2() {}
 
-    public StructureComponentVillageField2(
-            StructureComponentVillageStartPiece par1ComponentVillageStartPiece,
-            int par2,
-            Random par3Random,
-            StructureBoundingBox par4StructureBoundingBox,
-            int par5) {
+    public StructureComponentVillageField2(StructureComponentVillageStartPiece par1ComponentVillageStartPiece, int par2,
+            Random par3Random, StructureBoundingBox par4StructureBoundingBox, int par5) {
         super(par1ComponentVillageStartPiece, par2);
         this.coordBaseMode = par5;
         this.boundingBox = par4StructureBoundingBox;
@@ -70,30 +68,28 @@ public class StructureComponentVillageField2 extends StructureComponentVillage {
 
     @SuppressWarnings("rawtypes")
     public static StructureComponentVillageField2 func_74900_a(
-            StructureComponentVillageStartPiece par0ComponentVillageStartPiece,
-            List par1List,
-            Random par2Random,
-            int par3,
-            int par4,
-            int par5,
-            int par6,
-            int par7) {
-        final StructureBoundingBox structureboundingbox =
-                StructureBoundingBox.getComponentToAddBoundingBox(par3, par4, par5, 0, 0, 0, 13, 4, 9, par6);
+            StructureComponentVillageStartPiece par0ComponentVillageStartPiece, List par1List, Random par2Random,
+            int par3, int par4, int par5, int par6, int par7) {
+        final StructureBoundingBox structureboundingbox = StructureBoundingBox
+                .getComponentToAddBoundingBox(par3, par4, par5, 0, 0, 0, 13, 4, 9, par6);
         return StructureComponentVillage.canVillageGoDeeper(structureboundingbox)
-                        && StructureComponent.findIntersecting(par1List, structureboundingbox) == null
-                ? new StructureComponentVillageField2(
-                        par0ComponentVillageStartPiece, par7, par2Random, structureboundingbox, par6)
-                : null;
+                && StructureComponent.findIntersecting(par1List, structureboundingbox) == null
+                        ? new StructureComponentVillageField2(
+                                par0ComponentVillageStartPiece,
+                                par7,
+                                par2Random,
+                                structureboundingbox,
+                                par6)
+                        : null;
     }
 
     /**
-     * second Part of Structure generating, this for example places Spiderwebs, Mob
-     * Spawners, it closes Mineshafts at the end, it adds Fences...
+     * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes Mineshafts at
+     * the end, it adds Fences...
      */
     @Override
-    public boolean addComponentParts(
-            World par1World, Random par2Random, StructureBoundingBox par3StructureBoundingBox) {
+    public boolean addComponentParts(World par1World, Random par2Random,
+            StructureBoundingBox par3StructureBoundingBox) {
         if (this.averageGroundLevel < 0) {
             this.averageGroundLevel = this.getAverageGroundLevel(par1World, par3StructureBoundingBox);
 
@@ -106,13 +102,53 @@ public class StructureComponentVillageField2 extends StructureComponentVillage {
 
         this.fillWithBlocks(par1World, par3StructureBoundingBox, 0, 1, 0, 12, 4, 8, Blocks.air, Blocks.air, false);
         this.fillWithBlocks(
-                par1World, par3StructureBoundingBox, 1, 0, 1, 2, 0, 7, Blocks.farmland, Blocks.farmland, false);
+                par1World,
+                par3StructureBoundingBox,
+                1,
+                0,
+                1,
+                2,
+                0,
+                7,
+                Blocks.farmland,
+                Blocks.farmland,
+                false);
         this.fillWithBlocks(
-                par1World, par3StructureBoundingBox, 4, 0, 1, 5, 0, 7, Blocks.farmland, Blocks.farmland, false);
+                par1World,
+                par3StructureBoundingBox,
+                4,
+                0,
+                1,
+                5,
+                0,
+                7,
+                Blocks.farmland,
+                Blocks.farmland,
+                false);
         this.fillWithBlocks(
-                par1World, par3StructureBoundingBox, 7, 0, 1, 8, 0, 7, Blocks.farmland, Blocks.farmland, false);
+                par1World,
+                par3StructureBoundingBox,
+                7,
+                0,
+                1,
+                8,
+                0,
+                7,
+                Blocks.farmland,
+                Blocks.farmland,
+                false);
         this.fillWithBlocks(
-                par1World, par3StructureBoundingBox, 10, 0, 1, 11, 0, 7, Blocks.farmland, Blocks.farmland, false);
+                par1World,
+                par3StructureBoundingBox,
+                10,
+                0,
+                1,
+                11,
+                0,
+                7,
+                Blocks.farmland,
+                Blocks.farmland,
+                false);
         this.fillWithBlocks(par1World, par3StructureBoundingBox, 0, 0, 0, 0, 0, 8, Blocks.log, Blocks.log, false);
         this.fillWithBlocks(par1World, par3StructureBoundingBox, 6, 0, 0, 6, 0, 8, Blocks.log, Blocks.log, false);
         this.fillWithBlocks(par1World, par3StructureBoundingBox, 12, 0, 0, 12, 0, 8, Blocks.log, Blocks.log, false);

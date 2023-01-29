@@ -1,12 +1,13 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import cpw.mods.fml.relauncher.Side;
 import java.util.EnumSet;
+
 import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
 import micdoodle8.mods.galacticraft.api.transmission.tile.IConnector;
 import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectricalSource;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -17,6 +18,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityCoalGenerator extends TileBaseUniversalElectricalSource
         implements IInventory, ISidedInventory, IConnector {
@@ -45,8 +48,7 @@ public class TileEntityCoalGenerator extends TileBaseUniversalElectricalSource
     public float heatGJperTick = 0;
 
     /**
-     * The number of ticks that a fresh copy of the currently-burning item would
-     * keep the furnace burning for
+     * The number of ticks that a fresh copy of the currently-burning item would keep the furnace burning for
      */
     @NetworkedField(targetSide = Side.CLIENT)
     public int itemCookTime = 0;
@@ -84,9 +86,9 @@ public class TileEntityCoalGenerator extends TileBaseUniversalElectricalSource
                     this.decrStackSize(0, 1);
                 } else if (this.containingItems[0].getItem() == Item.getItemFromBlock(Blocks.coal_block)
                         && this.containingItems[0].stackSize > 0) {
-                    this.itemCookTime = 320 * 10;
-                    this.decrStackSize(0, 1);
-                }
+                            this.itemCookTime = 320 * 10;
+                            this.decrStackSize(0, 1);
+                        }
             }
 
             this.produce();
@@ -229,7 +231,7 @@ public class TileEntityCoalGenerator extends TileBaseUniversalElectricalSource
 
     @Override
     public int[] getAccessibleSlotsFromSide(int var1) {
-        return new int[] {0};
+        return new int[] { 0 };
     }
 
     @Override

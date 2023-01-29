@@ -1,10 +1,8 @@
 package micdoodle8.mods.galacticraft.planets.mars.tile;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.block.ITerraformableBlock;
 import micdoodle8.mods.galacticraft.api.tile.IDisableableMachine;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
@@ -16,6 +14,7 @@ import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.FluidUtil;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.planets.mars.inventory.ContainerTerraformer;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockSapling;
@@ -34,8 +33,13 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
+
 public class TileEntityTerraformer extends TileBaseElectricBlockWithInventory
         implements ISidedInventory, IDisableableMachine, IBubbleProvider, IFluidHandler {
+
     private final int tankCapacity = 2000;
 
     @NetworkedField(targetSide = Side.CLIENT)
@@ -119,8 +123,7 @@ public class TileEntityTerraformer extends TileBaseElectricBlockWithInventory
                 }
             }
 
-            this.active = this.bubbleSize == this.MAX_SIZE
-                    && this.hasEnoughEnergyToRun
+            this.active = this.bubbleSize == this.MAX_SIZE && this.hasEnoughEnergyToRun
                     && this.getFirstBonemealStack() != null
                     && this.waterTank.getFluid() != null
                     && this.waterTank.getFluid().amount > 0;
@@ -146,15 +149,13 @@ public class TileEntityTerraformer extends TileBaseElectricBlockWithInventory
 
                             if (!blockID.isAir(this.worldObj, x, y, z)
                                     && this.getDistanceFromServer(x, y, z) < bubbleSizeSq) {
-                                if (doGrass
-                                        && blockID instanceof ITerraformableBlock
+                                if (doGrass && blockID instanceof ITerraformableBlock
                                         && ((ITerraformableBlock) blockID).isTerraformable(this.worldObj, x, y, z)) {
                                     this.terraformableBlocksList.add(new BlockVec3(x, y, z));
                                 } else if (doTrees) {
                                     final Block blockIDAbove = this.worldObj.getBlock(x, y + 1, z);
-                                    if (blockID == Blocks.grass
-                                            && (blockIDAbove == null
-                                                    || blockIDAbove.isAir(this.worldObj, x, y + 1, z))) {
+                                    if (blockID == Blocks.grass && (blockIDAbove == null
+                                            || blockIDAbove.isAir(this.worldObj, x, y + 1, z))) {
                                         this.grassBlockList.add(new BlockVec3(x, y, z));
                                     }
                                 }
@@ -226,13 +227,12 @@ public class TileEntityTerraformer extends TileBaseElectricBlockWithInventory
                     this.worldObj.setBlock(vecSapling.x, vecSapling.y, vecSapling.z, b, sapling.getItemDamage(), 3);
                     if (b instanceof BlockSapling) {
                         if (this.worldObj.getBlockLightValue(vecSapling.x, vecSapling.y, vecSapling.z) >= 9) {
-                            ((BlockSapling) b)
-                                    .func_149878_d(
-                                            this.worldObj,
-                                            vecSapling.x,
-                                            vecSapling.y,
-                                            vecSapling.z,
-                                            this.worldObj.rand);
+                            ((BlockSapling) b).func_149878_d(
+                                    this.worldObj,
+                                    vecSapling.x,
+                                    vecSapling.y,
+                                    vecSapling.z,
+                                    this.worldObj.rand);
                             this.grownTreesList.add(vecSapling.clone());
                         }
                     } else if (b instanceof BlockBush) {
@@ -454,7 +454,7 @@ public class TileEntityTerraformer extends TileBaseElectricBlockWithInventory
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        return new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
+        return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
     }
 
     @Override
@@ -593,7 +593,7 @@ public class TileEntityTerraformer extends TileBaseElectricBlockWithInventory
 
     @Override
     public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-        return new FluidTankInfo[] {new FluidTankInfo(this.waterTank)};
+        return new FluidTankInfo[] { new FluidTankInfo(this.waterTank) };
     }
 
     @Override

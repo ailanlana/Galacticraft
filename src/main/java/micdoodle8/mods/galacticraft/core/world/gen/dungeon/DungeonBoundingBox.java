@@ -1,6 +1,7 @@
 package micdoodle8.mods.galacticraft.core.world.gen.dungeon;
 
 public class DungeonBoundingBox {
+
     int minX;
     int minZ;
     int maxX;

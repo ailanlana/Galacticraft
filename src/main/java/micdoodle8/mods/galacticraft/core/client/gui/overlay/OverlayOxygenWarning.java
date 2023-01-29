@@ -1,18 +1,22 @@
 package micdoodle8.mods.galacticraft.core.client.gui.overlay;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.core.util.ClientUtil;
 import micdoodle8.mods.galacticraft.core.util.ColorUtil;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.RenderHelper;
+
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class OverlayOxygenWarning extends Overlay {
+
     private static final Minecraft minecraft = FMLClientHandler.instance().getClient();
 
     private static long screenTicks;
@@ -38,19 +42,15 @@ public class OverlayOxygenWarning extends Overlay {
 
         OverlayOxygenWarning.minecraft.fontRenderer.drawString(
                 GCCoreUtil.translate("gui.warning"),
-                width / 4
-                        - OverlayOxygenWarning.minecraft.fontRenderer.getStringWidth(
-                                        GCCoreUtil.translate("gui.warning"))
-                                / 2,
+                width / 4 - OverlayOxygenWarning.minecraft.fontRenderer
+                        .getStringWidth(GCCoreUtil.translate("gui.warning")) / 2,
                 height / 8 - 20,
                 ColorUtil.to32BitColor(255, 255, 0, 0));
         final int alpha = (int) (200 * (Math.sin(OverlayOxygenWarning.screenTicks / 20.0F) * 0.5F + 0.5F)) + 5;
         OverlayOxygenWarning.minecraft.fontRenderer.drawString(
                 GCCoreUtil.translate("gui.oxygen.warning"),
-                width / 4
-                        - OverlayOxygenWarning.minecraft.fontRenderer.getStringWidth(
-                                        GCCoreUtil.translate("gui.oxygen.warning"))
-                                / 2,
+                width / 4 - OverlayOxygenWarning.minecraft.fontRenderer
+                        .getStringWidth(GCCoreUtil.translate("gui.oxygen.warning")) / 2,
                 height / 8,
                 ColorUtil.to32BitColor(alpha, 255, 0, 0));
 

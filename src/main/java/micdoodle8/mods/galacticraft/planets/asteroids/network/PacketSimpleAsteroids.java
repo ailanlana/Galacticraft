@@ -1,13 +1,10 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.network;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.network.IPacket;
@@ -16,30 +13,30 @@ import micdoodle8.mods.galacticraft.core.util.GCLog;
 import micdoodle8.mods.galacticraft.planets.asteroids.entities.EntityGrapple;
 import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityMinerBase;
 import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityShortRangeTelepad;
+
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+
 public class PacketSimpleAsteroids implements IPacket {
+
     public enum EnumSimplePacketAsteroids {
+
         // SERVER
         S_UPDATE_ADVANCED_GUI(Side.SERVER, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class),
         S_REQUEST_MINERBASE_FACING(Side.CLIENT, Integer.class, Integer.class, Integer.class),
         // CLIENT
         C_TELEPAD_SEND(Side.CLIENT, BlockVec3.class, Integer.class),
         C_UPDATE_GRAPPLE_POS(Side.CLIENT, Integer.class, Vector3.class),
-        C_UPDATE_MINERBASE_FACING(
-                Side.CLIENT,
-                Integer.class,
-                Integer.class,
-                Integer.class,
-                Integer.class,
-                Integer.class,
-                Integer.class,
-                Integer.class,
-                Integer.class);
+        C_UPDATE_MINERBASE_FACING(Side.CLIENT, Integer.class, Integer.class, Integer.class, Integer.class,
+                Integer.class, Integer.class, Integer.class, Integer.class);
 
         private final Side targetSide;
         private final Class<?>[] decodeAs;
@@ -124,13 +121,16 @@ public class PacketSimpleAsteroids implements IPacket {
                 break;
             case C_UPDATE_MINERBASE_FACING:
                 tile = player.worldObj.getTileEntity(
-                        (Integer) this.data.get(0), (Integer) this.data.get(1), (Integer) this.data.get(2));
+                        (Integer) this.data.get(0),
+                        (Integer) this.data.get(1),
+                        (Integer) this.data.get(2));
                 final int facingNew = (Integer) this.data.get(3);
                 if (tile instanceof TileEntityMinerBase) {
                     ((TileEntityMinerBase) tile).facing = facingNew;
-                    ((TileEntityMinerBase) tile)
-                            .setMainBlockPos(
-                                    (Integer) this.data.get(4), (Integer) this.data.get(5), (Integer) this.data.get(6));
+                    ((TileEntityMinerBase) tile).setMainBlockPos(
+                            (Integer) this.data.get(4),
+                            (Integer) this.data.get(5),
+                            (Integer) this.data.get(6));
                     final int link = (Integer) this.data.get(7);
                     if (link > 0) {
                         ((TileEntityMinerBase) tile).linkedMinerID = UUID.randomUUID();
@@ -149,7 +149,9 @@ public class PacketSimpleAsteroids implements IPacket {
         switch (this.type) {
             case S_UPDATE_ADVANCED_GUI:
                 TileEntity tile = player.worldObj.getTileEntity(
-                        (Integer) this.data.get(1), (Integer) this.data.get(2), (Integer) this.data.get(3));
+                        (Integer) this.data.get(1),
+                        (Integer) this.data.get(2),
+                        (Integer) this.data.get(3));
 
                 switch ((Integer) this.data.get(0)) {
                     case 0:
@@ -170,7 +172,9 @@ public class PacketSimpleAsteroids implements IPacket {
                 break;
             case S_REQUEST_MINERBASE_FACING:
                 tile = player.worldObj.getTileEntity(
-                        (Integer) this.data.get(0), (Integer) this.data.get(1), (Integer) this.data.get(2));
+                        (Integer) this.data.get(0),
+                        (Integer) this.data.get(1),
+                        (Integer) this.data.get(2));
                 if (tile instanceof TileEntityMinerBase) {
                     ((TileEntityMinerBase) tile).updateClientFlag = true;
                 }

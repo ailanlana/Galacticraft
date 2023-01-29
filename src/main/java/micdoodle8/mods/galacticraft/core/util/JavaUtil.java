@@ -1,6 +1,7 @@
 package micdoodle8.mods.galacticraft.core.util;
 
 public class JavaUtil extends SecurityManager {
+
     public static JavaUtil instance = new JavaUtil();
 
     public Class<?> getCaller() {

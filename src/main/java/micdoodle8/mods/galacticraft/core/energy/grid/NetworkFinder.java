@@ -4,12 +4,15 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
 import micdoodle8.mods.galacticraft.api.transmission.tile.IConductor;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class NetworkFinder {
+
     public World worldObj;
     public BlockVec3 start;
     private final BlockVec3 toIgnore;

@@ -5,6 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class BlockTuple {
+
     public Block block;
     public int meta;
 

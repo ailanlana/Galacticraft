@@ -1,13 +1,10 @@
 package micdoodle8.mods.galacticraft.core.items;
 
-import appeng.api.AEApi;
-import appeng.api.util.AEColor;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.core.blocks.BlockEnclosed;
 import micdoodle8.mods.galacticraft.core.blocks.BlockEnclosed.EnumEnclosedBlock;
 import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 import micdoodle8.mods.galacticraft.core.util.CompatibilityManager;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -15,8 +12,14 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import appeng.api.AEApi;
+import appeng.api.util.AEColor;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 @SuppressWarnings("unused")
 public class ItemBlockEnclosed extends ItemBlockDesc {
+
     public ItemBlockEnclosed(Block block) {
         super(block);
         this.setMaxDamage(0);
@@ -61,8 +64,7 @@ public class ItemBlockEnclosed extends ItemBlockDesc {
             default:
                 // The BuildCraft pipes
                 try {
-                    name = BlockEnclosed.getTypeFromMeta(par1ItemStack.getItemDamage())
-                            .getPipeType();
+                    name = BlockEnclosed.getTypeFromMeta(par1ItemStack.getItemDamage()).getPipeType();
                 } catch (final Exception e) {
                     name = "null";
                 }
@@ -73,17 +75,8 @@ public class ItemBlockEnclosed extends ItemBlockDesc {
     }
 
     @Override
-    public boolean onItemUse(
-            ItemStack itemstack,
-            EntityPlayer entityplayer,
-            World world,
-            int i,
-            int j,
-            int k,
-            int side,
-            float par8,
-            float par9,
-            float par10) {
+    public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int i, int j, int k, int side,
+            float par8, float par9, float par10) {
         final int metadata = this.getMetadata(itemstack.getItemDamage());
         if (metadata == EnumEnclosedBlock.ME_CABLE.getMetadata() && CompatibilityManager.isAppEngLoaded()) {
             final int x = i;
@@ -93,29 +86,28 @@ public class ItemBlockEnclosed extends ItemBlockDesc {
 
             if (block == Blocks.snow_layer && (world.getBlockMetadata(i, j, k) & 7) < 1) {
                 side = 1;
-            } else if (block != Blocks.vine
-                    && block != Blocks.tallgrass
+            } else if (block != Blocks.vine && block != Blocks.tallgrass
                     && block != Blocks.deadbush
                     && !block.isReplaceable(world, i, j, k)) {
-                if (side == 0) {
-                    j--;
-                }
-                if (side == 1) {
-                    j++;
-                }
-                if (side == 2) {
-                    k--;
-                }
-                if (side == 3) {
-                    k++;
-                }
-                if (side == 4) {
-                    i--;
-                }
-                if (side == 5) {
-                    i++;
-                }
-            }
+                        if (side == 0) {
+                            j--;
+                        }
+                        if (side == 1) {
+                            j++;
+                        }
+                        if (side == 2) {
+                            k--;
+                        }
+                        if (side == 3) {
+                            k++;
+                        }
+                        if (side == 4) {
+                            i--;
+                        }
+                        if (side == 5) {
+                            i++;
+                        }
+                    }
 
             if (itemstack.stackSize == 0) {
                 return false;
@@ -138,8 +130,8 @@ public class ItemBlockEnclosed extends ItemBlockDesc {
                             this.field_150939_a.stepSound.getPitch() * 0.8F);
                     --itemstack.stackSize;
 
-                    final ItemStack itemME =
-                            AEApi.instance().definitions().parts().cableGlass().stack(AEColor.Transparent, 1);
+                    final ItemStack itemME = AEApi.instance().definitions().parts().cableGlass()
+                            .stack(AEColor.Transparent, 1);
                     itemME.stackSize = 2; // Fool AppEng into not destroying anything in the player inventory
                     return AEApi.instance().partHelper().placeBus(itemME, x, y, z, side, entityplayer, world);
                     // Might be better to do appeng.parts.PartPlacement.place( is, x, y, z, side,

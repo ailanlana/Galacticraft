@@ -1,25 +1,28 @@
 package micdoodle8.mods.galacticraft.core.energy;
 
-import cpw.mods.fml.common.Loader;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.util.GCLog;
+
 import net.minecraftforge.common.config.Configuration;
 
+import cpw.mods.fml.common.Loader;
+
 /**
- * The universal energy compatibility module allows Galacticraft to be
- * compatible with most other major power systems in Minecraft as well.
+ * The universal energy compatibility module allows Galacticraft to be compatible with most other major power systems in
+ * Minecraft as well.
  *
  * @author Calclavia, Micdoodle, radfast
  */
 public class EnergyConfigHandler {
+
     private static Configuration config;
 
     /**
-     * Ratio of Build craft(MJ) energy to Galacticraft energy(gJ). Multiply BC3
-     * energy by this to convert to gJ.
+     * Ratio of Build craft(MJ) energy to Galacticraft energy(gJ). Multiply BC3 energy by this to convert to gJ.
      */
     public static float BC3_RATIO = 16F;
 
@@ -41,14 +44,12 @@ public class EnergyConfigHandler {
     // electrical energy 50% more efficiently than BuildCraft's Stirling Engine can.
 
     /**
-     * Ratio of RF energy to Galacticraft energy(gJ). Multiply RF energy by this to
-     * convert to gJ.
+     * Ratio of RF energy to Galacticraft energy(gJ). Multiply RF energy by this to convert to gJ.
      */
     public static float RF_RATIO = EnergyConfigHandler.BC3_RATIO / 10F;
 
     /**
-     * Ratio of IC2 energy (EU) to Galacticraft energy(gJ). Multiply IC2 power by
-     * this to convert to gJ.
+     * Ratio of IC2 energy (EU) to Galacticraft energy(gJ). Multiply IC2 power by this to convert to gJ.
      */
     public static float IC2_RATIO = EnergyConfigHandler.BC3_RATIO / 2.44F;
 
@@ -136,12 +137,10 @@ public class EnergyConfigHandler {
         EnergyConfigHandler.MEKANISM_RATIO = (float) EnergyConfigHandler.config
                 .get("Compatibility", "Mekanism Conversion Ratio", EnergyConfigHandler.MEKANISM_RATIO)
                 .getDouble(EnergyConfigHandler.MEKANISM_RATIO);
-        EnergyConfigHandler.conversionLossFactor = EnergyConfigHandler.config
-                .get(
-                        "Compatibility",
-                        "Loss factor when converting energy as a percentage (100 = no loss, 90 = 10% loss ...)",
-                        100)
-                .getInt(100);
+        EnergyConfigHandler.conversionLossFactor = EnergyConfigHandler.config.get(
+                "Compatibility",
+                "Loss factor when converting energy as a percentage (100 = no loss, 90 = 10% loss ...)",
+                100).getInt(100);
         if (EnergyConfigHandler.conversionLossFactor > 100) {
             EnergyConfigHandler.conversionLossFactor = 100;
         }
@@ -151,56 +150,41 @@ public class EnergyConfigHandler {
 
         updateRatios();
 
-        EnergyConfigHandler.displayEnergyUnitsBC = EnergyConfigHandler.config
-                .get(
-                        "Display",
-                        "If BuildCraft is loaded, show Galacticraft machines energy as MJ instead of gJ?",
-                        false)
-                .getBoolean(false);
-        EnergyConfigHandler.displayEnergyUnitsIC2 = EnergyConfigHandler.config
-                .get(
-                        "Display",
-                        "If IndustrialCraft2 is loaded, show Galacticraft machines energy as EU instead of gJ?",
-                        false)
-                .getBoolean(false);
-        EnergyConfigHandler.displayEnergyUnitsMek = EnergyConfigHandler.config
-                .get(
-                        "Display",
-                        "If Mekanism is loaded, show Galacticraft machines energy as Joules (J) instead of gJ?",
-                        false)
-                .getBoolean(false);
+        EnergyConfigHandler.displayEnergyUnitsBC = EnergyConfigHandler.config.get(
+                "Display",
+                "If BuildCraft is loaded, show Galacticraft machines energy as MJ instead of gJ?",
+                false).getBoolean(false);
+        EnergyConfigHandler.displayEnergyUnitsIC2 = EnergyConfigHandler.config.get(
+                "Display",
+                "If IndustrialCraft2 is loaded, show Galacticraft machines energy as EU instead of gJ?",
+                false).getBoolean(false);
+        EnergyConfigHandler.displayEnergyUnitsMek = EnergyConfigHandler.config.get(
+                "Display",
+                "If Mekanism is loaded, show Galacticraft machines energy as Joules (J) instead of gJ?",
+                false).getBoolean(false);
         EnergyConfigHandler.displayEnergyUnitsRF = EnergyConfigHandler.config
-                .get("Display", "Show Galacticraft machines energy in RF instead of gJ?", false)
-                .getBoolean(false);
+                .get("Display", "Show Galacticraft machines energy in RF instead of gJ?", false).getBoolean(false);
 
         EnergyConfigHandler.disableMJinterface = EnergyConfigHandler.config
                 .get("Compatibility", "Disable old Buildcraft API (MJ) interfacing completely?", false)
                 .getBoolean(false);
 
         EnergyConfigHandler.disableBuildCraftInput = EnergyConfigHandler.config
-                .get("Compatibility", "Disable INPUT of BuildCraft energy", false)
-                .getBoolean(false);
+                .get("Compatibility", "Disable INPUT of BuildCraft energy", false).getBoolean(false);
         EnergyConfigHandler.disableBuildCraftOutput = EnergyConfigHandler.config
-                .get("Compatibility", "Disable OUTPUT of BuildCraft energy", false)
-                .getBoolean(false);
+                .get("Compatibility", "Disable OUTPUT of BuildCraft energy", false).getBoolean(false);
         EnergyConfigHandler.disableRFInput = EnergyConfigHandler.config
-                .get("Compatibility", "Disable INPUT of RF energy", false)
-                .getBoolean(false);
+                .get("Compatibility", "Disable INPUT of RF energy", false).getBoolean(false);
         EnergyConfigHandler.disableRFOutput = EnergyConfigHandler.config
-                .get("Compatibility", "Disable OUTPUT of RF energy", false)
-                .getBoolean(false);
+                .get("Compatibility", "Disable OUTPUT of RF energy", false).getBoolean(false);
         EnergyConfigHandler.disableIC2Input = EnergyConfigHandler.config
-                .get("Compatibility", "Disable INPUT of IC2 energy", false)
-                .getBoolean(false);
+                .get("Compatibility", "Disable INPUT of IC2 energy", false).getBoolean(false);
         EnergyConfigHandler.disableIC2Output = EnergyConfigHandler.config
-                .get("Compatibility", "Disable OUTPUT of IC2 energy", false)
-                .getBoolean(false);
+                .get("Compatibility", "Disable OUTPUT of IC2 energy", false).getBoolean(false);
         EnergyConfigHandler.disableMekanismInput = EnergyConfigHandler.config
-                .get("Compatibility", "Disable INPUT of Mekanism energy", false)
-                .getBoolean(false);
+                .get("Compatibility", "Disable INPUT of Mekanism energy", false).getBoolean(false);
         EnergyConfigHandler.disableMekanismOutput = EnergyConfigHandler.config
-                .get("Compatibility", "Disable OUTPUT of Mekanism energy", false)
-                .getBoolean(false);
+                .get("Compatibility", "Disable OUTPUT of Mekanism energy", false).getBoolean(false);
 
         if (!EnergyConfigHandler.isBuildcraftLoaded()) {
             EnergyConfigHandler.displayEnergyUnitsBC = false;
@@ -274,8 +258,7 @@ public class EnergyConfigHandler {
                     if (Class.forName("buildcraft.api.mj.ISidedBatteryProvider") != null) {
                         count++;
                     }
-                } catch (final Exception e) {
-                }
+                } catch (final Exception e) {}
 
                 if (count < 6) {
                     return false;
@@ -288,8 +271,7 @@ public class EnergyConfigHandler {
                         cachedBCLoadedValue = true;
                         return true;
                     }
-                } catch (final Exception e) {
-                }
+                } catch (final Exception e) {}
 
                 GCLog.severe(
                         "Other mods with two different versions of Buildcraft API detected.  Galacticraft cannot use MJ until this is fixed.  You may have more serious problems with other mods.  More info at: http://wiki.micdoodle8.com/wiki/Compatibility.");
@@ -369,20 +351,17 @@ public class EnergyConfigHandler {
             if (Class.forName("cofh.api.energy.IEnergyHandler") != null) {
                 count += 2;
             }
-        } catch (final Exception e) {
-        }
+        } catch (final Exception e) {}
         try {
             if (Class.forName("cofh.api.energy.IEnergyProvider") != null) {
                 count2++;
             }
-        } catch (final Exception e) {
-        }
+        } catch (final Exception e) {}
         try {
             if (Class.forName("cofh.api.energy.IEnergyReceiver") != null) {
                 count2++;
             }
-        } catch (final Exception e) {
-        }
+        } catch (final Exception e) {}
 
         if (count + count2 == 3 && count2 != 1 || count + count2 == 5) {
             cachedRFLoadedValue = true;

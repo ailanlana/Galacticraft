@@ -1,11 +1,13 @@
 package micdoodle8.mods.galacticraft.core.entities;
 
 import java.util.UUID;
+
 import micdoodle8.mods.galacticraft.api.entity.IEntityBreathable;
 import micdoodle8.mods.galacticraft.core.items.GCItems;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.VersionUtil;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
+
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
@@ -32,11 +34,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 public class EntityEvolvedCreeper extends EntityCreeper implements IEntityBreathable {
+
     private float sizeXBase = -1.0F;
     private float sizeYBase;
     private static final UUID babySpeedBoostUUID = UUID.fromString("ef67a435-32a4-4efd-b218-e7431438b109");
-    private static final AttributeModifier babySpeedBoostModifier =
-            new AttributeModifier(babySpeedBoostUUID, "Baby speed boost evolved creeper", 0.5D, 1);
+    private static final AttributeModifier babySpeedBoostModifier = new AttributeModifier(
+            babySpeedBoostUUID,
+            "Baby speed boost evolved creeper",
+            0.5D,
+            1);
 
     public EntityEvolvedCreeper(World par1World) {
         super(par1World);
@@ -127,8 +133,8 @@ public class EntityEvolvedCreeper extends EntityCreeper implements IEntityBreath
         this.getDataWatcher().updateObject(12, Byte.valueOf((byte) (isChild ? 1 : 0)));
 
         if (this.worldObj != null && !this.worldObj.isRemote) {
-            final IAttributeInstance iattributeinstance =
-                    this.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
+            final IAttributeInstance iattributeinstance = this
+                    .getEntityAttribute(SharedMonsterAttributes.movementSpeed);
             iattributeinstance.removeModifier(babySpeedBoostModifier);
 
             if (isChild) {

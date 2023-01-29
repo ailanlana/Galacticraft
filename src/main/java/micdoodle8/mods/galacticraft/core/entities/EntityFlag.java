@@ -4,6 +4,7 @@ import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.items.GCItems;
 import micdoodle8.mods.galacticraft.core.util.ClientUtil;
 import micdoodle8.mods.galacticraft.core.wrappers.FlagData;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.client.Minecraft;
@@ -17,6 +18,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class EntityFlag extends Entity {
+
     public double xPosition;
     public double yPosition;
     public double zPosition;
@@ -162,7 +164,8 @@ public class EntityFlag extends Entity {
 
         if ((this.ticksExisted - 1) % 20 == 0 && this.worldObj.isRemote) {
             this.flagData = ClientUtil.updateFlagData(
-                    this.getOwner(), Minecraft.getMinecraft().thePlayer.getDistanceToEntity(this) < 50.0D);
+                    this.getOwner(),
+                    Minecraft.getMinecraft().thePlayer.getDistanceToEntity(this) < 50.0D);
         }
 
         Vector3 vec = new Vector3(this.posX, this.posY, this.posZ);

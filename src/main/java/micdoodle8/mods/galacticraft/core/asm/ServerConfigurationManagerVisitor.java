@@ -10,8 +10,7 @@ import org.objectweb.asm.MethodVisitor;
 /**
  * This cannot be a mixin, as it'd otherwise break on thermos server
  * <p>
- * Scrubs ServerConfigurationManager for new EntityPlayerMP and replace it with
- * new GCEntityPlayerMP
+ * Scrubs ServerConfigurationManager for new EntityPlayerMP and replace it with new GCEntityPlayerMP
  */
 public class ServerConfigurationManagerVisitor extends ClassVisitor {
 
@@ -25,8 +24,8 @@ public class ServerConfigurationManagerVisitor extends ClassVisitor {
     }
 
     private static class EntityPlayerMPReplacer extends MethodVisitor {
-        private static final String REPLACEMENT_CLASS_INTERNAL_NAME =
-                "micdoodle8/mods/galacticraft/core/entities/player/GCEntityPlayerMP";
+
+        private static final String REPLACEMENT_CLASS_INTERNAL_NAME = "micdoodle8/mods/galacticraft/core/entities/player/GCEntityPlayerMP";
         private final String methodName;
 
         public EntityPlayerMPReplacer(int api, MethodVisitor mv, String methodName) {
@@ -50,8 +49,7 @@ public class ServerConfigurationManagerVisitor extends ClassVisitor {
 
         @Override
         public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
-            if (opcode == INVOKESPECIAL
-                    && "<init>".equals(name)
+            if (opcode == INVOKESPECIAL && "<init>".equals(name)
                     && (dev ? "net/minecraft/entity/player/EntityPlayerMP".equals(owner) : "mw".equals(owner))) {
                 GCLoadingPlugin.LOGGER.debug(
                         "Replacing INVOKESPECIAL {}{}{} with NEW micdoodle8/mods/galacticraft/core/entities/player/GCEntityPlayerMP{}{} in {}",

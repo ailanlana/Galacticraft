@@ -1,15 +1,10 @@
 package micdoodle8.mods.galacticraft.core.tick;
 
-import com.google.common.collect.Lists;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.RenderTickEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.block.IDetectableResource;
 import micdoodle8.mods.galacticraft.api.entity.IEntityNoisy;
 import micdoodle8.mods.galacticraft.api.entity.IIgnoreShift;
@@ -54,6 +49,7 @@ import micdoodle8.mods.galacticraft.core.util.OxygenUtil;
 import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
 import micdoodle8.mods.galacticraft.core.wrappers.BlockMetaList;
 import micdoodle8.mods.galacticraft.core.wrappers.Footprint;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -71,11 +67,21 @@ import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.WorldProviderSurface;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import com.google.common.collect.Lists;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.common.gameevent.TickEvent.RenderTickEvent;
+
 public class TickHandlerClient {
+
     public static int airRemaining;
     public static int airRemaining2;
     private static long tickCount;
@@ -165,20 +171,16 @@ public class TickHandlerClient {
                         ColorUtil.to32BitColor(250, 10 + deltaColor, 10 + deltaColor, 10 + deltaColor));
                 minecraft.fontRenderer.drawString(
                         GCCoreUtil.translate("gui.spaceRace.create.title.name.0"),
-                        minecraft.currentScreen.width
-                                - 50
-                                - minecraft.fontRenderer.getStringWidth(
-                                                GCCoreUtil.translate("gui.spaceRace.create.title.name.0"))
-                                        / 2,
+                        minecraft.currentScreen.width - 50
+                                - minecraft.fontRenderer
+                                        .getStringWidth(GCCoreUtil.translate("gui.spaceRace.create.title.name.0")) / 2,
                         minecraft.currentScreen.height - 26,
                         ColorUtil.to32BitColor(255, 240, 240, 240));
                 minecraft.fontRenderer.drawString(
                         GCCoreUtil.translate("gui.spaceRace.create.title.name.1"),
-                        minecraft.currentScreen.width
-                                - 50
-                                - minecraft.fontRenderer.getStringWidth(
-                                                GCCoreUtil.translate("gui.spaceRace.create.title.name.1"))
-                                        / 2,
+                        minecraft.currentScreen.width - 50
+                                - minecraft.fontRenderer
+                                        .getStringWidth(GCCoreUtil.translate("gui.spaceRace.create.title.name.1")) / 2,
                         minecraft.currentScreen.height - 16,
                         ColorUtil.to32BitColor(255, 240, 240, 240));
                 Gui.drawRect(
@@ -199,8 +201,8 @@ public class TickHandlerClient {
                 ClientProxyCore.playerPosX = player.prevPosX + (player.posX - player.prevPosX) * event.renderTickTime;
                 ClientProxyCore.playerPosY = player.prevPosY + (player.posY - player.prevPosY) * event.renderTickTime;
                 ClientProxyCore.playerPosZ = player.prevPosZ + (player.posZ - player.prevPosZ) * event.renderTickTime;
-                ClientProxyCore.playerRotationYaw =
-                        player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw) * event.renderTickTime;
+                ClientProxyCore.playerRotationYaw = player.prevRotationYaw
+                        + (player.rotationYaw - player.prevRotationYaw) * event.renderTickTime;
                 ClientProxyCore.playerRotationPitch = player.prevRotationPitch
                         + (player.rotationPitch - player.prevRotationPitch) * event.renderTickTime;
             }
@@ -216,8 +218,8 @@ public class TickHandlerClient {
                     f = 1F;
                 }
 
-                final ScaledResolution scaledresolution =
-                        ClientUtil.getScaledRes(minecraft, minecraft.displayWidth, minecraft.displayHeight);
+                final ScaledResolution scaledresolution = ClientUtil
+                        .getScaledRes(minecraft, minecraft.displayWidth, minecraft.displayHeight);
                 scaledresolution.getScaledWidth();
                 scaledresolution.getScaledHeight();
                 minecraft.entityRenderer.setupOverlayRendering();
@@ -233,8 +235,7 @@ public class TickHandlerClient {
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             }
 
-            if (minecraft.currentScreen == null
-                    && player != null
+            if (minecraft.currentScreen == null && player != null
                     && player.ridingEntity != null
                     && player.ridingEntity instanceof EntitySpaceshipBase
                     && minecraft.gameSettings.thirdPersonView != 0
@@ -242,8 +243,7 @@ public class TickHandlerClient {
                 OverlayRocket.renderSpaceshipOverlay(((EntitySpaceshipBase) player.ridingEntity).getSpaceshipGui());
             }
 
-            if (minecraft.currentScreen == null
-                    && player != null
+            if (minecraft.currentScreen == null && player != null
                     && player.ridingEntity != null
                     && player.ridingEntity instanceof EntityLander
                     && minecraft.gameSettings.thirdPersonView != 0
@@ -251,8 +251,7 @@ public class TickHandlerClient {
                 OverlayLander.renderLanderOverlay();
             }
 
-            if (minecraft.currentScreen == null
-                    && player != null
+            if (minecraft.currentScreen == null && player != null
                     && player.ridingEntity != null
                     && player.ridingEntity instanceof EntityAutoRocket
                     && minecraft.gameSettings.thirdPersonView != 0
@@ -260,8 +259,7 @@ public class TickHandlerClient {
                 OverlayDockingRocket.renderDockingOverlay();
             }
 
-            if (minecraft.currentScreen == null
-                    && player != null
+            if (minecraft.currentScreen == null && player != null
                     && player.ridingEntity != null
                     && player.ridingEntity instanceof EntitySpaceshipBase
                     && minecraft.gameSettings.thirdPersonView != 0
@@ -271,11 +269,10 @@ public class TickHandlerClient {
                 OverlayLaunchCountdown.renderCountdownOverlay();
             }
 
-            if (player != null
-                    && (ConfigManagerCore.alwaysDisplayOxygenHUD
-                            || player.worldObj.provider instanceof IGalacticraftWorldProvider
-                                    && OxygenUtil.shouldDisplayTankGui(minecraft.currentScreen)
-                                    && OxygenUtil.noAtmosphericCombustion(player.worldObj.provider))) {
+            if (player != null && (ConfigManagerCore.alwaysDisplayOxygenHUD
+                    || player.worldObj.provider instanceof IGalacticraftWorldProvider
+                            && OxygenUtil.shouldDisplayTankGui(minecraft.currentScreen)
+                            && OxygenUtil.noAtmosphericCombustion(player.worldObj.provider))) {
                 int var6 = (TickHandlerClient.airRemaining - 90) * -1;
 
                 if (TickHandlerClient.airRemaining <= 0) {
@@ -298,8 +295,7 @@ public class TickHandlerClient {
                         Math.abs(thermalLevel - 22) >= 10 && !stats.thermalLevelNormalising);
             }
 
-            if (playerBaseClient != null
-                    && player.worldObj.provider instanceof IGalacticraftWorldProvider
+            if (playerBaseClient != null && player.worldObj.provider instanceof IGalacticraftWorldProvider
                     && !stats.oxygenSetupValid
                     && OxygenUtil.noAtmosphericCombustion(player.worldObj.provider)
                     && minecraft.currentScreen == null
@@ -315,8 +311,7 @@ public class TickHandlerClient {
         final EntityClientPlayerMP player = minecraft.thePlayer;
 
         if (event.type == RenderGameOverlayEvent.ElementType.ALL) {
-            if (player != null
-                    && player.ridingEntity != null
+            if (player != null && player.ridingEntity != null
                     && player.ridingEntity instanceof IIgnoreShift
                     && ((IIgnoreShift) player.ridingEntity).shouldIgnoreShiftExit()) {
                 // Remove "Press shift to dismount" message when shift-exiting is disabled (not
@@ -358,8 +353,7 @@ public class TickHandlerClient {
                     }
                 }
 
-                if (player != null
-                        && player.inventory.armorItemInSlot(3) != null
+                if (player != null && player.inventory.armorItemInSlot(3) != null
                         && player.inventory.armorItemInSlot(3).getItem() instanceof ItemSensorGlasses) {
                     ClientProxyCore.valueableBlocks.clear();
 
@@ -384,9 +378,8 @@ public class TickHandlerClient {
                                         }
                                     }
 
-                                    if (isDetectable
-                                            || block instanceof IDetectableResource
-                                                    && ((IDetectableResource) block).isValueable(metadata)) {
+                                    if (isDetectable || block instanceof IDetectableResource
+                                            && ((IDetectableResource) block).isValueable(metadata)) {
                                         ClientProxyCore.valueableBlocks.add(new BlockVec3(x, y, z));
                                     }
                                 }
@@ -414,8 +407,7 @@ public class TickHandlerClient {
                 }
             }
 
-            if (world != null
-                    && TickHandlerClient.spaceRaceGuiScheduled
+            if (world != null && TickHandlerClient.spaceRaceGuiScheduled
                     && minecraft.currentScreen == null
                     && ConfigManagerCore.enableSpaceRaceManagerPopup) {
                 player.openGui(
@@ -437,14 +429,13 @@ public class TickHandlerClient {
 
             if (world != null) {
                 if (world.provider instanceof WorldProviderSurface) {
-                    if (world.provider.getSkyRenderer() == null
-                            && player.ridingEntity instanceof EntitySpaceshipBase
+                    if (world.provider.getSkyRenderer() == null && player.ridingEntity instanceof EntitySpaceshipBase
                             && player.ridingEntity.posY > Constants.OVERWORLD_SKYPROVIDER_STARTHEIGHT) {
                         world.provider.setSkyRenderer(new SkyProviderOverworld());
                     } else if (world.provider.getSkyRenderer() instanceof SkyProviderOverworld
                             && player.posY <= Constants.OVERWORLD_SKYPROVIDER_STARTHEIGHT) {
-                        world.provider.setSkyRenderer(null);
-                    }
+                                world.provider.setSkyRenderer(null);
+                            }
                 } else if (world.provider instanceof WorldProviderSpaceStation) {
                     if (world.provider.getSkyRenderer() == null) {
                         ((WorldProviderSpaceStation) world.provider).createSkyProvider();
@@ -500,12 +491,9 @@ public class TickHandlerClient {
                     if (e instanceof IEntityNoisy) {
                         final IEntityNoisy vehicle = (IEntityNoisy) e;
                         if (vehicle.getSoundUpdater() == null) {
-                            final ISound noise = vehicle.setSoundUpdater(
-                                    FMLClientHandler.instance().getClient().thePlayer);
-                            FMLClientHandler.instance()
-                                    .getClient()
-                                    .getSoundHandler()
-                                    .playSound(noise);
+                            final ISound noise = vehicle
+                                    .setSoundUpdater(FMLClientHandler.instance().getClient().thePlayer);
+                            FMLClientHandler.instance().getClient().getSoundHandler().playSound(noise);
                         }
                     }
                 }
@@ -515,8 +503,7 @@ public class TickHandlerClient {
                 player.motionY = 0;
             }
 
-            if (world != null
-                    && world.provider instanceof IGalacticraftWorldProvider
+            if (world != null && world.provider instanceof IGalacticraftWorldProvider
                     && OxygenUtil.noAtmosphericCombustion(world.provider)) {
                 world.setRainStrength(0.0F);
             }
@@ -525,18 +512,17 @@ public class TickHandlerClient {
                 ClientProxyCore.lastSpacebarDown = false;
             }
 
-            if (player != null
-                    && player.ridingEntity != null
+            if (player != null && player.ridingEntity != null
                     && KeyHandlerClient.spaceKey.getIsKeyPressed()
                     && !ClientProxyCore.lastSpacebarDown) {
-                GalacticraftCore.packetPipeline.sendToServer(
-                        new PacketSimple(EnumSimplePacket.S_IGNITE_ROCKET, new Object[] {}));
+                GalacticraftCore.packetPipeline
+                        .sendToServer(new PacketSimple(EnumSimplePacket.S_IGNITE_ROCKET, new Object[] {}));
                 ClientProxyCore.lastSpacebarDown = true;
             }
 
             if (!TickHandlerClient.screenConnectionsUpdateList.isEmpty()) {
-                final HashSet<TileEntityScreen> updateListCopy =
-                        (HashSet<TileEntityScreen>) screenConnectionsUpdateList.clone();
+                final HashSet<TileEntityScreen> updateListCopy = (HashSet<TileEntityScreen>) screenConnectionsUpdateList
+                        .clone();
                 screenConnectionsUpdateList.clear();
                 for (final TileEntityScreen te : updateListCopy) {
                     if (te.refreshOnUpdate) {

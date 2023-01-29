@@ -1,9 +1,8 @@
 package micdoodle8.mods.galacticraft.planets.mars.tile;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 import java.util.ArrayList;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.entity.IDockable;
 import micdoodle8.mods.galacticraft.api.prefab.entity.EntityAutoRocket;
 import micdoodle8.mods.galacticraft.api.tile.IFuelDock;
@@ -21,6 +20,7 @@ import micdoodle8.mods.galacticraft.core.world.IChunkLoader;
 import micdoodle8.mods.galacticraft.planets.mars.ConfigManagerMars;
 import micdoodle8.mods.galacticraft.planets.mars.network.PacketSimpleMars;
 import micdoodle8.mods.galacticraft.planets.mars.network.PacketSimpleMars.EnumSimplePacketMars;
+
 import net.minecraft.block.Block;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -32,10 +32,14 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 // import java.util.Map;
 
 public class TileEntityLaunchController extends TileBaseElectricBlockWithInventory
         implements IChunkLoader, ISidedInventory, ILandingPadAttachable {
+
     public static final int WATTS_PER_TICK = 1;
     private ItemStack[] containingItems = new ItemStack[1];
 
@@ -138,16 +142,18 @@ public class TileEntityLaunchController extends TileBaseElectricBlockWithInvento
                         if (block != GCBlocks.landingPadFull) {
                             this.connectedPads.remove(i);
                             ForgeChunkManager.unforceChunk(
-                                    this.chunkLoadTicket, new ChunkCoordIntPair(coords.posX >> 4, coords.posZ >> 4));
+                                    this.chunkLoadTicket,
+                                    new ChunkCoordIntPair(coords.posX >> 4, coords.posZ >> 4));
                         }
                     }
                 }
             }
         } else {
             if (this.frequency == -1 && this.destFrequency == -1) {
-                GalacticraftCore.packetPipeline.sendToServer(new PacketSimpleMars(
-                        EnumSimplePacketMars.S_UPDATE_ADVANCED_GUI,
-                        new Object[] {5, this.xCoord, this.yCoord, this.zCoord, 0}));
+                GalacticraftCore.packetPipeline.sendToServer(
+                        new PacketSimpleMars(
+                                EnumSimplePacketMars.S_UPDATE_ADVANCED_GUI,
+                                new Object[] { 5, this.xCoord, this.yCoord, this.zCoord, 0 }));
             }
         }
     }
@@ -205,7 +211,11 @@ public class TileEntityLaunchController extends TileBaseElectricBlockWithInvento
                                         this.getOwnerName());
                             } else {
                                 ChunkLoadingCallback.addToList(
-                                        this.worldObj, this.xCoord, this.yCoord, this.zCoord, this.getOwnerName());
+                                        this.worldObj,
+                                        this.xCoord,
+                                        this.yCoord,
+                                        this.zCoord,
+                                        this.getOwnerName());
                             }
                         }
                     }
@@ -213,7 +223,12 @@ public class TileEntityLaunchController extends TileBaseElectricBlockWithInvento
             }
 
             ChunkLoadingCallback.forceChunk(
-                    this.chunkLoadTicket, this.worldObj, this.xCoord, this.yCoord, this.zCoord, this.getOwnerName());
+                    this.chunkLoadTicket,
+                    this.worldObj,
+                    this.xCoord,
+                    this.yCoord,
+                    this.zCoord,
+                    this.getOwnerName());
         }
     }
 
@@ -278,7 +293,7 @@ public class TileEntityLaunchController extends TileBaseElectricBlockWithInvento
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        return new int[] {0};
+        return new int[] { 0 };
     }
 
     @Override
@@ -343,8 +358,7 @@ public class TileEntityLaunchController extends TileBaseElectricBlockWithInvento
             this.frequencyValid = true;
             final WorldServer[] servers = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
 
-            worldLoop:
-            for (int i = 0; i < servers.length; i++) {
+            worldLoop: for (int i = 0; i < servers.length; i++) {
                 final WorldServer world = servers[i];
 
                 for (TileEntity tile2 : new ArrayList<TileEntity>(world.loadedTileEntityList)) {

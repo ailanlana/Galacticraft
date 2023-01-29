@@ -1,19 +1,20 @@
 package micdoodle8.mods.galacticraft.core.energy.item;
 
-import ic2.api.item.IElectricItemManager;
-import ic2.api.item.ISpecialElectricItem;
 import micdoodle8.mods.galacticraft.api.item.IItemElectricBase;
 import micdoodle8.mods.galacticraft.core.energy.EnergyConfigHandler;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 
+import ic2.api.item.IElectricItemManager;
+import ic2.api.item.ISpecialElectricItem;
+
 /*
- * Interface between Galacticraft electric items (batteries) and IC2.
- *
- * Galactricraft items implemented as Tier 1 items when recharging
- * and for discharging purposes (so can power anything)
+ * Interface between Galacticraft electric items (batteries) and IC2. Galactricraft items implemented as Tier 1 items
+ * when recharging and for discharging purposes (so can power anything)
  */
 public class ElectricItemManagerIC2_1710 implements IElectricItemManager {
+
     @Override
     public double charge(ItemStack itemStack, double amount, int tier, boolean ignoreTransferLimit, boolean simulate) {
         if (itemStack.getItem() instanceof IItemElectricBase) {
@@ -22,8 +23,8 @@ public class ElectricItemManagerIC2_1710 implements IElectricItemManager {
                 amount = ((ISpecialElectricItem) item).getMaxCharge(itemStack);
             }
             final float energy = (float) amount * EnergyConfigHandler.IC2_RATIO;
-            final float rejectedElectricity = Math.max(
-                    item.getElectricityStored(itemStack) + energy - item.getMaxElectricityStored(itemStack), 0);
+            final float rejectedElectricity = Math
+                    .max(item.getElectricityStored(itemStack) + energy - item.getMaxElectricityStored(itemStack), 0);
             float energyToReceive = energy - rejectedElectricity;
             if (!ignoreTransferLimit && energyToReceive > item.getMaxTransferGC(itemStack)) {}
 
@@ -42,13 +43,8 @@ public class ElectricItemManagerIC2_1710 implements IElectricItemManager {
     }
 
     @Override
-    public double discharge(
-            ItemStack itemStack,
-            double amount,
-            int tier,
-            boolean ignoreTransferLimit,
-            boolean externally,
-            boolean simulate) {
+    public double discharge(ItemStack itemStack, double amount, int tier, boolean ignoreTransferLimit,
+            boolean externally, boolean simulate) {
         if (itemStack.getItem() instanceof IItemElectricBase) {
             final IItemElectricBase item = (IItemElectricBase) itemStack.getItem();
             final float energy = (float) amount / EnergyConfigHandler.TO_IC2_RATIO;

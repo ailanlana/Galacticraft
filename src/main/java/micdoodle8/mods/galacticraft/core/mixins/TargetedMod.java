@@ -1,6 +1,7 @@
 package micdoodle8.mods.galacticraft.core.mixins;
 
 public enum TargetedMod {
+
     VANILLA("Minecraft", null),
     FORGE("Minecraft Forge", "net.minecraftforge.classloading.FMLForgePlugin", "Forge"),
     PLAYERAPI("Player API", "api.player.forge.PlayerAPIPlugin", "PlayerAPI"),
@@ -22,7 +23,11 @@ public enum TargetedMod {
 
     @Override
     public String toString() {
-        return "TargetedMod{modName='" + this.modName + "', coreModClass='" + this.coreModClass + "', modId='"
-                + this.modId + "'}";
+        return "TargetedMod{modName='" + this.modName
+                + "', coreModClass='"
+                + this.coreModClass
+                + "', modId='"
+                + this.modId
+                + "'}";
     }
 }

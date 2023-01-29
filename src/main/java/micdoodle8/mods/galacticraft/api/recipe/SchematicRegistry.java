@@ -1,16 +1,20 @@
 package micdoodle8.mods.galacticraft.api.recipe;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
+
 import micdoodle8.mods.galacticraft.api.recipe.SchematicEvent.FlipPage;
 import micdoodle8.mods.galacticraft.api.recipe.SchematicEvent.Unlock;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class SchematicRegistry {
+
     public static ArrayList<ISchematicPage> schematicRecipes = new ArrayList<>();
 
     /**
@@ -94,8 +98,7 @@ public class SchematicRegistry {
     /**
      * Finds the correct schematic when player presses NEXT
      *
-     * @param currentIndex the current index of unlocked schematics the player is
-     *                     viewing
+     * @param currentIndex the current index of unlocked schematics the player is viewing
      * @return the schematic page that will be shown when the player clicks NEXT
      */
     @SideOnly(Side.CLIENT)
@@ -110,8 +113,7 @@ public class SchematicRegistry {
     /**
      * Finds the correct schematic when player presses BACK
      *
-     * @param currentIndex the current index of unlocked schematics the player is
-     *                     viewing
+     * @param currentIndex the current index of unlocked schematics the player is viewing
      * @return the schematic page that will be shown when the player clicks BACK
      */
     @SideOnly(Side.CLIENT)

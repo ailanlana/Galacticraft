@@ -1,19 +1,24 @@
 package micdoodle8.mods.galacticraft.core.client.render.entities;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.model.ModelLander;
 import micdoodle8.mods.galacticraft.core.entities.EntityLander;
+
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderLander extends Render {
-    private static final ResourceLocation landerTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/model/lander.png");
+
+    private static final ResourceLocation landerTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/model/lander.png");
 
     protected ModelLander landerModel;
 

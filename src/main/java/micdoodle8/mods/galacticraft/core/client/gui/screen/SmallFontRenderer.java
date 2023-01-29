@@ -1,7 +1,5 @@
 package micdoodle8.mods.galacticraft.core.client.gui.screen;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +8,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
 import javax.imageio.ImageIO;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -18,10 +18,15 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class SmallFontRenderer implements IResourceManagerReloadListener {
+
     private static final ResourceLocation[] field_111274_c = new ResourceLocation[256];
 
     /**
@@ -37,14 +42,13 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
     public Random fontRandom = new Random();
 
     /**
-     * Array of the start/end column (in upper/lower nibble) for every glyph in the
-     * /font directory.
+     * Array of the start/end column (in upper/lower nibble) for every glyph in the /font directory.
      */
     private final byte[] glyphWidth = new byte[65536];
 
     /**
-     * Array of RGB triplets defining the 16 standard chat colors followed by 16
-     * darker version of the same colors for drop shadows.
+     * Array of RGB triplets defining the 16 standard chat colors followed by 16 darker version of the same colors for
+     * drop shadows.
      */
     private final int[] colorCode = new int[32];
 
@@ -66,14 +70,12 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
     private float posY;
 
     /**
-     * If true, strings should be rendered with Unicode fonts instead of the
-     * default.png font
+     * If true, strings should be rendered with Unicode fonts instead of the default.png font
      */
     private boolean unicodeFlag;
 
     /**
-     * If true, the Unicode Bidirectional Algorithm should be run before rendering
-     * any string.
+     * If true, the Unicode Bidirectional Algorithm should be run before rendering any string.
      */
     private boolean bidiFlag;
 
@@ -127,11 +129,8 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
      */
     private boolean strikethroughStyle;
 
-    public SmallFontRenderer(
-            GameSettings par1GameSettings,
-            ResourceLocation par2ResourceLocation,
-            TextureManager par3TextureManager,
-            boolean par4) {
+    public SmallFontRenderer(GameSettings par1GameSettings, ResourceLocation par2ResourceLocation,
+            TextureManager par3TextureManager, boolean par4) {
         this.field_111273_g = par2ResourceLocation;
         this.renderEngine = par3TextureManager;
         this.unicodeFlag = true;
@@ -171,10 +170,8 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
         BufferedImage bufferedimage;
 
         try {
-            bufferedimage = ImageIO.read(Minecraft.getMinecraft()
-                    .getResourceManager()
-                    .getResource(this.field_111273_g)
-                    .getInputStream());
+            bufferedimage = ImageIO.read(
+                    Minecraft.getMinecraft().getResourceManager().getResource(this.field_111273_g).getInputStream());
         } catch (final IOException ioexception) {
             throw new RuntimeException(ioexception);
         }
@@ -228,10 +225,8 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
 
     private void readGlyphSizes() {
         try {
-            final InputStream inputstream = Minecraft.getMinecraft()
-                    .getResourceManager()
-                    .getResource(new ResourceLocation("font/glyph_sizes.bin"))
-                    .getInputStream();
+            final InputStream inputstream = Minecraft.getMinecraft().getResourceManager()
+                    .getResource(new ResourceLocation("font/glyph_sizes.bin")).getInputStream();
             inputstream.read(this.glyphWidth);
         } catch (final IOException ioexception) {
             throw new RuntimeException(ioexception);
@@ -242,16 +237,13 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
      * Pick how to render a single character and return the width used.
      */
     private float renderCharAtPos(int par1, char par2, boolean par3) {
-        return par2 == 32
-                ? 4.0F
-                : par1 > 0 && !this.unicodeFlag
-                        ? this.renderDefaultChar(par1 + 32, par3)
+        return par2 == 32 ? 4.0F
+                : par1 > 0 && !this.unicodeFlag ? this.renderDefaultChar(par1 + 32, par3)
                         : this.renderUnicodeChar(par2, par3);
     }
 
     /**
-     * Render a single character with the default.png font at current (posX,posY)
-     * location...
+     * Render a single character with the default.png font at current (posX,posY) location...
      */
     private float renderDefaultChar(int par1, boolean par2) {
         final float f = par1 % 16 * 8;
@@ -274,24 +266,22 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
 
     private ResourceLocation func_111271_a(int par1) {
         if (SmallFontRenderer.field_111274_c[par1] == null) {
-            SmallFontRenderer.field_111274_c[par1] =
-                    new ResourceLocation(String.format("textures/font/unicode_page_%02x.png", Integer.valueOf(par1)));
+            SmallFontRenderer.field_111274_c[par1] = new ResourceLocation(
+                    String.format("textures/font/unicode_page_%02x.png", Integer.valueOf(par1)));
         }
 
         return SmallFontRenderer.field_111274_c[par1];
     }
 
     /**
-     * Load one of the /font/glyph_XX.png into a new GL texture and store the
-     * texture ID in glyphTextureName array.
+     * Load one of the /font/glyph_XX.png into a new GL texture and store the texture ID in glyphTextureName array.
      */
     private void loadGlyphTexture(int par1) {
         this.renderEngine.bindTexture(this.func_111271_a(par1));
     }
 
     /**
-     * Render a single Unicode character at current (posX,posY) location using one
-     * of the /font/glyph_XX.png files...
+     * Render a single Unicode character at current (posX,posY) location using one of the /font/glyph_XX.png files...
      */
     private float renderUnicodeChar(char par1, boolean par2) {
         if (this.glyphWidth[par1] == 0) {
@@ -357,8 +347,7 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
     }
 
     /**
-     * Apply Unicode Bidirectional Algorithm to string and return a new possibly
-     * reordered string for visual rendering.
+     * Apply Unicode Bidirectional Algorithm to string and return a new possibly reordered string for visual rendering.
      */
     private String bidiReorder(String par1Str) {
         if (par1Str != null && Bidi.requiresBidi(par1Str.toCharArray(), 0, par1Str.length())) {
@@ -423,8 +412,7 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
     }
 
     /**
-     * Reset all style flag fields in the class to false; called at the start of
-     * string rendering
+     * Reset all style flag fields in the class to false; called at the start of string rendering
      */
     private void resetStyles() {
         this.randomStyle = false;
@@ -485,9 +473,8 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
 
                 ++i;
             } else {
-                j =
-                        "\u00c0\u00c1\u00c2\u00c8\u00ca\u00cb\u00cd\u00d3\u00d4\u00d5\u00da\u00df\u00e3\u00f5\u011f\u0130\u0131\u0152\u0153\u015e\u015f\u0174\u0175\u017e\u0207\u0000\u0000\u0000\u0000\u0000\u0000\u0000 !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\u0000\u00c7\u00fc\u00e9\u00e2\u00e4\u00e0\u00e5\u00e7\u00ea\u00eb\u00e8\u00ef\u00ee\u00ec\u00c4\u00c5\u00c9\u00e6\u00c6\u00f4\u00f6\u00f2\u00fb\u00f9\u00ff\u00d6\u00dc\u00f8\u00a3\u00d8\u00d7\u0192\u00e1\u00ed\u00f3\u00fa\u00f1\u00d1\u00aa\u00ba\u00bf\u00ae\u00ac\u00bd\u00bc\u00a1\u00ab\u00bb\u2591\u2592\u2593\u2502\u2524\u2561\u2562\u2556\u2555\u2563\u2551\u2557\u255d\u255c\u255b\u2510\u2514\u2534\u252c\u251c\u2500\u253c\u255e\u255f\u255a\u2554\u2569\u2566\u2560\u2550\u256c\u2567\u2568\u2564\u2565\u2559\u2558\u2552\u2553\u256b\u256a\u2518\u250c\u2588\u2584\u258c\u2590\u2580\u03b1\u03b2\u0393\u03c0\u03a3\u03c3\u03bc\u03c4\u03a6\u0398\u03a9\u03b4\u221e\u2205\u2208\u2229\u2261\u00b1\u2265\u2264\u2320\u2321\u00f7\u2248\u00b0\u2219\u00b7\u221a\u207f\u00b2\u25a0\u0000"
-                                .indexOf(c0);
+                j = "\u00c0\u00c1\u00c2\u00c8\u00ca\u00cb\u00cd\u00d3\u00d4\u00d5\u00da\u00df\u00e3\u00f5\u011f\u0130\u0131\u0152\u0153\u015e\u015f\u0174\u0175\u017e\u0207\u0000\u0000\u0000\u0000\u0000\u0000\u0000 !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\u0000\u00c7\u00fc\u00e9\u00e2\u00e4\u00e0\u00e5\u00e7\u00ea\u00eb\u00e8\u00ef\u00ee\u00ec\u00c4\u00c5\u00c9\u00e6\u00c6\u00f4\u00f6\u00f2\u00fb\u00f9\u00ff\u00d6\u00dc\u00f8\u00a3\u00d8\u00d7\u0192\u00e1\u00ed\u00f3\u00fa\u00f1\u00d1\u00aa\u00ba\u00bf\u00ae\u00ac\u00bd\u00bc\u00a1\u00ab\u00bb\u2591\u2592\u2593\u2502\u2524\u2561\u2562\u2556\u2555\u2563\u2551\u2557\u255d\u255c\u255b\u2510\u2514\u2534\u252c\u251c\u2500\u253c\u255e\u255f\u255a\u2554\u2569\u2566\u2560\u2550\u256c\u2567\u2568\u2564\u2565\u2559\u2558\u2552\u2553\u256b\u256a\u2518\u250c\u2588\u2584\u258c\u2590\u2580\u03b1\u03b2\u0393\u03c0\u03a3\u03c3\u03bc\u03c4\u03a6\u0398\u03a9\u03b4\u221e\u2205\u2208\u2229\u2261\u00b1\u2265\u2264\u2320\u2321\u00f7\u2248\u00b0\u2219\u00b7\u221a\u207f\u00b2\u25a0\u0000"
+                        .indexOf(c0);
 
                 if (this.randomStyle && j != -1) {
                     do {
@@ -577,8 +564,7 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
     }
 
     /**
-     * Render single line string by setting GL color, current (posX,posY), and
-     * calling renderStringAtPos()
+     * Render single line string by setting GL color, current (posX,posY), and calling renderStringAtPos()
      */
     private int renderString(String par1Str, int par2, int par3, int par4, boolean par5) {
         if (par1Str == null) {
@@ -605,8 +591,7 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
     }
 
     /**
-     * Returns the width of this string. Equivalent of
-     * FontMetrics.stringWidth(String s).
+     * Returns the width of this string. Equivalent of FontMetrics.stringWidth(String s).
      */
     public int getStringWidth(String par1Str) {
         if (par1Str == null) {
@@ -654,9 +639,8 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
         } else if (par1 == 32) {
             return 4;
         } else {
-            final int i =
-                    "\u00c0\u00c1\u00c2\u00c8\u00ca\u00cb\u00cd\u00d3\u00d4\u00d5\u00da\u00df\u00e3\u00f5\u011f\u0130\u0131\u0152\u0153\u015e\u015f\u0174\u0175\u017e\u0207\u0000\u0000\u0000\u0000\u0000\u0000\u0000 !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\u0000\u00c7\u00fc\u00e9\u00e2\u00e4\u00e0\u00e5\u00e7\u00ea\u00eb\u00e8\u00ef\u00ee\u00ec\u00c4\u00c5\u00c9\u00e6\u00c6\u00f4\u00f6\u00f2\u00fb\u00f9\u00ff\u00d6\u00dc\u00f8\u00a3\u00d8\u00d7\u0192\u00e1\u00ed\u00f3\u00fa\u00f1\u00d1\u00aa\u00ba\u00bf\u00ae\u00ac\u00bd\u00bc\u00a1\u00ab\u00bb\u2591\u2592\u2593\u2502\u2524\u2561\u2562\u2556\u2555\u2563\u2551\u2557\u255d\u255c\u255b\u2510\u2514\u2534\u252c\u251c\u2500\u253c\u255e\u255f\u255a\u2554\u2569\u2566\u2560\u2550\u256c\u2567\u2568\u2564\u2565\u2559\u2558\u2552\u2553\u256b\u256a\u2518\u250c\u2588\u2584\u258c\u2590\u2580\u03b1\u03b2\u0393\u03c0\u03a3\u03c3\u03bc\u03c4\u03a6\u0398\u03a9\u03b4\u221e\u2205\u2208\u2229\u2261\u00b1\u2265\u2264\u2320\u2321\u00f7\u2248\u00b0\u2219\u00b7\u221a\u207f\u00b2\u25a0\u0000"
-                            .indexOf(par1);
+            final int i = "\u00c0\u00c1\u00c2\u00c8\u00ca\u00cb\u00cd\u00d3\u00d4\u00d5\u00da\u00df\u00e3\u00f5\u011f\u0130\u0131\u0152\u0153\u015e\u015f\u0174\u0175\u017e\u0207\u0000\u0000\u0000\u0000\u0000\u0000\u0000 !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\u0000\u00c7\u00fc\u00e9\u00e2\u00e4\u00e0\u00e5\u00e7\u00ea\u00eb\u00e8\u00ef\u00ee\u00ec\u00c4\u00c5\u00c9\u00e6\u00c6\u00f4\u00f6\u00f2\u00fb\u00f9\u00ff\u00d6\u00dc\u00f8\u00a3\u00d8\u00d7\u0192\u00e1\u00ed\u00f3\u00fa\u00f1\u00d1\u00aa\u00ba\u00bf\u00ae\u00ac\u00bd\u00bc\u00a1\u00ab\u00bb\u2591\u2592\u2593\u2502\u2524\u2561\u2562\u2556\u2555\u2563\u2551\u2557\u255d\u255c\u255b\u2510\u2514\u2534\u252c\u251c\u2500\u253c\u255e\u255f\u255a\u2554\u2569\u2566\u2560\u2550\u256c\u2567\u2568\u2564\u2565\u2559\u2558\u2552\u2553\u256b\u256a\u2518\u250c\u2588\u2584\u258c\u2590\u2580\u03b1\u03b2\u0393\u03c0\u03a3\u03c3\u03bc\u03c4\u03a6\u0398\u03a9\u03b4\u221e\u2205\u2208\u2229\u2261\u00b1\u2265\u2264\u2320\u2321\u00f7\u2248\u00b0\u2219\u00b7\u221a\u207f\u00b2\u25a0\u0000"
+                    .indexOf(par1);
 
             if (par1 > 0 && i != -1 && !this.unicodeFlag) {
                 return this.charWidth[i];
@@ -755,8 +739,8 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
     }
 
     /**
-     * Perform actual work of rendering a multi-line string with wordwrap and with
-     * darker drop shadow color if flag is set
+     * Perform actual work of rendering a multi-line string with wordwrap and with darker drop shadow color if flag is
+     * set
      */
     private void renderSplitString(String par1Str, int par2, int par3, int par4, boolean par5) {
         final List<?> list = this.listFormattedStringToWidth(par1Str, par4);
@@ -775,24 +759,23 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
     }
 
     /**
-     * Set unicodeFlag controlling whether strings should be rendered with Unicode
-     * fonts instead of the default.png font.
+     * Set unicodeFlag controlling whether strings should be rendered with Unicode fonts instead of the default.png
+     * font.
      */
     public void setUnicodeFlag(boolean par1) {
         this.unicodeFlag = par1;
     }
 
     /**
-     * Get unicodeFlag controlling whether strings should be rendered with Unicode
-     * fonts instead of the default.png font.
+     * Get unicodeFlag controlling whether strings should be rendered with Unicode fonts instead of the default.png
+     * font.
      */
     public boolean getUnicodeFlag() {
         return this.unicodeFlag;
     }
 
     /**
-     * Set bidiFlag to control if the Unicode Bidirectional Algorithm should be run
-     * before rendering any string.
+     * Set bidiFlag to control if the Unicode Bidirectional Algorithm should be run before rendering any string.
      */
     public void setBidiFlag(boolean par1) {
         this.bidiFlag = par1;
@@ -806,8 +789,7 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
     }
 
     /**
-     * Inserts newline and formatting into a string to wrap it within the specified
-     * width.
+     * Inserts newline and formatting into a string to wrap it within the specified width.
      */
     String wrapFormattedStringToWidth(String par1Str, int par2) {
         final int j = this.sizeStringToWidth(par1Str, par2);
@@ -824,8 +806,7 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
     }
 
     /**
-     * Determines how many characters from the string will fit into the specified
-     * width.
+     * Determines how many characters from the string will fit into the specified width.
      */
     private int sizeStringToWidth(String par1Str, int par2) {
         final int j = par1Str.length();
@@ -894,8 +875,7 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
     }
 
     /**
-     * Digests a string for nonprinting formatting characters then returns a string
-     * containing only that formatting.
+     * Digests a string for nonprinting formatting characters then returns a string containing only that formatting.
      */
     private static String getFormatFromString(String par0Str) {
         String s1 = "";
@@ -918,8 +898,7 @@ public class SmallFontRenderer implements IResourceManagerReloadListener {
     }
 
     /**
-     * Get bidiFlag that controls if the Unicode Bidirectional Algorithm should be
-     * run before rendering any string
+     * Get bidiFlag that controls if the Unicode Bidirectional Algorithm should be run before rendering any string
      */
     public boolean getBidiFlag() {
         return this.bidiFlag;

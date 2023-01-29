@@ -1,8 +1,7 @@
 package micdoodle8.mods.galacticraft.planets.mars.client.render.entity;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.planets.mars.entities.EntityProjectileTNT;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.Render;
@@ -11,18 +10,23 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderProjectileTNT extends Render {
+
     private final RenderBlocks renderBlocks = new RenderBlocks();
 
     public RenderProjectileTNT() {
         this.shadowSize = 0.5F;
     }
 
-    public void renderProjectileTNT(
-            EntityProjectileTNT tnt, double par2, double par4, double par6, float par8, float par9) {
+    public void renderProjectileTNT(EntityProjectileTNT tnt, double par2, double par4, double par6, float par8,
+            float par9) {
         GL11.glPushMatrix();
         GL11.glTranslatef((float) par2, (float) par4 + 0.5F, (float) par6);
         this.bindTexture(TextureMap.locationBlocksTexture);

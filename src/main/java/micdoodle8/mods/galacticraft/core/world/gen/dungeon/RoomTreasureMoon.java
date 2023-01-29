@@ -2,14 +2,17 @@ package micdoodle8.mods.galacticraft.core.world.gen.dungeon;
 
 import java.util.HashSet;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityTreasureChest;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class RoomTreasureMoon extends DungeonRoom {
+
     int sizeX;
     int sizeY;
     int sizeZ;
@@ -31,8 +34,7 @@ public class RoomTreasureMoon extends DungeonRoom {
         for (int i = this.posX - 1; i <= this.posX + this.sizeX; i++) {
             for (int k = this.posZ - 1; k <= this.posZ + this.sizeZ; k++) {
                 for (int j = this.posY - 1; j <= this.posY + this.sizeY; j++) {
-                    if (i == this.posX - 1
-                            || i == this.posX + this.sizeX
+                    if (i == this.posX - 1 || i == this.posX + this.sizeX
                             || j == this.posY - 1
                             || j == this.posY + this.sizeY
                             || k == this.posZ - 1

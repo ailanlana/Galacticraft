@@ -1,17 +1,19 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.tile;
 
 import java.util.ArrayList;
+
 import micdoodle8.mods.galacticraft.planets.asteroids.blocks.AsteroidBlocks;
+
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityMinerBaseSingle extends TileEntity {
+
     @Override
     public void updateEntity() {
         if (!this.worldObj.isRemote) {
             final ArrayList<TileEntity> attachedBaseBlocks = new ArrayList<>();
 
-            SEARCH:
-            for (int x = this.xCoord; x < this.xCoord + 2; x++) {
+            SEARCH: for (int x = this.xCoord; x < this.xCoord + 2; x++) {
                 for (int y = this.yCoord; y < this.yCoord + 2; y++) {
                     for (int z = this.zCoord; z < this.zCoord + 2; z++) {
                         final TileEntity tile = this.worldObj.getTileEntity(x, y, z);

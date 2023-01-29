@@ -1,14 +1,18 @@
 package micdoodle8.mods.galacticraft.core.network;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 import java.util.UUID;
+
 import micdoodle8.mods.galacticraft.api.vector.Vector2;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+
 public class PacketEntityUpdate implements IPacket {
+
     private int entityID;
     private Vector3 position;
     private float rotationYaw;
@@ -74,8 +78,7 @@ public class PacketEntityUpdate implements IPacket {
         final Entity entity = player.worldObj.getEntityByID(this.entityID);
 
         if (entity instanceof IEntityFullSync) {
-            if (player.worldObj.isRemote
-                    || player.getUniqueID().equals(((IEntityFullSync) entity).getOwnerUUID())
+            if (player.worldObj.isRemote || player.getUniqueID().equals(((IEntityFullSync) entity).getOwnerUUID())
                     || ((IEntityFullSync) entity).getOwnerUUID() == null) {
                 final IEntityFullSync controllable = (IEntityFullSync) entity;
                 controllable.setPositionRotationAndMotion(
@@ -93,16 +96,9 @@ public class PacketEntityUpdate implements IPacket {
     }
 
     public interface IEntityFullSync {
-        void setPositionRotationAndMotion(
-                double x,
-                double y,
-                double z,
-                float yaw,
-                float pitch,
-                double motX,
-                double motY,
-                double motZ,
-                boolean onGround);
+
+        void setPositionRotationAndMotion(double x, double y, double z, float yaw, float pitch, double motX,
+                double motY, double motZ, boolean onGround);
 
         UUID getOwnerUUID();
     }

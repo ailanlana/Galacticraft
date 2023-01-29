@@ -1,10 +1,8 @@
 package micdoodle8.mods.galacticraft.api.prefab.entity;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.api.entity.IIgnoreShift;
 import micdoodle8.mods.galacticraft.api.entity.ITelemetry;
@@ -19,6 +17,7 @@ import micdoodle8.mods.galacticraft.core.tile.TileEntityTelemetry;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.DamageSourceGC;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -35,12 +34,18 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.fluids.FluidTank;
+
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 
 /**
  * Do not include this prefab class in your released mod download.
  */
 public abstract class EntitySpaceshipBase extends Entity implements IPacketReceiver, IIgnoreShift, ITelemetry {
+
     public enum EnumLaunchPhase {
         UNIGNITED,
         IGNITED,
@@ -144,8 +149,7 @@ public abstract class EntitySpaceshipBase extends Entity implements IPacketRecei
             final EntityItem entityItem = this.entityDropItem(item, 0);
 
             if (item.hasTagCompound()) {
-                entityItem.getEntityItem().setTagCompound((NBTTagCompound)
-                        item.getTagCompound().copy());
+                entityItem.getEntityItem().setTagCompound((NBTTagCompound) item.getTagCompound().copy());
             }
         }
     }
@@ -168,7 +172,7 @@ public abstract class EntitySpaceshipBase extends Entity implements IPacketRecei
         return false;
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void onUpdate() {
         if (this.ticks >= Long.MAX_VALUE) {
@@ -195,10 +199,9 @@ public abstract class EntitySpaceshipBase extends Entity implements IPacketRecei
             this.riddenByEntity.fallDistance = 0.0F;
         }
 
-        if (this.posY
-                > (this.worldObj.provider instanceof IExitHeight
-                        ? ((IExitHeight) this.worldObj.provider).getYCoordinateToTeleport()
-                        : 1200)) {
+        if (this.posY > (this.worldObj.provider instanceof IExitHeight
+                ? ((IExitHeight) this.worldObj.provider).getYCoordinateToTeleport()
+                : 1200)) {
             this.onReachAtmosphere();
             // if (this.worldObj.isRemote)
             // this.posY = 1 + (this.worldObj.provider instanceof IExitHeight ?
@@ -217,20 +220,18 @@ public abstract class EntitySpaceshipBase extends Entity implements IPacketRecei
         if (!this.worldObj.isRemote) {
             if (this.posY < 0.0D) {
                 this.kill();
-            } else if (this.posY
-                    > (this.worldObj.provider instanceof IExitHeight
-                                    ? ((IExitHeight) this.worldObj.provider).getYCoordinateToTeleport()
-                                    : 1200)
-                            + 100) {
-                if (this.riddenByEntity instanceof EntityPlayerMP) {
-                    final GCPlayerStats stats = GCPlayerStats.get((EntityPlayerMP) this.riddenByEntity);
-                    if (stats.usingPlanetSelectionGui) {
-                        this.kill();
+            } else if (this.posY > (this.worldObj.provider instanceof IExitHeight
+                    ? ((IExitHeight) this.worldObj.provider).getYCoordinateToTeleport()
+                    : 1200) + 100) {
+                        if (this.riddenByEntity instanceof EntityPlayerMP) {
+                            final GCPlayerStats stats = GCPlayerStats.get((EntityPlayerMP) this.riddenByEntity);
+                            if (stats.usingPlanetSelectionGui) {
+                                this.kill();
+                            }
+                        } else {
+                            this.kill();
+                        }
                     }
-                } else {
-                    this.kill();
-                }
-            }
 
             if (this.timeSinceLaunch > 50 && this.onGround) {
                 this.failRocket();
@@ -280,11 +281,9 @@ public abstract class EntitySpaceshipBase extends Entity implements IPacketRecei
             this.rotationPitch = -90;
         }
 
-        this.motionX = -(50
-                * Math.cos(this.rotationYaw * Math.PI / 180.0D)
+        this.motionX = -(50 * Math.cos(this.rotationYaw * Math.PI / 180.0D)
                 * Math.sin(this.rotationPitch * 0.01 * Math.PI / 180.0D));
-        this.motionZ = -(50
-                * Math.sin(this.rotationYaw * Math.PI / 180.0D)
+        this.motionZ = -(50 * Math.sin(this.rotationYaw * Math.PI / 180.0D)
                 * Math.sin(this.rotationPitch * 0.01 * Math.PI / 180.0D));
 
         if (this.launchPhase != EnumLaunchPhase.LAUNCHED.ordinal()) {
@@ -312,8 +311,8 @@ public abstract class EntitySpaceshipBase extends Entity implements IPacketRecei
         this.prevPosZ = this.posZ;
 
         if (!this.worldObj.isRemote && this.ticks % 3 == 0) {
-            GalacticraftCore.packetPipeline.sendToDimension(
-                    new PacketDynamic(this), this.worldObj.provider.dimensionId);
+            GalacticraftCore.packetPipeline
+                    .sendToDimension(new PacketDynamic(this), this.worldObj.provider.dimensionId);
             // PacketDispatcher.sendPacketToAllInDimension(GCCorePacketManager.getPacket(GalacticraftCore.CHANNELENTITIES,
             // this, this.getNetworkedData(new ArrayList())),
             // this.worldObj.provider.dimensionId);
@@ -467,8 +466,8 @@ public abstract class EntitySpaceshipBase extends Entity implements IPacketRecei
     public void onReachAtmosphere() {}
 
     @SideOnly(Side.CLIENT)
-    public void spawnParticle(
-            String var1, double var2, double var4, double var6, double var8, double var10, double var12) {}
+    public void spawnParticle(String var1, double var2, double var4, double var6, double var8, double var10,
+            double var12) {}
 
     @Override
     public boolean canRiderInteract() {
@@ -489,6 +488,7 @@ public abstract class EntitySpaceshipBase extends Entity implements IPacketRecei
     }
 
     public static class RocketLaunchEvent extends EntityEvent {
+
         public final EntitySpaceshipBase rocket;
 
         public RocketLaunchEvent(EntitySpaceshipBase entity) {
@@ -533,10 +533,8 @@ public abstract class EntitySpaceshipBase extends Entity implements IPacketRecei
         // data4 = pitch angle
         final int countdown = data[0];
         str[0] = "";
-        str[1] = countdown == 400
-                ? GCCoreUtil.translate("gui.rocket.onLaunchpad")
-                : countdown > 0
-                        ? GCCoreUtil.translate("gui.rocket.countdown") + ": " + countdown / 20
+        str[1] = countdown == 400 ? GCCoreUtil.translate("gui.rocket.onLaunchpad")
+                : countdown > 0 ? GCCoreUtil.translate("gui.rocket.countdown") + ": " + countdown / 20
                         : GCCoreUtil.translate("gui.rocket.launched");
         str[2] = GCCoreUtil.translate("gui.rocket.height") + ": " + data[1];
         str[3] = GameScreenText.makeSpeedString(data[2]);

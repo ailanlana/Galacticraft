@@ -8,6 +8,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class TileBaseElectricBlockWithInventory extends TileBaseElectricBlock implements IInventory {
+
     public ItemStack[] readStandardItemsFromNBT(NBTTagCompound nbt) {
         final NBTTagList var2 = nbt.getTagList("Items", 10);
         final int length = this.getSizeInventory();

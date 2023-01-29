@@ -1,6 +1,7 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.items.GCItems;
@@ -8,6 +9,7 @@ import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityFallenMeteor;
 import micdoodle8.mods.galacticraft.core.util.ColorUtil;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -24,6 +26,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockFallenMeteor extends Block implements ITileEntityProvider, ItemBlockDesc.IBlockShiftDesc {
+
     public BlockFallenMeteor(String assetName) {
         super(Material.rock);
         this.setBlockBounds(0.2F, 0.2F, 0.2F, 0.8F, 0.8F, 0.8F);
@@ -108,9 +111,8 @@ public class BlockFallenMeteor extends Block implements ITileEntityProvider, Ite
                 double var9 = par2 + 0.5F - livingEntity.posX;
                 double var7;
 
-                for (var7 = livingEntity.posZ - par4;
-                        var9 * var9 + var7 * var7 < 1.0E-4D;
-                        var7 = (Math.random() - Math.random()) * 0.01D) {
+                for (var7 = livingEntity.posZ - par4; var9 * var9 + var7 * var7
+                        < 1.0E-4D; var7 = (Math.random() - Math.random()) * 0.01D) {
                     var9 = (Math.random() - Math.random()) * 0.01D;
                 }
 
@@ -138,8 +140,8 @@ public class BlockFallenMeteor extends Block implements ITileEntityProvider, Ite
 
     private void tryToFall(World par1World, int par2, int par3, int par4) {
         if (BlockFallenMeteor.canFallBelow(par1World, par2, par3 - 1, par4) && par3 >= 0) {
-            final int prevHeatLevel =
-                    ((TileEntityFallenMeteor) par1World.getTileEntity(par2, par3, par4)).getHeatLevel();
+            final int prevHeatLevel = ((TileEntityFallenMeteor) par1World.getTileEntity(par2, par3, par4))
+                    .getHeatLevel();
             par1World.setBlock(par2, par3, par4, Blocks.air, 0, 3);
 
             while (BlockFallenMeteor.canFallBelow(par1World, par2, par3 - 1, par4) && par3 > 0) {

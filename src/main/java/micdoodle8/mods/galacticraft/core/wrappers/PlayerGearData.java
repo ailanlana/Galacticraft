@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 public class PlayerGearData {
+
     private final EntityPlayer player;
     private int mask;
     private int gear;
@@ -14,16 +15,10 @@ public class PlayerGearData {
     private int frequencyModule;
 
     public PlayerGearData(EntityPlayer player) {
-        this(player, -1, -1, -1, -1, -1, new int[] {-1, -1, -1, -1});
+        this(player, -1, -1, -1, -1, -1, new int[] { -1, -1, -1, -1 });
     }
 
-    public PlayerGearData(
-            EntityPlayer player,
-            int mask,
-            int gear,
-            int leftTank,
-            int rightTank,
-            int frequencyModule,
+    public PlayerGearData(EntityPlayer player, int mask, int gear, int leftTank, int rightTank, int frequencyModule,
             int[] thermalPadding) {
         this.player = player;
         this.mask = mask;
@@ -108,10 +103,7 @@ public class PlayerGearData {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof PlayerGearData) {
-            return ((PlayerGearData) obj)
-                    .player
-                    .getGameProfile()
-                    .getName()
+            return ((PlayerGearData) obj).player.getGameProfile().getName()
                     .equals(this.player.getGameProfile().getName());
         }
 

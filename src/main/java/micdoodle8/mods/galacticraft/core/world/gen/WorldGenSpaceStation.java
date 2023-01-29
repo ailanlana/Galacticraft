@@ -1,12 +1,15 @@
 package micdoodle8.mods.galacticraft.core.world.gen;
 
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class WorldGenSpaceStation extends WorldGenerator {
+
     @Override
     public boolean generate(World world, Random rand, int i, int j, int k) {
         world.setBlock(i + 0, j + 0, k + 0, GCBlocks.basicBlock, 4, 3);

@@ -1,19 +1,23 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import cpw.mods.fml.relauncher.Side;
 import java.util.ArrayList;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 
+import cpw.mods.fml.relauncher.Side;
+
 public class TileEntityAirLockController extends TileEntityAirLock {
+
     @NetworkedField(targetSide = Side.CLIENT)
     public boolean redstoneActivation;
 
@@ -86,8 +90,8 @@ public class TileEntityAirLockController extends TileEntityAirLock {
                 final Vector3 thisPos = new Vector3(this).translate(0.5F);
                 final Vector3 minPos = new Vector3(thisPos).translate(-distance);
                 final Vector3 maxPos = new Vector3(thisPos).translate(distance);
-                final AxisAlignedBB matchingRegion =
-                        AxisAlignedBB.getBoundingBox(minPos.x, minPos.y, minPos.z, maxPos.x, maxPos.y, maxPos.z);
+                final AxisAlignedBB matchingRegion = AxisAlignedBB
+                        .getBoundingBox(minPos.x, minPos.y, minPos.z, maxPos.x, maxPos.y, maxPos.z);
                 final List playersWithin = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, matchingRegion);
 
                 boolean foundPlayer = false;
@@ -123,16 +127,15 @@ public class TileEntityAirLockController extends TileEntityAirLock {
                 } else {
                     this.otherAirLocks = this.protocol.calculate(this.horizontalModeEnabled);
 
-                    if (this.active
-                            && (this.otherAirLocks != null
-                                    || this.lastOtherAirLocks != null && this.otherAirLocks != this.lastOtherAirLocks
-                                    || this.lastOtherAirLocks != null
-                                            && this.otherAirLocks.size() != this.lastOtherAirLocks.size())) {
+                    if (this.active && (this.otherAirLocks != null
+                            || this.lastOtherAirLocks != null && this.otherAirLocks != this.lastOtherAirLocks
+                            || this.lastOtherAirLocks != null
+                                    && this.otherAirLocks.size() != this.lastOtherAirLocks.size())) {
                         this.sealAirLock();
                     } else if (!this.active && this.lastActive
                             || this.otherAirLocks == null && this.lastOtherAirLocks != null) {
-                        this.unsealAirLock();
-                    }
+                                this.unsealAirLock();
+                            }
                 }
 
                 if (this.active != this.lastActive) {
@@ -157,8 +160,7 @@ public class TileEntityAirLockController extends TileEntityAirLock {
         }
 
         if (this.horizontalModeEnabled) {
-            if (this.protocol.minY == this.protocol.maxY
-                    && this.protocol.minX != this.protocol.maxX
+            if (this.protocol.minY == this.protocol.maxY && this.protocol.minX != this.protocol.maxX
                     && this.protocol.minZ != this.protocol.maxZ) {
                 for (x = this.protocol.minX + 1; x <= this.protocol.maxX - 1; x++) {
                     for (z = this.protocol.minZ + 1; z <= this.protocol.maxZ - 1; z++) {
@@ -209,8 +211,7 @@ public class TileEntityAirLockController extends TileEntityAirLock {
         }
 
         if (this.lastHorizontalModeEnabled) {
-            if (this.protocol.minY == this.protocol.maxY
-                    && this.protocol.minX != this.protocol.maxX
+            if (this.protocol.minY == this.protocol.maxY && this.protocol.minX != this.protocol.maxX
                     && this.protocol.minZ != this.protocol.maxZ) {
                 for (x = this.protocol.minX + 1; x <= this.protocol.maxX - 1; x++) {
                     for (z = this.protocol.minZ + 1; z <= this.protocol.maxZ - 1; z++) {

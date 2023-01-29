@@ -1,9 +1,5 @@
 package micdoodle8.mods.galacticraft.core.client.render.entities;
 
-import api.player.model.ModelPlayer;
-import api.player.render.RenderPlayerAPI;
-import api.player.render.RenderPlayerBase;
-import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.api.entity.ICameraZoomEntity;
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
@@ -15,6 +11,7 @@ import micdoodle8.mods.galacticraft.core.tile.TileEntityMulti;
 import micdoodle8.mods.galacticraft.core.wrappers.PlayerGearData;
 import micdoodle8.mods.galacticraft.planets.mars.blocks.BlockMachineMars;
 import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -26,18 +23,24 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+
 import org.lwjgl.opengl.GL11;
 
+import api.player.model.ModelPlayer;
+import api.player.render.RenderPlayerAPI;
+import api.player.render.RenderPlayerBase;
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class RenderPlayerBaseGC extends RenderPlayerBase {
+
     public ModelPlayer modelThermalPadding;
     public ModelPlayer modelThermalPaddingHelmet;
     private static ResourceLocation thermalPaddingTexture0;
     private static ResourceLocation thermalPaddingTexture1;
 
     /**
-     * This is used in place of RenderPlayerGC only if RenderPlayerAPI is installed
-     * It renders the thermal armor (also does something connected with rotating a
-     * sleeping player)
+     * This is used in place of RenderPlayerGC only if RenderPlayerAPI is installed It renders the thermal armor (also
+     * does something connected with rotating a sleeping player)
      *
      * @param renderPlayerAPI
      */
@@ -48,10 +51,9 @@ public class RenderPlayerBaseGC extends RenderPlayerBase {
 
         if (GalacticraftCore.isPlanetsLoaded) {
             try {
-                final String prefix =
-                        (String) Class.forName("micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule")
-                                .getField("ASSET_PREFIX")
-                                .get(null);
+                final String prefix = (String) Class
+                        .forName("micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule")
+                        .getField("ASSET_PREFIX").get(null);
                 thermalPaddingTexture0 = new ResourceLocation(prefix, "textures/misc/thermalPadding_0.png");
                 thermalPaddingTexture1 = new ResourceLocation(prefix, "textures/misc/thermalPadding_1.png");
             } catch (final Exception e) {
@@ -61,19 +63,13 @@ public class RenderPlayerBaseGC extends RenderPlayerBase {
     }
 
     @Override
-    public void renderModel(
-            EntityLivingBase par1EntityLivingBase,
-            float par2,
-            float par3,
-            float par4,
-            float par5,
-            float par6,
-            float par7) {
+    public void renderModel(EntityLivingBase par1EntityLivingBase, float par2, float par3, float par4, float par5,
+            float par6, float par7) {
         super.renderModel(par1EntityLivingBase, par2, par3, par4, par5, par6, par7);
 
         if (thermalPaddingTexture0 != null) {
-            final PlayerGearData gearData =
-                    ClientProxyCore.playerItemData.get(par1EntityLivingBase.getCommandSenderName());
+            final PlayerGearData gearData = ClientProxyCore.playerItemData
+                    .get(par1EntityLivingBase.getCommandSenderName());
 
             if (gearData != null && !RenderPlayerGC.flagThermalOverride) {
                 ModelBiped modelBiped;
@@ -93,10 +89,7 @@ public class RenderPlayerBaseGC extends RenderPlayerBase {
                     if (padding == 0 && !par1EntityLivingBase.isInvisible()) {
                         // First draw the thermal armor without any color tinting
                         GL11.glColor4f(1, 1, 1, 1);
-                        FMLClientHandler.instance()
-                                .getClient()
-                                .getTextureManager()
-                                .bindTexture(thermalPaddingTexture1);
+                        FMLClientHandler.instance().getClient().getTextureManager().bindTexture(thermalPaddingTexture1);
                         modelBiped.bipedHead.showModel = i == 0;
                         modelBiped.bipedHeadwear.showModel = i == 0;
                         modelBiped.bipedBody.showModel = i == 1 || i == 2;
@@ -119,10 +112,7 @@ public class RenderPlayerBaseGC extends RenderPlayerBase {
                         // Then overlay the same again, with color tinting:
                         // Start alpha render
                         GL11.glDisable(GL11.GL_LIGHTING);
-                        FMLClientHandler.instance()
-                                .getClient()
-                                .getTextureManager()
-                                .bindTexture(thermalPaddingTexture0);
+                        FMLClientHandler.instance().getClient().getTextureManager().bindTexture(thermalPaddingTexture0);
                         GL11.glEnable(GL11.GL_ALPHA_TEST);
                         GL11.glEnable(GL11.GL_BLEND);
                         GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
@@ -187,12 +177,12 @@ public class RenderPlayerBaseGC extends RenderPlayerBase {
                             pos.posZ,
                             par1AbstractClientPlayer)) {
                         if (bed == GCBlocks.fakeBlock && meta == 5) {
-                            final TileEntity tile =
-                                    event.entityPlayer.worldObj.getTileEntity(pos.posX, pos.posY, pos.posZ);
+                            final TileEntity tile = event.entityPlayer.worldObj
+                                    .getTileEntity(pos.posX, pos.posY, pos.posZ);
                             if (tile instanceof TileEntityMulti) {
                                 bed = ((TileEntityMulti) tile).mainBlockPosition.getBlock(event.entityPlayer.worldObj);
-                                meta = ((TileEntityMulti) tile)
-                                        .mainBlockPosition.getBlockMetadata(event.entityPlayer.worldObj);
+                                meta = ((TileEntityMulti) tile).mainBlockPosition
+                                        .getBlockMetadata(event.entityPlayer.worldObj);
                             }
                         }
 

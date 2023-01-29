@@ -3,9 +3,9 @@ package micdoodle8.mods.galacticraft.api.item;
 import net.minecraft.item.ItemStack;
 
 public interface IItemThermal {
+
     /**
-     * The thermal strength of this armor. Value for first tier thermal padding is
-     * 1.
+     * The thermal strength of this armor. Value for first tier thermal padding is 1.
      */
     int getThermalStrength();
 

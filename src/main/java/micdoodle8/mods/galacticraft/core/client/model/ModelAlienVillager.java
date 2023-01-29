@@ -5,6 +5,7 @@ import net.minecraft.client.model.ModelVillager;
 import net.minecraft.entity.Entity;
 
 public class ModelAlienVillager extends ModelVillager {
+
     public ModelRenderer brain;
 
     public ModelAlienVillager(float par1) {
@@ -49,8 +50,8 @@ public class ModelAlienVillager extends ModelVillager {
     }
 
     @Override
-    public void setRotationAngles(
-            float par1, float par2, float par3, float par4, float par5, float par6, Entity par7Entity) {
+    public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6,
+            Entity par7Entity) {
         super.setRotationAngles(par1, par2, par3, par4, par5, par6, par7Entity);
 
         this.brain.rotateAngleX = this.villagerHead.rotateAngleX;

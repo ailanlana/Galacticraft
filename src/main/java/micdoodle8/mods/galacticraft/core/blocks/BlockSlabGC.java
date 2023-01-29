@@ -2,7 +2,9 @@ package micdoodle8.mods.galacticraft.core.blocks;
 
 import java.util.List;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -15,7 +17,8 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class BlockSlabGC extends BlockSlab {
-    private static final String[] woodTypes = new String[] {"tin", "tin", "moon", "moonBricks", "mars", "marsBricks"};
+
+    private static final String[] woodTypes = new String[] { "tin", "tin", "moon", "moonBricks", "mars", "marsBricks" };
 
     private IIcon[] textures;
     private IIcon[] tinSideIcon;
@@ -39,8 +42,7 @@ public class BlockSlabGC extends BlockSlab {
         if (GalacticraftCore.isPlanetsLoaded) {
             try {
                 final String prefix = (String) Class.forName("micdoodle8.mods.galacticraft.planets.mars.MarsModule")
-                        .getField("TEXTURE_PREFIX")
-                        .get(null);
+                        .getField("TEXTURE_PREFIX").get(null);
                 this.textures[4] = par1IconRegister.registerIcon(prefix + "cobblestone");
                 this.textures[5] = par1IconRegister.registerIcon(prefix + "brick");
             } catch (final Exception e) {
@@ -79,7 +81,7 @@ public class BlockSlabGC extends BlockSlab {
     }
 
     @Override
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void getSubBlocks(Item block, CreativeTabs creativeTabs, List list) {
         int max = 0;
 
@@ -95,10 +97,7 @@ public class BlockSlabGC extends BlockSlab {
 
     @Override
     public String func_150002_b(int meta) {
-        return new StringBuilder()
-                .append(woodTypes[this.getWoodType(meta)])
-                .append("Slab")
-                .toString();
+        return new StringBuilder().append(woodTypes[this.getWoodType(meta)]).append("Slab").toString();
     }
 
     @Override
@@ -143,15 +142,8 @@ public class BlockSlabGC extends BlockSlab {
     }
 
     @Override
-    public float getExplosionResistance(
-            Entity par1Entity,
-            World world,
-            int x,
-            int y,
-            int z,
-            double explosionX,
-            double explosionY,
-            double explosionZ) {
+    public float getExplosionResistance(Entity par1Entity, World world, int x, int y, int z, double explosionX,
+            double explosionY, double explosionZ) {
         return super.getBlockHardness(world, x, y, z);
     }
 

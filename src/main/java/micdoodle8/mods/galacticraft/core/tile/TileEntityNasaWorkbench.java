@@ -1,19 +1,22 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.blocks.BlockMulti;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 import micdoodle8.mods.galacticraft.core.client.gui.GuiIdsCore;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class TileEntityNasaWorkbench extends TileEntityMulti implements IMultiBlock {
+
     @Override
     public boolean onActivated(EntityPlayer entityPlayer) {
         entityPlayer.openGui(
@@ -39,8 +42,10 @@ public class TileEntityNasaWorkbench extends TileEntityMulti implements IMultiBl
 
             for (int x = -1; x < 2; x++) {
                 for (int z = -1; z < 2; z++) {
-                    final BlockVec3 vecToAdd =
-                            new BlockVec3(placedPosition.x + x, placedPosition.y + y, placedPosition.z + z);
+                    final BlockVec3 vecToAdd = new BlockVec3(
+                            placedPosition.x + x,
+                            placedPosition.y + y,
+                            placedPosition.z + z);
 
                     if (!vecToAdd.equals(placedPosition)) {
                         if (Math.abs(x) != 1 || Math.abs(z) != 1) {
@@ -68,15 +73,12 @@ public class TileEntityNasaWorkbench extends TileEntityMulti implements IMultiBl
                     if (Math.abs(x) != 1 || Math.abs(z) != 1) {
                         if ((y == 0 || y == 3) && x == 0 && z == 0) {
                             if (this.worldObj.isRemote && this.worldObj.rand.nextDouble() < 0.05D) {
-                                FMLClientHandler.instance()
-                                        .getClient()
-                                        .effectRenderer
-                                        .addBlockDestroyEffects(
-                                                thisBlock.x + x,
-                                                thisBlock.y + y,
-                                                thisBlock.z + z,
-                                                GCBlocks.nasaWorkbench,
-                                                Block.getIdFromBlock(GCBlocks.nasaWorkbench) >> 12 & 255);
+                                FMLClientHandler.instance().getClient().effectRenderer.addBlockDestroyEffects(
+                                        thisBlock.x + x,
+                                        thisBlock.y + y,
+                                        thisBlock.z + z,
+                                        GCBlocks.nasaWorkbench,
+                                        Block.getIdFromBlock(GCBlocks.nasaWorkbench) >> 12 & 255);
                             }
 
                             if (y == 0) {
@@ -86,15 +88,12 @@ public class TileEntityNasaWorkbench extends TileEntityMulti implements IMultiBl
                             }
                         } else if (y != 0 && y != 3) {
                             if (this.worldObj.isRemote && this.worldObj.rand.nextDouble() < 0.05D) {
-                                FMLClientHandler.instance()
-                                        .getClient()
-                                        .effectRenderer
-                                        .addBlockDestroyEffects(
-                                                thisBlock.x + x,
-                                                thisBlock.y + y,
-                                                thisBlock.z + z,
-                                                GCBlocks.nasaWorkbench,
-                                                Block.getIdFromBlock(GCBlocks.nasaWorkbench) >> 12 & 255);
+                                FMLClientHandler.instance().getClient().effectRenderer.addBlockDestroyEffects(
+                                        thisBlock.x + x,
+                                        thisBlock.y + y,
+                                        thisBlock.z + z,
+                                        GCBlocks.nasaWorkbench,
+                                        Block.getIdFromBlock(GCBlocks.nasaWorkbench) >> 12 & 255);
                             }
 
                             this.worldObj.setBlockToAir(thisBlock.x + x, thisBlock.y + y, thisBlock.z + z);
@@ -109,6 +108,11 @@ public class TileEntityNasaWorkbench extends TileEntityMulti implements IMultiBl
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
         return AxisAlignedBB.getBoundingBox(
-                this.xCoord - 1, this.yCoord, this.zCoord - 1, this.xCoord + 2, this.yCoord + 4, this.zCoord + 2);
+                this.xCoord - 1,
+                this.yCoord,
+                this.zCoord - 1,
+                this.xCoord + 2,
+                this.yCoord + 4,
+                this.zCoord + 2);
     }
 }

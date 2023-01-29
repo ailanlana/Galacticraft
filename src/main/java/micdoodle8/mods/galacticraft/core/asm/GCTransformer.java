@@ -3,16 +3,19 @@ package micdoodle8.mods.galacticraft.core.asm;
 import static micdoodle8.mods.galacticraft.core.asm.GCLoadingPlugin.debugOutputDir;
 import static org.objectweb.asm.Opcodes.ASM5;
 
-import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+
 import net.minecraft.launchwrapper.IClassTransformer;
+
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.util.TraceClassVisitor;
+
+import com.google.common.collect.ImmutableMap;
 
 public class GCTransformer implements IClassTransformer {
 
@@ -44,15 +47,16 @@ public class GCTransformer implements IClassTransformer {
             final int curCount = transformCounts.compute(transformedName, (k, v) -> v == null ? 0 : v + 1);
             final String infix = curCount == 0 ? "" : "_" + curCount;
             try (PrintWriter origOut = new PrintWriter(new File(debugOutputDir, name + infix + "_orig.txt"), "UTF-8");
-                    PrintWriter tranOut =
-                            new PrintWriter(new File(debugOutputDir, name + infix + "_tran.txt"), "UTF-8")) {
+                    PrintWriter tranOut = new PrintWriter(
+                            new File(debugOutputDir, name + infix + "_tran.txt"),
+                            "UTF-8")) {
                 cr.accept(
                         new TraceClassVisitor(factory.apply(ASM5, new TraceClassVisitor(cw, tranOut)), origOut),
                         factory.isExpandFrames() ? ClassReader.SKIP_FRAMES : 0);
                 transformedBytes = cw.toByteArray();
             } catch (final Exception e) {
-                GCLoadingPlugin.LOGGER.warn(
-                        "Unable to transform with debug output on. Now retrying without debug output.", e);
+                GCLoadingPlugin.LOGGER
+                        .warn("Unable to transform with debug output on. Now retrying without debug output.", e);
             }
         }
         if (transformedBytes == null || transformedBytes.length == 0) {

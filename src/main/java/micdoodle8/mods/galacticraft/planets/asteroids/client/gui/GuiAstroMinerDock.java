@@ -2,6 +2,7 @@ package micdoodle8.mods.galacticraft.planets.asteroids.client.gui;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.gui.container.GuiCargoLoader;
 import micdoodle8.mods.galacticraft.core.client.gui.container.GuiContainerGC;
@@ -15,17 +16,21 @@ import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
 import micdoodle8.mods.galacticraft.planets.asteroids.entities.EntityAstroMiner;
 import micdoodle8.mods.galacticraft.planets.asteroids.inventory.ContainerAstroMinerDock;
 import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityMinerBase;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
 public class GuiAstroMinerDock extends GuiContainerGC {
-    private static final ResourceLocation dockGui =
-            new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "textures/gui/guiAstroMinerDock.png");
+
+    private static final ResourceLocation dockGui = new ResourceLocation(
+            AsteroidsModule.ASSET_PREFIX,
+            "textures/gui/guiAstroMinerDock.png");
 
     private final TileEntityMinerBase tile;
 
@@ -56,8 +61,7 @@ public class GuiAstroMinerDock extends GuiContainerGC {
             this.recallButton.enabled = false;
         } else {
             final EntityAstroMiner miner = this.tile.linkedMiner;
-            if (miner == null
-                    || miner.isDead
+            if (miner == null || miner.isDead
                     || this.tile.linkCountDown == 0
                     || miner.AIstate < EntityAstroMiner.AISTATE_TRAVELLING
                     || miner.AIstate == EntityAstroMiner.AISTATE_DOCKING) {
@@ -77,10 +81,10 @@ public class GuiAstroMinerDock extends GuiContainerGC {
         final int yPos = (this.height - this.ySize) / 2;
         final List<String> electricityDesc = new ArrayList<>();
         electricityDesc.add(GCCoreUtil.translate("gui.energyStorage.desc.0"));
-        electricityDesc.add(EnumColor.YELLOW
-                + GCCoreUtil.translate("gui.energyStorage.desc.1")
-                + ((int) Math.floor(this.tile.getEnergyStoredGC()) + " / "
-                        + (int) Math.floor(this.tile.getMaxEnergyStoredGC())));
+        electricityDesc.add(
+                EnumColor.YELLOW + GCCoreUtil.translate("gui.energyStorage.desc.1")
+                        + ((int) Math.floor(this.tile.getEnergyStoredGC()) + " / "
+                                + (int) Math.floor(this.tile.getMaxEnergyStoredGC())));
         this.electricInfoRegion.tooltipStrings = electricityDesc;
         this.electricInfoRegion.xPosition = xPos + 233;
         this.electricInfoRegion.yPosition = yPos + 29;
@@ -90,11 +94,24 @@ public class GuiAstroMinerDock extends GuiContainerGC {
         final List<String> batterySlotDesc = new ArrayList<>();
         batterySlotDesc.add(GCCoreUtil.translate("gui.batterySlot.desc.0"));
         batterySlotDesc.add(GCCoreUtil.translate("gui.batterySlot.desc.1"));
-        this.infoRegions.add(new GuiElementInfoRegion(
-                xPos + 230, yPos + 108, 18, 18, batterySlotDesc, this.width, this.height, this));
+        this.infoRegions.add(
+                new GuiElementInfoRegion(
+                        xPos + 230,
+                        yPos + 108,
+                        18,
+                        18,
+                        batterySlotDesc,
+                        this.width,
+                        this.height,
+                        this));
         this.buttonList.add(
                 this.recallButton = new GuiButton(
-                        0, xPos + 173, yPos + 195, 76, 20, GCCoreUtil.translate("gui.button.recall.name")));
+                        0,
+                        xPos + 173,
+                        yPos + 195,
+                        76,
+                        20,
+                        GCCoreUtil.translate("gui.button.recall.name")));
     }
 
     @Override
@@ -107,9 +124,10 @@ public class GuiAstroMinerDock extends GuiContainerGC {
         if (par1GuiButton.enabled) {
             switch (par1GuiButton.id) {
                 case 0:
-                    GalacticraftCore.packetPipeline.sendToServer(new PacketSimple(
-                            EnumSimplePacket.S_UPDATE_DISABLEABLE_BUTTON,
-                            new Object[] {this.tile.xCoord, this.tile.yCoord, this.tile.zCoord, 0}));
+                    GalacticraftCore.packetPipeline.sendToServer(
+                            new PacketSimple(
+                                    EnumSimplePacket.S_UPDATE_DISABLEABLE_BUTTON,
+                                    new Object[] { this.tile.xCoord, this.tile.yCoord, this.tile.zCoord, 0 }));
                     break;
                 default:
                     break;
@@ -127,27 +145,24 @@ public class GuiAstroMinerDock extends GuiContainerGC {
         this.fontRendererObj.drawString(this.getStatus(), 177, 141, 4210752);
         if (this.extraLines) {
             this.fontRendererObj.drawString(
-                    "\u0394x: "
-                            + this.getDeltaString(
-                                    MathHelper.floor_double(this.tile.linkedMiner.posX) - this.tile.xCoord - 1),
+                    "\u0394x: " + this
+                            .getDeltaString(MathHelper.floor_double(this.tile.linkedMiner.posX) - this.tile.xCoord - 1),
                     186,
                     152,
                     2536735);
         }
         if (this.extraLines) {
             this.fontRendererObj.drawString(
-                    "\u0394y: "
-                            + this.getDeltaString(
-                                    MathHelper.floor_double(this.tile.linkedMiner.posY) - this.tile.yCoord),
+                    "\u0394y: " + this
+                            .getDeltaString(MathHelper.floor_double(this.tile.linkedMiner.posY) - this.tile.yCoord),
                     186,
                     162,
                     2536735);
         }
         if (this.extraLines) {
             this.fontRendererObj.drawString(
-                    "\u0394z: "
-                            + this.getDeltaString(
-                                    MathHelper.floor_double(this.tile.linkedMiner.posZ) - this.tile.zCoord - 1),
+                    "\u0394z: " + this
+                            .getDeltaString(MathHelper.floor_double(this.tile.linkedMiner.posZ) - this.tile.zCoord - 1),
                     186,
                     172,
                     2536735);
@@ -208,7 +223,9 @@ public class GuiAstroMinerDock extends GuiContainerGC {
         final List<String> electricityDesc = new ArrayList<>();
         electricityDesc.add(GCCoreUtil.translate("gui.energyStorage.desc.0"));
         EnergyDisplayHelper.getEnergyDisplayTooltip(
-                this.tile.getEnergyStoredGC(), this.tile.getMaxEnergyStoredGC(), electricityDesc);
+                this.tile.getEnergyStoredGC(),
+                this.tile.getMaxEnergyStoredGC(),
+                electricityDesc);
         this.electricInfoRegion.tooltipStrings = electricityDesc;
 
         this.mc.getTextureManager().bindTexture(GuiCargoLoader.loaderTexture);

@@ -1,9 +1,8 @@
 package micdoodle8.mods.galacticraft.planets.mars.client.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.gui.container.GuiContainerGC;
 import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementInfoRegion;
@@ -17,20 +16,28 @@ import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
 import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
 import micdoodle8.mods.galacticraft.planets.mars.inventory.ContainerMethaneSynthesizer;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityMethaneSynthesizer;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiMethaneSynthesizer extends GuiContainerGC {
-    private static final ResourceLocation refineryTexture =
-            new ResourceLocation(MarsModule.ASSET_PREFIX, "textures/gui/methaneSynthesizer.png");
 
-    private static final ResourceLocation gasTextures =
-            new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "textures/gui/gasesMethaneOxygenNitrogen.png");
+    private static final ResourceLocation refineryTexture = new ResourceLocation(
+            MarsModule.ASSET_PREFIX,
+            "textures/gui/methaneSynthesizer.png");
+
+    private static final ResourceLocation gasTextures = new ResourceLocation(
+            AsteroidsModule.ASSET_PREFIX,
+            "textures/gui/gasesMethaneOxygenNitrogen.png");
 
     private final TileEntityMethaneSynthesizer tileEntity;
 
@@ -102,12 +109,28 @@ public class GuiMethaneSynthesizer extends GuiContainerGC {
         final List<String> batterySlotDesc = new ArrayList<>();
         batterySlotDesc.add(GCCoreUtil.translate("gui.batterySlot.desc.0"));
         batterySlotDesc.add(GCCoreUtil.translate("gui.batterySlot.desc.1"));
-        this.infoRegions.add(new GuiElementInfoRegion(
-                edgeLeft + 53, edgeTop + 53, 18, 18, batterySlotDesc, this.width, this.height, this));
+        this.infoRegions.add(
+                new GuiElementInfoRegion(
+                        edgeLeft + 53,
+                        edgeTop + 53,
+                        18,
+                        18,
+                        batterySlotDesc,
+                        this.width,
+                        this.height,
+                        this));
         final List<String> carbonSlotDesc = new ArrayList<>();
         carbonSlotDesc.add(GCCoreUtil.translate("gui.carbonSlot.desc.0"));
-        this.infoRegions.add(new GuiElementInfoRegion(
-                edgeLeft + 27, edgeTop + 53, 18, 18, carbonSlotDesc, this.width, this.height, this));
+        this.infoRegions.add(
+                new GuiElementInfoRegion(
+                        edgeLeft + 27,
+                        edgeTop + 53,
+                        18,
+                        18,
+                        carbonSlotDesc,
+                        this.width,
+                        this.height,
+                        this));
 
         this.fuelTankRegion.xPosition = edgeLeft + 153;
         this.fuelTankRegion.yPosition = edgeTop + 28;
@@ -119,10 +142,26 @@ public class GuiMethaneSynthesizer extends GuiContainerGC {
         fuelSlotDesc.add(GCCoreUtil.translate("gui.fuelOutput.desc.0"));
         fuelSlotDesc.add(GCCoreUtil.translate("gui.fuelOutput.desc.1"));
         fuelSlotDesc.add(GCCoreUtil.translate("gui.methaneOutput.desc.2"));
-        this.infoRegions.add(new GuiElementInfoRegion(
-                edgeLeft + 152, edgeTop + 6, 18, 18, fuelSlotDesc, this.width, this.height, this));
-        this.infoRegions.add(new GuiElementInfoRegion(
-                edgeLeft + 131, edgeTop + 6, 18, 18, fuelSlotDesc, this.width, this.height, this));
+        this.infoRegions.add(
+                new GuiElementInfoRegion(
+                        edgeLeft + 152,
+                        edgeTop + 6,
+                        18,
+                        18,
+                        fuelSlotDesc,
+                        this.width,
+                        this.height,
+                        this));
+        this.infoRegions.add(
+                new GuiElementInfoRegion(
+                        edgeLeft + 131,
+                        edgeTop + 6,
+                        18,
+                        18,
+                        fuelSlotDesc,
+                        this.width,
+                        this.height,
+                        this));
 
         fuelSlotDesc = new ArrayList<>();
         fuelSlotDesc.addAll(GCCoreUtil.translateWithSplit("gui.hydrogenInput.desc.0"));
@@ -130,16 +169,32 @@ public class GuiMethaneSynthesizer extends GuiContainerGC {
         fuelSlotDesc.add("(" + GCCoreUtil.translate("gui.message.withAtmosphere0.name"));
         fuelSlotDesc.add(GCCoreUtil.lowerCaseNoun("fluid.hydrogen"));
         fuelSlotDesc.add(GCCoreUtil.translate("gui.message.withAtmosphere1.name") + ")");
-        this.infoRegions.add(new GuiElementInfoRegion(
-                edgeLeft + 6, edgeTop + 6, 18, 18, fuelSlotDesc, this.width, this.height, this));
+        this.infoRegions.add(
+                new GuiElementInfoRegion(
+                        edgeLeft + 6,
+                        edgeTop + 6,
+                        18,
+                        18,
+                        fuelSlotDesc,
+                        this.width,
+                        this.height,
+                        this));
 
         fuelSlotDesc = new ArrayList<>();
         fuelSlotDesc.add(GCCoreUtil.translate("item.atmosphericValve.name"));
         fuelSlotDesc.add("(" + GCCoreUtil.translate("gui.message.withAtmosphere0.name"));
         fuelSlotDesc.add(GCCoreUtil.lowerCaseNoun("gas.carbondioxide.name"));
         fuelSlotDesc.add(GCCoreUtil.translate("gui.message.withAtmosphere1.name") + ")");
-        this.infoRegions.add(new GuiElementInfoRegion(
-                edgeLeft + 27, edgeTop + 6, 18, 18, fuelSlotDesc, this.width, this.height, this));
+        this.infoRegions.add(
+                new GuiElementInfoRegion(
+                        edgeLeft + 27,
+                        edgeTop + 6,
+                        18,
+                        18,
+                        fuelSlotDesc,
+                        this.width,
+                        this.height,
+                        this));
 
         this.electricInfoRegion.xPosition = edgeLeft + 66;
         this.electricInfoRegion.yPosition = edgeTop + 16;
@@ -163,9 +218,11 @@ public class GuiMethaneSynthesizer extends GuiContainerGC {
     protected void actionPerformed(GuiButton par1GuiButton) {
         switch (par1GuiButton.id) {
             case 0:
-                GalacticraftCore.packetPipeline.sendToServer(new PacketSimple(
-                        EnumSimplePacket.S_UPDATE_DISABLEABLE_BUTTON,
-                        new Object[] {this.tileEntity.xCoord, this.tileEntity.yCoord, this.tileEntity.zCoord, 0}));
+                GalacticraftCore.packetPipeline.sendToServer(
+                        new PacketSimple(
+                                EnumSimplePacket.S_UPDATE_DISABLEABLE_BUTTON,
+                                new Object[] { this.tileEntity.xCoord, this.tileEntity.yCoord, this.tileEntity.zCoord,
+                                        0 }));
                 break;
         }
     }
@@ -200,16 +257,16 @@ public class GuiMethaneSynthesizer extends GuiContainerGC {
         this.buttonDisable.displayString = this.tileEntity.processTicks <= -8
                 ? GCCoreUtil.translate("gui.button.liquefy.name")
                 : GCCoreUtil.translate("gui.button.liquefyStop.name");
-        this.fontRendererObj.drawString(
-                GCCoreUtil.translate("gui.message.status.name") + ":", 72, 45 + 23 + yOffset, 4210752);
+        this.fontRendererObj
+                .drawString(GCCoreUtil.translate("gui.message.status.name") + ":", 72, 45 + 23 + yOffset, 4210752);
         this.fontRendererObj.drawString(displayText, 75, 45 + 33 + yOffset, 4210752);
         // this.fontRendererObj.drawString(ElectricityDisplay.getDisplay(this.tileEntity.ueWattsPerTick
         // * 20,
         // ElectricUnit.WATT), 72, 56 + 23 + yOffset, 4210752);
         // this.fontRendererObj.drawString(ElectricityDisplay.getDisplay(this.tileEntity.getVoltage(),
         // ElectricUnit.VOLTAGE), 72, 68 + 23 + yOffset, 4210752);
-        this.fontRendererObj.drawString(
-                GCCoreUtil.translate("container.inventory"), 8, this.ySize - 118 + 2 + 23, 4210752);
+        this.fontRendererObj
+                .drawString(GCCoreUtil.translate("container.inventory"), 8, this.ySize - 118 + 2 + 23, 4210752);
     }
 
     @Override
@@ -224,10 +281,20 @@ public class GuiMethaneSynthesizer extends GuiContainerGC {
         this.mc.renderEngine.bindTexture(GuiMethaneSynthesizer.gasTextures);
         int displayInt = this.tileEntity.getScaledGasLevel(38);
         this.drawTexturedModalRect(
-                edgeLeft + 7, edgeTop + 17 + 49 - displayInt, 1 + 2 * 17, 38 - displayInt, 16, displayInt);
+                edgeLeft + 7,
+                edgeTop + 17 + 49 - displayInt,
+                1 + 2 * 17,
+                38 - displayInt,
+                16,
+                displayInt);
         displayInt = this.tileEntity.getScaledGasLevel2(20);
         this.drawTexturedModalRect(
-                edgeLeft + 28, edgeTop + 48 - displayInt, 1 + 2 * 17, 38 - displayInt, 16, displayInt);
+                edgeLeft + 28,
+                edgeTop + 48 - displayInt,
+                1 + 2 * 17,
+                38 - displayInt,
+                16,
+                displayInt);
         displayInt = this.tileEntity.getScaledFuelLevel(38);
         this.drawTexturedModalRect(edgeLeft + 153, edgeTop + 17 + 49 - displayInt, 1, 38 - displayInt, 16, displayInt);
 
@@ -240,7 +307,12 @@ public class GuiMethaneSynthesizer extends GuiContainerGC {
         }
 
         this.drawTexturedModalRect(
-                edgeLeft + 66, edgeTop + 17, 176, 38, Math.min(this.tileEntity.getScaledElecticalLevel(54), 54), 7);
+                edgeLeft + 66,
+                edgeTop + 17,
+                176,
+                38,
+                Math.min(this.tileEntity.getScaledElecticalLevel(54), 54),
+                7);
     }
 
     private void addToolTips() {
@@ -303,7 +375,9 @@ public class GuiMethaneSynthesizer extends GuiContainerGC {
         // Math.floor(this.tileEntity.getEnergyStoredGC()) + " / " + (int)
         // Math.floor(this.tileEntity.getMaxEnergyStoredGC())));
         EnergyDisplayHelper.getEnergyDisplayTooltip(
-                this.tileEntity.getEnergyStoredGC(), this.tileEntity.getMaxEnergyStoredGC(), electricityDesc);
+                this.tileEntity.getEnergyStoredGC(),
+                this.tileEntity.getMaxEnergyStoredGC(),
+                electricityDesc);
         this.electricInfoRegion.tooltipStrings = electricityDesc;
     }
 }

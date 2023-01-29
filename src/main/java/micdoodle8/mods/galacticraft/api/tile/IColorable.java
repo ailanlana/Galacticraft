@@ -6,6 +6,7 @@ import net.minecraftforge.common.util.ForgeDirection;
  * Used for colored pipes to set/get colors
  */
 public interface IColorable {
+
     /**
      * Sets the color of the tile
      *
@@ -16,8 +17,7 @@ public interface IColorable {
     /**
      * Gets the color of this tile
      *
-     * @return the color of the tile, equivalent to the dye colors in vanilla
-     * minecraft
+     * @return the color of the tile, equivalent to the dye colors in vanilla minecraft
      */
     byte getColor();
 

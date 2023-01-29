@@ -1,9 +1,11 @@
 package micdoodle8.mods.galacticraft.core.wrappers;
 
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+
 import net.minecraft.block.Block;
 
 public class ScheduledBlockChange {
+
     private BlockVec3 changePosition;
     private Block change;
     private int changeMeta;

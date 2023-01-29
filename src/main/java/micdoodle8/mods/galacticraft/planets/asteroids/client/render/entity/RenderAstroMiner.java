@@ -1,13 +1,14 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.client.render.entity;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import java.util.ArrayList;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.perlin.NoiseModule;
 import micdoodle8.mods.galacticraft.core.perlin.generator.Gradient;
 import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
 import micdoodle8.mods.galacticraft.planets.asteroids.entities.EntityAstroMiner;
+
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -17,10 +18,14 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class RenderAstroMiner extends Render {
+
     private static final float LSIZE = 0.12F;
     private static final float RETRACTIONSPEED = 0.02F;
     private final RenderBlocks blockRenderer = new RenderBlocks();
@@ -45,18 +50,18 @@ public class RenderAstroMiner extends Render {
     private final NoiseModule wobbleZZ;
 
     static {
-        modelObj = AdvancedModelLoader.loadModel(
-                new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "models/astroMiner.obj"));
-        modellaser1 = AdvancedModelLoader.loadModel(
-                new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "models/astroMinerLaserFront.obj"));
-        modellaser2 = AdvancedModelLoader.loadModel(
-                new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "models/astroMinerLaserBottom.obj"));
-        modellaser3 = AdvancedModelLoader.loadModel(
-                new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "models/astroMinerLaserCenter.obj"));
-        modellasergl = AdvancedModelLoader.loadModel(
-                new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "models/astroMinerLeftGuard.obj"));
-        modellasergr = AdvancedModelLoader.loadModel(
-                new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "models/astroMinerRightGuard.obj"));
+        modelObj = AdvancedModelLoader
+                .loadModel(new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "models/astroMiner.obj"));
+        modellaser1 = AdvancedModelLoader
+                .loadModel(new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "models/astroMinerLaserFront.obj"));
+        modellaser2 = AdvancedModelLoader
+                .loadModel(new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "models/astroMinerLaserBottom.obj"));
+        modellaser3 = AdvancedModelLoader
+                .loadModel(new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "models/astroMinerLaserCenter.obj"));
+        modellasergl = AdvancedModelLoader
+                .loadModel(new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "models/astroMinerLeftGuard.obj"));
+        modellasergr = AdvancedModelLoader
+                .loadModel(new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "models/astroMinerRightGuard.obj"));
         modelTexture = new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "textures/model/astroMiner.png");
         modelTextureFX = new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "textures/model/astroMinerFX.png");
         modelTextureOff = new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "textures/model/astroMiner_off.png");
@@ -113,8 +118,8 @@ public class RenderAstroMiner extends Render {
         // RenderHelper.enableStandardItemLighting();
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         GL11.glPushMatrix();
-        final float rotPitch =
-                entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTickTime;
+        final float rotPitch = entity.prevRotationPitch
+                + (entity.rotationPitch - entity.prevRotationPitch) * partialTickTime;
         final float rotYaw = entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTickTime;
 
         GL11.glTranslatef((float) x, (float) y + 1.4F, (float) z);
@@ -242,7 +247,9 @@ public class RenderAstroMiner extends Render {
                 GL11.glPopMatrix();
                 GL11.glPushMatrix();
                 GL11.glTranslatef(
-                        (float) (x - astroMiner.posX), (float) (y - astroMiner.posY), (float) (z - astroMiner.posZ));
+                        (float) (x - astroMiner.posX),
+                        (float) (y - astroMiner.posY),
+                        (float) (z - astroMiner.posZ));
                 for (final Integer blockTime : new ArrayList<>(astroMiner.laserTimes)) {
                     if (blockTime < astroMiner.ticksExisted - 19) {
                         removeCount++;

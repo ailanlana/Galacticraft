@@ -1,31 +1,28 @@
 package micdoodle8.mods.galacticraft.core.client.render.item;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.core.client.model.ModelFlag;
 import micdoodle8.mods.galacticraft.core.client.render.entities.RenderFlag;
 import micdoodle8.mods.galacticraft.core.entities.EntityFlag;
 import micdoodle8.mods.galacticraft.core.util.ClientUtil;
+
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.IItemRenderer;
+
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class ItemRendererFlag implements IItemRenderer {
-    private final EntityFlag entityFlagDummy =
-            new EntityFlag(FMLClientHandler.instance().getClient().theWorld);
+
+    private final EntityFlag entityFlagDummy = new EntityFlag(FMLClientHandler.instance().getClient().theWorld);
     private final ModelFlag modelFlag = new ModelFlag();
 
-    private void renderFlag(
-            ItemRenderType type,
-            RenderBlocks render,
-            ItemStack item,
-            float translateX,
-            float translateY,
-            float translateZ,
-            Object... data) {
+    private void renderFlag(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX,
+            float translateY, float translateZ, Object... data) {
         GL11.glPushMatrix();
         long var10 = this.entityFlagDummy.getEntityId() * 493286711L;
         var10 = var10 * var10 * 4392167121L + var10 * 98761L;
@@ -34,16 +31,14 @@ public class ItemRendererFlag implements IItemRenderer {
         final float var14 = (((var10 >> 24 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
 
         this.entityFlagDummy.worldObj = FMLClientHandler.instance().getClient().theWorld;
-        this.entityFlagDummy.ticksExisted =
-                (int) FMLClientHandler.instance().getWorldClient().getTotalWorldTime();
+        this.entityFlagDummy.ticksExisted = (int) FMLClientHandler.instance().getWorldClient().getTotalWorldTime();
         this.entityFlagDummy.setType(item.getItemDamage());
 
         if (type == ItemRenderType.EQUIPPED) {
             final EntityLivingBase entityHolding = (EntityLivingBase) data[1];
 
             if (entityHolding instanceof EntityPlayer) {
-                final String playerName =
-                        ((EntityPlayer) entityHolding).getGameProfile().getName();
+                final String playerName = ((EntityPlayer) entityHolding).getGameProfile().getName();
 
                 if (!playerName.equals(this.entityFlagDummy.getOwner())) {
                     this.entityFlagDummy.setOwner(playerName);
@@ -51,11 +46,7 @@ public class ItemRendererFlag implements IItemRenderer {
                 }
             }
         } else {
-            final String playerName = FMLClientHandler.instance()
-                    .getClient()
-                    .thePlayer
-                    .getGameProfile()
-                    .getName();
+            final String playerName = FMLClientHandler.instance().getClient().thePlayer.getGameProfile().getName();
 
             if (!playerName.equals(this.entityFlagDummy.getOwner()) || this.entityFlagDummy.ticksExisted % 100 == 0) {
                 this.entityFlagDummy.setOwner(playerName);

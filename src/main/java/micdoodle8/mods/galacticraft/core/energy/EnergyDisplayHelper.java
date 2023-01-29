@@ -1,16 +1,22 @@
 package micdoodle8.mods.galacticraft.core.energy;
 
 import java.util.List;
+
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 
 public class EnergyDisplayHelper {
+
     public static void getEnergyDisplayTooltip(float energyVal, float maxEnergy, List strList) {
-        strList.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("gui.message.energy") + ": "
-                + getEnergyDisplayS(energyVal));
-        strList.add(EnumChatFormatting.RED + StatCollector.translateToLocal("gui.message.maxEnergy") + ": "
-                + getEnergyDisplayS(maxEnergy));
+        strList.add(
+                EnumChatFormatting.GREEN + StatCollector.translateToLocal("gui.message.energy")
+                        + ": "
+                        + getEnergyDisplayS(energyVal));
+        strList.add(
+                EnumChatFormatting.RED + StatCollector.translateToLocal("gui.message.maxEnergy")
+                        + ": "
+                        + getEnergyDisplayS(maxEnergy));
     }
 
     public static String getEnergyDisplayS(float energyVal) {
@@ -80,7 +86,9 @@ public class EnergyDisplayHelper {
     }
 
     public static String getEnergyDisplay1DP(float energyVal) {
-        return "" + MathHelper.floor_float(energyVal) + "." + MathHelper.floor_float(energyVal * 10) % 10
+        return "" + MathHelper.floor_float(energyVal)
+                + "."
+                + MathHelper.floor_float(energyVal * 10) % 10
                 + MathHelper.floor_float(energyVal * 100) % 10;
     }
 }

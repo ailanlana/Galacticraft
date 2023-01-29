@@ -1,15 +1,19 @@
 package micdoodle8.mods.galacticraft.core.world.gen;
 
-import cpw.mods.fml.common.IWorldGenerator;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
+import cpw.mods.fml.common.IWorldGenerator;
+
 public class OverworldGenerator implements IWorldGenerator {
+
     private final int amountPerChunk;
     private final int maxGenerateLevel;
     private final int minGenerateLevel;
@@ -17,8 +21,8 @@ public class OverworldGenerator implements IWorldGenerator {
     private final Block oreBlock;
     private final int metadata;
 
-    public OverworldGenerator(
-            Block oreBlock, int metadata, int amountPerChunk, int minGenLevel, int maxGenLevel, int amountPerVein) {
+    public OverworldGenerator(Block oreBlock, int metadata, int amountPerChunk, int minGenLevel, int maxGenLevel,
+            int amountPerVein) {
         this.oreBlock = oreBlock;
         this.metadata = metadata;
         this.amountPerChunk = amountPerChunk;
@@ -28,12 +32,7 @@ public class OverworldGenerator implements IWorldGenerator {
     }
 
     @Override
-    public void generate(
-            Random random,
-            int chunkX,
-            int chunkZ,
-            World world,
-            IChunkProvider chunkGenerator,
+    public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator,
             IChunkProvider chunkProvider) {
         if (!(world.provider instanceof IGalacticraftWorldProvider)) {
             for (int i = 0; i < this.amountPerChunk; i++) {

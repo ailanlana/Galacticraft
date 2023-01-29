@@ -1,7 +1,7 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import cpw.mods.fml.relauncher.Side;
 import java.util.EnumSet;
+
 import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
 import micdoodle8.mods.galacticraft.api.transmission.grid.IOxygenNetwork;
 import micdoodle8.mods.galacticraft.api.transmission.tile.IOxygenReceiver;
@@ -10,11 +10,15 @@ import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseElectricBlock;
 import micdoodle8.mods.galacticraft.core.oxygen.NetworkHelper;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+
 public abstract class TileEntityOxygen extends TileBaseElectricBlock implements IOxygenReceiver, IOxygenStorage {
+
     public float maxOxygen;
     public float oxygenPerTick;
 
@@ -36,8 +40,8 @@ public abstract class TileEntityOxygen extends TileBaseElectricBlock implements 
     public abstract boolean shouldUseOxygen();
 
     public int getCappedScaledOxygenLevel(int scale) {
-        return (int)
-                Math.max(Math.min(Math.floor((double) this.storedOxygen / (double) this.maxOxygen * scale), scale), 0);
+        return (int) Math
+                .max(Math.min(Math.floor((double) this.storedOxygen / (double) this.maxOxygen * scale), scale), 0);
     }
 
     @Override
@@ -183,8 +187,8 @@ public abstract class TileEntityOxygen extends TileBaseElectricBlock implements 
 
         if (provide > 0F) {
             final TileEntity outputTile = new BlockVec3(this).getTileEntityOnSide(this.worldObj, outputDirection);
-            final IOxygenNetwork outputNetwork =
-                    NetworkHelper.getOxygenNetworkFromTileEntity(outputTile, outputDirection);
+            final IOxygenNetwork outputNetwork = NetworkHelper
+                    .getOxygenNetworkFromTileEntity(outputTile, outputDirection);
 
             if (outputNetwork != null) {
                 final float powerRequest = outputNetwork.getRequest(this);
@@ -196,12 +200,12 @@ public abstract class TileEntityOxygen extends TileBaseElectricBlock implements 
                     return true;
                 }
             } else if (outputTile instanceof IOxygenReceiver) {
-                final float requestedOxygen =
-                        ((IOxygenReceiver) outputTile).getOxygenRequest(outputDirection.getOpposite());
+                final float requestedOxygen = ((IOxygenReceiver) outputTile)
+                        .getOxygenRequest(outputDirection.getOpposite());
 
                 if (requestedOxygen > 0) {
-                    final float acceptedOxygen =
-                            ((IOxygenReceiver) outputTile).receiveOxygen(outputDirection.getOpposite(), provide, true);
+                    final float acceptedOxygen = ((IOxygenReceiver) outputTile)
+                            .receiveOxygen(outputDirection.getOpposite(), provide, true);
                     this.provideOxygen(acceptedOxygen, true);
                     return true;
                 }
@@ -226,9 +230,8 @@ public abstract class TileEntityOxygen extends TileBaseElectricBlock implements 
     }
 
     /**
-     * Make sure this does not exceed the oxygen stored. This should return 0 if no
-     * oxygen is stored. Implementing tiles must respect this or you will generate
-     * infinite oxygen.
+     * Make sure this does not exceed the oxygen stored. This should return 0 if no oxygen is stored. Implementing tiles
+     * must respect this or you will generate infinite oxygen.
      */
     @Override
     public float getOxygenProvide(ForgeDirection direction) {

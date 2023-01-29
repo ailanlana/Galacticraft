@@ -1,12 +1,10 @@
 package micdoodle8.mods.galacticraft.core.client.render.entities;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.model.ModelEvolvedSkeletonBoss;
 import micdoodle8.mods.galacticraft.core.entities.EntitySkeletonBoss;
 import micdoodle8.mods.galacticraft.core.items.ItemSensorGlasses;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -18,14 +16,22 @@ import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderEvolvedSkeletonBoss extends RenderLiving {
-    private static final ResourceLocation skeletonBossTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/model/skeletonboss.png");
-    private static final ResourceLocation powerTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/model/power.png");
+
+    private static final ResourceLocation skeletonBossTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/model/skeletonboss.png");
+    private static final ResourceLocation powerTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/model/power.png");
 
     private final ModelEvolvedSkeletonBoss model = new ModelEvolvedSkeletonBoss();
 
@@ -92,8 +98,7 @@ public class RenderEvolvedSkeletonBoss extends RenderLiving {
             helmetSlot = player.inventory.armorItemInSlot(3);
         }
 
-        if (helmetSlot != null
-                && helmetSlot.getItem() instanceof ItemSensorGlasses
+        if (helmetSlot != null && helmetSlot.getItem() instanceof ItemSensorGlasses
                 && minecraft.currentScreen == null) {
             if (par2 == 1) {
                 final float var4 = par1EntityLiving.ticksExisted * 2 + par3;

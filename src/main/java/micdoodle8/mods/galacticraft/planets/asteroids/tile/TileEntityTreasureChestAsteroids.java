@@ -1,8 +1,8 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.tile;
 
-import cpw.mods.fml.relauncher.Side;
 import java.util.Iterator;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.item.IKeyable;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.network.PacketSimple;
@@ -11,6 +11,7 @@ import micdoodle8.mods.galacticraft.core.tile.TileEntityAdvanced;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.planets.asteroids.blocks.BlockTier3TreasureChest;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ContainerChest;
@@ -21,7 +22,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 
+import cpw.mods.fml.relauncher.Side;
+
 public class TileEntityTreasureChestAsteroids extends TileEntityAdvanced implements IInventory, IKeyable {
+
     private ItemStack[] chestContents = new ItemStack[36];
 
     /**
@@ -99,8 +103,8 @@ public class TileEntityTreasureChestAsteroids extends TileEntityAdvanced impleme
     }
 
     /**
-     * Removes from an inventory slot (first arg) up to a specified number (second
-     * arg) of items and returns them in a new stack.
+     * Removes from an inventory slot (first arg) up to a specified number (second arg) of items and returns them in a
+     * new stack.
      */
     @Override
     public ItemStack decrStackSize(int par1, int par2) {
@@ -128,8 +132,8 @@ public class TileEntityTreasureChestAsteroids extends TileEntityAdvanced impleme
     }
 
     /**
-     * When some containers are closed they call this on each slot, then drop
-     * whatever it returns as an EntityItem - like when you close a workbench GUI.
+     * When some containers are closed they call this on each slot, then drop whatever it returns as an EntityItem -
+     * like when you close a workbench GUI.
      */
     @Override
     public ItemStack getStackInSlotOnClosing(int par1) {
@@ -143,8 +147,7 @@ public class TileEntityTreasureChestAsteroids extends TileEntityAdvanced impleme
     }
 
     /**
-     * Sets the given item stack to the specified slot in the inventory (can be
-     * crafting or armor sections).
+     * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
      */
     @Override
     public void setInventorySlotContents(int par1, ItemStack par2ItemStack) {
@@ -201,8 +204,8 @@ public class TileEntityTreasureChestAsteroids extends TileEntityAdvanced impleme
     }
 
     /**
-     * Returns the maximum stack size for a inventory slot. Seems to always be 64,
-     * possibly will be extended. *Isn't this more of a set than a get?*
+     * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended. *Isn't
+     * this more of a set than a get?*
      */
     @Override
     public int getInventoryStackLimit() {
@@ -210,8 +213,7 @@ public class TileEntityTreasureChestAsteroids extends TileEntityAdvanced impleme
     }
 
     /**
-     * Do not make give this method the name canInteractWith because it clashes with
-     * Container
+     * Do not make give this method the name canInteractWith because it clashes with Container
      */
     @Override
     public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer) {
@@ -220,8 +222,8 @@ public class TileEntityTreasureChestAsteroids extends TileEntityAdvanced impleme
     }
 
     /**
-     * Causes the TileEntity to reset all it's cached values for it's container
-     * block, blockID, metaData and in the case of chests, the adjcacent chest check
+     * Causes the TileEntity to reset all it's cached values for it's container block, blockID, metaData and in the case
+     * of chests, the adjcacent chest check
      */
     @Override
     public void updateContainingBlockInfo() {
@@ -261,8 +263,7 @@ public class TileEntityTreasureChestAsteroids extends TileEntityAdvanced impleme
     }
 
     /**
-     * Performs the check for adjacent chests to determine if this chest is double
-     * or not.
+     * Performs the check for adjacent chests to determine if this chest is double or not.
      */
     public void checkForAdjacentChests() {
         if (!this.adjacentChestChecked) {
@@ -273,23 +274,23 @@ public class TileEntityTreasureChestAsteroids extends TileEntityAdvanced impleme
             this.adjacentChestZPos = null;
 
             if (this.func_94044_a(this.xCoord - 1, this.yCoord, this.zCoord)) {
-                this.adjacentChestXNeg = (TileEntityTreasureChestAsteroids)
-                        this.worldObj.getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord);
+                this.adjacentChestXNeg = (TileEntityTreasureChestAsteroids) this.worldObj
+                        .getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord);
             }
 
             if (this.func_94044_a(this.xCoord + 1, this.yCoord, this.zCoord)) {
-                this.adjacentChestXPos = (TileEntityTreasureChestAsteroids)
-                        this.worldObj.getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord);
+                this.adjacentChestXPos = (TileEntityTreasureChestAsteroids) this.worldObj
+                        .getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord);
             }
 
             if (this.func_94044_a(this.xCoord, this.yCoord, this.zCoord - 1)) {
-                this.adjacentChestZNeg = (TileEntityTreasureChestAsteroids)
-                        this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1);
+                this.adjacentChestZNeg = (TileEntityTreasureChestAsteroids) this.worldObj
+                        .getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1);
             }
 
             if (this.func_94044_a(this.xCoord, this.yCoord, this.zCoord + 1)) {
-                this.adjacentChestZPos = (TileEntityTreasureChestAsteroids)
-                        this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1);
+                this.adjacentChestZPos = (TileEntityTreasureChestAsteroids) this.worldObj
+                        .getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1);
             }
 
             if (this.adjacentChestZNeg != null) {
@@ -316,9 +317,8 @@ public class TileEntityTreasureChestAsteroids extends TileEntityAdvanced impleme
     }
 
     /**
-     * Allows the entity to update its state. Overridden in most subclasses, e.g.
-     * the mob spawner uses this to count ticks and creates a new spawn inside its
-     * implementation.
+     * Allows the entity to update its state. Overridden in most subclasses, e.g. the mob spawner uses this to count
+     * ticks and creates a new spawn inside its implementation.
      */
     @Override
     public void updateEntity() {
@@ -327,8 +327,7 @@ public class TileEntityTreasureChestAsteroids extends TileEntityAdvanced impleme
         ++this.ticksSinceSync;
         float f;
 
-        if (!this.worldObj.isRemote
-                && this.numUsingPlayers != 0
+        if (!this.worldObj.isRemote && this.numUsingPlayers != 0
                 && (this.ticksSinceSync + this.xCoord + this.yCoord + this.zCoord) % 200 == 0) {
             this.numUsingPlayers = 0;
             f = 5.0F;
@@ -347,12 +346,11 @@ public class TileEntityTreasureChestAsteroids extends TileEntityAdvanced impleme
                 final EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
                 if (entityplayer.openContainer instanceof ContainerChest) {
-                    final IInventory iinventory =
-                            ((ContainerChest) entityplayer.openContainer).getLowerChestInventory();
+                    final IInventory iinventory = ((ContainerChest) entityplayer.openContainer)
+                            .getLowerChestInventory();
 
-                    if (iinventory == this
-                            || iinventory instanceof InventoryLargeChest
-                                    && ((InventoryLargeChest) iinventory).isPartOfLargeChest(this)) {
+                    if (iinventory == this || iinventory instanceof InventoryLargeChest
+                            && ((InventoryLargeChest) iinventory).isPartOfLargeChest(this)) {
                         ++this.numUsingPlayers;
                     }
                 }
@@ -363,8 +361,7 @@ public class TileEntityTreasureChestAsteroids extends TileEntityAdvanced impleme
         f = 0.05F;
         double d0;
 
-        if (this.numUsingPlayers > 0
-                && this.lidAngle == 0.0F
+        if (this.numUsingPlayers > 0 && this.lidAngle == 0.0F
                 && this.adjacentChestZNeg == null
                 && this.adjacentChestXNeg == null) {
             double d1 = this.xCoord + 0.5D;
@@ -379,7 +376,12 @@ public class TileEntityTreasureChestAsteroids extends TileEntityAdvanced impleme
             }
 
             this.worldObj.playSoundEffect(
-                    d1, this.yCoord + 0.5D, d0, "random.chestopen", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.6F);
+                    d1,
+                    this.yCoord + 0.5D,
+                    d0,
+                    "random.chestopen",
+                    0.5F,
+                    this.worldObj.rand.nextFloat() * 0.1F + 0.6F);
         }
 
         if (this.numUsingPlayers == 0 && this.lidAngle > 0.0F || this.numUsingPlayers > 0 && this.lidAngle < 1.0F) {
@@ -425,8 +427,7 @@ public class TileEntityTreasureChestAsteroids extends TileEntityAdvanced impleme
     }
 
     /**
-     * Called when a client event is received with the event number and argument,
-     * see World.sendClientEvent
+     * Called when a client event is received with the event number and argument, see World.sendClientEvent
      */
     @Override
     public boolean receiveClientEvent(int par1, int par2) {
@@ -445,8 +446,8 @@ public class TileEntityTreasureChestAsteroids extends TileEntityAdvanced impleme
         }
 
         ++this.numUsingPlayers;
-        this.worldObj.addBlockEvent(
-                this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), 1, this.numUsingPlayers);
+        this.worldObj
+                .addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), 1, this.numUsingPlayers);
         this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
         this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord - 1, this.zCoord, this.getBlockType());
     }
@@ -455,8 +456,8 @@ public class TileEntityTreasureChestAsteroids extends TileEntityAdvanced impleme
     public void closeInventory() {
         if (this.getBlockType() != null && this.getBlockType() instanceof BlockTier3TreasureChest) {
             --this.numUsingPlayers;
-            this.worldObj.addBlockEvent(
-                    this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), 1, this.numUsingPlayers);
+            this.worldObj
+                    .addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), 1, this.numUsingPlayers);
             this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
             this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord - 1, this.zCoord, this.getBlockType());
         }
@@ -529,8 +530,10 @@ public class TileEntityTreasureChestAsteroids extends TileEntityAdvanced impleme
     public boolean onActivatedWithoutKey(EntityPlayer player, int face) {
         if (this.locked) {
             if (player.worldObj.isRemote) {
-                GalacticraftCore.packetPipeline.sendToServer(new PacketSimple(
-                        EnumSimplePacket.S_ON_FAILED_CHEST_UNLOCK, new Object[] {this.getTierOfKeyRequired()}));
+                GalacticraftCore.packetPipeline.sendToServer(
+                        new PacketSimple(
+                                EnumSimplePacket.S_ON_FAILED_CHEST_UNLOCK,
+                                new Object[] { this.getTierOfKeyRequired() }));
             }
             return true;
         }

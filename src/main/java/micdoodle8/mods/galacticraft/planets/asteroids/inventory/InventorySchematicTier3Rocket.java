@@ -6,6 +6,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
 public class InventorySchematicTier3Rocket implements IInventory {
+
     private final ItemStack[] stackList;
     private final int inventoryWidth;
     private final Container eventHandler;

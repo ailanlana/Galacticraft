@@ -1,13 +1,13 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical;
 import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityRefinery;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -23,7 +23,11 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockRefinery extends BlockAdvancedTile implements ItemBlockDesc.IBlockShiftDesc {
+
     private final Random refineryRand = new Random();
 
     private IIcon iconMachineSide;
@@ -81,7 +85,13 @@ public class BlockRefinery extends BlockAdvancedTile implements ItemBlockDesc.IB
                 for (int i = -1; i <= 1; i++) {
                     for (int j = -1; j <= 1; j++) {
                         par1World.spawnParticle(
-                                "smoke", var7 + var11 + i * 0.2, var8, var9 + var10 + j * 0.2, 0.0D, 0.01D, 0.0D);
+                                "smoke",
+                                var7 + var11 + i * 0.2,
+                                var8,
+                                var9 + var10 + j * 0.2,
+                                0.0D,
+                                0.01D,
+                                0.0D);
                         par1World.spawnParticle(
                                 "flame",
                                 var7 + var11 + i * 0.1,
@@ -97,23 +107,15 @@ public class BlockRefinery extends BlockAdvancedTile implements ItemBlockDesc.IB
     }
 
     @Override
-    public boolean onMachineActivated(
-            World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
+    public boolean onMachineActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX,
+            float hitY, float hitZ) {
         entityPlayer.openGui(GalacticraftCore.instance, -1, world, x, y, z);
         return true;
     }
 
     @Override
-    public boolean onUseWrench(
-            World par1World,
-            int x,
-            int y,
-            int z,
-            EntityPlayer par5EntityPlayer,
-            int side,
-            float hitX,
-            float hitY,
-            float hitZ) {
+    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ) {
         int change = 0;
 
         // Re-orient the block
@@ -175,8 +177,7 @@ public class BlockRefinery extends BlockAdvancedTile implements ItemBlockDesc.IB
                                 new ItemStack(var9.getItem(), var13, var9.getItemDamage()));
 
                         if (var9.hasTagCompound()) {
-                            var14.getEntityItem().setTagCompound((NBTTagCompound)
-                                    var9.getTagCompound().copy());
+                            var14.getEntityItem().setTagCompound((NBTTagCompound) var9.getTagCompound().copy());
                         }
 
                         final float var15 = 0.05F;
@@ -196,8 +197,7 @@ public class BlockRefinery extends BlockAdvancedTile implements ItemBlockDesc.IB
     public IIcon getIcon(int side, int metadata) {
         if (side == metadata + 2) {
             return this.iconOilInput;
-        } else if (side
-                == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) {
+        } else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) {
             return this.iconFuelOutput;
         }
 
@@ -209,8 +209,7 @@ public class BlockRefinery extends BlockAdvancedTile implements ItemBlockDesc.IB
             return this.iconMachineSide;
         }
 
-        if (metadata == 0 && side == 4
-                || metadata == 1 && side == 5
+        if (metadata == 0 && side == 4 || metadata == 1 && side == 5
                 || metadata == 2 && side == 3
                 || metadata == 3 && side == 2) {
             return this.iconFront;

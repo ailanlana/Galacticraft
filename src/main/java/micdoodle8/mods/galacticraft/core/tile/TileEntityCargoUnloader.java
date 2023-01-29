@@ -1,6 +1,5 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import cpw.mods.fml.relauncher.Side;
 import micdoodle8.mods.galacticraft.api.entity.ICargoEntity;
 import micdoodle8.mods.galacticraft.api.entity.ICargoEntity.EnumCargoLoadingState;
 import micdoodle8.mods.galacticraft.api.entity.ICargoEntity.RemovalResult;
@@ -10,6 +9,7 @@ import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
 import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseElectricBlockWithInventory;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,8 +17,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+
 public class TileEntityCargoUnloader extends TileBaseElectricBlockWithInventory
         implements ISidedInventory, ILandingPadAttachable {
+
     private ItemStack[] containingItems = new ItemStack[15];
 
     @NetworkedField(targetSide = Side.CLIENT)
@@ -56,8 +59,7 @@ public class TileEntityCargoUnloader extends TileBaseElectricBlockWithInventory
 
                     this.targetEmpty = state == EnumCargoLoadingState.EMPTY;
 
-                    if (this.ticks % 15 == 0
-                            && state == EnumCargoLoadingState.SUCCESS
+                    if (this.ticks % 15 == 0 && state == EnumCargoLoadingState.SUCCESS
                             && !this.disabled
                             && this.hasEnoughEnergyToRun) {
                         this.addCargo(this.attachedFuelable.removeCargo(true).resultStack, true);
@@ -132,8 +134,7 @@ public class TileEntityCargoUnloader extends TileBaseElectricBlockWithInventory
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        return side != this.getBlockMetadata() - 2
-                ? new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}
+        return side != this.getBlockMetadata() - 2 ? new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 }
                 : new int[] {};
     }
 
@@ -175,8 +176,7 @@ public class TileEntityCargoUnloader extends TileBaseElectricBlockWithInventory
         for (count = 1; count < this.containingItems.length; count++) {
             final ItemStack stackAt = this.containingItems[count];
 
-            if (stackAt != null
-                    && stackAt.getItem() == stack.getItem()
+            if (stackAt != null && stackAt.getItem() == stack.getItem()
                     && stackAt.getItemDamage() == stack.getItemDamage()
                     && stackAt.stackSize < stackAt.getMaxStackSize()) {
                 if (stackAt.stackSize + stack.stackSize <= stackAt.getMaxStackSize()) {

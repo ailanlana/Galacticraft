@@ -1,8 +1,8 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import cpw.mods.fml.relauncher.Side;
 import java.util.Iterator;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.blocks.BlockParaChest;
 import micdoodle8.mods.galacticraft.core.entities.IScaleableFuelLevel;
@@ -12,6 +12,7 @@ import micdoodle8.mods.galacticraft.core.network.PacketDynamicInventory;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
 import micdoodle8.mods.galacticraft.core.util.FluidUtil;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,7 +20,10 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.fluids.FluidTank;
 
+import cpw.mods.fml.relauncher.Side;
+
 public class TileEntityParaChest extends TileEntityAdvanced implements IInventorySettable, IScaleableFuelLevel {
+
     private final int tankCapacity = 5000;
 
     @NetworkedField(targetSide = Side.CLIENT)
@@ -198,8 +202,7 @@ public class TileEntityParaChest extends TileEntityAdvanced implements IInventor
         super.updateEntity();
         float f;
 
-        if (!this.worldObj.isRemote
-                && this.numUsingPlayers != 0
+        if (!this.worldObj.isRemote && this.numUsingPlayers != 0
                 && (this.ticks + this.xCoord + this.yCoord + this.zCoord) % 200 == 0) {
             this.numUsingPlayers = 0;
             f = 5.0F;
@@ -232,7 +235,12 @@ public class TileEntityParaChest extends TileEntityAdvanced implements IInventor
             d0 = this.zCoord + 0.5D;
 
             this.worldObj.playSoundEffect(
-                    d1, this.yCoord + 0.5D, d0, "random.chestopen", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+                    d1,
+                    this.yCoord + 0.5D,
+                    d0,
+                    "random.chestopen",
+                    0.5F,
+                    this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
         }
 
         if (this.numUsingPlayers == 0 && this.lidAngle > 0.0F || this.numUsingPlayers > 0 && this.lidAngle < 1.0F) {
@@ -294,8 +302,8 @@ public class TileEntityParaChest extends TileEntityAdvanced implements IInventor
         }
 
         ++this.numUsingPlayers;
-        this.worldObj.addBlockEvent(
-                this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), 1, this.numUsingPlayers);
+        this.worldObj
+                .addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), 1, this.numUsingPlayers);
         this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
         this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord - 1, this.zCoord, this.getBlockType());
     }
@@ -304,8 +312,8 @@ public class TileEntityParaChest extends TileEntityAdvanced implements IInventor
     public void closeInventory() {
         if (this.getBlockType() != null && this.getBlockType() instanceof BlockParaChest) {
             --this.numUsingPlayers;
-            this.worldObj.addBlockEvent(
-                    this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), 1, this.numUsingPlayers);
+            this.worldObj
+                    .addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), 1, this.numUsingPlayers);
             this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
             this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord - 1, this.zCoord, this.getBlockType());
         }

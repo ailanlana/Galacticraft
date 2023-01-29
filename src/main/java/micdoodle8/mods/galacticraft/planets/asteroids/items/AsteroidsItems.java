@@ -1,15 +1,18 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.items;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import micdoodle8.mods.galacticraft.core.Constants;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.oredict.OreDictionary;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+
 public class AsteroidsItems {
+
     public static Item grapple;
     public static Item tier3Rocket;
     public static Item astroMiner;
@@ -33,8 +36,8 @@ public class AsteroidsItems {
     public static Item titaniumSword;
 
     public static Item.ToolMaterial TOOL_TITANIUM = EnumHelper.addToolMaterial("titanium", 3, 520, 8.0F, 3.0F, 10);
-    public static ItemArmor.ArmorMaterial ARMOR_TITANIUM =
-            EnumHelper.addArmorMaterial("titanium", 26, new int[] {5, 10, 7, 5}, 10);
+    public static ItemArmor.ArmorMaterial ARMOR_TITANIUM = EnumHelper
+            .addArmorMaterial("titanium", 26, new int[] { 5, 10, 7, 5 }, 10);
 
     public static void initItems() {
         AsteroidsItems.grapple = new ItemGrappleHook("grapple");

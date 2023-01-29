@@ -1,14 +1,8 @@
 package micdoodle8.mods.galacticraft.core.energy.tile;
 
-import cofh.api.energy.IEnergyContainerItem;
-import cofh.api.energy.IEnergyHandler;
-import cpw.mods.fml.common.Optional.Interface;
-import cpw.mods.fml.common.Optional.InterfaceList;
-import cpw.mods.fml.common.eventhandler.Event;
-import ic2.api.energy.tile.IEnergySink;
-import ic2.api.item.IElectricItem;
 import java.lang.reflect.Constructor;
 import java.util.EnumSet;
+
 import mekanism.api.energy.ICableOutputter;
 import mekanism.api.energy.IStrictEnergyAcceptor;
 import micdoodle8.mods.galacticraft.api.item.ElectricItemHelper;
@@ -17,6 +11,7 @@ import micdoodle8.mods.galacticraft.api.transmission.tile.IConductor;
 import micdoodle8.mods.galacticraft.api.transmission.tile.IElectrical;
 import micdoodle8.mods.galacticraft.core.energy.EnergyConfigHandler;
 import micdoodle8.mods.galacticraft.core.tile.ReceiverMode;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,14 +20,21 @@ import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 
-@InterfaceList({
-    @Interface(modid = "IC2API", iface = "ic2.api.energy.tile.IEnergySink"),
-    @Interface(modid = "CoFHAPI|energy", iface = "cofh.api.energy.IEnergyHandler"),
-    @Interface(modid = "MekanismAPI|energy", iface = "mekanism.api.energy.IStrictEnergyAcceptor"),
-    @Interface(modid = "MekanismAPI|energy", iface = "mekanism.api.energy.ICableOutputter"),
-})
+import cofh.api.energy.IEnergyContainerItem;
+import cofh.api.energy.IEnergyHandler;
+import cpw.mods.fml.common.Optional.Interface;
+import cpw.mods.fml.common.Optional.InterfaceList;
+import cpw.mods.fml.common.eventhandler.Event;
+import ic2.api.energy.tile.IEnergySink;
+import ic2.api.item.IElectricItem;
+
+@InterfaceList({ @Interface(modid = "IC2API", iface = "ic2.api.energy.tile.IEnergySink"),
+        @Interface(modid = "CoFHAPI|energy", iface = "cofh.api.energy.IEnergyHandler"),
+        @Interface(modid = "MekanismAPI|energy", iface = "mekanism.api.energy.IStrictEnergyAcceptor"),
+        @Interface(modid = "MekanismAPI|energy", iface = "mekanism.api.energy.ICableOutputter"), })
 public abstract class TileBaseUniversalElectrical extends EnergyStorageTile
         implements IEnergySink, IEnergyHandler, IStrictEnergyAcceptor, ICableOutputter {
+
     protected boolean isAddedToEnergyNet;
     protected Object powerHandlerBC;
 
@@ -100,8 +102,7 @@ public abstract class TileBaseUniversalElectrical extends EnergyStorageTile
     // }
 
     /**
-     * A non-side specific version of receiveElectricity for you to optionally use
-     * it internally.
+     * A non-side specific version of receiveElectricity for you to optionally use it internally.
      */
     // public float receiveElectricity(ElectricityPack receive, boolean doReceive)
     // {
@@ -180,18 +181,19 @@ public abstract class TileBaseUniversalElectrical extends EnergyStorageTile
             if (item instanceof IItemElectric) {
                 this.storage.receiveEnergyGC(ElectricItemHelper.dischargeItem(itemStack, energyToDischarge));
             } else if (EnergyConfigHandler.isRFAPILoaded() && item instanceof IEnergyContainerItem) {
-                this.storage.receiveEnergyGC(((IEnergyContainerItem) item)
-                                .extractEnergy(
-                                        itemStack, (int) (energyToDischarge / EnergyConfigHandler.RF_RATIO), false)
-                        * EnergyConfigHandler.RF_RATIO);
+                this.storage.receiveEnergyGC(
+                        ((IEnergyContainerItem) item).extractEnergy(
+                                itemStack,
+                                (int) (energyToDischarge / EnergyConfigHandler.RF_RATIO),
+                                false) * EnergyConfigHandler.RF_RATIO);
             } else if (EnergyConfigHandler.isIndustrialCraft2Loaded()) {
                 if (item instanceof IElectricItem) {
                     final IElectricItem electricItem = (IElectricItem) item;
                     if (electricItem.canProvideEnergy(itemStack)) {
                         double result = 0;
                         final double energyDischargeIC2 = energyToDischarge / EnergyConfigHandler.IC2_RATIO;
-                        result = ic2.api.item.ElectricItem.manager.discharge(
-                                itemStack, energyDischargeIC2, 4, false, false, false);
+                        result = ic2.api.item.ElectricItem.manager
+                                .discharge(itemStack, energyDischargeIC2, 4, false, false, false);
                         final float energyDischarged = (float) result * EnergyConfigHandler.IC2_RATIO;
                         this.storage.receiveEnergyGC(energyDischarged);
                     }
@@ -293,8 +295,9 @@ public abstract class TileBaseUniversalElectrical extends EnergyStorageTile
 
             final float received = this.storage.receiveEnergyGC(this.IC2surplusInGJ, true);
             if (received == this.IC2surplusInGJ) {
-                return Math.ceil((this.storage.receiveEnergyGC(Integer.MAX_VALUE, true) - this.IC2surplusInGJ)
-                        / EnergyConfigHandler.IC2_RATIO);
+                return Math.ceil(
+                        (this.storage.receiveEnergyGC(Integer.MAX_VALUE, true) - this.IC2surplusInGJ)
+                                / EnergyConfigHandler.IC2_RATIO);
             }
         } catch (final Exception e) {
             e.printStackTrace();
@@ -305,8 +308,7 @@ public abstract class TileBaseUniversalElectrical extends EnergyStorageTile
     @Override
     public double injectEnergy(ForgeDirection direction, double amount, double voltage) {
         if (!EnergyConfigHandler.disableIC2Input
-                && (direction == ForgeDirection.UNKNOWN
-                        || this.getElectricalInputDirections().contains(direction))) {
+                && (direction == ForgeDirection.UNKNOWN || this.getElectricalInputDirections().contains(direction))) {
             final float convertedEnergy = (float) amount * EnergyConfigHandler.IC2_RATIO;
             final int tierFromIC2 = (int) voltage > 120 ? 2 : 1;
             final float receive = this.receiveElectricity(direction, convertedEnergy, tierFromIC2, true);

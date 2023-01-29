@@ -1,11 +1,10 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.tile;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.UUID;
+
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
@@ -20,6 +19,7 @@ import micdoodle8.mods.galacticraft.planets.asteroids.entities.EntityAstroMiner;
 import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
 import micdoodle8.mods.galacticraft.planets.asteroids.network.PacketSimpleAsteroids;
 import micdoodle8.mods.galacticraft.planets.asteroids.network.PacketSimpleAsteroids.EnumSimplePacketAsteroids;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ISidedInventory;
@@ -30,7 +30,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class TileEntityMinerBase extends TileBaseElectricBlockWithInventory implements ISidedInventory, IMultiBlock {
+
     public static final int HOLDSIZE = 72;
     private ItemStack[] containingItems = new ItemStack[HOLDSIZE + 1];
     private final int[] slotArray;
@@ -238,8 +242,7 @@ public class TileEntityMinerBase extends TileBaseElectricBlockWithInventory impl
             while (itemstack.stackSize > 0 && k < invSize) {
                 existingStack = this.containingItems[k];
 
-                if (existingStack != null
-                        && existingStack.getItem() == itemstack.getItem()
+                if (existingStack != null && existingStack.getItem() == itemstack.getItem()
                         && (!itemstack.getHasSubtypes() || itemstack.getItemDamage() == existingStack.getItemDamage())
                         && ItemStack.areItemStackTagsEqual(itemstack, existingStack)) {
                     final int combined = existingStack.stackSize + itemstack.stackSize;
@@ -284,9 +287,10 @@ public class TileEntityMinerBase extends TileBaseElectricBlockWithInventory impl
     public void validate() {
         super.validate();
         if (this.worldObj.isRemote) {
-            GalacticraftCore.packetPipeline.sendToServer(new PacketSimpleAsteroids(
-                    EnumSimplePacketAsteroids.S_REQUEST_MINERBASE_FACING,
-                    new Object[] {this.xCoord, this.yCoord, this.zCoord}));
+            GalacticraftCore.packetPipeline.sendToServer(
+                    new PacketSimpleAsteroids(
+                            EnumSimplePacketAsteroids.S_REQUEST_MINERBASE_FACING,
+                            new Object[] { this.xCoord, this.yCoord, this.zCoord }));
         }
     }
 
@@ -407,7 +411,12 @@ public class TileEntityMinerBase extends TileBaseElectricBlockWithInventory impl
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
         return AxisAlignedBB.getBoundingBox(
-                this.xCoord, this.yCoord, this.zCoord, this.xCoord + 2, this.yCoord + 2, this.zCoord + 2);
+                this.xCoord,
+                this.yCoord,
+                this.zCoord,
+                this.xCoord + 2,
+                this.yCoord + 2,
+                this.zCoord + 2);
     }
 
     @Override
@@ -457,7 +466,7 @@ public class TileEntityMinerBase extends TileBaseElectricBlockWithInventory impl
         GalacticraftCore.packetPipeline.sendToDimension(
                 new PacketSimpleAsteroids(
                         EnumSimplePacketAsteroids.C_UPDATE_MINERBASE_FACING,
-                        new Object[] {this.xCoord, this.yCoord, this.zCoord, this.facing, x, y, z, link}),
+                        new Object[] { this.xCoord, this.yCoord, this.zCoord, this.facing, x, y, z, link }),
                 this.worldObj.provider.dimensionId);
     }
 
@@ -646,8 +655,8 @@ public class TileEntityMinerBase extends TileBaseElectricBlockWithInventory impl
             }
         }
 
-        posnTarget.modifyPositionFromSide(
-                ForgeDirection.getOrientation(baseFacing), this.worldObj.rand.nextInt(16) + 32);
+        posnTarget
+                .modifyPositionFromSide(ForgeDirection.getOrientation(baseFacing), this.worldObj.rand.nextInt(16) + 32);
         int miny = Math.min(this.yCoord * 2 - 90, this.yCoord - 22);
         if (miny < 5) {
             miny = 5;
@@ -665,14 +674,12 @@ public class TileEntityMinerBase extends TileBaseElectricBlockWithInventory impl
         this.targetPoints.add(posnTarget.clone().modifyPositionFromSide(lateral, 13));
         this.targetPoints.add(posnTarget.clone().modifyPositionFromSide(lateral, -13));
         if (posnTarget.y > 17) {
-            this.targetPoints.add(posnTarget
-                    .clone()
-                    .modifyPositionFromSide(lateral, 7)
-                    .modifyPositionFromSide(ForgeDirection.DOWN, 11));
-            this.targetPoints.add(posnTarget
-                    .clone()
-                    .modifyPositionFromSide(lateral, -7)
-                    .modifyPositionFromSide(ForgeDirection.DOWN, 11));
+            this.targetPoints.add(
+                    posnTarget.clone().modifyPositionFromSide(lateral, 7)
+                            .modifyPositionFromSide(ForgeDirection.DOWN, 11));
+            this.targetPoints.add(
+                    posnTarget.clone().modifyPositionFromSide(lateral, -7)
+                            .modifyPositionFromSide(ForgeDirection.DOWN, 11));
         } else {
             this.targetPoints.add(posnTarget.clone().modifyPositionFromSide(lateral, 26));
             this.targetPoints.add(posnTarget.clone().modifyPositionFromSide(lateral, -26));
@@ -682,15 +689,13 @@ public class TileEntityMinerBase extends TileBaseElectricBlockWithInventory impl
         this.targetPoints.add(
                 posnTarget.clone().modifyPositionFromSide(lateral, -7).modifyPositionFromSide(ForgeDirection.UP, 11));
         if (posnTarget.y < this.yCoord - 38) {
-            this.targetPoints.add(posnTarget
-                    .clone()
-                    .modifyPositionFromSide(lateral, 13)
-                    .modifyPositionFromSide(ForgeDirection.UP, 22));
+            this.targetPoints.add(
+                    posnTarget.clone().modifyPositionFromSide(lateral, 13)
+                            .modifyPositionFromSide(ForgeDirection.UP, 22));
             this.targetPoints.add(posnTarget.clone().modifyPositionFromSide(ForgeDirection.UP, 22));
-            this.targetPoints.add(posnTarget
-                    .clone()
-                    .modifyPositionFromSide(lateral, -13)
-                    .modifyPositionFromSide(ForgeDirection.UP, 22));
+            this.targetPoints.add(
+                    posnTarget.clone().modifyPositionFromSide(lateral, -13)
+                            .modifyPositionFromSide(ForgeDirection.UP, 22));
         }
 
         final int s = this.targetPoints.size();

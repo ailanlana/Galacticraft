@@ -6,16 +6,20 @@ import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
 import micdoodle8.mods.galacticraft.planets.asteroids.inventory.ContainerSchematicTier3Rocket;
 import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
 public class GuiSchematicTier3Rocket extends GuiContainer implements ISchematicResultPage {
-    private static final ResourceLocation tier2SchematicTexture =
-            new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "textures/gui/schematic_rocket_T3.png");
+
+    private static final ResourceLocation tier2SchematicTexture = new ResourceLocation(
+            AsteroidsModule.ASSET_PREFIX,
+            "textures/gui/schematic_rocket_T3.png");
 
     private int pageIndex;
 
@@ -29,20 +33,22 @@ public class GuiSchematicTier3Rocket extends GuiContainer implements ISchematicR
     public void initGui() {
         super.initGui();
         this.buttonList.clear();
-        this.buttonList.add(new GuiButton(
-                0,
-                this.width / 2 - 130,
-                this.height / 2 - 30 + 27 - 12,
-                40,
-                20,
-                GCCoreUtil.translate("gui.button.back.name")));
-        this.buttonList.add(new GuiButton(
-                1,
-                this.width / 2 - 130,
-                this.height / 2 - 30 + 27 + 12,
-                40,
-                20,
-                GCCoreUtil.translate("gui.button.next.name")));
+        this.buttonList.add(
+                new GuiButton(
+                        0,
+                        this.width / 2 - 130,
+                        this.height / 2 - 30 + 27 - 12,
+                        40,
+                        20,
+                        GCCoreUtil.translate("gui.button.back.name")));
+        this.buttonList.add(
+                new GuiButton(
+                        1,
+                        this.width / 2 - 130,
+                        this.height / 2 - 30 + 27 + 12,
+                        40,
+                        20,
+                        GCCoreUtil.translate("gui.button.next.name")));
     }
 
     @Override

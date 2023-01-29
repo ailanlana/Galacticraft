@@ -1,16 +1,21 @@
 package micdoodle8.mods.galacticraft.core.client.render.block;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import java.util.Arrays;
+
 import micdoodle8.mods.galacticraft.core.util.OxygenUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
+
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+
 public class BlockRendererOxygenPipe implements ISimpleBlockRenderingHandler {
+
     final int renderID;
 
     public BlockRendererOxygenPipe(int var1) {
@@ -104,8 +109,8 @@ public class BlockRendererOxygenPipe implements ISimpleBlockRenderingHandler {
     }
 
     @Override
-    public boolean renderWorldBlock(
-            IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId,
+            RenderBlocks renderer) {
         this.renderPipe(renderer, world, block, x, y, z);
         return true;
     }

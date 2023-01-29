@@ -1,20 +1,14 @@
 package micdoodle8.mods.galacticraft.core.energy.item;
 
-import cofh.api.energy.IEnergyContainerItem;
-import cpw.mods.fml.common.Optional.Interface;
-import cpw.mods.fml.common.Optional.InterfaceList;
-import cpw.mods.fml.common.Optional.Method;
-import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
-import cpw.mods.fml.relauncher.FMLInjectionData;
-import ic2.api.item.IElectricItemManager;
-import ic2.api.item.ISpecialElectricItem;
 import java.util.List;
+
 import mekanism.api.energy.IEnergizedItem;
 import micdoodle8.mods.galacticraft.api.item.ElectricItemHelper;
 import micdoodle8.mods.galacticraft.api.item.IItemElectricBase;
 import micdoodle8.mods.galacticraft.core.energy.EnergyConfigHandler;
 import micdoodle8.mods.galacticraft.core.energy.EnergyDisplayHelper;
 import micdoodle8.mods.galacticraft.core.items.ItemBatteryInfinite;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -25,13 +19,21 @@ import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.world.World;
 
-@InterfaceList({
-    @Interface(modid = "CoFHAPI|energy", iface = "cofh.api.energy.IEnergyContainerItem"),
-    @Interface(modid = "IC2API", iface = "ic2.api.item.ISpecialElectricItem"),
-    @Interface(modid = "MekanismAPI|energy", iface = "mekanism.api.energy.IEnergizedItem"),
-})
+import cofh.api.energy.IEnergyContainerItem;
+import cpw.mods.fml.common.Optional.Interface;
+import cpw.mods.fml.common.Optional.InterfaceList;
+import cpw.mods.fml.common.Optional.Method;
+import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
+import cpw.mods.fml.relauncher.FMLInjectionData;
+import ic2.api.item.IElectricItemManager;
+import ic2.api.item.ISpecialElectricItem;
+
+@InterfaceList({ @Interface(modid = "CoFHAPI|energy", iface = "cofh.api.energy.IEnergyContainerItem"),
+        @Interface(modid = "IC2API", iface = "ic2.api.item.ISpecialElectricItem"),
+        @Interface(modid = "MekanismAPI|energy", iface = "mekanism.api.energy.IEnergizedItem"), })
 public abstract class ItemElectricBase extends Item
         implements IItemElectricBase, IEnergyContainerItem, ISpecialElectricItem, IEnergizedItem {
+
     private static Object itemManagerIC2;
     public float transferMax;
     private final DefaultArtifactVersion mcVersion;
@@ -59,7 +61,7 @@ public abstract class ItemElectricBase extends Item
         return this.transferMax;
     }
 
-    @SuppressWarnings({"unchecked"})
+    @SuppressWarnings({ "unchecked" })
     @Override
     public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean par4) {
         String color;
@@ -73,13 +75,15 @@ public abstract class ItemElectricBase extends Item
             color = "\u00a76";
         }
 
-        list.add(color + EnergyDisplayHelper.getEnergyDisplayS(joules) + "/"
-                + EnergyDisplayHelper.getEnergyDisplayS(this.getMaxElectricityStored(itemStack)));
+        list.add(
+                color + EnergyDisplayHelper.getEnergyDisplayS(joules)
+                        + "/"
+                        + EnergyDisplayHelper.getEnergyDisplayS(this.getMaxElectricityStored(itemStack)));
     }
 
     /**
-     * Makes sure the item is uncharged when it is crafted and not charged. Change
-     * this if you do not want this to happen!
+     * Makes sure the item is uncharged when it is crafted and not charged. Change this if you do not want this to
+     * happen!
      */
     @Override
     public void onCreated(ItemStack itemStack, World par2World, EntityPlayer par3EntityPlayer) {
@@ -88,8 +92,8 @@ public abstract class ItemElectricBase extends Item
 
     @Override
     public float recharge(ItemStack itemStack, float energy, boolean doReceive) {
-        final float rejectedElectricity =
-                Math.max(this.getElectricityStored(itemStack) + energy - this.getMaxElectricityStored(itemStack), 0);
+        final float rejectedElectricity = Math
+                .max(this.getElectricityStored(itemStack) + energy - this.getMaxElectricityStored(itemStack), 0);
         float energyToReceive = energy - rejectedElectricity;
         if (energyToReceive > this.transferMax) {
             energyToReceive = this.transferMax;
@@ -104,8 +108,8 @@ public abstract class ItemElectricBase extends Item
 
     @Override
     public float discharge(ItemStack itemStack, float energy, boolean doTransfer) {
-        final float energyToTransfer =
-                Math.min(Math.min(this.getElectricityStored(itemStack), energy), this.transferMax);
+        final float energyToTransfer = Math
+                .min(Math.min(this.getElectricityStored(itemStack), energy), this.transferMax);
 
         if (doTransfer) {
             this.setElectricity(itemStack, this.getElectricityStored(itemStack) - energyToTransfer);
@@ -135,8 +139,8 @@ public abstract class ItemElectricBase extends Item
 
     @Override
     public float getTransfer(ItemStack itemStack) {
-        return Math.min(
-                this.transferMax, this.getMaxElectricityStored(itemStack) - this.getElectricityStored(itemStack));
+        return Math
+                .min(this.transferMax, this.getMaxElectricityStored(itemStack) - this.getElectricityStored(itemStack));
     }
 
     /**
@@ -162,12 +166,13 @@ public abstract class ItemElectricBase extends Item
         return energyStored;
     }
 
-    @SuppressWarnings({"unchecked"})
+    @SuppressWarnings({ "unchecked" })
     @Override
     public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
         par3List.add(ElectricItemHelper.getUncharged(new ItemStack(this)));
-        par3List.add(ElectricItemHelper.getWithCharge(
-                new ItemStack(this), this.getMaxElectricityStored(new ItemStack(this))));
+        par3List.add(
+                ElectricItemHelper
+                        .getWithCharge(new ItemStack(this), this.getMaxElectricityStored(new ItemStack(this))));
     }
 
     public static boolean isElectricItem(Item item) {

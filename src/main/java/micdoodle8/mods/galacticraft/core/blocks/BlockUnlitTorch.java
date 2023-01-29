@@ -1,13 +1,13 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.block.IOxygenReliantBlock;
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.util.OxygenUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -18,7 +18,11 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockUnlitTorch extends Block implements IOxygenReliantBlock {
+
     public boolean lit;
     public Block litVersion;
     public Block unlitVersion;
@@ -53,8 +57,8 @@ public class BlockUnlitTorch extends Block implements IOxygenReliantBlock {
         }
     }
 
-    private static boolean isBlockSolidOnSide(
-            World world, int x, int y, int z, ForgeDirection direction, boolean nope) {
+    private static boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection direction,
+            boolean nope) {
         return world.getBlock(x, y, z).isSideSolid(world, x, y, z, direction);
     }
 
@@ -97,8 +101,8 @@ public class BlockUnlitTorch extends Block implements IOxygenReliantBlock {
     }
 
     @Override
-    public int onBlockPlaced(
-            World par1World, int par2, int par3, int par4, int par5, float par6, float par7, float par8, int par9) {
+    public int onBlockPlaced(World par1World, int par2, int par3, int par4, int par5, float par6, float par7,
+            float par8, int par9) {
         int var10 = par9;
 
         if (par5 == 1 && this.canPlaceTorchOn(par1World, par2, par3 - 1, par4)) {
@@ -144,15 +148,16 @@ public class BlockUnlitTorch extends Block implements IOxygenReliantBlock {
                 par1World.setBlockMetadataWithNotify(par2, par3, par4, 1, 2);
             } else if (BlockUnlitTorch.isBlockSolidOnSide(par1World, par2 + 1, par3, par4, ForgeDirection.WEST, true)) {
                 par1World.setBlockMetadataWithNotify(par2, par3, par4, 2, 2);
-            } else if (BlockUnlitTorch.isBlockSolidOnSide(
-                    par1World, par2, par3, par4 - 1, ForgeDirection.SOUTH, true)) {
-                par1World.setBlockMetadataWithNotify(par2, par3, par4, 3, 2);
-            } else if (BlockUnlitTorch.isBlockSolidOnSide(
-                    par1World, par2, par3, par4 + 1, ForgeDirection.NORTH, true)) {
-                par1World.setBlockMetadataWithNotify(par2, par3, par4, 4, 2);
-            } else if (this.canPlaceTorchOn(par1World, par2, par3 - 1, par4)) {
-                par1World.setBlockMetadataWithNotify(par2, par3, par4, 5, 2);
-            }
+            } else
+                if (BlockUnlitTorch.isBlockSolidOnSide(par1World, par2, par3, par4 - 1, ForgeDirection.SOUTH, true)) {
+                    par1World.setBlockMetadataWithNotify(par2, par3, par4, 3, 2);
+                } else if (BlockUnlitTorch
+                        .isBlockSolidOnSide(par1World, par2, par3, par4 + 1, ForgeDirection.NORTH, true)) {
+                            par1World.setBlockMetadataWithNotify(par2, par3, par4, 4, 2);
+                        } else
+                    if (this.canPlaceTorchOn(par1World, par2, par3 - 1, par4)) {
+                        par1World.setBlockMetadataWithNotify(par2, par3, par4, 5, 2);
+                    }
         }
 
         if (this.dropTorchIfCantStay(par1World, par2, par3, par4)) {
@@ -161,9 +166,8 @@ public class BlockUnlitTorch extends Block implements IOxygenReliantBlock {
     }
 
     /**
-     * Lets the block know when one of its neighbor changes. Doesn't know which
-     * neighbor changed (coordinates passed are their own) Args: x, y, z, neighbor
-     * blockID
+     * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed (coordinates passed are
+     * their own) Args: x, y, z, neighbor blockID
      */
     @Override
     public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, Block par5) {
@@ -217,9 +221,8 @@ public class BlockUnlitTorch extends Block implements IOxygenReliantBlock {
     }
 
     /**
-     * Tests if the block can remain at its current location and will drop as an
-     * item if it is unable to stay. Returns True if it can stay and False if it
-     * drops. Args: world, x, y, z
+     * Tests if the block can remain at its current location and will drop as an item if it is unable to stay. Returns
+     * True if it can stay and False if it drops. Args: world, x, y, z
      */
     private boolean dropTorchIfCantStay(World par1World, int par2, int par3, int par4) {
         if (!this.canPlaceBlockAt(par1World, par2, par3, par4)) {
@@ -235,12 +238,12 @@ public class BlockUnlitTorch extends Block implements IOxygenReliantBlock {
     }
 
     /**
-     * Ray traces through the blocks collision from start vector to end vector
-     * returning a ray trace hit. Args: world, x, y, z, startVec, endVec
+     * Ray traces through the blocks collision from start vector to end vector returning a ray trace hit. Args: world,
+     * x, y, z, startVec, endVec
      */
     @Override
-    public MovingObjectPosition collisionRayTrace(
-            World par1World, int par2, int par3, int par4, Vec3 par5Vec3, Vec3 par6Vec3) {
+    public MovingObjectPosition collisionRayTrace(World par1World, int par2, int par3, int par4, Vec3 par5Vec3,
+            Vec3 par6Vec3) {
         final int var7 = par1World.getBlockMetadata(par2, par3, par4) & 7;
         float var8 = 0.15F;
 
@@ -263,8 +266,7 @@ public class BlockUnlitTorch extends Block implements IOxygenReliantBlock {
     @Override
     @SideOnly(Side.CLIENT)
     /**
-     * A randomly called display update to be able to add particles or other items
-     * for display
+     * A randomly called display update to be able to add particles or other items for display
      */
     public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random) {
         final boolean doSmoke = par5Random.nextInt(5) == 0;

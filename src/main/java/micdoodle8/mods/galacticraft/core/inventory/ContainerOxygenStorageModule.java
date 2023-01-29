@@ -2,6 +2,7 @@ package micdoodle8.mods.galacticraft.core.inventory;
 
 import micdoodle8.mods.galacticraft.api.item.IItemOxygenSupply;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenStorageModule;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -9,10 +10,11 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerOxygenStorageModule extends Container {
+
     private final TileEntityOxygenStorageModule tileEntity;
 
-    public ContainerOxygenStorageModule(
-            InventoryPlayer par1InventoryPlayer, TileEntityOxygenStorageModule storageModule) {
+    public ContainerOxygenStorageModule(InventoryPlayer par1InventoryPlayer,
+            TileEntityOxygenStorageModule storageModule) {
         this.tileEntity = storageModule;
         this.addSlotToContainer(new SlotSpecific(storageModule, 0, 17, 22, IItemOxygenSupply.class));
 
@@ -44,8 +46,7 @@ public class ContainerOxygenStorageModule extends Container {
     }
 
     /**
-     * Called to transfer a stack from one inventory to the other eg. when shift
-     * clicking.
+     * Called to transfer a stack from one inventory to the other eg. when shift clicking.
      */
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1) {

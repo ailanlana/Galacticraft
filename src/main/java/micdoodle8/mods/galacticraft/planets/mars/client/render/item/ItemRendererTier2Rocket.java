@@ -1,24 +1,29 @@
 package micdoodle8.mods.galacticraft.planets.mars.client.render.item;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.api.entity.IRocketType.EnumRocketType;
 import micdoodle8.mods.galacticraft.core.client.render.item.ItemRendererTier1Rocket;
 import micdoodle8.mods.galacticraft.core.entities.EntityTier1Rocket;
 import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
 import micdoodle8.mods.galacticraft.planets.mars.client.model.ModelTier2Rocket;
 import micdoodle8.mods.galacticraft.planets.mars.entities.EntityTier2Rocket;
+
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModelCustom;
+
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class ItemRendererTier2Rocket extends ItemRendererTier1Rocket {
-    private static final ResourceLocation cargoRocketTexture =
-            new ResourceLocation(MarsModule.ASSET_PREFIX, "textures/model/cargoRocket.png");
+
+    private static final ResourceLocation cargoRocketTexture = new ResourceLocation(
+            MarsModule.ASSET_PREFIX,
+            "textures/model/cargoRocket.png");
     private final IModelCustom cargoRocketModel;
 
     public ItemRendererTier2Rocket(IModelCustom cargoRocketModel) {
@@ -30,13 +35,8 @@ public class ItemRendererTier2Rocket extends ItemRendererTier1Rocket {
     }
 
     @Override
-    protected void renderSpaceship(
-            ItemRenderType type,
-            RenderBlocks render,
-            ItemStack item,
-            float translateX,
-            float translateY,
-            float translateZ) {
+    protected void renderSpaceship(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX,
+            float translateY, float translateZ) {
         GL11.glPushMatrix();
 
         this.transform(item, type);
@@ -46,9 +46,7 @@ public class ItemRendererTier2Rocket extends ItemRendererTier1Rocket {
             this.modelSpaceship.render(this.spaceship, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
             GL11.glPopMatrix();
         } else {
-            FMLClientHandler.instance()
-                    .getClient()
-                    .renderEngine
+            FMLClientHandler.instance().getClient().renderEngine
                     .bindTexture(ItemRendererTier2Rocket.cargoRocketTexture);
             this.cargoRocketModel.renderAll();
             GL11.glPopMatrix();

@@ -1,23 +1,19 @@
 package micdoodle8.mods.galacticraft.core.world.gen;
 
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.prefab.world.gen.MapGenBaseMeta;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class MapGenCavesMoon extends MapGenBaseMeta {
-    protected void generateLargeCaveNode(
-            long par1,
-            int par3,
-            int par4,
-            Block[] blockIdArray,
-            byte[] metaArray,
-            double par6,
-            double par8,
-            double par10) {
+
+    protected void generateLargeCaveNode(long par1, int par3, int par4, Block[] blockIdArray, byte[] metaArray,
+            double par6, double par8, double par10) {
         this.generateCaveNode(
                 par1,
                 par3,
@@ -35,21 +31,8 @@ public class MapGenCavesMoon extends MapGenBaseMeta {
                 0.5D);
     }
 
-    protected void generateCaveNode(
-            long par1,
-            int par3,
-            int par4,
-            Block[] blockIdArray,
-            byte[] metaArray,
-            double par6,
-            double par8,
-            double par10,
-            float par12,
-            float par13,
-            float par14,
-            int par15,
-            int par16,
-            double par17) {
+    protected void generateCaveNode(long par1, int par3, int par4, Block[] blockIdArray, byte[] metaArray, double par6,
+            double par8, double par10, float par12, float par13, float par14, int par15, int par16, double par17) {
         final double d4 = par3 * 16 + 8;
         final double d5 = par4 * 16 + 8;
         float f3 = 0.0F;
@@ -136,8 +119,7 @@ public class MapGenCavesMoon extends MapGenBaseMeta {
                     return;
                 }
 
-                if (par6 >= d4 - 16.0D - d6 * 2.0D
-                        && par10 >= d5 - 16.0D - d6 * 2.0D
+                if (par6 >= d4 - 16.0D - d6 * 2.0D && par10 >= d5 - 16.0D - d6 * 2.0D
                         && par6 <= d4 + 16.0D + d6 * 2.0D
                         && par10 <= d5 + 16.0D + d6 * 2.0D) {
                     int l1 = MathHelper.floor_double(par6 - d6) - par3 * 16 - 1;
@@ -203,8 +185,7 @@ public class MapGenCavesMoon extends MapGenBaseMeta {
 
                                         if (yfactor > -0.7D && xfactorSq + yfactorSq + zfactorSq < 1.0D) {
                                             if (blockIdArray[coords] == GCBlocks.blockMoon) {
-                                                if (metaArray[coords] == 3
-                                                        || metaArray[coords] == 4
+                                                if (metaArray[coords] == 3 || metaArray[coords] == 4
                                                         || metaArray[coords] == 5) {
                                                     blockIdArray[coords] = Blocks.air;
                                                 }
@@ -225,8 +206,8 @@ public class MapGenCavesMoon extends MapGenBaseMeta {
     }
 
     @Override
-    protected void recursiveGenerate(
-            World par1World, int par2, int par3, int par4, int par5, Block[] blockIdArray, byte[] metaArray) {
+    protected void recursiveGenerate(World par1World, int par2, int par3, int par4, int par5, Block[] blockIdArray,
+            byte[] metaArray) {
         int var7 = this.rand.nextInt(this.rand.nextInt(this.rand.nextInt(40) + 1) + 1);
 
         if (this.rand.nextInt(15) != 0) {
@@ -241,7 +222,14 @@ public class MapGenCavesMoon extends MapGenBaseMeta {
 
             if (this.rand.nextInt(4) == 0) {
                 this.generateLargeCaveNode(
-                        this.rand.nextLong(), par4, par5, blockIdArray, metaArray, var9, var11, var13);
+                        this.rand.nextLong(),
+                        par4,
+                        par5,
+                        blockIdArray,
+                        metaArray,
+                        var9,
+                        var11,
+                        var13);
                 var15 += this.rand.nextInt(4);
             }
 

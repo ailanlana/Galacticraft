@@ -1,9 +1,9 @@
 package micdoodle8.mods.galacticraft.core.client;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.core.Constants;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.network.PacketSimple;
@@ -11,6 +11,7 @@ import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.VersionUtil;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GLAllocation;
@@ -21,11 +22,15 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.client.IRenderHandler;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.util.glu.Project;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class SkyProviderOverworld extends IRenderHandler {
+
     private static final ResourceLocation moonTexture = new ResourceLocation("textures/environment/moon_phases.png");
     private static final ResourceLocation sunTexture = new ResourceLocation("textures/environment/sun.png");
 
@@ -34,15 +39,15 @@ public class SkyProviderOverworld extends IRenderHandler {
     static {
         try {
             optifinePresent = Launch.classLoader.getClassBytes("CustomColorizer") != null;
-        } catch (final Exception e) {
-        }
+        } catch (final Exception e) {}
     }
 
     public int starGLCallList = GLAllocation.generateDisplayLists(7);
     public int glSkyList;
     public int glSkyList2;
-    private final ResourceLocation planetToRender =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/celestialbodies/earth.png");
+    private final ResourceLocation planetToRender = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/gui/celestialbodies/earth.png");
 
     public SkyProviderOverworld() {
         GL11.glPushMatrix();
@@ -118,16 +123,16 @@ public class SkyProviderOverworld extends IRenderHandler {
         if (!optifinePresent) {
             try {
                 final Class<?> c = mc.entityRenderer.getClass();
-                final Field cameraZoom =
-                        c.getDeclaredField(VersionUtil.getNameDynamic(VersionUtil.KEY_FIELD_CAMERA_ZOOM));
+                final Field cameraZoom = c
+                        .getDeclaredField(VersionUtil.getNameDynamic(VersionUtil.KEY_FIELD_CAMERA_ZOOM));
                 cameraZoom.setAccessible(true);
                 zoom = cameraZoom.getDouble(mc.entityRenderer);
-                final Field cameraYaw =
-                        c.getDeclaredField(VersionUtil.getNameDynamic(VersionUtil.KEY_FIELD_CAMERA_YAW));
+                final Field cameraYaw = c
+                        .getDeclaredField(VersionUtil.getNameDynamic(VersionUtil.KEY_FIELD_CAMERA_YAW));
                 cameraYaw.setAccessible(true);
                 yaw = cameraYaw.getDouble(mc.entityRenderer);
-                final Field cameraPitch =
-                        c.getDeclaredField(VersionUtil.getNameDynamic(VersionUtil.KEY_FIELD_CAMERA_PITCH));
+                final Field cameraPitch = c
+                        .getDeclaredField(VersionUtil.getNameDynamic(VersionUtil.KEY_FIELD_CAMERA_PITCH));
                 cameraPitch.setAccessible(true);
                 pitch = cameraPitch.getDouble(mc.entityRenderer);
 
@@ -140,7 +145,10 @@ public class SkyProviderOverworld extends IRenderHandler {
                 }
 
                 Project.gluPerspective(
-                        mc.gameSettings.fovSetting, (float) mc.displayWidth / (float) mc.displayHeight, 0.05F, 1400.0F);
+                        mc.gameSettings.fovSetting,
+                        (float) mc.displayWidth / (float) mc.displayHeight,
+                        0.05F,
+                        1400.0F);
                 GL11.glMatrixMode(GL11.GL_MODELVIEW);
                 GL11.glLoadIdentity();
 
@@ -152,8 +160,8 @@ public class SkyProviderOverworld extends IRenderHandler {
             }
         }
 
-        float theta = MathHelper.sqrt_float(
-                ((float) mc.thePlayer.posY - Constants.OVERWORLD_SKYPROVIDER_STARTHEIGHT) / 1000.0F);
+        float theta = MathHelper
+                .sqrt_float(((float) mc.thePlayer.posY - Constants.OVERWORLD_SKYPROVIDER_STARTHEIGHT) / 1000.0F);
         final float var21 = Math.max(1.0F - theta * 4.0F, 0.0F);
 
         GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -186,8 +194,8 @@ public class SkyProviderOverworld extends IRenderHandler {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         RenderHelper.disableStandardItemLighting();
-        final float[] costh = this.minecraft.theWorld.provider.calcSunriseSunsetColors(
-                this.minecraft.theWorld.getCelestialAngle(partialTicks), partialTicks);
+        final float[] costh = this.minecraft.theWorld.provider
+                .calcSunriseSunsetColors(this.minecraft.theWorld.getCelestialAngle(partialTicks), partialTicks);
         float var9;
         float size;
         float rand1;
@@ -201,8 +209,7 @@ public class SkyProviderOverworld extends IRenderHandler {
             GL11.glPushMatrix();
             GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
             GL11.glRotatef(
-                    MathHelper.sin(this.minecraft.theWorld.getCelestialAngleRadians(partialTicks)) < 0.0F
-                            ? 180.0F
+                    MathHelper.sin(this.minecraft.theWorld.getCelestialAngleRadians(partialTicks)) < 0.0F ? 180.0F
                             : 0.0F,
                     0.0F,
                     0.0F,

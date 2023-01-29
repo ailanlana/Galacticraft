@@ -1,8 +1,8 @@
 package micdoodle8.mods.galacticraft.planets.mars.world.gen;
 
-import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.api.prefab.core.BlockMetaPair;
 import micdoodle8.mods.galacticraft.api.prefab.world.gen.BiomeDecoratorSpace;
 import micdoodle8.mods.galacticraft.api.prefab.world.gen.ChunkProviderSpace;
@@ -18,13 +18,17 @@ import micdoodle8.mods.galacticraft.planets.mars.world.gen.dungeon.RoomChestsMar
 import micdoodle8.mods.galacticraft.planets.mars.world.gen.dungeon.RoomEmptyMars;
 import micdoodle8.mods.galacticraft.planets.mars.world.gen.dungeon.RoomSpawnerMars;
 import micdoodle8.mods.galacticraft.planets.mars.world.gen.dungeon.RoomTreasureMars;
+
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.google.common.collect.Lists;
+
 public class ChunkProviderMars extends ChunkProviderSpace {
+
     private final BiomeDecoratorMars marsBiomeDecorator = new BiomeDecoratorMars();
     private final MapGenCavernMars caveGenerator = new MapGenCavernMars();
     private final MapGenCaveMars cavernGenerator = new MapGenCaveMars();
@@ -55,7 +59,7 @@ public class ChunkProviderMars extends ChunkProviderSpace {
 
     @Override
     protected BiomeGenBase[] getBiomesForGeneration() {
-        return new BiomeGenBase[] {BiomeGenBaseMars.marsFlat};
+        return new BiomeGenBase[] { BiomeGenBaseMars.marsFlat };
     }
 
     @Override
@@ -129,7 +133,15 @@ public class ChunkProviderMars extends ChunkProviderSpace {
     @Override
     public void onChunkProvide(int cX, int cZ, Block[] blocks, byte[] metadata) {
         this.dungeonGenerator.generateUsingArrays(
-                this.worldObj, this.worldObj.getSeed(), cX * 16, 30, cZ * 16, cX, cZ, blocks, metadata);
+                this.worldObj,
+                this.worldObj.getSeed(),
+                cX * 16,
+                30,
+                cZ * 16,
+                cX,
+                cZ,
+                blocks,
+                metadata);
     }
 
     @Override

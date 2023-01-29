@@ -2,6 +2,7 @@ package micdoodle8.mods.galacticraft.api.inventory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 
 /**
@@ -10,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
  * Call: AccessInventoryGC.getGCInventoryForPlayer(player)
  */
 public class AccessInventoryGC {
+
     private static Class<?> playerStatsClass;
     private static Method getMethod;
     private static Field extendedInventoryField;

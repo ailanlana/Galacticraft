@@ -1,7 +1,7 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.client.render.item;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
+
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -10,13 +10,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.model.IModelCustom;
+
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class ItemRendererGrappleHook implements IItemRenderer {
-    public static final ResourceLocation grappleTexture =
-            new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "textures/model/grapple.png");
+
+    public static final ResourceLocation grappleTexture = new ResourceLocation(
+            AsteroidsModule.ASSET_PREFIX,
+            "textures/model/grapple.png");
 
     public static IModelCustom modelGrapple;
 
@@ -24,13 +29,8 @@ public class ItemRendererGrappleHook implements IItemRenderer {
         ItemRendererGrappleHook.modelGrapple = modelGrapple;
     }
 
-    private void renderGrappleGun(
-            ItemRenderType type,
-            RenderBlocks render,
-            ItemStack item,
-            float translateX,
-            float translateY,
-            float translateZ) {
+    private void renderGrappleGun(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX,
+            float translateY, float translateZ) {
         if (type == ItemRenderType.INVENTORY) {
             GL11.glPushMatrix();
             GL11.glScalef(0.7F, 0.75F, 0.5F);

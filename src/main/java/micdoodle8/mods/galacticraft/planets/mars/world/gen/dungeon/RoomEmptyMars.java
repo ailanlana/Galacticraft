@@ -1,14 +1,17 @@
 package micdoodle8.mods.galacticraft.planets.mars.world.gen.dungeon;
 
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.core.world.gen.dungeon.DungeonBoundingBox;
 import micdoodle8.mods.galacticraft.core.world.gen.dungeon.DungeonRoom;
 import micdoodle8.mods.galacticraft.core.world.gen.dungeon.MapGenDungeon;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class RoomEmptyMars extends DungeonRoom {
+
     int sizeX;
     int sizeY;
     int sizeZ;
@@ -28,8 +31,7 @@ public class RoomEmptyMars extends DungeonRoom {
         for (int i = this.posX - 1; i <= this.posX + this.sizeX; i++) {
             for (int j = this.posY - 1; j <= this.posY + this.sizeY; j++) {
                 for (int k = this.posZ - 1; k <= this.posZ + this.sizeZ; k++) {
-                    if (i == this.posX - 1
-                            || i == this.posX + this.sizeX
+                    if (i == this.posX - 1 || i == this.posX + this.sizeX
                             || j == this.posY - 1
                             || j == this.posY + this.sizeY
                             || k == this.posZ - 1

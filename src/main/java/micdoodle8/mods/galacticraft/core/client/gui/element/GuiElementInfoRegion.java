@@ -1,20 +1,25 @@
 package micdoodle8.mods.galacticraft.core.client.gui.element;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Iterator;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.client.gui.container.GuiContainerGC;
 import micdoodle8.mods.galacticraft.core.util.ColorUtil;
+
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 @SideOnly(Side.CLIENT)
 public class GuiElementInfoRegion extends Gui {
+
     protected int width;
     protected int height;
     public int xPosition;
@@ -28,15 +33,8 @@ public class GuiElementInfoRegion extends Gui {
     public int parentHeight;
     public GuiContainerGC parentGui;
 
-    public GuiElementInfoRegion(
-            int xPos,
-            int yPos,
-            int width,
-            int height,
-            List<String> tooltipStrings,
-            int parentWidth,
-            int parentHeight,
-            GuiContainerGC parentGui) {
+    public GuiElementInfoRegion(int xPos, int yPos, int width, int height, List<String> tooltipStrings, int parentWidth,
+            int parentHeight, GuiContainerGC parentGui) {
         this.width = 200;
         this.height = 20;
         this.enabled = true;
@@ -68,8 +66,7 @@ public class GuiElementInfoRegion extends Gui {
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-        this.withinRegion = par2 >= this.xPosition
-                && par3 >= this.yPosition
+        this.withinRegion = par2 >= this.xPosition && par3 >= this.yPosition
                 && par2 < this.xPosition + this.width
                 && par3 < this.yPosition + this.height;
 
@@ -90,8 +87,7 @@ public class GuiElementInfoRegion extends Gui {
 
             while (iterator.hasNext()) {
                 final String s = iterator.next();
-                final int l =
-                        FMLClientHandler.instance().getClient().fontRenderer.getStringWidth(s);
+                final int l = FMLClientHandler.instance().getClient().fontRenderer.getStringWidth(s);
 
                 if (l > k) {
                     k = l;

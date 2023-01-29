@@ -1,8 +1,5 @@
 package micdoodle8.mods.galacticraft.planets.mars;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.api.event.wgen.GCCoreEventPopulate;
 import micdoodle8.mods.galacticraft.api.tile.IFuelDock;
 import micdoodle8.mods.galacticraft.api.tile.ILandingPadAttachable;
@@ -20,6 +17,7 @@ import micdoodle8.mods.galacticraft.planets.mars.entities.EntitySlimeling;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityCryogenicChamber;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityLaunchController;
 import micdoodle8.mods.galacticraft.planets.mars.world.gen.WorldGenEggs;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -35,9 +33,15 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class EventHandlerMars {
+
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
         if (event.source.damageType.equals("slimeling") && event.source instanceof EntityDamageSource) {
@@ -51,8 +55,7 @@ public class EventHandlerMars {
 
     @SubscribeEvent
     public void onLivingAttacked(LivingAttackEvent event) {
-        if (!event.entity.isEntityInvulnerable()
-                && !event.entity.worldObj.isRemote
+        if (!event.entity.isEntityInvulnerable() && !event.entity.worldObj.isRemote
                 && event.entityLiving.getHealth() <= 0.0F
                 && (!event.source.isFireDamage() || !event.entityLiving.isPotionActive(Potion.fireResistance))) {
             final Entity entity = event.source.getEntity();
@@ -197,13 +200,12 @@ public class EventHandlerMars {
 
             for (final ILandingPadAttachable connectedTile : dock.getConnectedTiles()) {
                 if (connectedTile instanceof TileEntityLaunchController) {
-                    final TileEntityLaunchController launchController =
-                            (TileEntityLaunchController) event.world.getTileEntity(
+                    final TileEntityLaunchController launchController = (TileEntityLaunchController) event.world
+                            .getTileEntity(
                                     ((TileEntityLaunchController) connectedTile).xCoord,
                                     ((TileEntityLaunchController) connectedTile).yCoord,
                                     ((TileEntityLaunchController) connectedTile).zCoord);
-                    if (launchController.getEnergyStoredGC() > 0.0F
-                            && launchController.launchPadRemovalDisabled
+                    if (launchController.getEnergyStoredGC() > 0.0F && launchController.launchPadRemovalDisabled
                             && !launchController.getDisabled(0)) {
                         event.allow = false;
                         return;

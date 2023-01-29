@@ -1,20 +1,26 @@
 package micdoodle8.mods.galacticraft.planets.mars.client.render.item;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
 import micdoodle8.mods.galacticraft.planets.mars.blocks.BlockMachineMars;
+
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.model.IModelCustom;
+
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class ItemRendererMachine implements IItemRenderer {
-    private static final ResourceLocation chamberTexture0 =
-            new ResourceLocation(MarsModule.ASSET_PREFIX, "textures/model/chamber_dark.png");
-    private static final ResourceLocation chamberTexture1 =
-            new ResourceLocation(MarsModule.ASSET_PREFIX, "textures/model/chamber2_dark.png");
+
+    private static final ResourceLocation chamberTexture0 = new ResourceLocation(
+            MarsModule.ASSET_PREFIX,
+            "textures/model/chamber_dark.png");
+    private static final ResourceLocation chamberTexture1 = new ResourceLocation(
+            MarsModule.ASSET_PREFIX,
+            "textures/model/chamber2_dark.png");
 
     private final IModelCustom model;
 
@@ -22,13 +28,8 @@ public class ItemRendererMachine implements IItemRenderer {
         this.model = model;
     }
 
-    private void renderCryogenicChamber(
-            ItemRenderType type,
-            RenderBlocks render,
-            ItemStack item,
-            float translateX,
-            float translateY,
-            float translateZ) {
+    private void renderCryogenicChamber(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX,
+            float translateY, float translateZ) {
         GL11.glPushMatrix();
 
         this.transform(type);

@@ -1,11 +1,8 @@
 package micdoodle8.mods.galacticraft.core.energy.tile;
 
-import cofh.api.energy.IEnergyContainerItem;
-import cpw.mods.fml.common.Optional.Interface;
-import cpw.mods.fml.common.Optional.InterfaceList;
-import ic2.api.energy.tile.IEnergySource;
 import java.lang.reflect.Method;
 import java.util.EnumSet;
+
 import mekanism.api.energy.ICableOutputter;
 import micdoodle8.mods.galacticraft.api.item.ElectricItemHelper;
 import micdoodle8.mods.galacticraft.api.item.IItemElectric;
@@ -16,27 +13,27 @@ import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.energy.EnergyConfigHandler;
 import micdoodle8.mods.galacticraft.core.energy.EnergyUtil;
 import micdoodle8.mods.galacticraft.core.util.VersionUtil;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.util.ForgeDirection;
 
-@InterfaceList({
-    @Interface(modid = "IC2API", iface = "ic2.api.energy.tile.IEnergySource"),
-    @Interface(modid = "MekanismAPI|energy", iface = "mekanism.api.energy.ICableOutputter"),
-})
+import cofh.api.energy.IEnergyContainerItem;
+import cpw.mods.fml.common.Optional.Interface;
+import cpw.mods.fml.common.Optional.InterfaceList;
+import ic2.api.energy.tile.IEnergySource;
+
+@InterfaceList({ @Interface(modid = "IC2API", iface = "ic2.api.energy.tile.IEnergySource"),
+        @Interface(modid = "MekanismAPI|energy", iface = "mekanism.api.energy.ICableOutputter"), })
 public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectrical
         implements IEnergySource, ICableOutputter {
+
     /*
-     * The main function to output energy each tick from a source.
-     *
-     * The source will attempt to produce into its outputDirections whatever energy
-     * it has available, and will reduce its stored energy by the amount which is in
-     * fact used.
-     *
-     * Max output = this.storage.maxExtract.
-     *
+     * The main function to output energy each tick from a source. The source will attempt to produce into its
+     * outputDirections whatever energy it has available, and will reduce its stored energy by the amount which is in
+     * fact used. Max output = this.storage.maxExtract.
      * @return The amount of energy that was used.
      */
     public float produce() {
@@ -50,12 +47,9 @@ public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectric
     }
 
     /*
-     * Function to produce energy each tick into the outputs of a source. If
-     * simulate is true, no energy is in fact transferred.
-     *
-     * Note: even if simulate is false this does NOT reduce the source's own energy
-     * storage by the amount produced, that needs to be done elsewhere See
-     * this.produce() for an example.
+     * Function to produce energy each tick into the outputs of a source. If simulate is true, no energy is in fact
+     * transferred. Note: even if simulate is false this does NOT reduce the source's own energy storage by the amount
+     * produced, that needs to be done elsewhere See this.produce() for an example.
      */
     public float produce(boolean simulate) {
         float amountProduced = 0;
@@ -88,8 +82,8 @@ public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectric
                         amountProduced += ((TileBaseUniversalElectrical) tileAdj)
                                 .receiveElectricity(direction.getOpposite(), toSend, this.tierGC, !simulate);
                     } else {
-                        amountProduced +=
-                                EnergyUtil.otherModsEnergyTransfer(tileAdj, direction.getOpposite(), toSend, simulate);
+                        amountProduced += EnergyUtil
+                                .otherModsEnergyTransfer(tileAdj, direction.getOpposite(), toSend, simulate);
                     }
                 }
             }
@@ -114,12 +108,10 @@ public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectric
                 this.storage.extractEnergyGC(ElectricItemHelper.chargeItem(itemStack, energyToCharge), false);
             } else if (EnergyConfigHandler.isRFAPILoaded() && item instanceof IEnergyContainerItem) {
                 this.storage.extractEnergyGC(
-                        ((IEnergyContainerItem) item)
-                                        .receiveEnergy(
-                                                itemStack,
-                                                (int) (energyToCharge * EnergyConfigHandler.TO_RF_RATIO),
-                                                false)
-                                / EnergyConfigHandler.TO_RF_RATIO,
+                        ((IEnergyContainerItem) item).receiveEnergy(
+                                itemStack,
+                                (int) (energyToCharge * EnergyConfigHandler.TO_RF_RATIO),
+                                false) / EnergyConfigHandler.TO_RF_RATIO,
                         false);
             } else if (EnergyConfigHandler.isIndustrialCraft2Loaded()) {
                 try {
@@ -138,7 +130,12 @@ public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectric
                         double result;
                         if (VersionUtil.mcVersion1_7_2) {
                             final Method methodCharge = itemManagerIC2.getMethod(
-                                    "charge", ItemStack.class, int.class, int.class, boolean.class, boolean.class);
+                                    "charge",
+                                    ItemStack.class,
+                                    int.class,
+                                    int.class,
+                                    boolean.class,
+                                    boolean.class);
                             result = (Integer) methodCharge.invoke(
                                     IC2manager,
                                     itemStack,
@@ -148,7 +145,12 @@ public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectric
                                     false);
                         } else {
                             final Method methodCharge = itemManagerIC2.getMethod(
-                                    "charge", ItemStack.class, double.class, int.class, boolean.class, boolean.class);
+                                    "charge",
+                                    ItemStack.class,
+                                    double.class,
+                                    int.class,
+                                    boolean.class,
+                                    boolean.class);
                             result = (Double) methodCharge.invoke(
                                     IC2manager,
                                     itemStack,
@@ -161,12 +163,16 @@ public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectric
                         this.storage.extractEnergyGC(energy, false);
                     } else if (itemElectricIC2B.isInstance(item)) {
                         final Class<?> electricItemIC2 = Class.forName("ic2.api.item.ElectricItem");
-                        final Object IC2manager =
-                                electricItemIC2.getField("manager").get(null);
+                        final Object IC2manager = electricItemIC2.getField("manager").get(null);
                         double result;
                         if (VersionUtil.mcVersion1_7_2) {
                             final Method methodCharge = itemManagerIC2.getMethod(
-                                    "charge", ItemStack.class, int.class, int.class, boolean.class, boolean.class);
+                                    "charge",
+                                    ItemStack.class,
+                                    int.class,
+                                    int.class,
+                                    boolean.class,
+                                    boolean.class);
                             result = (Integer) methodCharge.invoke(
                                     IC2manager,
                                     itemStack,
@@ -176,7 +182,12 @@ public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectric
                                     false);
                         } else {
                             final Method methodCharge = itemManagerIC2.getMethod(
-                                    "charge", ItemStack.class, double.class, int.class, boolean.class, boolean.class);
+                                    "charge",
+                                    ItemStack.class,
+                                    double.class,
+                                    int.class,
+                                    boolean.class,
+                                    boolean.class);
                             result = (Double) methodCharge.invoke(
                                     IC2manager,
                                     itemStack,
@@ -258,8 +269,8 @@ public class TileBaseUniversalElectricalSource extends TileBaseUniversalElectric
     @Override
     public float getProvide(ForgeDirection direction) {
         if (direction == ForgeDirection.UNKNOWN && EnergyConfigHandler.isIndustrialCraft2Loaded()) {
-            final TileEntity tile =
-                    new BlockVec3(this).getTileEntityOnSide(this.worldObj, this.getElectricalOutputDirectionMain());
+            final TileEntity tile = new BlockVec3(this)
+                    .getTileEntityOnSide(this.worldObj, this.getElectricalOutputDirectionMain());
             if (tile instanceof IConductor) {
                 // No power provide to IC2 mod if it's a Galacticraft wire on the output.
                 // Galacticraft network will

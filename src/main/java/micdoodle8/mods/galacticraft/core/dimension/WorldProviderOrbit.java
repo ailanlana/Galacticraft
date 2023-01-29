@@ -1,7 +1,5 @@
 package micdoodle8.mods.galacticraft.core.dimension;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.api.world.IExitHeight;
@@ -14,14 +12,19 @@ import micdoodle8.mods.galacticraft.core.client.SkyProviderOrbit;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.world.gen.ChunkProviderOrbit;
 import micdoodle8.mods.galacticraft.core.world.gen.WorldChunkManagerOrbit;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.chunk.IChunkProvider;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class WorldProviderOrbit extends WorldProviderSpaceStation
         implements IOrbitDimension, IZeroGDimension, ISolarLevel, IExitHeight {
+
     public int spaceStationDimensionID;
 
     @Override
@@ -325,10 +328,11 @@ public class WorldProviderOrbit extends WorldProviderSpaceStation
     @Override
     @SideOnly(Side.CLIENT)
     public void createSkyProvider() {
-        this.setSkyRenderer(new SkyProviderOrbit(
-                new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/celestialbodies/earth.png"),
-                true,
-                true));
+        this.setSkyRenderer(
+                new SkyProviderOrbit(
+                        new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/celestialbodies/earth.png"),
+                        true,
+                        true));
         this.setSpinDeltaPerTick(this.getSpinManager().getSpinRate());
 
         if (this.getCloudRenderer() == null) {

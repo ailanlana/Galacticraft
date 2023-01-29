@@ -1,27 +1,33 @@
 package micdoodle8.mods.galacticraft.core.client.gui.container;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementInfoRegion;
 import micdoodle8.mods.galacticraft.core.entities.EntityBuggy;
 import micdoodle8.mods.galacticraft.core.inventory.ContainerBuggy;
 import micdoodle8.mods.galacticraft.core.util.EnumColor;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiBuggy extends GuiContainerGC {
+
     private static final ResourceLocation[] sealerTexture = new ResourceLocation[4];
 
     static {
         for (int i = 0; i < 4; i++) {
-            GuiBuggy.sealerTexture[i] =
-                    new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/buggy_" + i * 18 + ".png");
+            GuiBuggy.sealerTexture[i] = new ResourceLocation(
+                    GalacticraftCore.ASSET_PREFIX,
+                    "textures/gui/buggy_" + i * 18 + ".png");
         }
     }
 
@@ -42,15 +48,16 @@ public class GuiBuggy extends GuiContainerGC {
         final List<String> oxygenDesc = new ArrayList<>();
         oxygenDesc.add(GCCoreUtil.translate("gui.fuelTank.desc.0"));
         oxygenDesc.add(GCCoreUtil.translate("gui.fuelTank.desc.1"));
-        this.infoRegions.add(new GuiElementInfoRegion(
-                (this.width - this.xSize) / 2 + 71,
-                (this.height - this.ySize) / 2 + 6,
-                36,
-                40,
-                oxygenDesc,
-                this.width,
-                this.height,
-                this));
+        this.infoRegions.add(
+                new GuiElementInfoRegion(
+                        (this.width - this.xSize) / 2 + 71,
+                        (this.height - this.ySize) / 2 + 6,
+                        36,
+                        40,
+                        oxygenDesc,
+                        this.width,
+                        this.height,
+                        this));
     }
 
     @Override
@@ -63,13 +70,11 @@ public class GuiBuggy extends GuiContainerGC {
                 this.type == 0 ? 50 : 39,
                 4210752);
 
-        if (this.mc.thePlayer != null
-                && this.mc.thePlayer.ridingEntity != null
+        if (this.mc.thePlayer != null && this.mc.thePlayer.ridingEntity != null
                 && this.mc.thePlayer.ridingEntity instanceof EntityBuggy) {
             this.fontRendererObj.drawString(GCCoreUtil.translate("gui.message.fuel.name") + ":", 125, 15 + 3, 4210752);
             final double percentage = ((EntityBuggy) this.mc.thePlayer.ridingEntity).getScaledFuelLevel(100);
-            final String color = percentage > 80.0D
-                    ? EnumColor.BRIGHT_GREEN.getCode()
+            final String color = percentage > 80.0D ? EnumColor.BRIGHT_GREEN.getCode()
                     : percentage > 40.0D ? EnumColor.ORANGE.getCode() : EnumColor.RED.getCode();
             final String str = percentage + "% " + GCCoreUtil.translate("gui.message.full.name");
             this.fontRendererObj.drawString(color + str, 117 - str.length() / 2, 20 + 8, 4210752);
@@ -85,8 +90,7 @@ public class GuiBuggy extends GuiContainerGC {
         final int var6 = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(var5, var6, 0, 0, 176, this.ySize);
 
-        if (this.mc.thePlayer != null
-                && this.mc.thePlayer.ridingEntity != null
+        if (this.mc.thePlayer != null && this.mc.thePlayer.ridingEntity != null
                 && this.mc.thePlayer.ridingEntity instanceof EntityBuggy) {
             final int fuelLevel = ((EntityBuggy) this.mc.thePlayer.ridingEntity).getScaledFuelLevel(38);
 

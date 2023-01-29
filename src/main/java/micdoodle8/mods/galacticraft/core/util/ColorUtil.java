@@ -16,10 +16,9 @@ public class ColorUtil {
     static Vector3 black = new Vector3(0, 0, 0);
     static Vector3 mud = new Vector3(94, 81, 74);
 
-    static double[] colorwheelAngles = {-110D, -30D, 0D, 60D, 120D, 180D, 215D, 250D, 330D, 360D, 420D, 480D};
-    static Vector3[] colorwheelColors = {
-        blue, magenta, red, orange, yellow, green, cyan, blue, magenta, red, orange, yellow
-    };
+    static double[] colorwheelAngles = { -110D, -30D, 0D, 60D, 120D, 180D, 215D, 250D, 330D, 360D, 420D, 480D };
+    static Vector3[] colorwheelColors = { blue, magenta, red, orange, yellow, green, cyan, blue, magenta, red, orange,
+            yellow };
 
     private static Vector3 hue_to_rgb(double deg) {
         deg = deg % 360;

@@ -1,11 +1,14 @@
 package micdoodle8.mods.galacticraft.core.network;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 import micdoodle8.mods.galacticraft.core.entities.IControllableEntity;
+
 import net.minecraft.entity.player.EntityPlayer;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+
 public class PacketControllableEntity implements IPacket {
+
     private int keyPressed;
 
     public PacketControllableEntity() {}

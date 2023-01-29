@@ -1,9 +1,9 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import cpw.mods.fml.relauncher.Side;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+
 import micdoodle8.mods.galacticraft.api.item.IItemOxygenSupply;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
@@ -14,6 +14,7 @@ import micdoodle8.mods.galacticraft.core.oxygen.ThreadFindSeal;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
 import micdoodle8.mods.galacticraft.core.util.FluidUtil;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,7 +26,10 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.relauncher.Side;
+
 public class TileEntityOxygenSealer extends TileEntityOxygen implements IInventory, ISidedInventory {
+
     @NetworkedField(targetSide = Side.CLIENT)
     public boolean sealed;
 
@@ -103,9 +107,11 @@ public class TileEntityOxygenSealer extends TileEntityOxygen implements IInvento
             return 0;
         }
         final Block blockAbove = this.worldObj.getBlock(this.xCoord, this.yCoord + 1, this.zCoord);
-        if (!(blockAbove instanceof BlockAir)
-                && !OxygenPressureProtocol.canBlockPassAir(
-                        this.worldObj, blockAbove, new BlockVec3(this.xCoord, this.yCoord + 1, this.zCoord), 1)) {
+        if (!(blockAbove instanceof BlockAir) && !OxygenPressureProtocol.canBlockPassAir(
+                this.worldObj,
+                blockAbove,
+                new BlockVec3(this.xCoord, this.yCoord + 1, this.zCoord),
+                1)) {
             // The vent is blocked
             return 0;
         }
@@ -115,8 +121,7 @@ public class TileEntityOxygenSealer extends TileEntityOxygen implements IInvento
 
     public boolean thermalControlEnabled() {
         final ItemStack oxygenItemStack = this.getStackInSlot(2);
-        return oxygenItemStack != null
-                && oxygenItemStack.getItem() == GCItems.basicItem
+        return oxygenItemStack != null && oxygenItemStack.getItem() == GCItems.basicItem
                 && oxygenItemStack.getItemDamage() == 20
                 && this.hasEnoughEnergyToRun
                 && !this.disabled;
@@ -303,7 +308,7 @@ public class TileEntityOxygenSealer extends TileEntityOxygen implements IInvento
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        return new int[] {0, 1};
+        return new int[] { 0, 1 };
     }
 
     @Override
@@ -387,8 +392,8 @@ public class TileEntityOxygenSealer extends TileEntityOxygen implements IInvento
         return EnumSet.noneOf(ForgeDirection.class);
     }
 
-    public static HashMap<BlockVec3, TileEntityOxygenSealer> getSealersAround(
-            World world, int x, int y, int z, int rSquared) {
+    public static HashMap<BlockVec3, TileEntityOxygenSealer> getSealersAround(World world, int x, int y, int z,
+            int rSquared) {
         final HashMap<BlockVec3, TileEntityOxygenSealer> ret = new HashMap<>();
 
         for (final TileEntityOxygenSealer tile : new ArrayList<>(TileEntityOxygenSealer.loadedTiles)) {

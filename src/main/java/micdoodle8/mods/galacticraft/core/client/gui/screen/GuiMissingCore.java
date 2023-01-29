@@ -1,18 +1,22 @@
 package micdoodle8.mods.galacticraft.core.client.gui.screen;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.net.URI;
+
 import micdoodle8.mods.galacticraft.core.util.ColorUtil;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 @SideOnly(Side.CLIENT)
 public class GuiMissingCore extends GuiScreen {
+
     private int urlX;
     private int urlY;
     private int urlWidth;
@@ -28,13 +32,25 @@ public class GuiMissingCore extends GuiScreen {
         this.drawDefaultBackground();
         int offset = this.height / 2 - 50;
         this.drawCenteredString(
-                this.fontRendererObj, GCCoreUtil.translate("gui.missingCore.name.0"), this.width / 2, offset, 0xFF5555);
+                this.fontRendererObj,
+                GCCoreUtil.translate("gui.missingCore.name.0"),
+                this.width / 2,
+                offset,
+                0xFF5555);
         offset += 25;
         this.drawCenteredString(
-                this.fontRendererObj, GCCoreUtil.translate("gui.missingCore.name.1"), this.width / 2, offset, 0xFF5555);
+                this.fontRendererObj,
+                GCCoreUtil.translate("gui.missingCore.name.1"),
+                this.width / 2,
+                offset,
+                0xFF5555);
         offset += 20;
         this.drawCenteredString(
-                this.fontRendererObj, GCCoreUtil.translate("gui.missingCore.name.2"), this.width / 2, offset, 0x999999);
+                this.fontRendererObj,
+                GCCoreUtil.translate("gui.missingCore.name.2"),
+                this.width / 2,
+                offset,
+                0x999999);
         offset += 20;
         final String s = EnumChatFormatting.UNDERLINE + GCCoreUtil.translate("gui.missingCore.name.3");
         this.urlX = this.width / 2 - this.fontRendererObj.getStringWidth(s) / 2 - 10;
@@ -67,8 +83,7 @@ public class GuiMissingCore extends GuiScreen {
         if (x > this.urlX && x < this.urlX + this.urlWidth && y > this.urlY && y < this.urlY + this.urlHeight) {
             try {
                 final Class<?> oclass = Class.forName("java.awt.Desktop");
-                final Object object =
-                        oclass.getMethod("getDesktop", new Class[0]).invoke(null);
+                final Object object = oclass.getMethod("getDesktop", new Class[0]).invoke(null);
                 oclass.getMethod("browse", URI.class)
                         .invoke(object, new URI("https://github.com/GTNewHorizons/Galacticraft"));
             } catch (final Throwable throwable) {

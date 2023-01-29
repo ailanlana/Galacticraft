@@ -1,17 +1,22 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.dimension;
 
-import com.google.common.collect.Maps;
 import java.util.Map;
+
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.planets.asteroids.tick.AsteroidsTickHandlerServer;
 import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityShortRangeTelepad;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.WorldSavedData;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.google.common.collect.Maps;
+
 public class ShortRangeTelepadHandler extends WorldSavedData {
+
     public static final String saveDataID = "ShortRangeTelepads";
     private static final Map<Integer, TelepadEntry> tileMap = Maps.newHashMap();
 
@@ -20,6 +25,7 @@ public class ShortRangeTelepadHandler extends WorldSavedData {
     }
 
     public static class TelepadEntry {
+
         public int dimensionID;
         public BlockVec3 position;
 
@@ -30,19 +36,14 @@ public class ShortRangeTelepadHandler extends WorldSavedData {
 
         @Override
         public int hashCode() {
-            return new HashCodeBuilder()
-                    .append(this.dimensionID)
-                    .append(this.position.hashCode())
-                    .toHashCode();
+            return new HashCodeBuilder().append(this.dimensionID).append(this.position.hashCode()).toHashCode();
         }
 
         @Override
         public boolean equals(Object other) {
             if (other instanceof TelepadEntry) {
-                return new EqualsBuilder()
-                        .append(((TelepadEntry) other).dimensionID, this.dimensionID)
-                        .append(((TelepadEntry) other).position, this.position)
-                        .isEquals();
+                return new EqualsBuilder().append(((TelepadEntry) other).dimensionID, this.dimensionID)
+                        .append(((TelepadEntry) other).position, this.position).isEquals();
             }
 
             return false;
@@ -85,8 +86,9 @@ public class ShortRangeTelepadHandler extends WorldSavedData {
     public static void addShortRangeTelepad(TileEntityShortRangeTelepad telepad) {
         if (!telepad.getWorldObj().isRemote) {
             if (telepad.addressValid) {
-                final TelepadEntry newEntry =
-                        new TelepadEntry(telepad.getWorldObj().provider.dimensionId, new BlockVec3(telepad));
+                final TelepadEntry newEntry = new TelepadEntry(
+                        telepad.getWorldObj().provider.dimensionId,
+                        new BlockVec3(telepad));
                 final TelepadEntry previous = tileMap.put(telepad.address, newEntry);
 
                 if (previous == null || !previous.equals(newEntry)) {

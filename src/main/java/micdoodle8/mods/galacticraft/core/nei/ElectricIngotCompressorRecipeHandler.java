@@ -1,23 +1,29 @@
 package micdoodle8.mods.galacticraft.core.nei;
 
-import codechicken.lib.gui.GuiDraw;
-import codechicken.nei.NEIServerUtils;
-import codechicken.nei.PositionedStack;
-import codechicken.nei.recipe.TemplateRecipeHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
+import codechicken.lib.gui.GuiDraw;
+import codechicken.nei.NEIServerUtils;
+import codechicken.nei.PositionedStack;
+import codechicken.nei.recipe.TemplateRecipeHandler;
+
 public class ElectricIngotCompressorRecipeHandler extends TemplateRecipeHandler {
-    private static final ResourceLocation ingotCompressorTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/electric_IngotCompressor.png");
+
+    private static final ResourceLocation ingotCompressorTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/gui/electric_IngotCompressor.png");
     public static int ticksPassed;
     private int alternate = 0;
 
@@ -33,12 +39,11 @@ public class ElectricIngotCompressorRecipeHandler extends TemplateRecipeHandler 
     public Set<Entry<ArrayList<PositionedStack>, PositionedStack>> getRecipes() {
         final HashMap<ArrayList<PositionedStack>, PositionedStack> recipes = new HashMap<>();
 
-        for (final Entry<HashMap<Integer, PositionedStack>, PositionedStack> stack :
-                NEIGalacticraftConfig.getIngotCompressorRecipes()) {
+        for (final Entry<HashMap<Integer, PositionedStack>, PositionedStack> stack : NEIGalacticraftConfig
+                .getIngotCompressorRecipes()) {
             final ArrayList<PositionedStack> inputStacks = new ArrayList<>();
 
-            for (final Map.Entry<Integer, PositionedStack> input :
-                    stack.getKey().entrySet()) {
+            for (final Map.Entry<Integer, PositionedStack> input : stack.getKey().entrySet()) {
                 final PositionedStack inputStack = input.getValue().copy();
                 for (final ItemStack inputItemStack : inputStack.items) {
                     inputItemStack.stackSize = 2;
@@ -63,7 +68,12 @@ public class ElectricIngotCompressorRecipeHandler extends TemplateRecipeHandler 
         }
 
         GuiDraw.drawTexturedModalRect(
-                79, 46, 176, 13, Math.min(ElectricIngotCompressorRecipeHandler.ticksPassed % 70, 53), 17);
+                79,
+                46,
+                176,
+                13,
+                Math.min(ElectricIngotCompressorRecipeHandler.ticksPassed % 70, 53),
+                17);
     }
 
     @Override
@@ -123,13 +133,14 @@ public class ElectricIngotCompressorRecipeHandler extends TemplateRecipeHandler 
     }
 
     public class ElectricCompressorRecipe extends TemplateRecipeHandler.CachedRecipe {
+
         public ArrayList<PositionedStack> input;
         public PositionedStack output;
 
         @Override
         public ArrayList<PositionedStack> getIngredients() {
-            return (ArrayList<PositionedStack>)
-                    this.getCycledIngredients(ElectricIngotCompressorRecipeHandler.this.cycleticks / 20, this.input);
+            return (ArrayList<PositionedStack>) this
+                    .getCycledIngredients(ElectricIngotCompressorRecipeHandler.this.cycleticks / 20, this.input);
         }
 
         @Override

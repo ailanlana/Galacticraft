@@ -1,9 +1,10 @@
 package micdoodle8.mods.galacticraft.core.client;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GLAllocation;
@@ -13,13 +14,18 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.client.IRenderHandler;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class SkyProviderOrbit extends IRenderHandler {
+
     private static final ResourceLocation moonTexture = new ResourceLocation("textures/environment/moon_phases.png");
-    private static final ResourceLocation sunTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/planets/orbitalsun.png");
+    private static final ResourceLocation sunTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/gui/planets/orbitalsun.png");
 
     public int starGLCallList = GLAllocation.generateDisplayLists(3);
     public int glSkyList;
@@ -117,8 +123,8 @@ public class SkyProviderOrbit extends IRenderHandler {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         RenderHelper.disableStandardItemLighting();
-        final float[] var24 = this.minecraft.theWorld.provider.calcSunriseSunsetColors(
-                this.minecraft.theWorld.getCelestialAngle(partialTicks), partialTicks);
+        final float[] var24 = this.minecraft.theWorld.provider
+                .calcSunriseSunsetColors(this.minecraft.theWorld.getCelestialAngle(partialTicks), partialTicks);
         float var9;
         float var10;
         float var11;
@@ -130,8 +136,7 @@ public class SkyProviderOrbit extends IRenderHandler {
             GL11.glPushMatrix();
             GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
             GL11.glRotatef(
-                    MathHelper.sin(this.minecraft.theWorld.getCelestialAngleRadians(partialTicks)) < 0.0F
-                            ? 180.0F
+                    MathHelper.sin(this.minecraft.theWorld.getCelestialAngleRadians(partialTicks)) < 0.0F ? 180.0F
                             : 0.0F,
                     0.0F,
                     0.0F,
@@ -295,35 +300,21 @@ public class SkyProviderOrbit extends IRenderHandler {
         GL11.glColor3f(0.0F, 0.0F, 0.0F);
 
         /*
-         * This all does nothing! double var25 = 0.0D;
-         *
-         * // if (this.minecraft.thePlayer.ridingEntity != null) { var25 =
-         * this.minecraft.thePlayer.posY - 64;
-         *
-         * if (var25 < 0.0D) { // GL11.glPushMatrix(); // GL11.glTranslatef(0.0F, 12.0F,
-         * 0.0F); // GL11.glCallList(this.glSkyList2); // GL11.glPopMatrix(); // var10 =
-         * 1.0F; // var11 = -((float)(var25 + 65.0D)); // var12 = -var10; //
-         * var23.startDrawingQuads(); // var23.setColorRGBA_I(0, 255); //
-         * var23.addVertex(-var10, var11, var10); // var23.addVertex(var10, var11,
-         * var10); // var23.addVertex(var10, var12, var10); // var23.addVertex(-var10,
-         * var12, var10); // var23.addVertex(-var10, var12, -var10); //
-         * var23.addVertex(var10, var12, -var10); // var23.addVertex(var10, var11,
-         * -var10); // var23.addVertex(-var10, var11, -var10); // var23.addVertex(var10,
-         * var12, -var10); // var23.addVertex(var10, var12, var10); //
-         * var23.addVertex(var10, var11, var10); // var23.addVertex(var10, var11,
-         * -var10); // var23.addVertex(-var10, var11, -var10); //
-         * var23.addVertex(-var10, var11, var10); // var23.addVertex(-var10, var12,
-         * var10); // var23.addVertex(-var10, var12, -var10); // var23.addVertex(-var10,
-         * var12, -var10); // var23.addVertex(-var10, var12, var10); //
-         * var23.addVertex(var10, var12, var10); // var23.addVertex(var10, var12,
-         * -var10); // var23.draw(); } }
-         *
-         * if (this.minecraft.theWorld.provider.isSkyColored()) { GL11.glColor3f(0.0f,
-         * 0.0f, 0.0f); } else { GL11.glColor3f(var3, var4, var5); }
-         * GL11.glColor3f(0.0f, 0.0f, 0.0f);
-         *
-         * GL11.glPushMatrix(); GL11.glTranslatef(0.0F, -((float) (var25 - 16.0D)),
-         * 0.0F); GL11.glPopMatrix();
+         * This all does nothing! double var25 = 0.0D; // if (this.minecraft.thePlayer.ridingEntity != null) { var25 =
+         * this.minecraft.thePlayer.posY - 64; if (var25 < 0.0D) { // GL11.glPushMatrix(); // GL11.glTranslatef(0.0F,
+         * 12.0F, 0.0F); // GL11.glCallList(this.glSkyList2); // GL11.glPopMatrix(); // var10 = 1.0F; // var11 =
+         * -((float)(var25 + 65.0D)); // var12 = -var10; // var23.startDrawingQuads(); // var23.setColorRGBA_I(0, 255);
+         * // var23.addVertex(-var10, var11, var10); // var23.addVertex(var10, var11, var10); // var23.addVertex(var10,
+         * var12, var10); // var23.addVertex(-var10, var12, var10); // var23.addVertex(-var10, var12, -var10); //
+         * var23.addVertex(var10, var12, -var10); // var23.addVertex(var10, var11, -var10); // var23.addVertex(-var10,
+         * var11, -var10); // var23.addVertex(var10, var12, -var10); // var23.addVertex(var10, var12, var10); //
+         * var23.addVertex(var10, var11, var10); // var23.addVertex(var10, var11, -var10); // var23.addVertex(-var10,
+         * var11, -var10); // var23.addVertex(-var10, var11, var10); // var23.addVertex(-var10, var12, var10); //
+         * var23.addVertex(-var10, var12, -var10); // var23.addVertex(-var10, var12, -var10); // var23.addVertex(-var10,
+         * var12, var10); // var23.addVertex(var10, var12, var10); // var23.addVertex(var10, var12, -var10); //
+         * var23.draw(); } } if (this.minecraft.theWorld.provider.isSkyColored()) { GL11.glColor3f(0.0f, 0.0f, 0.0f); }
+         * else { GL11.glColor3f(var3, var4, var5); } GL11.glColor3f(0.0f, 0.0f, 0.0f); GL11.glPushMatrix();
+         * GL11.glTranslatef(0.0F, -((float) (var25 - 16.0D)), 0.0F); GL11.glPopMatrix();
          */
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_COLOR_MATERIAL);

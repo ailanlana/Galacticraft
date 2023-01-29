@@ -1,6 +1,7 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
 import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -15,6 +16,7 @@ import net.minecraft.world.World;
  * An advanced block class that is to be extended for wrenching capabilities.
  */
 public abstract class BlockTileGC extends BlockAdvanced implements ITileEntityProvider {
+
     public BlockTileGC(Material material) {
         super(material);
         this.isBlockContainer = true;
@@ -29,8 +31,7 @@ public abstract class BlockTileGC extends BlockAdvanced implements ITileEntityPr
     }
 
     /**
-     * ejects contained items into the world, and notifies neighbours of an update,
-     * as appropriate
+     * ejects contained items into the world, and notifies neighbours of an update, as appropriate
      */
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int par6) {
@@ -39,9 +40,8 @@ public abstract class BlockTileGC extends BlockAdvanced implements ITileEntityPr
     }
 
     /**
-     * Called when the block receives a BlockEvent - see World.addBlockEvent. By
-     * default, passes it on to the tile entity at this location. Args: world, x, y,
-     * z, blockID, EventID, event parameter
+     * Called when the block receives a BlockEvent - see World.addBlockEvent. By default, passes it on to the tile
+     * entity at this location. Args: world, x, y, z, blockID, EventID, event parameter
      */
     @Override
     public boolean onBlockEventReceived(World par1World, int par2, int par3, int par4, int par5, int par6) {
@@ -51,8 +51,7 @@ public abstract class BlockTileGC extends BlockAdvanced implements ITileEntityPr
     }
 
     /**
-     * Override this if you don't need it. This will eject all items out of this
-     * machine if it has an inventory.
+     * Override this if you don't need it. This will eject all items out of this machine if it has an inventory.
      */
     public void dropEntireInventory(World world, int x, int y, int z, Block block, int par6) {
         final TileEntity tileEntity = world.getTileEntity(x, y, z);
@@ -86,8 +85,7 @@ public abstract class BlockTileGC extends BlockAdvanced implements ITileEntityPr
                                     new ItemStack(var7.getItem(), var11, var7.getItemDamage()));
 
                             if (var7.hasTagCompound()) {
-                                var12.getEntityItem().setTagCompound((NBTTagCompound)
-                                        var7.getTagCompound().copy());
+                                var12.getEntityItem().setTagCompound((NBTTagCompound) var7.getTagCompound().copy());
                             }
 
                             final float var13 = 0.05F;
@@ -103,8 +101,8 @@ public abstract class BlockTileGC extends BlockAdvanced implements ITileEntityPr
     }
 
     /**
-     * Returns the TileEntity used by this block. You should use the metadata
-     * sensitive version of this to get the maximum optimization!
+     * Returns the TileEntity used by this block. You should use the metadata sensitive version of this to get the
+     * maximum optimization!
      */
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {

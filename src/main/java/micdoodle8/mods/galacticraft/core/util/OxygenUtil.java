@@ -1,10 +1,8 @@
 package micdoodle8.mods.galacticraft.core.util;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.HashSet;
+
 import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
 import micdoodle8.mods.galacticraft.api.item.IBreathableArmor;
 import micdoodle8.mods.galacticraft.api.item.IBreathableArmor.EnumGearType;
@@ -21,6 +19,7 @@ import micdoodle8.mods.galacticraft.core.items.ItemOxygenMask;
 import micdoodle8.mods.galacticraft.core.items.ItemOxygenTank;
 import micdoodle8.mods.galacticraft.core.oxygen.OxygenPressureProtocol;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenDistributor;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEnchantmentTable;
 import net.minecraft.block.BlockFarmland;
@@ -46,7 +45,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class OxygenUtil {
+
     private static HashSet<BlockVec3> checked;
 
     @SideOnly(Side.CLIENT)
@@ -164,9 +168,8 @@ public class OxygenUtil {
     }
 
     /*
-     * A simplified version of the breathable air check which checks all 6 sides of
-     * the given block (because a torch can pass air on all sides) Used in
-     * BlockUnlitTorch.
+     * A simplified version of the breathable air check which checks all 6 sides of the given block (because a torch can
+     * pass air on all sides) Used in BlockUnlitTorch.
      */
     public static boolean checkTorchHasOxygen(World world, Block block, int x, int y, int z) {
         if (OxygenUtil.inOxygenBubble(world, x + 0.5D, y + 0.6D, z + 0.5D)) {
@@ -185,11 +188,10 @@ public class OxygenUtil {
     }
 
     /*
-     * Test whether the given block at (x,y,z) coordinates is either: - breathable
-     * air (returns true) - solid, or air which is not breathable (returns false) -
-     * an air-permeable block, for example a torch, in which case test the
-     * surrounding air-reachable blocks (up to 5 blocks away) and return true if
-     * breathable air is found in one of them, or false if not.
+     * Test whether the given block at (x,y,z) coordinates is either: - breathable air (returns true) - solid, or air
+     * which is not breathable (returns false) - an air-permeable block, for example a torch, in which case test the
+     * surrounding air-reachable blocks (up to 5 blocks away) and return true if breathable air is found in one of them,
+     * or false if not.
      */
     private static int testContactWithBreathableAir(World world, Block block, int x, int y, int z, int limitCount) {
         final BlockVec3 vec = new BlockVec3(x, y, z);
@@ -206,23 +208,21 @@ public class OxygenUtil {
         boolean permeableFlag = false;
         if (!(block instanceof BlockLeavesBase)) {
             if (block.isOpaqueCube()) {
-                if (block instanceof BlockGravel
-                        || block.getMaterial() == Material.cloth
+                if (block instanceof BlockGravel || block.getMaterial() == Material.cloth
                         || block instanceof BlockSponge) {
                     permeableFlag = true;
                 } else {
                     return -1;
                 }
-            } else if (block instanceof BlockGlass
-                    || block instanceof BlockStainedGlass
-                    || block instanceof BlockLiquid) {
-                return -1;
-            } else if (OxygenPressureProtocol.nonPermeableBlocks.containsKey(block)) {
-                final ArrayList<Integer> metaList = OxygenPressureProtocol.nonPermeableBlocks.get(block);
-                if (metaList.contains(Integer.valueOf(-1)) || metaList.contains(world.getBlockMetadata(x, y, z))) {
+            } else
+                if (block instanceof BlockGlass || block instanceof BlockStainedGlass || block instanceof BlockLiquid) {
                     return -1;
+                } else if (OxygenPressureProtocol.nonPermeableBlocks.containsKey(block)) {
+                    final ArrayList<Integer> metaList = OxygenPressureProtocol.nonPermeableBlocks.get(block);
+                    if (metaList.contains(Integer.valueOf(-1)) || metaList.contains(world.getBlockMetadata(x, y, z))) {
+                        return -1;
+                    }
                 }
-            }
         } else {
             permeableFlag = true;
         }
@@ -235,7 +235,12 @@ public class OxygenUtil {
                     if (!checked.contains(sidevec)) {
                         final Block newblock = sidevec.getBlockID_noChunkLoad(world);
                         final int adjResult = OxygenUtil.testContactWithBreathableAir(
-                                world, newblock, sidevec.x, sidevec.y, sidevec.z, limitCount + 1);
+                                world,
+                                newblock,
+                                sidevec.x,
+                                sidevec.y,
+                                sidevec.z,
+                                limitCount + 1);
                         if (adjResult >= 0) {
                             return adjResult;
                         }
@@ -281,11 +286,9 @@ public class OxygenUtil {
     }
 
     public static int getDrainSpacing(ItemStack tank, ItemStack tank2) {
-        final boolean tank1Valid = tank != null
-                && tank.getItem() instanceof ItemOxygenTank
+        final boolean tank1Valid = tank != null && tank.getItem() instanceof ItemOxygenTank
                 && tank.getMaxDamage() - tank.getItemDamage() > 0;
-        final boolean tank2Valid = tank2 != null
-                && tank2.getItem() instanceof ItemOxygenTank
+        final boolean tank2Valid = tank2 != null && tank2.getItem() instanceof ItemOxygenTank
                 && tank2.getMaxDamage() - tank2.getItemDamage() > 0;
 
         if (!tank1Valid && !tank2Valid) {
@@ -343,7 +346,7 @@ public class OxygenUtil {
         }
 
         if ((stats.extendedInventory.getStackInSlot(2) == null
-                        || !OxygenUtil.isItemValidForPlayerTankInv(2, stats.extendedInventory.getStackInSlot(2)))
+                || !OxygenUtil.isItemValidForPlayerTankInv(2, stats.extendedInventory.getStackInSlot(2)))
                 && (stats.extendedInventory.getStackInSlot(3) == null
                         || !OxygenUtil.isItemValidForPlayerTankInv(3, stats.extendedInventory.getStackInSlot(3)))) {
             boolean handled = false;

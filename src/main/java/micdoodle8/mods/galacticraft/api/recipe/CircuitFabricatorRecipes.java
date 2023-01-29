@@ -5,23 +5,22 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import net.minecraft.item.ItemStack;
 
 public class CircuitFabricatorRecipes {
+
     private static final HashMap<ItemStack[], ItemStack> recipes = new HashMap<>();
 
     public static ArrayList<ArrayList<ItemStack>> slotValidItems = new ArrayList<>(5);
 
     /**
-     * Input list must be ItemStack array with 5 elements, contain null if no item
-     * is used in the slot.
+     * Input list must be ItemStack array with 5 elements, contain null if no item is used in the slot.
      * <p/>
-     * 0 - Crystal slot 1 - Silicon slot 2 - Silicon slot 3 - Redstone slot 4 -
-     * Optional slot
+     * 0 - Crystal slot 1 - Silicon slot 2 - Silicon slot 3 - Redstone slot 4 - Optional slot
      *
      * @param output
-     * @param inputList ItemStack array with length 5. Fill with stacks as explained
-     *                  above
+     * @param inputList ItemStack array with length 5. Fill with stacks as explained above
      * @return
      */
     public static void addRecipe(ItemStack output, ItemStack[] inputList) {
@@ -87,9 +86,9 @@ public class CircuitFabricatorRecipes {
                     }
                 } else if (recipeStack.getItem() != inputStack.getItem()
                         || recipeStack.getItemDamage() != inputStack.getItemDamage()) {
-                    found = false;
-                    break;
-                }
+                            found = false;
+                            break;
+                        }
             }
 
             if (!found) {
@@ -103,9 +102,8 @@ public class CircuitFabricatorRecipes {
     }
 
     public static void removeRecipe(ItemStack match) {
-        for (final Iterator<Map.Entry<ItemStack[], ItemStack>> it =
-                        CircuitFabricatorRecipes.recipes.entrySet().iterator();
-                it.hasNext(); ) {
+        for (final Iterator<Map.Entry<ItemStack[], ItemStack>> it = CircuitFabricatorRecipes.recipes.entrySet()
+                .iterator(); it.hasNext();) {
             final Map.Entry<ItemStack[], ItemStack> recipe = it.next();
             if (ItemStack.areItemStacksEqual(match, recipe.getValue())) {
                 it.remove();

@@ -1,9 +1,7 @@
 package micdoodle8.mods.galacticraft.core.energy.tile;
 
-import cpw.mods.fml.common.Optional.Interface;
-import cpw.mods.fml.relauncher.Side;
-import ic2.api.tile.IWrenchable;
 import java.util.EnumSet;
+
 import micdoodle8.mods.galacticraft.api.tile.IDisableableMachine;
 import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
 import micdoodle8.mods.galacticraft.api.transmission.tile.IConnector;
@@ -11,11 +9,16 @@ import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
 import micdoodle8.mods.galacticraft.core.util.EnumColor;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.core.util.RedstoneUtil;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.common.Optional.Interface;
+import cpw.mods.fml.relauncher.Side;
+import ic2.api.tile.IWrenchable;
 
 @Interface(modid = "IC2API", iface = "ic2.api.tile.IWrenchable")
 public abstract class TileBaseElectricBlock extends TileBaseUniversalElectrical
@@ -92,17 +95,14 @@ public abstract class TileBaseElectricBlock extends TileBaseUniversalElectrical
     @Override
     public void updateEntity() {
         if (!this.worldObj.isRemote) {
-            if (this.shouldPullEnergy()
-                    && this.getEnergyStoredGC(null) < this.getMaxEnergyStoredGC(null)
+            if (this.shouldPullEnergy() && this.getEnergyStoredGC(null) < this.getMaxEnergyStoredGC(null)
                     && this.getBatteryInSlot() != null
                     && this.getElectricInputDirection() != null) {
                 this.discharge(this.getBatteryInSlot());
             }
 
-            if (this.getEnergyStoredGC(null) > this.storage.getMaxExtract()
-                    && (this.noRedstoneControl
-                            || !RedstoneUtil.isBlockReceivingRedstone(
-                                    this.worldObj, this.xCoord, this.yCoord, this.zCoord))) {
+            if (this.getEnergyStoredGC(null) > this.storage.getMaxExtract() && (this.noRedstoneControl
+                    || !RedstoneUtil.isBlockReceivingRedstone(this.worldObj, this.xCoord, this.yCoord, this.zCoord))) {
                 this.hasEnoughEnergyToRun = true;
                 if (this.shouldUseEnergy()) {
                     this.storage.extractEnergyGC(this.storage.getMaxExtract(), false);

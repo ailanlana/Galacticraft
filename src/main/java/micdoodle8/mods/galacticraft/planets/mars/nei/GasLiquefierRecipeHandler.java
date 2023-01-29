@@ -1,30 +1,37 @@
 package micdoodle8.mods.galacticraft.planets.mars.nei;
 
-import codechicken.lib.gui.GuiDraw;
-import codechicken.nei.NEIServerUtils;
-import codechicken.nei.PositionedStack;
-import codechicken.nei.recipe.TemplateRecipeHandler;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
 import micdoodle8.mods.galacticraft.core.items.GCItems;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
 import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
 import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
+import codechicken.lib.gui.GuiDraw;
+import codechicken.nei.NEIServerUtils;
+import codechicken.nei.PositionedStack;
+import codechicken.nei.recipe.TemplateRecipeHandler;
+
 public class GasLiquefierRecipeHandler extends TemplateRecipeHandler {
-    private static final ResourceLocation liquefierGuiTexture =
-            new ResourceLocation(MarsModule.ASSET_PREFIX, "textures/gui/gasLiquefier.png");
-    private static final ResourceLocation liquefierGasesTexture =
-            new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "textures/gui/gasesMethaneOxygenNitrogen.png");
+
+    private static final ResourceLocation liquefierGuiTexture = new ResourceLocation(
+            MarsModule.ASSET_PREFIX,
+            "textures/gui/gasLiquefier.png");
+    private static final ResourceLocation liquefierGasesTexture = new ResourceLocation(
+            AsteroidsModule.ASSET_PREFIX,
+            "textures/gui/gasesMethaneOxygenNitrogen.png");
     int ticksPassed;
     int extra = 0;
     int inputGas = 0; // 0 is methane 1 is oxygen 2 is atmosphere or nitrogen
@@ -93,12 +100,11 @@ public class GasLiquefierRecipeHandler extends TemplateRecipeHandler {
         }
 
         if (this.fillAtmos) {
-            final String gasname = this.outputGas == 3
-                    ? GCCoreUtil.translate("gas.oxygen.name")
+            final String gasname = this.outputGas == 3 ? GCCoreUtil.translate("gas.oxygen.name")
                     : GCCoreUtil.translate("gas.nitrogen.name");
             final String text1 = " * " + GCCoreUtil.translate("gui.message.withAtmosphere0.name");
-            final String text2 =
-                    GCCoreUtil.lowerCaseNoun(gasname) + " " + GCCoreUtil.translate("gui.message.withAtmosphere1.name");
+            final String text2 = GCCoreUtil.lowerCaseNoun(gasname) + " "
+                    + GCCoreUtil.translate("gui.message.withAtmosphere1.name");
             this.fontRendererObj.drawString(text1, 4, 83, 4210752);
             this.fontRendererObj.drawString(text2, 4, 93, 4210752);
         }
@@ -184,13 +190,16 @@ public class GasLiquefierRecipeHandler extends TemplateRecipeHandler {
 
         if (this.ticksPassed % 144 < 104) {
             return new PositionedStack(
-                    new ItemStack(outputItem, 1, outputItem.getMaxDamage()), output.relx, output.rely);
+                    new ItemStack(outputItem, 1, outputItem.getMaxDamage()),
+                    output.relx,
+                    output.rely);
         } else {
             return this.arecipes.get(recipe).getResult();
         }
     }
 
     public class CachedLiquefierRecipe extends TemplateRecipeHandler.CachedRecipe {
+
         public PositionedStack input;
         public PositionedStack output;
 

@@ -2,6 +2,7 @@ package micdoodle8.mods.galacticraft.core.blocks;
 
 import java.util.List;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical;
 import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
@@ -10,6 +11,7 @@ import micdoodle8.mods.galacticraft.core.tile.TileEntityCoalGenerator;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityElectricIngotCompressor;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenStorageModule;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -26,6 +28,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockMachine2 extends BlockTileGC implements ItemBlockDesc.IBlockShiftDesc {
+
     public static final int ELECTRIC_COMPRESSOR_METADATA = 0;
     public static final int CIRCUIT_FABRICATOR_METADATA = 4;
     public static final int OXYGEN_STORAGE_MODULE_METADATA = 8;
@@ -60,14 +63,14 @@ public class BlockMachine2 extends BlockTileGC implements ItemBlockDesc.IBlockSh
         this.iconOxygenOutput = iconRegister.registerIcon(GalacticraftCore.TEXTURE_PREFIX + "machine_oxygen_output");
 
         this.iconMachineSide = iconRegister.registerIcon(GalacticraftCore.TEXTURE_PREFIX + "machine_side");
-        this.iconElectricCompressor =
-                iconRegister.registerIcon(GalacticraftCore.TEXTURE_PREFIX + "electric_compressor");
+        this.iconElectricCompressor = iconRegister
+                .registerIcon(GalacticraftCore.TEXTURE_PREFIX + "electric_compressor");
         this.iconCircuitFabricator = iconRegister.registerIcon(GalacticraftCore.TEXTURE_PREFIX + "circuit_fabricator");
         this.iconOxygenStorageModule = new IIcon[17];
 
         for (int i = 0; i < this.iconOxygenStorageModule.length; i++) {
-            this.iconOxygenStorageModule[i] =
-                    iconRegister.registerIcon(GalacticraftCore.TEXTURE_PREFIX + "oxygenStorageModule_" + i);
+            this.iconOxygenStorageModule[i] = iconRegister
+                    .registerIcon(GalacticraftCore.TEXTURE_PREFIX + "oxygenStorageModule_" + i);
         }
     }
 
@@ -123,8 +126,7 @@ public class BlockMachine2 extends BlockTileGC implements ItemBlockDesc.IBlockSh
                 return this.iconOxygenInput;
             }
             // If it is the back side
-            else if (side
-                    == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) {
+            else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) {
                 return this.iconOxygenOutput;
             }
 
@@ -158,8 +160,7 @@ public class BlockMachine2 extends BlockTileGC implements ItemBlockDesc.IBlockSh
                 return this.iconOxygenInput;
             }
             // If it is the back side
-            else if (side
-                    == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) {
+            else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) {
                 return this.iconOxygenOutput;
             }
 
@@ -167,8 +168,7 @@ public class BlockMachine2 extends BlockTileGC implements ItemBlockDesc.IBlockSh
         } else if (metadata >= BlockMachine2.CIRCUIT_FABRICATOR_METADATA) {
             metadata -= BlockMachine2.CIRCUIT_FABRICATOR_METADATA;
 
-            if (metadata == 0 && side == 4
-                    || metadata == 1 && side == 5
+            if (metadata == 0 && side == 4 || metadata == 1 && side == 5
                     || metadata == 2 && side == 3
                     || metadata == 3 && side == 2) {
                 return this.iconCircuitFabricator;
@@ -180,8 +180,7 @@ public class BlockMachine2 extends BlockTileGC implements ItemBlockDesc.IBlockSh
         } else if (metadata >= BlockMachine2.ELECTRIC_COMPRESSOR_METADATA) {
             metadata -= BlockMachine2.ELECTRIC_COMPRESSOR_METADATA;
 
-            if (metadata == 0 && side == 4
-                    || metadata == 1 && side == 5
+            if (metadata == 0 && side == 4 || metadata == 1 && side == 5
                     || metadata == 2 && side == 3
                     || metadata == 3 && side == 2) {
                 return this.iconElectricCompressor;
@@ -230,16 +229,8 @@ public class BlockMachine2 extends BlockTileGC implements ItemBlockDesc.IBlockSh
     }
 
     @Override
-    public boolean onUseWrench(
-            World par1World,
-            int x,
-            int y,
-            int z,
-            EntityPlayer par5EntityPlayer,
-            int side,
-            float hitX,
-            float hitY,
-            float hitZ) {
+    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ) {
         final int metadata = par1World.getBlockMetadata(x, y, z);
         int original = metadata;
 
@@ -290,16 +281,8 @@ public class BlockMachine2 extends BlockTileGC implements ItemBlockDesc.IBlockSh
      * Called when the block is right clicked by the player
      */
     @Override
-    public boolean onMachineActivated(
-            World par1World,
-            int x,
-            int y,
-            int z,
-            EntityPlayer par5EntityPlayer,
-            int side,
-            float hitX,
-            float hitY,
-            float hitZ) {
+    public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ) {
         if (!par1World.isRemote) {
             par5EntityPlayer.openGui(GalacticraftCore.instance, -1, par1World, x, y, z);
             return true;
@@ -333,7 +316,7 @@ public class BlockMachine2 extends BlockTileGC implements ItemBlockDesc.IBlockSh
         return new ItemStack(this, 1, BlockMachine2.OXYGEN_STORAGE_MODULE_METADATA);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
         par3List.add(this.getElectricCompressor());

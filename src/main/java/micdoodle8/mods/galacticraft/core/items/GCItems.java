@@ -1,10 +1,11 @@
 package micdoodle8.mods.galacticraft.core.items;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import java.util.ArrayList;
+
 import micdoodle8.mods.galacticraft.core.Constants;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
@@ -12,7 +13,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.oredict.OreDictionary;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+
 public class GCItems {
+
     public static Item oxTankLight;
     public static Item oxTankMedium;
     public static Item oxTankHeavy;
@@ -64,9 +68,9 @@ public class GCItems {
     public static Item bucketFuel;
     // public static Item cheeseBlock;
 
-    public static ArmorMaterial ARMOR_SENSOR_GLASSES =
-            EnumHelper.addArmorMaterial("SENSORGLASSES", 200, new int[] {0, 0, 0, 0}, 0);
-    public static ArmorMaterial ARMOR_STEEL = EnumHelper.addArmorMaterial("steel", 30, new int[] {3, 8, 6, 3}, 12);
+    public static ArmorMaterial ARMOR_SENSOR_GLASSES = EnumHelper
+            .addArmorMaterial("SENSORGLASSES", 200, new int[] { 0, 0, 0, 0 }, 0);
+    public static ArmorMaterial ARMOR_STEEL = EnumHelper.addArmorMaterial("steel", 30, new int[] { 3, 8, 6, 3 }, 12);
     public static ToolMaterial TOOL_STEEL = EnumHelper.addToolMaterial("steel", 3, 768, 5.0F, 2, 8);
 
     public static ArrayList<Item> hiddenItems = new ArrayList<>();
@@ -206,7 +210,9 @@ public class GCItems {
         GCCoreUtil.registerGalacticraftItem("fuelCanisterFull", GCItems.fuelCanister, 1);
         GCCoreUtil.registerGalacticraftItem("oilCanisterFull", GCItems.oilCanister, 1);
         GCCoreUtil.registerGalacticraftItem(
-                "liquidCanisterEmpty", GCItems.oilCanister, GCItems.oilCanister.getMaxDamage());
+                "liquidCanisterEmpty",
+                GCItems.oilCanister,
+                GCItems.oilCanister.getMaxDamage());
         GCCoreUtil.registerGalacticraftItem("steelPole", GCItems.flagPole);
         GCCoreUtil.registerGalacticraftItem("oilExtractor", GCItems.oilExtractor);
         GCCoreUtil.registerGalacticraftItem("schematicMoonBuggy", GCItems.schematic, 0);
@@ -246,8 +252,7 @@ public class GCItems {
         GCItems.registerItems();
 
         for (int i = 0; i < ItemBasic.names.length; i++) {
-            if (ItemBasic.names[i].contains("ingot")
-                    || ItemBasic.names[i].contains("compressed")
+            if (ItemBasic.names[i].contains("ingot") || ItemBasic.names[i].contains("compressed")
                     || ItemBasic.names[i].contains("wafer")) {
                 OreDictionary.registerOre(ItemBasic.names[i], new ItemStack(GCItems.basicItem, 1, i));
             }

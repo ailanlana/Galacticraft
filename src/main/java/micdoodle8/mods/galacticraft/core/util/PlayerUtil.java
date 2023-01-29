@@ -1,20 +1,24 @@
 package micdoodle8.mods.galacticraft.core.util;
 
-import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
+import com.mojang.authlib.GameProfile;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class PlayerUtil {
+
     public static HashMap<String, GameProfile> knownSkins = new HashMap();
 
     public static EntityPlayerMP getPlayerForUsernameVanilla(MinecraftServer server, String username) {
@@ -28,8 +32,7 @@ public class PlayerUtil {
             if (ignoreCase) {
                 return getPlayerForUsernameVanilla(server, username);
             } else {
-                final Iterator iterator =
-                        server.getConfigurationManager().playerEntityList.iterator();
+                final Iterator iterator = server.getConfigurationManager().playerEntityList.iterator();
                 EntityPlayerMP entityplayermp;
 
                 do {
@@ -66,8 +69,9 @@ public class PlayerUtil {
         final EntityClientPlayerMP clientPlayer = FMLClientHandler.instance().getClientPlayerEntity();
 
         if (clientPlayer == null && player != null) {
-            GCLog.severe("Warning: Could not find player base client instance for player "
-                    + player.getGameProfile().getName());
+            GCLog.severe(
+                    "Warning: Could not find player base client instance for player "
+                            + player.getGameProfile().getName());
         }
 
         return clientPlayer;
@@ -120,9 +124,6 @@ public class PlayerUtil {
     }
 
     public static boolean isPlayerOnline(EntityPlayerMP player) {
-        return MinecraftServer.getServer()
-                .getConfigurationManager()
-                .playerEntityList
-                .contains(player);
+        return MinecraftServer.getServer().getConfigurationManager().playerEntityList.contains(player);
     }
 }

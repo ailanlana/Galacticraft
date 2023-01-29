@@ -1,13 +1,9 @@
 package micdoodle8.mods.galacticraft.planets.mars.network;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
 import micdoodle8.mods.galacticraft.core.event.EventWakePlayer;
 import micdoodle8.mods.galacticraft.core.network.IPacket;
 import micdoodle8.mods.galacticraft.core.network.NetworkUtil;
@@ -20,6 +16,7 @@ import micdoodle8.mods.galacticraft.planets.mars.entities.EntitySlimeling;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityCryogenicChamber;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityLaunchController;
 import micdoodle8.mods.galacticraft.planets.mars.util.MarsUtil;
+
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,8 +25,16 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.common.MinecraftForge;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+
 public class PacketSimpleMars implements IPacket {
+
     public enum EnumSimplePacketMars {
+
         // SERVER
         S_UPDATE_SLIMELING_DATA(Side.SERVER, Integer.class, Integer.class, String.class),
         S_WAKE_PLAYER(Side.SERVER),
@@ -110,8 +115,7 @@ public class PacketSimpleMars implements IPacket {
                         entity = player.worldObj.getEntityByID(entityID);
 
                         if (entity != null && entity instanceof EntitySlimeling) {
-                            FMLClientHandler.instance()
-                                    .getClient()
+                            FMLClientHandler.instance().getClient()
                                     .displayGuiScreen(new GuiSlimelingInventory(player, (EntitySlimeling) entity));
                         }
 
@@ -122,8 +126,7 @@ public class PacketSimpleMars implements IPacket {
                         entity = player.worldObj.getEntityByID(entityID);
 
                         if (entity != null && entity instanceof EntityCargoRocket) {
-                            FMLClientHandler.instance()
-                                    .getClient()
+                            FMLClientHandler.instance().getClient()
                                     .displayGuiScreen(new GuiCargoRocket(player.inventory, (EntityCargoRocket) entity));
                         }
 
@@ -132,12 +135,16 @@ public class PacketSimpleMars implements IPacket {
                 }
             case C_BEGIN_CRYOGENIC_SLEEP:
                 final TileEntity tile = player.worldObj.getTileEntity(
-                        (Integer) this.data.get(0), (Integer) this.data.get(1), (Integer) this.data.get(2));
+                        (Integer) this.data.get(0),
+                        (Integer) this.data.get(1),
+                        (Integer) this.data.get(2));
 
                 if (tile instanceof TileEntityCryogenicChamber) {
-                    ((TileEntityCryogenicChamber) tile)
-                            .sleepInBedAt(player, (Integer) this.data.get(0), (Integer) this.data.get(1), (Integer)
-                                    this.data.get(2));
+                    ((TileEntityCryogenicChamber) tile).sleepInBedAt(
+                            player,
+                            (Integer) this.data.get(0),
+                            (Integer) this.data.get(1),
+                            (Integer) this.data.get(2));
                 }
             default:
                 break;
@@ -178,8 +185,7 @@ public class PacketSimpleMars implements IPacket {
                             }
                             break;
                         case 3:
-                            if (!slimeling.isInLove()
-                                    && player == slimeling.getOwner()
+                            if (!slimeling.isInLove() && player == slimeling.getOwner()
                                     && !slimeling.worldObj.isRemote) {
                                 slimeling.func_146082_f(playerBase);
                             }
@@ -206,15 +212,24 @@ public class PacketSimpleMars implements IPacket {
                 final ChunkCoordinates c = playerBase.playerLocation;
 
                 if (c != null) {
-                    final EventWakePlayer event =
-                            new EventWakePlayer(playerBase, c.posX, c.posY, c.posZ, true, true, false, true);
+                    final EventWakePlayer event = new EventWakePlayer(
+                            playerBase,
+                            c.posX,
+                            c.posY,
+                            c.posZ,
+                            true,
+                            true,
+                            false,
+                            true);
                     MinecraftForge.EVENT_BUS.post(event);
                     playerBase.wakeUpPlayer(true, true, false);
                 }
                 break;
             case S_UPDATE_ADVANCED_GUI:
                 final TileEntity tile = player.worldObj.getTileEntity(
-                        (Integer) this.data.get(1), (Integer) this.data.get(2), (Integer) this.data.get(3));
+                        (Integer) this.data.get(1),
+                        (Integer) this.data.get(2),
+                        (Integer) this.data.get(3));
 
                 switch ((Integer) this.data.get(0)) {
                     case 0:

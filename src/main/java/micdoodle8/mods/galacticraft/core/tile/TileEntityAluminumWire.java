@@ -1,9 +1,11 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
 import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalConductor;
+
 import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEntityAluminumWire extends TileBaseUniversalConductor {
+
     public int tier;
 
     public TileEntityAluminumWire() {

@@ -1,15 +1,15 @@
 package micdoodle8.mods.galacticraft.api.prefab.world.gen;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.api.world.IAtmosphericGas;
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.MathHelper;
@@ -21,7 +21,11 @@ import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public abstract class WorldProviderSpace extends WorldProvider implements IGalacticraftWorldProvider {
+
     long timeCurrentOffset = 0L;
     long preTickTime = Long.MIN_VALUE;
     private long saveTCO = 0L;
@@ -29,8 +33,8 @@ public abstract class WorldProviderSpace extends WorldProvider implements IGalac
 
     static {
         try {
-            tickCounter = VillageCollection.class.getDeclaredField(
-                    GCCoreUtil.isDeobfuscated() ? "tickCounter" : "field_75553_e");
+            tickCounter = VillageCollection.class
+                    .getDeclaredField(GCCoreUtil.isDeobfuscated() ? "tickCounter" : "field_75553_e");
         } catch (final Exception e) {
             e.printStackTrace();
         }
@@ -52,8 +56,7 @@ public abstract class WorldProviderSpace extends WorldProvider implements IGalac
     public abstract boolean canRainOrSnow();
 
     /**
-     * Whether or not to render vanilla sunset (can be overridden with custom sky
-     * provider)
+     * Whether or not to render vanilla sunset (can be overridden with custom sky provider)
      */
     public abstract boolean hasSunset();
 
@@ -101,8 +104,7 @@ public abstract class WorldProviderSpace extends WorldProvider implements IGalac
                     if (savedTick < 0) {
                         savedTick = 0;
                     }
-                } catch (final Exception ignore) {
-                }
+                } catch (final Exception ignore) {}
                 this.timeCurrentOffset = savedTick - newTime;
             } else {
                 // Detect jumps in world time (e.g. because of bed use on Overworld) and reverse
@@ -204,9 +206,8 @@ public abstract class WorldProviderSpace extends WorldProvider implements IGalac
     /**
      * Do not override this.
      * <p>
-     * Returns true on clients (to allow rendering of sky etc, maybe even clouds).
-     * Returns false on servers (to disable Nether Portal mob spawning and sleeping
-     * in beds).
+     * Returns true on clients (to allow rendering of sky etc, maybe even clouds). Returns false on servers (to disable
+     * Nether Portal mob spawning and sleeping in beds).
      */
     @Override
     public boolean isSurfaceWorld() {
@@ -214,14 +215,12 @@ public abstract class WorldProviderSpace extends WorldProvider implements IGalac
     }
 
     /**
-     * This must normally return false, so that if the dimension is set for 'static'
-     * loading it will not keep chunks around the dimension spawn position
-     * permanently loaded. It is also needed to be false so that the 'Force
-     * Overworld Respawn' setting in core.conf will work correctly - see also
-     * WorldProviderS[ace.getRespawnDimension().
+     * This must normally return false, so that if the dimension is set for 'static' loading it will not keep chunks
+     * around the dimension spawn position permanently loaded. It is also needed to be false so that the 'Force
+     * Overworld Respawn' setting in core.conf will work correctly - see also WorldProviderS[ace.getRespawnDimension().
      * <p>
-     * But: returning 'false' will cause beds to explode in this dimension. If you
-     * want beds NOT to explode, you can override this, like in WorldProviderMoon.
+     * But: returning 'false' will cause beds to explode in this dimension. If you want beds NOT to explode, you can
+     * override this, like in WorldProviderMoon.
      */
     @Override
     public boolean canRespawnHere() {
@@ -231,9 +230,8 @@ public abstract class WorldProviderSpace extends WorldProvider implements IGalac
     /**
      * Do NOT override this in your add-ons.
      * <p>
-     * This controls whether the player will respawn in the space dimension or the
-     * Overworld in accordance with the 'Force Overworld Respawn' setting on
-     * core.conf.
+     * This controls whether the player will respawn in the space dimension or the Overworld in accordance with the
+     * 'Force Overworld Respawn' setting on core.conf.
      */
     @Override
     public int getRespawnDimension(EntityPlayerMP player) {
@@ -243,9 +241,8 @@ public abstract class WorldProviderSpace extends WorldProvider implements IGalac
     /**
      * If true, the the player should respawn in this dimension upon death.
      * <p>
-     * Obeying the 'Force Overworld Respawn' setting from core.conf is an important
-     * protection for players are endlessly dying in a space dimension: for example
-     * respawning in an airless environment with no oxygen tanks and no oxygen
+     * Obeying the 'Force Overworld Respawn' setting from core.conf is an important protection for players are endlessly
+     * dying in a space dimension: for example respawning in an airless environment with no oxygen tanks and no oxygen
      * machinery.
      */
     public boolean shouldForceRespawn() {
@@ -258,9 +255,8 @@ public abstract class WorldProviderSpace extends WorldProvider implements IGalac
     }
 
     /**
-     * If false (the default) then Nether Portals will have no function on this
-     * world. Nether Portals can still be constructed, if the player can make fire,
-     * they just won't do anything.
+     * If false (the default) then Nether Portals will have no function on this world. Nether Portals can still be
+     * constructed, if the player can make fire, they just won't do anything.
      *
      * @return True if Nether Portals should work like on the Overworld.
      */
@@ -276,7 +272,8 @@ public abstract class WorldProviderSpace extends WorldProvider implements IGalac
 
             final Constructor<?>[] constructors = chunkProviderClass.getConstructors();
             for (final Constructor<?> constr : constructors) {
-                if (Arrays.equals(constr.getParameterTypes(), new Object[] {World.class, long.class, boolean.class})) {
+                if (Arrays
+                        .equals(constr.getParameterTypes(), new Object[] { World.class, long.class, boolean.class })) {
                     return (IChunkProvider) constr.newInstance(
                             this.worldObj,
                             this.worldObj.getSeed(),
@@ -302,7 +299,7 @@ public abstract class WorldProviderSpace extends WorldProvider implements IGalac
 
                 final Constructor<?>[] constructors = chunkManagerClass.getConstructors();
                 for (final Constructor<?> constr : constructors) {
-                    if (Arrays.equals(constr.getParameterTypes(), new Object[] {World.class})) {
+                    if (Arrays.equals(constr.getParameterTypes(), new Object[] { World.class })) {
                         this.worldChunkMgr = (WorldChunkManager) constr.newInstance(this.worldObj);
                     } else if (constr.getParameterTypes().length == 0) {
                         this.worldChunkMgr = (WorldChunkManager) constr.newInstance();
@@ -360,9 +357,8 @@ public abstract class WorldProviderSpace extends WorldProvider implements IGalac
     }
 
     /**
-     * Adjust time offset on Galacticraft worlds when the Overworld time jumps and
-     * you don't want the time on all the other Galacticraft worlds to jump also -
-     * see WorldUtil.setNextMorning() for example
+     * Adjust time offset on Galacticraft worlds when the Overworld time jumps and you don't want the time on all the
+     * other Galacticraft worlds to jump also - see WorldUtil.setNextMorning() for example
      */
     public void adjustTimeOffset(long diff) {
         this.timeCurrentOffset -= diff;
@@ -373,8 +369,7 @@ public abstract class WorldProviderSpace extends WorldProvider implements IGalac
     }
 
     /**
-     * Save this world's custom time (from timeCurrentOffset) into this world's
-     * villages.dat :)
+     * Save this world's custom time (from timeCurrentOffset) into this world's villages.dat :)
      */
     private void saveTime() {
         try {
@@ -382,7 +377,6 @@ public abstract class WorldProviderSpace extends WorldProvider implements IGalac
             tickCounter.setAccessible(true);
             tickCounter.setInt(vc, (int) this.getWorldTime());
             vc.markDirty();
-        } catch (final Exception ignore) {
-        }
+        } catch (final Exception ignore) {}
     }
 }

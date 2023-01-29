@@ -4,6 +4,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 public class RocketFuel {
+
     private final int fluidId;
     private final int maxTier;
 

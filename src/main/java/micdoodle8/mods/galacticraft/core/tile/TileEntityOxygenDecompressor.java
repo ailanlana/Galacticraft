@@ -1,10 +1,12 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
 import java.util.EnumSet;
+
 import micdoodle8.mods.galacticraft.core.blocks.BlockOxygenCompressor;
 import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
 import micdoodle8.mods.galacticraft.core.items.ItemOxygenTank;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -14,6 +16,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityOxygenDecompressor extends TileEntityOxygen implements IInventory, ISidedInventory {
+
     private ItemStack[] containingItems = new ItemStack[2];
 
     public static final int OUTPUT_PER_TICK = 100;
@@ -157,7 +160,7 @@ public class TileEntityOxygenDecompressor extends TileEntityOxygen implements II
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        return new int[] {0, 1};
+        return new int[] { 0, 1 };
     }
 
     @Override
@@ -214,8 +217,8 @@ public class TileEntityOxygenDecompressor extends TileEntityOxygen implements II
 
     @Override
     public ForgeDirection getElectricInputDirection() {
-        return ForgeDirection.getOrientation(
-                this.getBlockMetadata() - BlockOxygenCompressor.OXYGEN_DECOMPRESSOR_METADATA + 2);
+        return ForgeDirection
+                .getOrientation(this.getBlockMetadata() - BlockOxygenCompressor.OXYGEN_DECOMPRESSOR_METADATA + 2);
     }
 
     @Override

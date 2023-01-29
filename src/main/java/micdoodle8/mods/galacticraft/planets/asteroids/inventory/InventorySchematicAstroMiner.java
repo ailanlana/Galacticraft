@@ -6,6 +6,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
 public class InventorySchematicAstroMiner implements IInventory {
+
     private final ItemStack[] stackList;
     private final Container eventHandler;
 

@@ -1,11 +1,12 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.client;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import java.util.Random;
+
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GLAllocation;
@@ -14,14 +15,20 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IRenderHandler;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class SkyProviderAsteroids extends IRenderHandler {
-    private static final ResourceLocation overworldTexture =
-            new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "textures/gui/celestialbodies/earth.png");
-    private static final ResourceLocation galaxyTexture =
-            new ResourceLocation(MarsModule.ASSET_PREFIX, "textures/gui/planets/galaxy.png");
+
+    private static final ResourceLocation overworldTexture = new ResourceLocation(
+            GalacticraftCore.ASSET_PREFIX,
+            "textures/gui/celestialbodies/earth.png");
+    private static final ResourceLocation galaxyTexture = new ResourceLocation(
+            MarsModule.ASSET_PREFIX,
+            "textures/gui/planets/galaxy.png");
     private static final ResourceLocation sunTexture = new ResourceLocation("textures/environment/sun.png");
 
     public int starGLCallList = GLAllocation.generateDisplayLists(3);

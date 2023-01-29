@@ -1,6 +1,7 @@
 package micdoodle8.mods.galacticraft.api.vector;
 
 import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,6 +13,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.lwjgl.util.vector.Vector3f;
@@ -380,7 +382,12 @@ public class Vector3 implements Cloneable {
         return worldObj.getEntitiesWithinAABB(
                 par1Class,
                 AxisAlignedBB.getBoundingBox(
-                        this.intX(), this.intY(), this.intZ(), this.intX() + 1, this.intY() + 1, this.intZ() + 1));
+                        this.intX(),
+                        this.intY(),
+                        this.intZ(),
+                        this.intX() + 1,
+                        this.intY() + 1,
+                        this.intZ() + 1));
     }
 
     /**
@@ -483,8 +490,9 @@ public class Vector3 implements Cloneable {
     public static Vector3 translateMatrix(double[] matrix, Vector3 translation) {
         final double x = translation.x * matrix[0] + translation.y * matrix[1] + translation.z * matrix[2] + matrix[3];
         final double y = translation.x * matrix[4] + translation.y * matrix[5] + translation.z * matrix[6] + matrix[7];
-        final double z =
-                translation.x * matrix[8] + translation.y * matrix[9] + translation.z * matrix[10] + matrix[11];
+        final double z = translation.x * matrix[8] + translation.y * matrix[9]
+                + translation.z * matrix[10]
+                + matrix[11];
         translation.x = x;
         translation.y = y;
         translation.z = z;
@@ -508,21 +516,16 @@ public class Vector3 implements Cloneable {
         final double z = this.z;
 
         this.x = x * Math.cos(yawRadians) * Math.cos(pitchRadians)
-                + z
-                        * (Math.cos(yawRadians) * Math.sin(pitchRadians) * Math.sin(rollRadians)
-                                - Math.sin(yawRadians) * Math.cos(rollRadians))
-                + y
-                        * (Math.cos(yawRadians) * Math.sin(pitchRadians) * Math.cos(rollRadians)
-                                + Math.sin(yawRadians) * Math.sin(rollRadians));
+                + z * (Math.cos(yawRadians) * Math.sin(pitchRadians) * Math.sin(rollRadians)
+                        - Math.sin(yawRadians) * Math.cos(rollRadians))
+                + y * (Math.cos(yawRadians) * Math.sin(pitchRadians) * Math.cos(rollRadians)
+                        + Math.sin(yawRadians) * Math.sin(rollRadians));
         this.z = x * Math.sin(yawRadians) * Math.cos(pitchRadians)
-                + z
-                        * (Math.sin(yawRadians) * Math.sin(pitchRadians) * Math.sin(rollRadians)
-                                + Math.cos(yawRadians) * Math.cos(rollRadians))
-                + y
-                        * (Math.sin(yawRadians) * Math.sin(pitchRadians) * Math.cos(rollRadians)
-                                - Math.cos(yawRadians) * Math.sin(rollRadians));
-        this.y = -x * Math.sin(pitchRadians)
-                + z * Math.cos(pitchRadians) * Math.sin(rollRadians)
+                + z * (Math.sin(yawRadians) * Math.sin(pitchRadians) * Math.sin(rollRadians)
+                        + Math.cos(yawRadians) * Math.cos(rollRadians))
+                + y * (Math.sin(yawRadians) * Math.sin(pitchRadians) * Math.cos(rollRadians)
+                        - Math.cos(yawRadians) * Math.sin(rollRadians));
+        this.y = -x * Math.sin(pitchRadians) + z * Math.cos(pitchRadians) * Math.sin(rollRadians)
                 + y * Math.cos(pitchRadians) * Math.cos(rollRadians);
     }
 
@@ -546,9 +549,8 @@ public class Vector3 implements Cloneable {
     }
 
     /**
-     * Gets the delta look position based on the rotation yaw and pitch. Minecraft
-     * coordinates are messed up. Y and Z are flipped. Yaw is displaced by 90
-     * degrees. Pitch is inversed.
+     * Gets the delta look position based on the rotation yaw and pitch. Minecraft coordinates are messed up. Y and Z
+     * are flipped. Yaw is displaced by 90 degrees. Pitch is inversed.
      *
      * @param rotationYaw
      * @param rotationPitch
@@ -624,13 +626,13 @@ public class Vector3 implements Cloneable {
     }
 
     @Deprecated
-    public MovingObjectPosition rayTraceEntities(
-            World world, float rotationYaw, float rotationPitch, boolean collisionFlag, double reachDistance) {
+    public MovingObjectPosition rayTraceEntities(World world, float rotationYaw, float rotationPitch,
+            boolean collisionFlag, double reachDistance) {
         return this.rayTraceEntities(world, rotationYaw, rotationPitch, reachDistance);
     }
 
-    public MovingObjectPosition rayTraceEntities(
-            World world, float rotationYaw, float rotationPitch, double reachDistance) {
+    public MovingObjectPosition rayTraceEntities(World world, float rotationYaw, float rotationPitch,
+            double reachDistance) {
         return this.rayTraceEntities(
                 world,
                 Vector3.getDeltaPositionFromRotation(rotationYaw, rotationPitch).scale(reachDistance));
@@ -640,8 +642,7 @@ public class Vector3 implements Cloneable {
      * Does an entity raytrace.
      *
      * @param world  - The world object.
-     * @param target - The rotation in terms of Vector3. Convert using
-     *               getDeltaPositionFromRotation()
+     * @param target - The rotation in terms of Vector3. Convert using getDeltaPositionFromRotation()
      * @return The target hit.
      */
     public MovingObjectPosition rayTraceEntities(World world, Vector3 target) {
@@ -655,8 +656,8 @@ public class Vector3 implements Cloneable {
                 startingPosition.zCoord + look.zCoord * reachDistance);
 
         final double checkBorder = 1.1 * reachDistance;
-        final AxisAlignedBB boxToScan = AxisAlignedBB.getBoundingBox(
-                        -checkBorder, -checkBorder, -checkBorder, checkBorder, checkBorder, checkBorder)
+        final AxisAlignedBB boxToScan = AxisAlignedBB
+                .getBoundingBox(-checkBorder, -checkBorder, -checkBorder, checkBorder, checkBorder, checkBorder)
                 .offset(this.x, this.y, this.z);
 
         @SuppressWarnings("unchecked")
@@ -698,21 +699,14 @@ public class Vector3 implements Cloneable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(this.x)
-                .append(this.y)
-                .append(this.z)
-                .hashCode();
+        return new HashCodeBuilder().append(this.x).append(this.y).append(this.z).hashCode();
     }
 
     @Override
     public boolean equals(Object o) {
         if (o instanceof Vector3) {
             final Vector3 vector3 = (Vector3) o;
-            return new EqualsBuilder()
-                    .append(this.x, vector3.x)
-                    .append(this.y, vector3.y)
-                    .append(this.z, vector3.z)
+            return new EqualsBuilder().append(this.x, vector3.x).append(this.y, vector3.y).append(this.z, vector3.z)
                     .isEquals();
         }
 

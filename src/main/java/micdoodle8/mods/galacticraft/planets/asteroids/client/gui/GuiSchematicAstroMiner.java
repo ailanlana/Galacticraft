@@ -7,16 +7,20 @@ import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
 import micdoodle8.mods.galacticraft.planets.asteroids.inventory.ContainerSchematicAstroMiner;
 import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
 public class GuiSchematicAstroMiner extends GuiContainer implements ISchematicResultPage {
-    public static final ResourceLocation schematicTexture =
-            new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "textures/gui/schematic_rocket_GS1_Miner.png");
+
+    public static final ResourceLocation schematicTexture = new ResourceLocation(
+            AsteroidsModule.ASSET_PREFIX,
+            "textures/gui/schematic_rocket_GS1_Miner.png");
 
     private int pageIndex;
 
@@ -30,20 +34,22 @@ public class GuiSchematicAstroMiner extends GuiContainer implements ISchematicRe
     public void initGui() {
         super.initGui();
         this.buttonList.clear();
-        this.buttonList.add(new GuiButton(
-                0,
-                this.width / 2 - 130,
-                this.height / 2 - 30 + 27 - 12,
-                40,
-                20,
-                GCCoreUtil.translate("gui.button.back.name")));
-        this.buttonList.add(new GuiButton(
-                1,
-                this.width / 2 - 130,
-                this.height / 2 - 30 + 27 + 12,
-                40,
-                20,
-                GCCoreUtil.translate("gui.button.next.name")));
+        this.buttonList.add(
+                new GuiButton(
+                        0,
+                        this.width / 2 - 130,
+                        this.height / 2 - 30 + 27 - 12,
+                        40,
+                        20,
+                        GCCoreUtil.translate("gui.button.back.name")));
+        this.buttonList.add(
+                new GuiButton(
+                        1,
+                        this.width / 2 - 130,
+                        this.height / 2 - 30 + 27 + 12,
+                        40,
+                        20,
+                        GCCoreUtil.translate("gui.button.next.name")));
     }
 
     @Override
@@ -63,14 +69,13 @@ public class GuiSchematicAstroMiner extends GuiContainer implements ISchematicRe
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         this.fontRendererObj.drawString(
-                EnumColor.WHITE
-                        + AsteroidsItems.astroMiner.getItemStackDisplayName(
-                                new ItemStack(AsteroidsItems.astroMiner, 1, 0)),
+                EnumColor.WHITE + AsteroidsItems.astroMiner
+                        .getItemStackDisplayName(new ItemStack(AsteroidsItems.astroMiner, 1, 0)),
                 7,
                 7,
                 0x404040);
-        this.fontRendererObj.drawString(
-                EnumColor.WHITE + GCCoreUtil.translate("container.inventory"), 14, 110, 0x404040);
+        this.fontRendererObj
+                .drawString(EnumColor.WHITE + GCCoreUtil.translate("container.inventory"), 14, 110, 0x404040);
     }
 
     @Override

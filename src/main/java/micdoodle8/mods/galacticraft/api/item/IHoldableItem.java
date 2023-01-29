@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
  * Implement into an item class to allow player to hold it above their head
  */
 public interface IHoldableItem {
+
     /**
      * Self-explanatory.
      * <p/>
