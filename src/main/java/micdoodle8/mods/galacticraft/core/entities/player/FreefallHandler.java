@@ -7,8 +7,6 @@ import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 import micdoodle8.mods.galacticraft.core.dimension.SpinManager;
 import micdoodle8.mods.galacticraft.core.dimension.WorldProviderSpaceStation;
 import micdoodle8.mods.galacticraft.core.entities.EntityLanderBase;
-import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
-import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -167,27 +165,6 @@ public class FreefallHandler {
             }
         }
 
-        /*
-         * if (freefall) { //If that check didn't produce a result, see if the player is inside the walls //TODO: could
-         * apply special weightless movement here like Coriolis force - the player is inside the walls, not touching
-         * them, and in a vacuum int quadrant = 0; double xd = p.posX - this.spinCentreX; double zd = p.posZ -
-         * this.spinCentreZ; if (xd<0) { if (xd<-Math.abs(zd)) { quadrant = 2; } else quadrant = (zd<0) ? 3 : 1; } else
-         * if (xd>Math.abs(zd)) { quadrant = 0; } else quadrant = (zd<0) ? 3 : 1; int ymin =
-         * MathHelper.floor_double(p.boundingBox.minY)-1; int ymax = MathHelper.floor_double(p.boundingBox.maxY); int
-         * xmin, xmax, zmin, zmax; switch (quadrant) { case 0: xmin = MathHelper.floor_double(p.boundingBox.maxX); xmax
-         * = this.ssBoundsMaxX - 1; zmin = MathHelper.floor_double(p.boundingBox.minZ)-1; zmax =
-         * MathHelper.floor_double(p.boundingBox.maxZ)+1; break; case 1: xmin =
-         * MathHelper.floor_double(p.boundingBox.minX)-1; xmax = MathHelper.floor_double(p.boundingBox.maxX)+1; zmin =
-         * MathHelper.floor_double(p.boundingBox.maxZ); zmax = this.ssBoundsMaxZ - 1; break; case 2: zmin =
-         * MathHelper.floor_double(p.boundingBox.minZ)-1; zmax = MathHelper.floor_double(p.boundingBox.maxZ)+1; xmin =
-         * this.ssBoundsMinX; xmax = MathHelper.floor_double(p.boundingBox.minX); break; case 3: default: xmin =
-         * MathHelper.floor_double(p.boundingBox.minX)-1; xmax = MathHelper.floor_double(p.boundingBox.maxX)+1; zmin =
-         * this.ssBoundsMinZ; zmax = MathHelper.floor_double(p.boundingBox.minZ); break; } //This block search could
-         * cost a lot of CPU (but client side) - maybe optimise later BLOCKCHECK0: for(int x = xmin; x <= xmax; x++) for
-         * (int z = zmin; z <= zmax; z++) for (int y = ymin; y <= ymax; y++) if (Blocks.air != this.worldObj.getBlock(x,
-         * y, z)) { freefall = false; break BLOCKCHECK0; } }
-         */
-
         return true;
     }
 
@@ -198,101 +175,6 @@ public class FreefallHandler {
         pPrevMotionY = p.motionY;
         pPrevMotionZ = p.motionZ;
     }
-
-    @SideOnly(Side.CLIENT)
-    public static void freefallMotion(EntityPlayerSP p) {
-        boolean jetpackUsed = false;
-        final double dX = p.motionX - pPrevMotionX;
-        final double dY = p.motionY - pPrevMotionY;
-        final double dZ = p.motionZ - pPrevMotionZ;
-
-        final double posOffsetX = -p.motionX;
-        double posOffsetY = -p.motionY;
-        if (posOffsetY == -WorldUtil.getGravityForEntity(p)) {
-            posOffsetY = 0;
-        }
-        final double posOffsetZ = -p.motionZ;
-        // if (p.capabilities.isFlying)
-
-        /// Undo whatever vanilla tried to do to our y motion
-        if (dY < 0D && p.motionY != 0.0D) {
-            p.motionY = pPrevMotionY;
-        } else if (dY > 0.01D && GCPlayerStatsClient.get(p).inFreefallLast) {
-            // Impulse upwards - it's probably a jetpack from another mod
-            if (dX < 0.01D && dZ < 0.01D) {
-                final float pitch = p.rotationPitch / 57.29578F;
-                jetpackBoost = (float) dY * MathHelper.cos(pitch) * 0.1F;
-                final float factor = 1 + MathHelper.sin(pitch) / 5;
-                p.motionY -= dY * factor;
-                jetpackUsed = true;
-            } else {
-                p.motionY -= dY / 2;
-            }
-        }
-
-        p.motionX -= dX;
-        // p.motionY -= dY; //Enabling this will disable jetpacks
-        p.motionZ -= dZ;
-
-        if (p.movementInput.moveForward != 0) {
-            p.motionX -= p.movementInput.moveForward * MathHelper.sin(p.rotationYaw / 57.29578F)
-                    / (ConfigManagerCore.hardMode ? 600F : 200F);
-            p.motionZ += p.movementInput.moveForward * MathHelper.cos(p.rotationYaw / 57.29578F)
-                    / (ConfigManagerCore.hardMode ? 600F : 200F);
-        }
-
-        if (jetpackBoost != 0) {
-            p.motionX -= jetpackBoost * MathHelper.sin(p.rotationYaw / 57.29578F);
-            p.motionZ += jetpackBoost * MathHelper.cos(p.rotationYaw / 57.29578F);
-        }
-
-        if (p.movementInput.sneak) {
-            if (!sneakLast) {
-                // posOffsetY += 0.0268;
-                sneakLast = true;
-            }
-            p.motionY -= ConfigManagerCore.hardMode ? 0.002D : 0.0032D;
-        } else if (sneakLast) {
-            sneakLast = false;
-            // posOffsetY -= 0.0268;
-        }
-
-        if (!jetpackUsed && p.movementInput.jump) {
-            p.motionY += ConfigManagerCore.hardMode ? 0.002D : 0.0032D;
-        }
-
-        final float speedLimit = ConfigManagerCore.hardMode ? 0.9F : 0.7F;
-
-        if (p.motionX > speedLimit) {
-            p.motionX = speedLimit;
-        }
-        if (p.motionX < -speedLimit) {
-            p.motionX = -speedLimit;
-        }
-        if (p.motionY > speedLimit) {
-            p.motionY = speedLimit;
-        }
-        if (p.motionY < -speedLimit) {
-            p.motionY = -speedLimit;
-        }
-        if (p.motionZ > speedLimit) {
-            p.motionZ = speedLimit;
-        }
-        if (p.motionZ < -speedLimit) {
-            p.motionZ = -speedLimit;
-        }
-        pPrevMotionX = p.motionX;
-        pPrevMotionY = p.motionY;
-        pPrevMotionZ = p.motionZ;
-        p.moveEntity(p.motionX + posOffsetX, p.motionY + posOffsetY, p.motionZ + posOffsetZ);
-    }
-
-    /*
-     * double dyaw = p.rotationYaw - p.prevRotationYaw; p.rotationYaw -= dyaw * 0.8D; double dyawh = p.rotationYawHead -
-     * p.prevRotationYawHead; p.rotationYawHead -= dyawh * 0.8D; while (p.rotationYaw > 360F) { p.rotationYaw -= 360F; }
-     * while (p.rotationYaw < 0F) { p.rotationYaw += 360F; } while (p.rotationYawHead > 360F) { p.rotationYawHead -=
-     * 360F; } while (p.rotationYawHead < 0F) { p.rotationYawHead += 360F; }
-     */
 
     public static void updateFreefall(EntityPlayer p) {
         pPrevMotionX = p.motionX;
@@ -345,37 +227,32 @@ public class FreefallHandler {
                 doCentrifugal = spinManager.updatePlayerForSpin(p, 1F);
             }
 
-            // Do freefall motion
-            if (!p.capabilities.isCreativeMode) {
-                FreefallHandler.freefallMotion(p);
-            } else {
-                p.capabilities.isFlying = true;
-                // Half the normal acceleration in Creative mode
-                final double dx = p.motionX - FreefallHandler.pPrevMotionX;
-                final double dy = p.motionY - FreefallHandler.pPrevMotionY;
-                final double dz = p.motionZ - FreefallHandler.pPrevMotionZ;
-                p.motionX -= dx / 2;
-                p.motionY -= dy / 2;
-                p.motionZ -= dz / 2;
+            p.capabilities.isFlying = true;
+            // Half the normal acceleration in Creative mode
+            final double dx = p.motionX - FreefallHandler.pPrevMotionX;
+            final double dy = p.motionY - FreefallHandler.pPrevMotionY;
+            final double dz = p.motionZ - FreefallHandler.pPrevMotionZ;
+            p.motionX -= dx / 1.2;
+            p.motionY -= dy / 1.2;
+            p.motionZ -= dz / 1.2;
 
-                if (p.motionX > 1.2F) {
-                    p.motionX = 1.2F;
-                }
-                if (p.motionX < -1.2F) {
-                    p.motionX = -1.2F;
-                }
-                if (p.motionY > 0.7F) {
-                    p.motionY = 0.7F;
-                }
-                if (p.motionY < -0.7F) {
-                    p.motionY = -0.7F;
-                }
-                if (p.motionZ > 1.2F) {
-                    p.motionZ = 1.2F;
-                }
-                if (p.motionZ < -1.2F) {
-                    p.motionZ = -1.2F;
-                }
+            if (p.motionX > 1.2F) {
+                p.motionX = 1.2F;
+            }
+            if (p.motionX < -1.2F) {
+                p.motionX = -1.2F;
+            }
+            if (p.motionY > 0.7F) {
+                p.motionY = 0.7F;
+            }
+            if (p.motionY < -0.7F) {
+                p.motionY = -0.7F;
+            }
+            if (p.motionZ > 1.2F) {
+                p.motionZ = 1.2F;
+            }
+            if (p.motionZ < -1.2F) {
+                p.motionZ = -1.2F;
             }
             // TODO: Think about endless drift?
             // Player may run out of oxygen - that will kill the player eventually if can't
