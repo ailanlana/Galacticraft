@@ -3,15 +3,6 @@ package micdoodle8.mods.galacticraft.core.blocks;
 import java.util.List;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical;
-import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityCoalGenerator;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityElectricFurnace;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityEnergyStorageModule;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityIngotCompressor;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -25,6 +16,15 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityCoalGenerator;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityElectricFurnace;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityEnergyStorageModule;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityIngotCompressor;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class BlockMachine extends BlockTileGC implements ItemBlockDesc.IBlockShiftDesc {
 
@@ -70,29 +70,33 @@ public class BlockMachine extends BlockTileGC implements ItemBlockDesc.IBlockShi
     public void randomDisplayTick(World par1World, int x, int y, int z, Random par5Random) {
         final TileEntity tile = par1World.getTileEntity(x, y, z);
 
-        if (tile instanceof TileEntityCoalGenerator) {
-            final TileEntityCoalGenerator tileEntity = (TileEntityCoalGenerator) tile;
-            if (tileEntity.heatGJperTick > 0) {
-                final int metadata = par1World.getBlockMetadata(x, y, z);
-                final float var7 = x + 0.5F;
-                final float var8 = y + 0.0F + par5Random.nextFloat() * 6.0F / 16.0F;
-                final float var9 = z + 0.5F;
-                final float var10 = 0.52F;
-                final float var11 = par5Random.nextFloat() * 0.6F - 0.3F;
+        if (tile instanceof TileEntityCoalGenerator tileEntity && tileEntity.heatGJperTick > 0) {
+            final int metadata = par1World.getBlockMetadata(x, y, z);
+            final float var7 = x + 0.5F;
+            final float var8 = y + 0.0F + par5Random.nextFloat() * 6.0F / 16.0F;
+            final float var9 = z + 0.5F;
+            final float var10 = 0.52F;
+            final float var11 = par5Random.nextFloat() * 0.6F - 0.3F;
 
-                if (metadata == 0) {
+            switch (metadata) {
+                case 0:
                     par1World.spawnParticle("smoke", var7 - var10, var8, var9 + var11, 0.0D, 0.0D, 0.0D);
                     par1World.spawnParticle("flame", var7 - var10, var8, var9 + var11, 0.0D, 0.0D, 0.0D);
-                } else if (metadata == 1) {
+                    break;
+                case 1:
                     par1World.spawnParticle("smoke", var7 + var10, var8, var9 + var11, 0.0D, 0.0D, 0.0D);
                     par1World.spawnParticle("flame", var7 + var10, var8, var9 + var11, 0.0D, 0.0D, 0.0D);
-                } else if (metadata == 2) {
+                    break;
+                case 2:
                     par1World.spawnParticle("smoke", var7 + var11, var8, var9 + var10, 0.0D, 0.0D, 0.0D);
                     par1World.spawnParticle("flame", var7 + var11, var8, var9 + var10, 0.0D, 0.0D, 0.0D);
-                } else if (metadata == 3) {
+                    break;
+                case 3:
                     par1World.spawnParticle("smoke", var7 + var11, var8, var9 - var10, 0.0D, 0.0D, 0.0D);
                     par1World.spawnParticle("flame", var7 + var11, var8, var9 - var10, 0.0D, 0.0D, 0.0D);
-                }
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -206,10 +210,8 @@ public class BlockMachine extends BlockTileGC implements ItemBlockDesc.IBlockShi
             if (metadata >= BlockMachine.COMPRESSOR_METADATA) {
                 par5EntityPlayer.openGui(GalacticraftCore.instance, -1, par1World, x, y, z);
                 return true;
-            } else {
-                par5EntityPlayer.openGui(GalacticraftCore.instance, -1, par1World, x, y, z);
-                return true;
             }
+            par5EntityPlayer.openGui(GalacticraftCore.instance, -1, par1World, x, y, z);
         }
 
         return true;
@@ -218,15 +220,12 @@ public class BlockMachine extends BlockTileGC implements ItemBlockDesc.IBlockShi
     @Override
     public TileEntity createTileEntity(World world, int metadata) {
         metadata &= 12;
-        if (metadata == BlockMachine.COMPRESSOR_METADATA) {
-            return new TileEntityIngotCompressor();
-        } else if (metadata == 4) {
-            return new TileEntityEnergyStorageModule();
-        } else if (metadata == 8) {
-            return new TileEntityElectricFurnace();
-        } else {
-            return new TileEntityCoalGenerator();
-        }
+        return switch (metadata) {
+            case BlockMachine.COMPRESSOR_METADATA -> new TileEntityIngotCompressor();
+            case 4 -> new TileEntityEnergyStorageModule();
+            case 8 -> new TileEntityElectricFurnace();
+            default -> new TileEntityCoalGenerator();
+        };
     }
 
     public ItemStack getCompressor() {
@@ -237,9 +236,8 @@ public class BlockMachine extends BlockTileGC implements ItemBlockDesc.IBlockShi
         return new ItemStack(this, 1, BlockMachine.COAL_GENERATOR_METADATA);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         par3List.add(this.getCoalGenerator());
         par3List.add(this.getCompressor());
     }

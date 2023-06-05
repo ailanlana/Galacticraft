@@ -3,13 +3,6 @@ package micdoodle8.mods.galacticraft.core.client.gui.container;
 import java.util.ArrayList;
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementInfoRegion;
-import micdoodle8.mods.galacticraft.core.entities.EntityBuggy;
-import micdoodle8.mods.galacticraft.core.inventory.ContainerBuggy;
-import micdoodle8.mods.galacticraft.core.util.EnumColor;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 
@@ -17,6 +10,12 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementInfoRegion;
+import micdoodle8.mods.galacticraft.core.entities.EntityBuggy;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerBuggy;
+import micdoodle8.mods.galacticraft.core.util.EnumColor;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 @SideOnly(Side.CLIENT)
 public class GuiBuggy extends GuiContainerGC {
@@ -70,8 +69,7 @@ public class GuiBuggy extends GuiContainerGC {
                 this.type == 0 ? 50 : 39,
                 4210752);
 
-        if (this.mc.thePlayer != null && this.mc.thePlayer.ridingEntity != null
-                && this.mc.thePlayer.ridingEntity instanceof EntityBuggy) {
+        if (this.mc.thePlayer != null && this.mc.thePlayer.ridingEntity instanceof EntityBuggy) {
             this.fontRendererObj.drawString(GCCoreUtil.translate("gui.message.fuel.name") + ":", 125, 15 + 3, 4210752);
             final double percentage = ((EntityBuggy) this.mc.thePlayer.ridingEntity).getScaledFuelLevel(100);
             final String color = percentage > 80.0D ? EnumColor.BRIGHT_GREEN.getCode()
@@ -90,8 +88,7 @@ public class GuiBuggy extends GuiContainerGC {
         final int var6 = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(var5, var6, 0, 0, 176, this.ySize);
 
-        if (this.mc.thePlayer != null && this.mc.thePlayer.ridingEntity != null
-                && this.mc.thePlayer.ridingEntity instanceof EntityBuggy) {
+        if (this.mc.thePlayer != null && this.mc.thePlayer.ridingEntity instanceof EntityBuggy) {
             final int fuelLevel = ((EntityBuggy) this.mc.thePlayer.ridingEntity).getScaledFuelLevel(38);
 
             this.drawTexturedModalRect(

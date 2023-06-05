@@ -2,19 +2,19 @@ package micdoodle8.mods.galacticraft.planets.asteroids.recipe;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.core.items.GCItems;
-import micdoodle8.mods.galacticraft.core.items.ItemOxygenTank;
-import micdoodle8.mods.galacticraft.planets.asteroids.items.ItemCanisterLiquidOxygen;
-
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.world.World;
 
+import micdoodle8.mods.galacticraft.core.items.GCItems;
+import micdoodle8.mods.galacticraft.core.items.ItemOxygenTank;
+import micdoodle8.mods.galacticraft.planets.asteroids.items.ItemCanisterLiquidOxygen;
+
 public class CanisterRecipes extends ShapelessRecipes {
 
-    public CanisterRecipes(ItemStack stack, List list) {
+    public CanisterRecipes(ItemStack stack, List<ItemStack> list) {
         super(stack, list);
     }
 
@@ -50,12 +50,8 @@ public class CanisterRecipes extends ShapelessRecipes {
         }
 
         // Need one canister + one tank
-        if (itemCanister == null || itemTank == null) {
-            return false;
-        }
-
         // Empty canister
-        if (itemCanister.getItemDamage() >= itemCanister.getMaxDamage()) {
+        if (itemCanister == null || itemTank == null || itemCanister.getItemDamage() >= itemCanister.getMaxDamage()) {
             return false;
         }
 
@@ -95,17 +91,12 @@ public class CanisterRecipes extends ShapelessRecipes {
         }
 
         // Need one canister + one tank
-        if (itemCanister == null || itemTank == null) {
-            return null;
-        }
 
         // Empty canister
-        if (itemCanister.getItemDamage() >= itemCanister.getMaxDamage()) {
-            return null;
-        }
-
         // Full tank
-        if (itemTank.getItemDamage() <= 0) {
+        if (itemCanister == null || itemTank == null
+                || itemCanister.getItemDamage() >= itemCanister.getMaxDamage()
+                || itemTank.getItemDamage() <= 0) {
             return null;
         }
 

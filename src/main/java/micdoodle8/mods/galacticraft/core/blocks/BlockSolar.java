@@ -2,14 +2,6 @@ package micdoodle8.mods.galacticraft.core.blocks;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical;
-import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
-import micdoodle8.mods.galacticraft.core.tile.TileEntitySolar;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -27,6 +19,13 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
+import micdoodle8.mods.galacticraft.core.tile.TileEntitySolar;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class BlockSolar extends BlockTileGC implements ItemBlockDesc.IBlockShiftDesc, IPartialSealableBlock {
 
@@ -45,10 +44,9 @@ public class BlockSolar extends BlockTileGC implements ItemBlockDesc.IBlockShift
         this.setBlockName(assetName);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         par3List.add(new ItemStack(par1, 1, BlockSolar.BASIC_METADATA));
         par3List.add(new ItemStack(par1, 1, BlockSolar.ADVANCED_METADATA));
     }
@@ -77,19 +75,22 @@ public class BlockSolar extends BlockTileGC implements ItemBlockDesc.IBlockShift
 
             if (side == ForgeDirection.getOrientation(shiftedMeta + 2).getOpposite().ordinal()) {
                 return this.icons[5];
-            } else if (side == ForgeDirection.UP.ordinal()) {
+            }
+            if (side == ForgeDirection.UP.ordinal()) {
                 return this.icons[2];
             } else if (side == ForgeDirection.DOWN.ordinal()) {
                 return this.icons[4];
             } else {
                 return this.icons[3];
             }
-        } else if (meta >= BlockSolar.BASIC_METADATA) {
+        }
+        if (meta >= BlockSolar.BASIC_METADATA) {
             final int shiftedMeta = meta -= BlockSolar.BASIC_METADATA;
 
             if (side == ForgeDirection.getOrientation(shiftedMeta + 2).getOpposite().ordinal()) {
                 return this.icons[5];
-            } else if (side == ForgeDirection.UP.ordinal()) {
+            }
+            if (side == ForgeDirection.UP.ordinal()) {
                 return this.icons[0];
             } else if (side == ForgeDirection.DOWN.ordinal()) {
                 return this.icons[4];
@@ -215,9 +216,8 @@ public class BlockSolar extends BlockTileGC implements ItemBlockDesc.IBlockShift
     public int damageDropped(int metadata) {
         if (metadata >= BlockSolar.ADVANCED_METADATA) {
             return BlockSolar.ADVANCED_METADATA;
-        } else {
-            return BlockSolar.BASIC_METADATA;
         }
+        return BlockSolar.BASIC_METADATA;
     }
 
     @Override
@@ -231,9 +231,8 @@ public class BlockSolar extends BlockTileGC implements ItemBlockDesc.IBlockShift
     public TileEntity createTileEntity(World world, int metadata) {
         if (metadata >= BlockSolar.ADVANCED_METADATA) {
             return new TileEntitySolar(2);
-        } else {
-            return new TileEntitySolar(1);
         }
+        return new TileEntitySolar(1);
     }
 
     @Override

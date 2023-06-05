@@ -1,10 +1,5 @@
 package micdoodle8.mods.galacticraft.core.client.gui.overlay;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.util.ClientUtil;
-import micdoodle8.mods.galacticraft.core.util.ColorUtil;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
@@ -15,6 +10,10 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.util.ClientUtil;
+import micdoodle8.mods.galacticraft.core.util.ColorUtil;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 @SideOnly(Side.CLIENT)
 public class OverlayOxygenTanks extends Overlay {
@@ -54,7 +53,6 @@ public class OverlayOxygenTanks extends Overlay {
         int maxLeftX = 0;
         int minRightX = 0;
         int maxRightX = 0;
-        double bottomY = 0;
         double topY = 0;
         final double zLevel = -190.0D;
 
@@ -76,7 +74,7 @@ public class OverlayOxygenTanks extends Overlay {
             topY = j - 57;
         }
 
-        bottomY = topY + 46.5;
+        double bottomY = topY + 46.5;
 
         final float texMod = 0.00390625F;
         tessellator.startDrawingQuads();

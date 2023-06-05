@@ -3,14 +3,7 @@ package micdoodle8.mods.galacticraft.planets.asteroids.client.render.entity;
 import java.util.ArrayList;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.core.perlin.NoiseModule;
-import micdoodle8.mods.galacticraft.core.perlin.generator.Gradient;
-import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
-import micdoodle8.mods.galacticraft.planets.asteroids.entities.EntityAstroMiner;
-
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
@@ -23,12 +16,16 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.core.perlin.NoiseModule;
+import micdoodle8.mods.galacticraft.core.perlin.generator.Gradient;
+import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
+import micdoodle8.mods.galacticraft.planets.asteroids.entities.EntityAstroMiner;
 
 public class RenderAstroMiner extends Render {
 
     private static final float LSIZE = 0.12F;
     private static final float RETRACTIONSPEED = 0.02F;
-    private final RenderBlocks blockRenderer = new RenderBlocks();
     private float lastPartTime;
 
     public static ResourceLocation scanTexture;
@@ -123,29 +120,15 @@ public class RenderAstroMiner extends Render {
         final float rotYaw = entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTickTime;
 
         GL11.glTranslatef((float) x, (float) y + 1.4F, (float) z);
-        float partBlock;
-        switch (astroMiner.facing) {
-            case 0:
-                partBlock = (float) (astroMiner.posY % 1D);
-                break;
-            case 1:
-                partBlock = 1F - (float) (astroMiner.posY % 1D);
-                break;
-            case 2:
-                partBlock = (float) (astroMiner.posZ % 1D);
-                break;
-            case 3:
-                partBlock = 1F - (float) (astroMiner.posZ % 1D);
-                break;
-            case 4:
-                partBlock = (float) (astroMiner.posX % 1D);
-                break;
-            case 5:
-                partBlock = 1F - (float) (astroMiner.posX % 1D);
-                break;
-            default:
-                partBlock = 0F;
-        }
+        float partBlock = switch (astroMiner.facing) {
+            case 0 -> (float) (astroMiner.posY % 1D);
+            case 1 -> 1F - (float) (astroMiner.posY % 1D);
+            case 2 -> (float) (astroMiner.posZ % 1D);
+            case 3 -> 1F - (float) (astroMiner.posZ % 1D);
+            case 4 -> (float) (astroMiner.posX % 1D);
+            case 5 -> 1F - (float) (astroMiner.posX % 1D);
+            default -> 0F;
+        };
         partBlock /= 0.06F;
 
         // else if (rotPitch > 0F)
@@ -279,16 +262,13 @@ public class RenderAstroMiner extends Render {
                         astroMiner.retraction = 0F;
                     }
                 }
-                GL11.glPopMatrix();
-            } else {
-                if (astroMiner.retraction < 1F) {
-                    astroMiner.retraction += RETRACTIONSPEED * partTime;
-                    if (astroMiner.retraction > 1F) {
-                        astroMiner.retraction = 1F;
-                    }
+            } else if (astroMiner.retraction < 1F) {
+                astroMiner.retraction += RETRACTIONSPEED * partTime;
+                if (astroMiner.retraction > 1F) {
+                    astroMiner.retraction = 1F;
                 }
-                GL11.glPopMatrix();
             }
+            GL11.glPopMatrix();
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

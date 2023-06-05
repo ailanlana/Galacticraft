@@ -2,9 +2,6 @@ package micdoodle8.mods.galacticraft.planets.mars.nei;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.planets.asteroids.blocks.AsteroidBlocks;
-import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -15,6 +12,8 @@ import net.minecraft.world.World;
 import codechicken.nei.api.IHighlightHandler;
 import codechicken.nei.api.ItemInfo;
 import codechicken.nei.guihook.GuiContainerManager;
+import micdoodle8.mods.galacticraft.planets.asteroids.blocks.AsteroidBlocks;
+import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
 
 public class GCMarsNEIHighlightHandler implements IHighlightHandler {
 
@@ -60,10 +59,8 @@ public class GCMarsNEIHighlightHandler implements IHighlightHandler {
             if (meta == 9) {
                 return new ItemStack(MarsBlocks.marsBlock, 1, 9);
             }
-        } else if (b == AsteroidBlocks.blockBasic) {
-            if (meta == 4) {
-                return new ItemStack(AsteroidBlocks.blockBasic, 1, 4);
-            }
+        } else if (b == AsteroidBlocks.blockBasic && meta == 4) {
+            return new ItemStack(AsteroidBlocks.blockBasic, 1, 4);
         }
         return null;
     }

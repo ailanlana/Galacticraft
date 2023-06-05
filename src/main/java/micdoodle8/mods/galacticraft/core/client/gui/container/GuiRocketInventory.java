@@ -3,6 +3,13 @@ package micdoodle8.mods.galacticraft.core.client.gui.container;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.inventory.IInventory;
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.api.entity.IRocketType.EnumRocketType;
 import micdoodle8.mods.galacticraft.api.prefab.entity.EntitySpaceshipBase;
 import micdoodle8.mods.galacticraft.api.prefab.entity.EntityTieredRocket;
@@ -11,14 +18,6 @@ import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementInfoRegion
 import micdoodle8.mods.galacticraft.core.inventory.ContainerRocketInventory;
 import micdoodle8.mods.galacticraft.core.util.EnumColor;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
-import net.minecraft.inventory.IInventory;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiRocketInventory extends GuiContainerGC {
@@ -71,8 +70,7 @@ public class GuiRocketInventory extends GuiContainerGC {
         this.fontRendererObj
                 .drawString(GCCoreUtil.translate(this.upperChestInventory.getInventoryName()), 8, 34 + 2 + 3, 4210752);
 
-        if (this.mc.thePlayer != null && this.mc.thePlayer.ridingEntity != null
-                && this.mc.thePlayer.ridingEntity instanceof EntitySpaceshipBase) {
+        if (this.mc.thePlayer != null && this.mc.thePlayer.ridingEntity instanceof EntitySpaceshipBase) {
             this.fontRendererObj.drawString(GCCoreUtil.translate("gui.message.fuel.name") + ":", 125, 15, 4210752);
             final EntitySpaceshipBase spaceship = (EntitySpaceshipBase) this.mc.thePlayer.ridingEntity;
             final double percentage = spaceship.getScaledFuelLevel(100);
@@ -100,8 +98,7 @@ public class GuiRocketInventory extends GuiContainerGC {
         final int var6 = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(var5, var6, 0, 0, 176, this.ySize);
 
-        if (this.mc.thePlayer != null && this.mc.thePlayer.ridingEntity != null
-                && this.mc.thePlayer.ridingEntity instanceof EntitySpaceshipBase) {
+        if (this.mc.thePlayer != null && this.mc.thePlayer.ridingEntity instanceof EntitySpaceshipBase) {
             final int fuelLevel = ((EntitySpaceshipBase) this.mc.thePlayer.ridingEntity).getScaledFuelLevel(38);
 
             this.drawTexturedModalRect(

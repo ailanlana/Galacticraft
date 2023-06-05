@@ -1,12 +1,6 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.client.render.item;
 
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.dimension.SpaceRace;
-import micdoodle8.mods.galacticraft.core.dimension.SpaceRaceManager;
-import micdoodle8.mods.galacticraft.core.util.VersionUtil;
-
 import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -16,11 +10,14 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.core.dimension.SpaceRace;
+import micdoodle8.mods.galacticraft.core.dimension.SpaceRaceManager;
+import micdoodle8.mods.galacticraft.core.util.VersionUtil;
 
 public class ItemRendererHeavyNoseCone implements IItemRenderer {
 
-    private void renderHeavyNoseCone(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX,
-            float translateY, float translateZ) {
+    private void renderHeavyNoseCone(ItemStack item) {
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
 
@@ -79,35 +76,28 @@ public class ItemRendererHeavyNoseCone implements IItemRenderer {
      */
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-        switch (type) {
-            case ENTITY:
-                return false;
-            case EQUIPPED:
-                return false;
-            case EQUIPPED_FIRST_PERSON:
-                return false;
-            case INVENTORY:
-                return true;
-            default:
-                return false;
-        }
+        return switch (type) {
+            case ENTITY -> false;
+            case EQUIPPED -> false;
+            case EQUIPPED_FIRST_PERSON -> false;
+            case INVENTORY -> true;
+            default -> false;
+        };
     }
 
     @Override
     public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-        switch (helper) {
-            case INVENTORY_BLOCK:
-                return false;
-            default:
-                return false;
-        }
+        return switch (helper) {
+            case INVENTORY_BLOCK -> false;
+            default -> false;
+        };
     }
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         switch (type) {
             case INVENTORY:
-                this.renderHeavyNoseCone(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderHeavyNoseCone(item);
                 break;
             default:
                 break;

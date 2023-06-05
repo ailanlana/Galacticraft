@@ -3,6 +3,20 @@ package micdoodle8.mods.galacticraft.planets.mars.tile;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 import micdoodle8.mods.galacticraft.api.entity.IDockable;
 import micdoodle8.mods.galacticraft.api.prefab.entity.EntityAutoRocket;
 import micdoodle8.mods.galacticraft.api.tile.IFuelDock;
@@ -20,21 +34,6 @@ import micdoodle8.mods.galacticraft.core.world.IChunkLoader;
 import micdoodle8.mods.galacticraft.planets.mars.ConfigManagerMars;
 import micdoodle8.mods.galacticraft.planets.mars.network.PacketSimpleMars;
 import micdoodle8.mods.galacticraft.planets.mars.network.PacketSimpleMars.EnumSimplePacketMars;
-
-import net.minecraft.block.Block;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 // import java.util.Map;
 
 public class TileEntityLaunchController extends TileBaseElectricBlockWithInventory
@@ -133,28 +132,24 @@ public class TileEntityLaunchController extends TileBaseElectricBlockWithInvento
                 this.setDestinationFrequency(this.destFrequency);
             }
 
-            if (this.ticks % 20 == 0) {
-                if (this.chunkLoadTicket != null) {
-                    for (int i = 0; i < this.connectedPads.size(); i++) {
-                        final ChunkCoordinates coords = this.connectedPads.get(i);
-                        final Block block = this.worldObj.getBlock(coords.posX, coords.posY, coords.posZ);
+            if (this.ticks % 20 == 0 && this.chunkLoadTicket != null) {
+                for (int i = 0; i < this.connectedPads.size(); i++) {
+                    final ChunkCoordinates coords = this.connectedPads.get(i);
+                    final Block block = this.worldObj.getBlock(coords.posX, coords.posY, coords.posZ);
 
-                        if (block != GCBlocks.landingPadFull) {
-                            this.connectedPads.remove(i);
-                            ForgeChunkManager.unforceChunk(
-                                    this.chunkLoadTicket,
-                                    new ChunkCoordIntPair(coords.posX >> 4, coords.posZ >> 4));
-                        }
+                    if (block != GCBlocks.landingPadFull) {
+                        this.connectedPads.remove(i);
+                        ForgeChunkManager.unforceChunk(
+                                this.chunkLoadTicket,
+                                new ChunkCoordIntPair(coords.posX >> 4, coords.posZ >> 4));
                     }
                 }
             }
-        } else {
-            if (this.frequency == -1 && this.destFrequency == -1) {
-                GalacticraftCore.packetPipeline.sendToServer(
-                        new PacketSimpleMars(
-                                EnumSimplePacketMars.S_UPDATE_ADVANCED_GUI,
-                                new Object[] { 5, this.xCoord, this.yCoord, this.zCoord, 0 }));
-            }
+        } else if (this.frequency == -1 && this.destFrequency == -1) {
+            GalacticraftCore.packetPipeline.sendToServer(
+                    new PacketSimpleMars(
+                            EnumSimplePacketMars.S_UPDATE_ADVANCED_GUI,
+                            new Object[] { 5, this.xCoord, this.yCoord, this.zCoord, 0 }));
         }
     }
 
@@ -197,26 +192,25 @@ public class TileEntityLaunchController extends TileBaseElectricBlockWithInvento
                 for (int z = -2; z <= 2; z++) {
                     final Block blockID = this.worldObj.getBlock(this.xCoord + x, this.yCoord, this.zCoord + z);
 
-                    if (blockID instanceof BlockLandingPadFull) {
-                        if (this.xCoord + x >> 4 != this.xCoord >> 4 || this.zCoord + z >> 4 != this.zCoord >> 4) {
-                            this.connectedPads.add(new ChunkCoordinates(this.xCoord + x, this.yCoord, this.zCoord + z));
+                    if (blockID instanceof BlockLandingPadFull
+                            && (this.xCoord + x >> 4 != this.xCoord >> 4 || this.zCoord + z >> 4 != this.zCoord >> 4)) {
+                        this.connectedPads.add(new ChunkCoordinates(this.xCoord + x, this.yCoord, this.zCoord + z));
 
-                            if (placed) {
-                                ChunkLoadingCallback.forceChunk(
-                                        this.chunkLoadTicket,
-                                        this.worldObj,
-                                        this.xCoord + x,
-                                        this.yCoord,
-                                        this.zCoord + z,
-                                        this.getOwnerName());
-                            } else {
-                                ChunkLoadingCallback.addToList(
-                                        this.worldObj,
-                                        this.xCoord,
-                                        this.yCoord,
-                                        this.zCoord,
-                                        this.getOwnerName());
-                            }
+                        if (placed) {
+                            ChunkLoadingCallback.forceChunk(
+                                    this.chunkLoadTicket,
+                                    this.worldObj,
+                                    this.xCoord + x,
+                                    this.yCoord,
+                                    this.zCoord + z,
+                                    this.getOwnerName());
+                        } else {
+                            ChunkLoadingCallback.addToList(
+                                    this.worldObj,
+                                    this.xCoord,
+                                    this.yCoord,
+                                    this.zCoord,
+                                    this.getOwnerName());
                         }
                     }
                 }
@@ -361,20 +355,17 @@ public class TileEntityLaunchController extends TileBaseElectricBlockWithInvento
             worldLoop: for (int i = 0; i < servers.length; i++) {
                 final WorldServer world = servers[i];
 
-                for (TileEntity tile2 : new ArrayList<TileEntity>(world.loadedTileEntityList)) {
+                for (TileEntity tile2 : new ArrayList<>(world.loadedTileEntityList)) {
                     if (this != tile2) {
                         tile2 = world.getTileEntity(tile2.xCoord, tile2.yCoord, tile2.zCoord);
                         if (tile2 == null) {
                             continue;
                         }
 
-                        if (tile2 instanceof TileEntityLaunchController) {
-                            final TileEntityLaunchController launchController2 = (TileEntityLaunchController) tile2;
-
-                            if (launchController2.frequency == this.frequency) {
-                                this.frequencyValid = false;
-                                break worldLoop;
-                            }
+                        if (tile2 instanceof TileEntityLaunchController launchController2
+                                && launchController2.frequency == this.frequency) {
+                            this.frequencyValid = false;
+                            break worldLoop;
                         }
                     }
                 }
@@ -398,20 +389,17 @@ public class TileEntityLaunchController extends TileBaseElectricBlockWithInvento
             if (this.destFrequency >= 0) {
                 final WorldServer[] servers = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
                 for (final WorldServer world : servers) {
-                    for (TileEntity tile2 : new ArrayList<TileEntity>(world.loadedTileEntityList)) {
+                    for (TileEntity tile2 : new ArrayList<>(world.loadedTileEntityList)) {
                         if (this != tile2) {
                             tile2 = world.getTileEntity(tile2.xCoord, tile2.yCoord, tile2.zCoord);
                             if (tile2 == null) {
                                 continue;
                             }
 
-                            if (tile2 instanceof TileEntityLaunchController) {
-                                final TileEntityLaunchController launchController2 = (TileEntityLaunchController) tile2;
-
-                                if (launchController2.frequency == this.destFrequency) {
-                                    this.destFrequencyValid = true;
-                                    return;
-                                }
+                            if (tile2 instanceof TileEntityLaunchController launchController2
+                                    && launchController2.frequency == this.destFrequency) {
+                                this.destFrequencyValid = true;
+                                return;
                             }
                         }
                     }
@@ -442,8 +430,7 @@ public class TileEntityLaunchController extends TileBaseElectricBlockWithInvento
     }
 
     public void updateRocketOnDockSettings() {
-        if (this.attachedDock instanceof TileEntityLandingPad) {
-            final TileEntityLandingPad pad = (TileEntityLandingPad) this.attachedDock;
+        if (this.attachedDock instanceof TileEntityLandingPad pad) {
             final IDockable rocket = pad.getDockedEntity();
             if (rocket instanceof EntityAutoRocket) {
                 ((EntityAutoRocket) rocket).updateControllerSettings(pad);

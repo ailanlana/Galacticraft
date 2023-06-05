@@ -1,9 +1,5 @@
 package micdoodle8.mods.galacticraft.planets.mars.items;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -14,6 +10,9 @@ import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
+import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
 
 public class ItemArmorMars extends ItemArmor {
 
@@ -36,9 +35,11 @@ public class ItemArmorMars extends ItemArmor {
         if (this.material == MarsItems.ARMORDESH) {
             if (stack.getItem() == MarsItems.deshHelmet) {
                 return MarsModule.TEXTURE_PREFIX + "textures/model/armor/desh_1.png";
-            } else if (stack.getItem() == MarsItems.deshChestplate || stack.getItem() == MarsItems.deshBoots) {
+            }
+            if (stack.getItem() == MarsItems.deshChestplate || stack.getItem() == MarsItems.deshBoots) {
                 return MarsModule.TEXTURE_PREFIX + "textures/model/armor/desh_2.png";
-            } else if (stack.getItem() == MarsItems.deshLeggings) {
+            }
+            if (stack.getItem() == MarsItems.deshLeggings) {
                 return MarsModule.TEXTURE_PREFIX + "textures/model/armor/desh_3.png";
             }
         }

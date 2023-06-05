@@ -2,10 +2,6 @@ package micdoodle8.mods.galacticraft.core.entities;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.core.items.GCItems;
-import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
-import micdoodle8.mods.galacticraft.core.util.WorldUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -27,6 +23,9 @@ import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.items.GCItems;
+import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
+import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 
 public class EntityMeteorChunk extends Entity implements IProjectile {
 
@@ -157,7 +156,6 @@ public class EntityMeteorChunk extends Entity implements IProjectile {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void onUpdate() {
         super.onUpdate();
 
@@ -259,9 +257,7 @@ public class EntityMeteorChunk extends Entity implements IProjectile {
             }
 
             if (movingobjectposition != null && movingobjectposition.entityHit != null
-                    && movingobjectposition.entityHit instanceof EntityPlayer) {
-                final EntityPlayer entityplayer = (EntityPlayer) movingobjectposition.entityHit;
-
+                    && movingobjectposition.entityHit instanceof EntityPlayer entityplayer) {
                 if (entityplayer.capabilities.disableDamage || this.shootingEntity instanceof EntityPlayer
                         && !((EntityPlayer) this.shootingEntity).canAttackPlayer(entityplayer)) {
                     movingobjectposition = null;
@@ -292,9 +288,7 @@ public class EntityMeteorChunk extends Entity implements IProjectile {
                     }
 
                     if (movingobjectposition.entityHit.attackEntityFrom(damagesource, i1)) {
-                        if (movingobjectposition.entityHit instanceof EntityLivingBase) {
-                            final EntityLivingBase entitylivingbase = (EntityLivingBase) movingobjectposition.entityHit;
-
+                        if (movingobjectposition.entityHit instanceof EntityLivingBase entitylivingbase) {
                             if (!this.worldObj.isRemote) {
                                 entitylivingbase.setArrowCountInEntity(entitylivingbase.getArrowCountInEntity() + 1);
                             }

@@ -1,5 +1,12 @@
 package micdoodle8.mods.galacticraft.core.client.gui.container;
 
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.input.Keyboard;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementCheckbox;
 import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementCheckbox.ICheckBoxCallback;
@@ -13,13 +20,6 @@ import micdoodle8.mods.galacticraft.core.tile.TileEntityAirLockController;
 import micdoodle8.mods.galacticraft.core.util.ColorUtil;
 import micdoodle8.mods.galacticraft.core.util.EnumColor;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.input.Keyboard;
 
 public class GuiAirLockController extends GuiScreen implements ICheckBoxCallback, IDropboxCallback, ITextBoxCallback {
 
@@ -44,7 +44,6 @@ public class GuiAirLockController extends GuiScreen implements ICheckBoxCallback
         this.ySize = 139;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void initGui() {
         super.initGui();
@@ -108,10 +107,8 @@ public class GuiAirLockController extends GuiScreen implements ICheckBoxCallback
 
     @Override
     protected void keyTyped(char keyChar, int keyID) {
-        if (keyID != Keyboard.KEY_ESCAPE) {
-            if (this.textBoxPlayerToOpenFor.keyTyped(keyChar, keyID)) {
-                return;
-            }
+        if (keyID != Keyboard.KEY_ESCAPE && this.textBoxPlayerToOpenFor.keyTyped(keyChar, keyID)) {
+            return;
         }
 
         super.keyTyped(keyChar, keyID);
@@ -254,9 +251,11 @@ public class GuiAirLockController extends GuiScreen implements ICheckBoxCallback
     public boolean getInitiallySelected(GuiElementCheckbox checkbox) {
         if (checkbox.equals(this.checkboxRedstoneSignal)) {
             return this.controller.redstoneActivation;
-        } else if (checkbox.equals(this.checkboxPlayerDistance)) {
+        }
+        if (checkbox.equals(this.checkboxPlayerDistance)) {
             return this.controller.playerDistanceActivation;
-        } else if (checkbox.equals(this.checkboxOpenForPlayer)) {
+        }
+        if (checkbox.equals(this.checkboxOpenForPlayer)) {
             return this.controller.playerNameMatches;
         } else if (checkbox.equals(this.checkboxInvertSelection)) {
             return this.controller.invertSelection;

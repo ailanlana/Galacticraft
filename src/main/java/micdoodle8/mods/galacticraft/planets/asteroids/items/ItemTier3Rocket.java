@@ -2,16 +2,6 @@ package micdoodle8.mods.galacticraft.planets.asteroids.items;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.entity.IRocketType.EnumRocketType;
-import micdoodle8.mods.galacticraft.api.item.IHoldableItem;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityLandingPad;
-import micdoodle8.mods.galacticraft.core.util.EnumColor;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-import micdoodle8.mods.galacticraft.planets.asteroids.entities.EntityTier3Rocket;
-
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,11 +15,19 @@ import net.minecraftforge.fluids.FluidStack;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.entity.IRocketType.EnumRocketType;
+import micdoodle8.mods.galacticraft.api.item.IHoldableItem;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityLandingPad;
+import micdoodle8.mods.galacticraft.core.util.EnumColor;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+import micdoodle8.mods.galacticraft.planets.asteroids.entities.EntityTier3Rocket;
 
 public class ItemTier3Rocket extends Item implements IHoldableItem {
 
     public ItemTier3Rocket(String assetName) {
-        super();
         this.setMaxDamage(0);
         this.setHasSubtypes(true);
         this.setMaxStackSize(1);
@@ -57,92 +55,86 @@ public class ItemTier3Rocket extends Item implements IHoldableItem {
 
         if (par3World.isRemote) {
             return false;
-        } else {
-            float centerX = -1;
-            float centerY = -1;
-            float centerZ = -1;
+        }
+        float centerX = -1;
+        float centerY = -1;
+        float centerZ = -1;
 
-            for (int i = -1; i < 2; i++) {
-                for (int j = -1; j < 2; j++) {
-                    final Block id = par3World.getBlock(par4 + i, par5, par6 + j);
-                    final int meta = par3World.getBlockMetadata(par4 + i, par5, par6 + j);
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                final Block id = par3World.getBlock(par4 + i, par5, par6 + j);
+                final int meta = par3World.getBlockMetadata(par4 + i, par5, par6 + j);
 
-                    if (id == GCBlocks.landingPadFull && meta == 0) {
-                        padFound = true;
-                        tile = par3World.getTileEntity(par4 + i, par5, par6 + j);
+                if (id == GCBlocks.landingPadFull && meta == 0) {
+                    padFound = true;
+                    tile = par3World.getTileEntity(par4 + i, par5, par6 + j);
 
-                        centerX = par4 + i + 0.5F;
-                        centerY = par5 + 0.4F;
-                        centerZ = par6 + j + 0.5F;
+                    centerX = par4 + i + 0.5F;
+                    centerY = par5 + 0.4F;
+                    centerZ = par6 + j + 0.5F;
 
-                        break;
-                    }
-                }
-
-                if (padFound) {
                     break;
                 }
             }
 
             if (padFound) {
-                // Check whether there is already a rocket on the pad
-                if (tile instanceof TileEntityLandingPad) {
-                    if (((TileEntityLandingPad) tile).getDockedEntity() != null) {
-                        return false;
-                    }
-                } else {
-                    return false;
-                }
+                break;
+            }
+        }
 
-                final EntityTier3Rocket rocket = new EntityTier3Rocket(
-                        par3World,
-                        centerX,
-                        centerY,
-                        centerZ,
-                        EnumRocketType.values()[par1ItemStack.getItemDamage()]);
-
-                rocket.rotationYaw += 45;
-                rocket.setPosition(rocket.posX, rocket.posY + rocket.getOnPadYOffset(), rocket.posZ);
-                par3World.spawnEntityInWorld(rocket);
-
-                if (par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("RocketFuel")) {
-                    rocket.fuelTank.fill(
-                            new FluidStack(
-                                    GalacticraftCore.fluidFuel,
-                                    par1ItemStack.getTagCompound().getInteger("RocketFuel")),
-                            true);
-                }
-
-                if (!par2EntityPlayer.capabilities.isCreativeMode) {
-                    par1ItemStack.stackSize--;
-
-                    if (par1ItemStack.stackSize <= 0) {
-                        par1ItemStack = null;
-                    }
-                }
-
-                if (rocket.getType().getPreFueled()) {
-                    rocket.fuelTank.fill(new FluidStack(GalacticraftCore.fluidFuel, rocket.getMaxFuel()), true);
-                }
-            } else {
+        if (!padFound) {
+            return false;
+        }
+        // Check whether there is already a rocket on the pad
+        if (tile instanceof TileEntityLandingPad) {
+            if (((TileEntityLandingPad) tile).getDockedEntity() != null) {
                 return false;
             }
+        } else {
+            return false;
+        }
+
+        final EntityTier3Rocket rocket = new EntityTier3Rocket(
+                par3World,
+                centerX,
+                centerY,
+                centerZ,
+                EnumRocketType.values()[par1ItemStack.getItemDamage()]);
+
+        rocket.rotationYaw += 45;
+        rocket.setPosition(rocket.posX, rocket.posY + rocket.getOnPadYOffset(), rocket.posZ);
+        par3World.spawnEntityInWorld(rocket);
+
+        if (par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("RocketFuel")) {
+            rocket.fuelTank.fill(
+                    new FluidStack(GalacticraftCore.fluidFuel, par1ItemStack.getTagCompound().getInteger("RocketFuel")),
+                    true);
+        }
+
+        if (!par2EntityPlayer.capabilities.isCreativeMode) {
+            par1ItemStack.stackSize--;
+
+            if (par1ItemStack.stackSize <= 0) {
+                par1ItemStack = null;
+            }
+        }
+
+        if (rocket.getType().getPreFueled()) {
+            rocket.fuelTank.fill(new FluidStack(GalacticraftCore.fluidFuel, rocket.getMaxFuel()), true);
         }
         return true;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         for (int i = 0; i < EnumRocketType.values().length; i++) {
             par3List.add(new ItemStack(par1, 1, i));
         }
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack par1ItemStack, EntityPlayer player, List par2List, boolean b) {
+    public void addInformation(ItemStack par1ItemStack, EntityPlayer player, List<String> par2List, boolean b) {
         EnumRocketType type;
 
         if (par1ItemStack.getItemDamage() < 10) {

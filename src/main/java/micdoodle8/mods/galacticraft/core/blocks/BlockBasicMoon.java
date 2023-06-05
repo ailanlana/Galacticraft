@@ -5,16 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.api.block.IDetectableResource;
-import micdoodle8.mods.galacticraft.api.block.IPlantableBlock;
-import micdoodle8.mods.galacticraft.api.block.ITerraformableBlock;
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3Dim;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.items.GCItems;
-import micdoodle8.mods.galacticraft.core.tick.TickHandlerServer;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityDungeonSpawner;
-import micdoodle8.mods.galacticraft.core.wrappers.Footprint;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.material.Material;
@@ -37,6 +27,15 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.block.IDetectableResource;
+import micdoodle8.mods.galacticraft.api.block.IPlantableBlock;
+import micdoodle8.mods.galacticraft.api.block.ITerraformableBlock;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3Dim;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.items.GCItems;
+import micdoodle8.mods.galacticraft.core.tick.TickHandlerServer;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityDungeonSpawner;
+import micdoodle8.mods.galacticraft.core.wrappers.Footprint;
 
 public class BlockBasicMoon extends BlockAdvancedTile
         implements IDetectableResource, IPlantableBlock, ITerraformableBlock {
@@ -77,9 +76,8 @@ public class BlockBasicMoon extends BlockAdvancedTile
     public boolean isNormalCube(IBlockAccess world, int x, int y, int z) {
         if (world.getBlockMetadata(x, y, z) == 15) {
             return false;
-        } else {
-            return super.isNormalCube(world, x, y, z);
         }
+        return super.isNormalCube(world, x, y, z);
     }
 
     @Override
@@ -118,14 +116,18 @@ public class BlockBasicMoon extends BlockAdvancedTile
             double explosionY, double explosionZ) {
         final int metadata = world.getBlockMetadata(x, y, z);
 
-        if (metadata == 15) {
-            return 10000.0F;
-        } else if (metadata == 14) {
-            return 40.0F;
-        } else if (metadata == 4) {
-            return 6.0F;
-        } else if (metadata < 3) {
-            return 3.0F;
+        switch (metadata) {
+            case 15:
+                return 10000.0F;
+            case 14:
+                return 40.0F;
+            case 4:
+                return 6.0F;
+            default:
+                if (metadata < 3) {
+                    return 3.0F;
+                }
+                break;
         }
 
         return this.blockResistance / 5.0F;
@@ -170,52 +172,43 @@ public class BlockBasicMoon extends BlockAdvancedTile
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIcon(int side, int meta) {
-        if (meta >= 5 && meta <= 13) {
-            if (side == 1) {
-                switch (meta - 5) {
-                    case 0:
-                        return this.moonBlockIcons[0];
-                    case 1:
-                        return this.moonBlockIcons[4];
-                    case 2:
-                        return this.moonBlockIcons[5];
-                    case 3:
-                        return this.moonBlockIcons[6];
-                    case 4:
-                        return this.moonBlockIcons[7];
-                    case 5:
-                        return this.moonBlockIcons[8];
-                    case 6:
-                        return this.moonBlockIcons[9];
-                    case 7:
-                        return this.moonBlockIcons[10];
-                    case 8:
-                        return this.moonBlockIcons[11];
-                }
-            } else if (side == 0) {
-                return this.moonBlockIcons[2];
-            } else {
-                return this.moonBlockIcons[3];
-            }
-        } else {
-            switch (meta) {
+        if ((meta < 5) || (meta > 13)) {
+            return switch (meta) {
+                case 0 -> this.moonBlockIcons[12];
+                case 1 -> this.moonBlockIcons[13];
+                case 2 -> this.moonBlockIcons[14];
+                case 3 -> this.moonBlockIcons[2];
+                case 4 -> this.moonBlockIcons[15];
+                case 14 -> this.moonBlockIcons[1];
+                case 15 -> this.moonBlockIcons[16];
+                default -> this.moonBlockIcons[16];
+            };
+        }
+        if (side == 1) {
+            switch (meta - 5) {
                 case 0:
-                    return this.moonBlockIcons[12];
+                    return this.moonBlockIcons[0];
                 case 1:
-                    return this.moonBlockIcons[13];
+                    return this.moonBlockIcons[4];
                 case 2:
-                    return this.moonBlockIcons[14];
+                    return this.moonBlockIcons[5];
                 case 3:
-                    return this.moonBlockIcons[2];
+                    return this.moonBlockIcons[6];
                 case 4:
-                    return this.moonBlockIcons[15];
-                case 14:
-                    return this.moonBlockIcons[1];
-                case 15:
-                    return this.moonBlockIcons[16];
-                default:
-                    return this.moonBlockIcons[16];
+                    return this.moonBlockIcons[7];
+                case 5:
+                    return this.moonBlockIcons[8];
+                case 6:
+                    return this.moonBlockIcons[9];
+                case 7:
+                    return this.moonBlockIcons[10];
+                case 8:
+                    return this.moonBlockIcons[11];
             }
+        } else if (side == 0) {
+            return this.moonBlockIcons[2];
+        } else {
+            return this.moonBlockIcons[3];
         }
 
         return null;
@@ -223,25 +216,22 @@ public class BlockBasicMoon extends BlockAdvancedTile
 
     @Override
     public Item getItemDropped(int meta, Random random, int par3) {
-        switch (meta) {
-            case 2:
-                return GCItems.cheeseCurd;
-            case 15:
-                return Item.getItemFromBlock(Blocks.air);
-            default:
-                return Item.getItemFromBlock(this);
-        }
+        return switch (meta) {
+            case 2 -> GCItems.cheeseCurd;
+            case 15 -> Item.getItemFromBlock(Blocks.air);
+            default -> Item.getItemFromBlock(this);
+        };
     }
 
     @Override
     public int damageDropped(int meta) {
         if (meta >= 5 && meta <= 13) {
             return 5;
-        } else if (meta == 2) {
-            return 0;
-        } else {
-            return meta;
         }
+        if (meta == 2) {
+            return 0;
+        }
+        return meta;
     }
 
     @Override
@@ -264,10 +254,9 @@ public class BlockBasicMoon extends BlockAdvancedTile
         }
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @SideOnly(Side.CLIENT)
     @Override
-    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         int var4;
 
         for (var4 = 0; var4 < 6; ++var4) {
@@ -295,16 +284,12 @@ public class BlockBasicMoon extends BlockAdvancedTile
 
     @Override
     public boolean isValueable(int metadata) {
-        switch (metadata) {
-            case 0:
-                return true;
-            case 1:
-                return true;
-            case 2:
-                return true;
-            default:
-                return false;
-        }
+        return switch (metadata) {
+            case 0 -> true;
+            case 1 -> true;
+            case 2 -> true;
+            default -> false;
+        };
     }
 
     @Override
@@ -342,6 +327,7 @@ public class BlockBasicMoon extends BlockAdvancedTile
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
         final int metadata = world.getBlockMetadata(x, y, z);

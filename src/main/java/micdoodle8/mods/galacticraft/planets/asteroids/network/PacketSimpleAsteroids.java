@@ -5,15 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.network.IPacket;
-import micdoodle8.mods.galacticraft.core.network.NetworkUtil;
-import micdoodle8.mods.galacticraft.core.util.GCLog;
-import micdoodle8.mods.galacticraft.planets.asteroids.entities.EntityGrapple;
-import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityMinerBase;
-import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityShortRangeTelepad;
-
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -24,6 +15,14 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.core.network.IPacket;
+import micdoodle8.mods.galacticraft.core.network.NetworkUtil;
+import micdoodle8.mods.galacticraft.core.util.GCLog;
+import micdoodle8.mods.galacticraft.planets.asteroids.entities.EntityGrapple;
+import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityMinerBase;
+import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityShortRangeTelepad;
 
 public class PacketSimpleAsteroids implements IPacket {
 
@@ -107,14 +106,14 @@ public class PacketSimpleAsteroids implements IPacket {
             case C_TELEPAD_SEND:
                 Entity entity = playerBaseClient.worldObj.getEntityByID((Integer) this.data.get(1));
 
-                if (entity != null && entity instanceof EntityLivingBase) {
+                if (entity instanceof EntityLivingBase) {
                     final BlockVec3 pos = (BlockVec3) this.data.get(0);
                     entity.setPosition(pos.x + 0.5, pos.y + 2.2, pos.z + 0.5);
                 }
                 break;
             case C_UPDATE_GRAPPLE_POS:
                 entity = playerBaseClient.worldObj.getEntityByID((Integer) this.data.get(0));
-                if (entity != null && entity instanceof EntityGrapple) {
+                if (entity instanceof EntityGrapple) {
                     final Vector3 vec = (Vector3) this.data.get(1);
                     entity.setPosition(vec.x, vec.y, vec.z);
                 }
@@ -155,14 +154,12 @@ public class PacketSimpleAsteroids implements IPacket {
 
                 switch ((Integer) this.data.get(0)) {
                     case 0:
-                        if (tile instanceof TileEntityShortRangeTelepad) {
-                            final TileEntityShortRangeTelepad launchController = (TileEntityShortRangeTelepad) tile;
+                        if (tile instanceof TileEntityShortRangeTelepad launchController) {
                             launchController.setAddress((Integer) this.data.get(4));
                         }
                         break;
                     case 1:
-                        if (tile instanceof TileEntityShortRangeTelepad) {
-                            final TileEntityShortRangeTelepad launchController = (TileEntityShortRangeTelepad) tile;
+                        if (tile instanceof TileEntityShortRangeTelepad launchController) {
                             launchController.setTargetAddress((Integer) this.data.get(4));
                         }
                         break;

@@ -5,13 +5,32 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.ChunkProviderServer;
+
+import com.google.common.collect.Lists;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3Dim;
 import micdoodle8.mods.galacticraft.api.world.IOrbitDimension;
@@ -34,27 +53,6 @@ import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 import micdoodle8.mods.galacticraft.core.wrappers.Footprint;
 import micdoodle8.mods.galacticraft.core.wrappers.ScheduledBlockChange;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityHydrogenPipe;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockAir;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.gen.ChunkProviderServer;
-
-import com.google.common.collect.Lists;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
 
 public class TickHandlerServer {
 
@@ -228,10 +226,7 @@ public class TickHandlerServer {
                         boolean mapChanged = false;
 
                         if (chunkProviderServer != null) {
-                            final Iterator iterator = chunkProviderServer.loadedChunks.iterator();
-
-                            while (iterator.hasNext()) {
-                                final Chunk chunk = (Chunk) iterator.next();
+                            for (Chunk chunk : chunkProviderServer.loadedChunks) {
                                 final long chunkKey = ChunkCoordIntPair.chunkXZ2Int(chunk.xPosition, chunk.zPosition);
 
                                 final List<Footprint> footprints = footprintMap.get(chunkKey);
@@ -314,27 +309,25 @@ public class TickHandlerServer {
                 footprintBlockChanges.clear();
             }
 
-            if (tickCount % 20 == 0) {
-                if (!playersRequestingMapData.isEmpty()) {
-                    final File baseFolder = new File(
-                            MinecraftServer.getServer().worldServerForDimension(0).getChunkSaveLocation(),
-                            "galacticraft/overworldMap");
-                    if (!baseFolder.exists() && !baseFolder.mkdirs()) {
-                        GCLog.severe("Base folder(s) could not be created: " + baseFolder.getAbsolutePath());
-                    } else {
-                        final ArrayList<EntityPlayerMP> copy = new ArrayList<>(playersRequestingMapData);
-                        final BufferedImage reusable = new BufferedImage(400, 400, BufferedImage.TYPE_INT_RGB);
-                        for (final EntityPlayerMP playerMP : copy) {
-                            final GCPlayerStats stats = GCPlayerStats.get(playerMP);
-                            MapUtil.makeVanillaMap(
-                                    playerMP.dimension,
-                                    (int) Math.floor(stats.coordsTeleportedFromX) >> 4,
-                                    (int) Math.floor(stats.coordsTeleportedFromZ) >> 4,
-                                    baseFolder,
-                                    reusable);
-                        }
-                        playersRequestingMapData.removeAll(copy);
+            if (tickCount % 20 == 0 && !playersRequestingMapData.isEmpty()) {
+                final File baseFolder = new File(
+                        MinecraftServer.getServer().worldServerForDimension(0).getChunkSaveLocation(),
+                        "galacticraft/overworldMap");
+                if (!baseFolder.exists() && !baseFolder.mkdirs()) {
+                    GCLog.severe("Base folder(s) could not be created: " + baseFolder.getAbsolutePath());
+                } else {
+                    final ArrayList<EntityPlayerMP> copy = new ArrayList<>(playersRequestingMapData);
+                    final BufferedImage reusable = new BufferedImage(400, 400, BufferedImage.TYPE_INT_RGB);
+                    for (final EntityPlayerMP playerMP : copy) {
+                        final GCPlayerStats stats = GCPlayerStats.get(playerMP);
+                        MapUtil.makeVanillaMap(
+                                playerMP.dimension,
+                                (int) Math.floor(stats.coordsTeleportedFromX) >> 4,
+                                (int) Math.floor(stats.coordsTeleportedFromZ) >> 4,
+                                baseFolder,
+                                reusable);
                     }
+                    playersRequestingMapData.removeAll(copy);
                 }
             }
 
@@ -348,22 +341,22 @@ public class TickHandlerServer {
         } else if (event.phase == Phase.END) {
             int maxPasses = 10;
             while (!TickHandlerServer.networkTicks.isEmpty()) {
-                final LinkedList<EnergyNetwork> pass = new LinkedList();
-                pass.addAll(TickHandlerServer.networkTicks);
+                final LinkedList<EnergyNetwork> pass = new LinkedList<>(TickHandlerServer.networkTicks);
                 TickHandlerServer.networkTicks.clear();
                 for (final EnergyNetwork grid : pass) {
                     grid.tickEnd();
                 }
 
-                if (--maxPasses <= 0) {
+                maxPasses--;
+                if (maxPasses <= 0) {
                     break;
                 }
             }
 
             maxPasses = 10;
             while (!TickHandlerServer.oxygenTransmitterUpdates.isEmpty()) {
-                final LinkedList<TileEntityOxygenTransmitter> pass = new LinkedList();
-                pass.addAll(TickHandlerServer.oxygenTransmitterUpdates);
+                final LinkedList<TileEntityOxygenTransmitter> pass = new LinkedList<>(
+                        TickHandlerServer.oxygenTransmitterUpdates);
                 TickHandlerServer.oxygenTransmitterUpdates.clear();
                 for (final TileEntityOxygenTransmitter newTile : pass) {
                     if (!newTile.isInvalid()) {
@@ -371,15 +364,16 @@ public class TickHandlerServer {
                     }
                 }
 
-                if (--maxPasses <= 0) {
+                maxPasses--;
+                if (maxPasses <= 0) {
                     break;
                 }
             }
 
             maxPasses = 10;
             while (!TickHandlerServer.hydrogenTransmitterUpdates.isEmpty()) {
-                final LinkedList<TileEntityHydrogenPipe> pass = new LinkedList();
-                pass.addAll(TickHandlerServer.hydrogenTransmitterUpdates);
+                final LinkedList<TileEntityHydrogenPipe> pass = new LinkedList<>(
+                        TickHandlerServer.hydrogenTransmitterUpdates);
                 TickHandlerServer.hydrogenTransmitterUpdates.clear();
                 for (final TileEntityHydrogenPipe newTile : pass) {
                     if (!newTile.isInvalid()) {
@@ -387,15 +381,15 @@ public class TickHandlerServer {
                     }
                 }
 
-                if (--maxPasses <= 0) {
+                maxPasses--;
+                if (maxPasses <= 0) {
                     break;
                 }
             }
 
             maxPasses = 10;
             while (!TickHandlerServer.energyTransmitterUpdates.isEmpty()) {
-                final LinkedList<TileBaseConductor> pass = new LinkedList();
-                pass.addAll(TickHandlerServer.energyTransmitterUpdates);
+                final LinkedList<TileBaseConductor> pass = new LinkedList<>(TickHandlerServer.energyTransmitterUpdates);
                 TickHandlerServer.energyTransmitterUpdates.clear();
                 for (final TileBaseConductor newTile : pass) {
                     if (!newTile.isInvalid()) {
@@ -403,7 +397,8 @@ public class TickHandlerServer {
                     }
                 }
 
-                if (--maxPasses <= 0) {
+                maxPasses--;
+                if (maxPasses <= 0) {
                     break;
                 }
             }
@@ -425,24 +420,23 @@ public class TickHandlerServer {
                         Math.max(0, changeList.size() - blockCountMax));
 
                 for (final ScheduledBlockChange change : changeList) {
-                    if (++blockCount > blockCountMax) {
+                    blockCount++;
+                    if (blockCount > blockCountMax) {
                         newList.add(change);
-                    } else {
-                        if (change != null) {
-                            final BlockVec3 changePosition = change.getChangePosition();
-                            final Block block = world.getBlock(changePosition.x, changePosition.y, changePosition.z);
-                            // Only replace blocks of type BlockAir or fire - this is to prevent accidents
-                            // where other
-                            // mods have moved blocks
-                            if (changePosition != null && (block instanceof BlockAir || block == Blocks.fire)) {
-                                world.setBlock(
-                                        changePosition.x,
-                                        changePosition.y,
-                                        changePosition.z,
-                                        change.getChangeID(),
-                                        change.getChangeMeta(),
-                                        change.getChangeUpdateFlag());
-                            }
+                    } else if (change != null) {
+                        final BlockVec3 changePosition = change.getChangePosition();
+                        final Block block = world.getBlock(changePosition.x, changePosition.y, changePosition.z);
+                        // Only replace blocks of type BlockAir or fire - this is to prevent accidents
+                        // where other
+                        // mods have moved blocks
+                        if (changePosition != null && (block instanceof BlockAir || block == Blocks.fire)) {
+                            world.setBlock(
+                                    changePosition.x,
+                                    changePosition.y,
+                                    changePosition.z,
+                                    change.getChangeID(),
+                                    change.getChangeMeta(),
+                                    change.getChangeUpdateFlag());
                         }
                     }
                 }
@@ -482,21 +476,14 @@ public class TickHandlerServer {
                 final Object[] entityList = world.loadedEntityList.toArray();
 
                 for (final Object o : entityList) {
-                    if (o instanceof Entity) {
-                        final Entity e = (Entity) o;
+                    if ((o instanceof Entity e && e.worldObj.provider instanceof IOrbitDimension dimension)
+                            && (e.posY <= dimension.getYCoordToTeleportToPlanet())) {
+                        int dim = 0;
+                        try {
+                            dim = WorldUtil.getProviderForNameServer(dimension.getPlanetToOrbit()).dimensionId;
+                        } catch (final Exception ex) {}
 
-                        if (e.worldObj.provider instanceof IOrbitDimension) {
-                            final IOrbitDimension dimension = (IOrbitDimension) e.worldObj.provider;
-
-                            if (e.posY <= dimension.getYCoordToTeleportToPlanet()) {
-                                int dim = 0;
-                                try {
-                                    dim = WorldUtil.getProviderForNameServer(dimension.getPlanetToOrbit()).dimensionId;
-                                } catch (final Exception ex) {}
-
-                                WorldUtil.transferEntityToDimension(e, dim, world, false, null);
-                            }
-                        }
+                        WorldUtil.transferEntityToDimension(e, dim, world, false, null);
                     }
                 }
             }
@@ -504,11 +491,10 @@ public class TickHandlerServer {
             final WorldServer world = (WorldServer) event.world;
 
             final List<BlockVec3> edgesList = TickHandlerServer.edgeChecks.get(world.provider.dimensionId);
-            final HashSet<BlockVec3> checkedThisTick = new HashSet();
+            final HashSet<BlockVec3> checkedThisTick = new HashSet<>();
 
             if (edgesList != null && !edgesList.isEmpty()) {
-                final List<BlockVec3> edgesListCopy = new ArrayList();
-                edgesListCopy.addAll(edgesList);
+                final List<BlockVec3> edgesListCopy = new ArrayList<>(edgesList);
                 for (final BlockVec3 edgeBlock : edgesListCopy) {
                     if (edgeBlock != null && !checkedThisTick.contains(edgeBlock)) {
                         if (TickHandlerServer.scheduledForChange(world.provider.dimensionId, edgeBlock)) {

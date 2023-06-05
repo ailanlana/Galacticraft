@@ -4,17 +4,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 
-import micdoodle8.mods.galacticraft.api.item.IItemOxygenSupply;
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
-import micdoodle8.mods.galacticraft.core.energy.tile.EnergyStorageTile;
-import micdoodle8.mods.galacticraft.core.items.GCItems;
-import micdoodle8.mods.galacticraft.core.oxygen.OxygenPressureProtocol;
-import micdoodle8.mods.galacticraft.core.oxygen.ThreadFindSeal;
-import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
-import micdoodle8.mods.galacticraft.core.util.FluidUtil;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,6 +16,16 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.relauncher.Side;
+import micdoodle8.mods.galacticraft.api.item.IItemOxygenSupply;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
+import micdoodle8.mods.galacticraft.core.energy.tile.EnergyStorageTile;
+import micdoodle8.mods.galacticraft.core.items.GCItems;
+import micdoodle8.mods.galacticraft.core.oxygen.OxygenPressureProtocol;
+import micdoodle8.mods.galacticraft.core.oxygen.ThreadFindSeal;
+import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
+import micdoodle8.mods.galacticraft.core.util.FluidUtil;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class TileEntityOxygenSealer extends TileEntityOxygen implements IInventory, ISidedInventory {
 
@@ -55,7 +54,7 @@ public class TileEntityOxygenSealer extends TileEntityOxygen implements IInvento
     public static int countEntities = 0;
     private static int countTemp = 0;
     private static boolean sealerCheckedThisTick = false;
-    public static ArrayList<TileEntityOxygenSealer> loadedTiles = new ArrayList();
+    public static ArrayList<TileEntityOxygenSealer> loadedTiles = new ArrayList<>();
     private static final int UNSEALED_OXYGENPERTICK = 12;
 
     public TileEntityOxygenSealer() {
@@ -71,10 +70,8 @@ public class TileEntityOxygenSealer extends TileEntityOxygen implements IInvento
     @Override
     public void validate() {
         super.validate();
-        if (!this.worldObj.isRemote) {
-            if (!TileEntityOxygenSealer.loadedTiles.contains(this)) {
-                TileEntityOxygenSealer.loadedTiles.add(this);
-            }
+        if (!this.worldObj.isRemote && !TileEntityOxygenSealer.loadedTiles.contains(this)) {
+            TileEntityOxygenSealer.loadedTiles.add(this);
         }
         this.stopSealThreadCooldown = 126 + countEntities;
     }
@@ -241,25 +238,22 @@ public class TileEntityOxygenSealer extends TileEntityOxygen implements IInvento
 
     @Override
     public ItemStack decrStackSize(int par1, int par2) {
-        if (this.containingItems[par1] != null) {
-            ItemStack var3;
-
-            if (this.containingItems[par1].stackSize <= par2) {
-                var3 = this.containingItems[par1];
-                this.containingItems[par1] = null;
-                return var3;
-            } else {
-                var3 = this.containingItems[par1].splitStack(par2);
-
-                if (this.containingItems[par1].stackSize == 0) {
-                    this.containingItems[par1] = null;
-                }
-
-                return var3;
-            }
-        } else {
+        if (this.containingItems[par1] == null) {
             return null;
         }
+        ItemStack var3;
+
+        if (this.containingItems[par1].stackSize <= par2) {
+            var3 = this.containingItems[par1];
+            this.containingItems[par1] = null;
+        } else {
+            var3 = this.containingItems[par1].splitStack(par2);
+
+            if (this.containingItems[par1].stackSize == 0) {
+                this.containingItems[par1] = null;
+            }
+        }
+        return var3;
     }
 
     @Override
@@ -268,9 +262,8 @@ public class TileEntityOxygenSealer extends TileEntityOxygen implements IInvento
             final ItemStack var2 = this.containingItems[par1];
             this.containingItems[par1] = null;
             return var2;
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
@@ -314,30 +307,23 @@ public class TileEntityOxygenSealer extends TileEntityOxygen implements IInvento
     @Override
     public boolean canInsertItem(int slotID, ItemStack itemstack, int side) {
         if (this.isItemValidForSlot(slotID, itemstack)) {
-            switch (slotID) {
-                case 0:
-                    return ItemElectricBase.isElectricItemCharged(itemstack);
-                case 1:
-                    return itemstack.getItemDamage() < itemstack.getItem().getMaxDamage();
-                case 2:
-                    return itemstack.getItem() == GCItems.basicItem && itemstack.getItemDamage() == 20;
-                default:
-                    return false;
-            }
+            return switch (slotID) {
+                case 0 -> ItemElectricBase.isElectricItemCharged(itemstack);
+                case 1 -> itemstack.getItemDamage() < itemstack.getItem().getMaxDamage();
+                case 2 -> itemstack.getItem() == GCItems.basicItem && itemstack.getItemDamage() == 20;
+                default -> false;
+            };
         }
         return false;
     }
 
     @Override
     public boolean canExtractItem(int slotID, ItemStack itemstack, int side) {
-        switch (slotID) {
-            case 0:
-                return ItemElectricBase.isElectricItemEmpty(itemstack);
-            case 1:
-                return FluidUtil.isEmptyContainer(itemstack);
-            default:
-                return false;
-        }
+        return switch (slotID) {
+            case 0 -> ItemElectricBase.isElectricItemEmpty(itemstack);
+            case 1 -> FluidUtil.isEmptyContainer(itemstack);
+            default -> false;
+        };
     }
 
     @Override
@@ -350,14 +336,15 @@ public class TileEntityOxygenSealer extends TileEntityOxygen implements IInvento
         if (itemstack == null) {
             return false;
         }
-        if (slotID == 0) {
-            return ItemElectricBase.isElectricItem(itemstack.getItem());
-        }
-        if (slotID == 1) {
-            return itemstack.getItem() instanceof IItemOxygenSupply;
-        }
-        if (slotID == 2) {
-            return itemstack.getItem() == GCItems.basicItem && itemstack.getItemDamage() == 20;
+        switch (slotID) {
+            case 0:
+                return ItemElectricBase.isElectricItem(itemstack.getItem());
+            case 1:
+                return itemstack.getItem() instanceof IItemOxygenSupply;
+            case 2:
+                return itemstack.getItem() == GCItems.basicItem && itemstack.getItemDamage() == 20;
+            default:
+                break;
         }
         return false;
     }

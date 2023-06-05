@@ -4,16 +4,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
-import micdoodle8.mods.galacticraft.api.transmission.tile.IConductor;
-import micdoodle8.mods.galacticraft.api.transmission.tile.INetworkConnection;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityAluminumWire;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenPipe;
-import micdoodle8.mods.galacticraft.core.util.CompatibilityManager;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.ITileEntityProvider;
@@ -31,6 +21,15 @@ import appeng.api.AEApi;
 import appeng.api.parts.IPartHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
+import micdoodle8.mods.galacticraft.api.transmission.tile.IConductor;
+import micdoodle8.mods.galacticraft.api.transmission.tile.INetworkConnection;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityAluminumWire;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenPipe;
+import micdoodle8.mods.galacticraft.core.util.CompatibilityManager;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class BlockEnclosed extends BlockContainer
         implements IPartialSealableBlock, ITileEntityProvider, ItemBlockDesc.IBlockShiftDesc {
@@ -107,10 +106,9 @@ public class BlockEnclosed extends BlockContainer
         this.setBlockName(assetName);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @SideOnly(Side.CLIENT)
     @Override
-    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         par3List.add(new ItemStack(par1, 1, EnumEnclosedBlock.ALUMINUM_WIRE.getMetadata()));
         par3List.add(new ItemStack(par1, 1, EnumEnclosedBlock.ALUMINUM_WIRE_HEAVY.getMetadata()));
         par3List.add(new ItemStack(par1, 1, EnumEnclosedBlock.OXYGEN_PIPE.getMetadata()));
@@ -213,21 +211,18 @@ public class BlockEnclosed extends BlockContainer
             if (CompatibilityManager.isIc2Loaded() && tileEntity != null) {
                 try {
                     onBlockNeighbourChangeIC2.invoke(tileEntity);
-                    return;
                 } catch (final Exception e) {
                     e.printStackTrace();
                 }
             }
         } else if (metadata <= 12) {
-            if (CompatibilityManager.isBCraftTransportLoaded()) {
-                if (blockPipeBC != null) {
-                    try {
-                        blockPipeBC.onNeighborBlockChange(world, x, y, z, block);
-                    } catch (final Exception e) {
-                        e.printStackTrace();
-                    }
-                    return;
+            if (CompatibilityManager.isBCraftTransportLoaded() && blockPipeBC != null) {
+                try {
+                    blockPipeBC.onNeighborBlockChange(world, x, y, z, block);
+                } catch (final Exception e) {
+                    e.printStackTrace();
                 }
+                return;
             }
 
             super.onNeighborBlockChange(world, x, y, z, block);
@@ -288,10 +283,12 @@ public class BlockEnclosed extends BlockContainer
                 try {
                     final IPartHelper apiPart = AEApi.instance().partHelper();
                     final Class<?> clazzApiPart = Class.forName("appeng.core.api.ApiPart");
-                    final Class clazz = (Class) clazzApiPart.getDeclaredMethod("getCombinedInstance", String.class)
+                    @SuppressWarnings("unchecked")
+                    final Class<? extends TileEntity> clazz = (Class<? extends TileEntity>) clazzApiPart
+                            .getDeclaredMethod("getCombinedInstance", String.class)
                             .invoke(apiPart, "appeng.tile.networking.TileCableBus");
                     // Needs to be: appeng.parts.layers.LayerITileStorageMonitorable_TileCableBus
-                    return (TileEntity) clazz.newInstance();
+                    return clazz.getConstructor().newInstance();
                 } catch (final Exception e) {
                     e.printStackTrace();
                 }
@@ -347,7 +344,7 @@ public class BlockEnclosed extends BlockContainer
                 final Object pipe = CompatibilityManager.methodBCBlockPipe_createPipe.invoke(null, pipeItem);
                 Method initializePipe = null;
                 for (final Method m : clazzTilePipe.getMethods()) {
-                    if (m.getName().equals("initialize") && m.getParameterTypes().length == 1) {
+                    if ("initialize".equals(m.getName()) && m.getParameterTypes().length == 1) {
                         initializePipe = m;
                         break;
                     }

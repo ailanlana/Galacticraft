@@ -1,15 +1,15 @@
 package micdoodle8.mods.galacticraft.core.inventory;
 
-import micdoodle8.mods.galacticraft.api.item.IItemElectric;
-import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseElectricBlock;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityFuelLoader;
-import micdoodle8.mods.galacticraft.core.util.FluidUtil;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import micdoodle8.mods.galacticraft.api.item.IItemElectric;
+import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseElectricBlock;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityFuelLoader;
+import micdoodle8.mods.galacticraft.core.util.FluidUtil;
 
 public class ContainerFuelLoader extends Container {
 
@@ -45,7 +45,7 @@ public class ContainerFuelLoader extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
         ItemStack var3 = null;
-        final Slot slot = (Slot) this.inventorySlots.get(par2);
+        final Slot slot = this.inventorySlots.get(par2);
 
         if (slot != null && slot.getHasStack()) {
             final ItemStack var5 = slot.getStack();
@@ -55,24 +55,20 @@ public class ContainerFuelLoader extends Container {
                 if (!this.mergeItemStack(var5, 2, 38, true)) {
                     return null;
                 }
-            } else {
-                if (var5.getItem() instanceof IItemElectric) {
-                    if (!this.mergeItemStack(var5, 0, 1, false)) {
-                        return null;
-                    }
-                } else {
-                    if (FluidUtil.isFuelContainerAny(var5)) {
-                        if (!this.mergeItemStack(var5, 1, 2, false)) {
-                            return null;
-                        }
-                    } else if (par2 < 29) {
-                        if (!this.mergeItemStack(var5, 29, 38, false)) {
-                            return null;
-                        }
-                    } else if (!this.mergeItemStack(var5, 2, 29, false)) {
-                        return null;
-                    }
+            } else if (var5.getItem() instanceof IItemElectric) {
+                if (!this.mergeItemStack(var5, 0, 1, false)) {
+                    return null;
                 }
+            } else if (FluidUtil.isFuelContainerAny(var5)) {
+                if (!this.mergeItemStack(var5, 1, 2, false)) {
+                    return null;
+                }
+            } else if (par2 < 29) {
+                if (!this.mergeItemStack(var5, 29, 38, false)) {
+                    return null;
+                }
+            } else if (!this.mergeItemStack(var5, 2, 29, false)) {
+                return null;
             }
 
             if (var5.stackSize == 0) {

@@ -1,9 +1,5 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.entities.player;
 
-import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
-import micdoodle8.mods.galacticraft.planets.asteroids.dimension.WorldProviderAsteroids;
-import micdoodle8.mods.galacticraft.planets.asteroids.entities.EntitySmallAsteroid;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -12,27 +8,30 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
+import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
+import micdoodle8.mods.galacticraft.planets.asteroids.dimension.WorldProviderAsteroids;
+import micdoodle8.mods.galacticraft.planets.asteroids.entities.EntitySmallAsteroid;
 
 public class AsteroidsPlayerHandler {
 
     @SubscribeEvent
     public void onPlayerLogin(PlayerLoggedInEvent event) {
         if (event.player instanceof EntityPlayerMP) {
-            this.onPlayerLogin((EntityPlayerMP) event.player);
+            this.onPlayerLogin();
         }
     }
 
     @SubscribeEvent
     public void onPlayerLogout(PlayerLoggedOutEvent event) {
         if (event.player instanceof EntityPlayerMP) {
-            this.onPlayerLogout((EntityPlayerMP) event.player);
+            this.onPlayerLogout();
         }
     }
 
     @SubscribeEvent
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         if (event.player instanceof EntityPlayerMP) {
-            this.onPlayerRespawn((EntityPlayerMP) event.player);
+            this.onPlayerRespawn();
         }
     }
 
@@ -43,11 +42,11 @@ public class AsteroidsPlayerHandler {
         }
     }
 
-    private void onPlayerLogin(EntityPlayerMP player) {}
+    private void onPlayerLogin() {}
 
-    private void onPlayerLogout(EntityPlayerMP player) {}
+    private void onPlayerLogout() {}
 
-    private void onPlayerRespawn(EntityPlayerMP player) {}
+    private void onPlayerRespawn() {}
 
     public void onPlayerUpdate(EntityPlayerMP player) {
         if (!player.worldObj.isRemote && player.worldObj.provider instanceof WorldProviderAsteroids) {

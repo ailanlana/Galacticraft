@@ -9,6 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyReceiver;
+import cpw.mods.fml.common.FMLLog;
+import ic2.api.energy.tile.IEnergySink;
 import micdoodle8.mods.galacticraft.api.transmission.grid.IElectricityNetwork;
 import micdoodle8.mods.galacticraft.api.transmission.tile.IConductor;
 import micdoodle8.mods.galacticraft.api.transmission.tile.IElectrical;
@@ -19,15 +27,6 @@ import micdoodle8.mods.galacticraft.core.tick.TickHandlerServer;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.GCLog;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import cofh.api.energy.IEnergyHandler;
-import cofh.api.energy.IEnergyReceiver;
-import cpw.mods.fml.common.FMLLog;
-import ic2.api.energy.tile.IEnergySink;
-
 // import buildcraft.api.power.PowerHandler.Type;
 
 /**
@@ -37,14 +36,10 @@ import ic2.api.energy.tile.IEnergySink;
  */
 public class EnergyNetwork implements IElectricityNetwork {
 
-    private final boolean isMekLoaded = EnergyConfigHandler.isMekanismLoaded()
-            && !EnergyConfigHandler.disableMekanismOutput;
     private final boolean isRF1Loaded = EnergyConfigHandler.isRFAPIv1Loaded() && !EnergyConfigHandler.disableRFOutput;
     private final boolean isRF2Loaded = EnergyConfigHandler.isRFAPIv2Loaded() && !EnergyConfigHandler.disableRFOutput;
     private final boolean isIC2Loaded = EnergyConfigHandler.isIndustrialCraft2Loaded()
             && !EnergyConfigHandler.disableIC2Output;
-    private final boolean isBCLoaded = EnergyConfigHandler.isBuildcraftLoaded()
-            && !EnergyConfigHandler.disableBuildCraftOutput;
 
     /*
      * Re-written by radfast for better performance Imagine a 30 producer, 80 acceptor network... Before: it would have
@@ -449,12 +444,9 @@ public class EnergyNetwork implements IElectricityNetwork {
             final TileEntity tile = (TileEntity) conductor;
             final World world = tile.getWorldObj();
             // Remove any conductors in unloaded chunks
-            if (tile.isInvalid() || world == null || !world.blockExists(tile.xCoord, tile.yCoord, tile.zCoord)) {
-                it.remove();
-                continue;
-            }
-
-            if (conductor != world.getTileEntity(tile.xCoord, tile.yCoord, tile.zCoord)) {
+            if (tile.isInvalid() || world == null
+                    || !world.blockExists(tile.xCoord, tile.yCoord, tile.zCoord)
+                    || conductor != world.getTileEntity(tile.xCoord, tile.yCoord, tile.zCoord)) {
                 it.remove();
                 continue;
             }
@@ -517,8 +509,7 @@ public class EnergyNetwork implements IElectricityNetwork {
         this.refreshWithChecks();
 
         try {
-            final LinkedList<IConductor> conductorsCopy = new LinkedList();
-            conductorsCopy.addAll(this.conductors);
+            final LinkedList<IConductor> conductorsCopy = new LinkedList<>(this.conductors);
             // This prevents concurrent modifications if something in the loop causes chunk
             // loading
             // (Chunk loading can change the network if new conductors are found)
@@ -545,18 +536,16 @@ public class EnergyNetwork implements IElectricityNetwork {
         if (network != null && network != this) {
             final Set<IConductor> thisNetwork = this.conductors;
             final Set<IConductor> thatNetwork = network.getTransmitters();
-            if (thisNetwork.size() >= thatNetwork.size()) {
-                thisNetwork.addAll(thatNetwork);
-                this.refresh();
-                if (network instanceof EnergyNetwork) {
-                    ((EnergyNetwork) network).destroy();
-                }
-                return this;
-            } else {
+            if (thisNetwork.size() < thatNetwork.size()) {
                 thatNetwork.addAll(thisNetwork);
                 network.refresh();
                 this.destroy();
                 return network;
+            }
+            thisNetwork.addAll(thatNetwork);
+            this.refresh();
+            if (network instanceof EnergyNetwork) {
+                ((EnergyNetwork) network).destroy();
             }
         }
 
@@ -597,30 +586,15 @@ public class EnergyNetwork implements IElectricityNetwork {
                     final int zCoord = ((TileEntity) splitPoint).zCoord;
 
                     for (int j = 0; j < 6; j++) {
-                        switch (j) {
-                            case 0:
-                                tileEntity = world.getTileEntity(xCoord, yCoord - 1, zCoord);
-                                break;
-                            case 1:
-                                tileEntity = world.getTileEntity(xCoord, yCoord + 1, zCoord);
-                                break;
-                            case 2:
-                                tileEntity = world.getTileEntity(xCoord, yCoord, zCoord - 1);
-                                break;
-                            case 3:
-                                tileEntity = world.getTileEntity(xCoord, yCoord, zCoord + 1);
-                                break;
-                            case 4:
-                                tileEntity = world.getTileEntity(xCoord - 1, yCoord, zCoord);
-                                break;
-                            case 5:
-                                tileEntity = world.getTileEntity(xCoord + 1, yCoord, zCoord);
-                                break;
-                            default:
-                                // Not reachable, only to prevent uninitiated compile errors
-                                tileEntity = null;
-                                break;
-                        }
+                        tileEntity = switch (j) {
+                            case 0 -> world.getTileEntity(xCoord, yCoord - 1, zCoord);
+                            case 1 -> world.getTileEntity(xCoord, yCoord + 1, zCoord);
+                            case 2 -> world.getTileEntity(xCoord, yCoord, zCoord - 1);
+                            case 3 -> world.getTileEntity(xCoord, yCoord, zCoord + 1);
+                            case 4 -> world.getTileEntity(xCoord - 1, yCoord, zCoord);
+                            case 5 -> world.getTileEntity(xCoord + 1, yCoord, zCoord);
+                            default -> /* Not reachable, only to prevent uninitiated compile errors */ null;
+                        };
 
                         if (tileEntity instanceof IConductor) {
                             nextToSplit[j] = tileEntity;
@@ -644,10 +618,8 @@ public class EnergyNetwork implements IElectricityNetwork {
                             for (int i2 = i1 + 1; i2 < 6; i2++) {
                                 final TileEntity connectedBlockB = nextToSplit[i2];
 
-                                if (toDo[i2]) {
-                                    if (partNetwork.contains(connectedBlockB)) {
-                                        toDo[i2] = false;
-                                    }
+                                if (toDo[i2] && partNetwork.contains(connectedBlockB)) {
+                                    toDo[i2] = false;
                                 }
                             }
 

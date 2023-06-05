@@ -1,7 +1,5 @@
 package micdoodle8.mods.galacticraft.core.items;
 
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemBlock;
@@ -9,10 +7,11 @@ import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 
 public class ItemBlockWallGC extends ItemBlock {
 
-    private static final String[] types = new String[] { "tin", "tin", "moon", "moonBricks", "mars", "marsBricks" };
+    private static final String[] types = { "tin", "tin", "moon", "moonBricks", "mars", "marsBricks" };
 
     public ItemBlockWallGC(Block block) {
         super(block);

@@ -1,8 +1,5 @@
 package micdoodle8.mods.galacticraft.core.inventory;
 
-import micdoodle8.mods.galacticraft.api.item.IItemElectric;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityElectricIngotCompressor;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -10,6 +7,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
+
+import micdoodle8.mods.galacticraft.api.item.IItemElectric;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityElectricIngotCompressor;
 
 public class ContainerElectricIngotCompressor extends Container {
 
@@ -70,7 +70,7 @@ public class ContainerElectricIngotCompressor extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1) {
         ItemStack var2 = null;
-        final Slot var3 = (Slot) this.inventorySlots.get(par1);
+        final Slot var3 = this.inventorySlots.get(par1);
 
         if (var3 != null && var3.getHasStack()) {
             final ItemStack var4 = var3.getStack();
@@ -84,18 +84,16 @@ public class ContainerElectricIngotCompressor extends Container {
                 if (par1 == 1 || par1 == 2) {
                     var3.onSlotChange(var4, var2);
                 }
-            } else {
-                if (var4.getItem() instanceof IItemElectric) {
-                    if (!this.mergeItemStack(var4, 9, 10, false)) {
-                        return null;
-                    }
-                } else if (par1 < 39) {
-                    if (!this.mergeItemStack(var4, 0, 9, false) && !this.mergeItemStack(var4, 39, 48, false)) {
-                        return null;
-                    }
-                } else if (!this.mergeItemStack(var4, 0, 9, false) && !this.mergeItemStack(var4, 12, 39, false)) {
+            } else if (var4.getItem() instanceof IItemElectric) {
+                if (!this.mergeItemStack(var4, 9, 10, false)) {
                     return null;
                 }
+            } else if (par1 < 39) {
+                if (!this.mergeItemStack(var4, 0, 9, false) && !this.mergeItemStack(var4, 39, 48, false)) {
+                    return null;
+                }
+            } else if (!this.mergeItemStack(var4, 0, 9, false) && !this.mergeItemStack(var4, 12, 39, false)) {
+                return null;
             }
 
             if (var4.stackSize == 0) {

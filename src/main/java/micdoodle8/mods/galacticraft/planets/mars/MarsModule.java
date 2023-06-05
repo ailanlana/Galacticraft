@@ -3,6 +3,34 @@ package micdoodle8.mods.galacticraft.planets.mars;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.MapColor;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialLiquid;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.relauncher.Side;
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
 import micdoodle8.mods.galacticraft.api.galaxies.GalaxyRegistry;
@@ -54,35 +82,6 @@ import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityMethaneSynthesiz
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntitySlimelingEgg;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityTerraformer;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityTreasureChestMars;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialLiquid;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 public class MarsModule implements IPlanetsModule {
 
@@ -195,17 +194,17 @@ public class MarsModule implements IPlanetsModule {
 
     private void registerMicroBlocks() {
         try {
-            final Class clazz = Class.forName("codechicken.microblock.MicroMaterialRegistry");
+            final Class<?> clazz = Class.forName("codechicken.microblock.MicroMaterialRegistry");
             if (clazz != null) {
                 Method registerMethod = null;
                 final Method[] methodz = clazz.getMethods();
                 for (final Method m : methodz) {
-                    if (m.getName().equals("registerMaterial")) {
+                    if ("registerMaterial".equals(m.getName())) {
                         registerMethod = m;
                         break;
                     }
                 }
-                final Class clazzbm = Class.forName("codechicken.microblock.BlockMicroMaterial");
+                final Class<?> clazzbm = Class.forName("codechicken.microblock.BlockMicroMaterial");
                 registerMethod.invoke(
                         null,
                         clazzbm.getConstructor(Block.class, int.class).newInstance(MarsBlocks.marsBlock, 4),
@@ -285,6 +284,7 @@ public class MarsModule implements IPlanetsModule {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public static void registerGalacticraftNonMobEntity(Class<? extends Entity> var0, String var1, int trackingDistance,
             int updateFreq, boolean sendVel) {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
@@ -315,9 +315,11 @@ public class MarsModule implements IPlanetsModule {
             if (ID == GuiIdsPlanets.MACHINE_MARS) {
                 if (tile instanceof TileEntityTerraformer) {
                     return new ContainerTerraformer(player.inventory, (TileEntityTerraformer) tile);
-                } else if (tile instanceof TileEntityLaunchController) {
+                }
+                if (tile instanceof TileEntityLaunchController) {
                     return new ContainerLaunchController(player.inventory, (TileEntityLaunchController) tile);
-                } else if (tile instanceof TileEntityElectrolyzer) {
+                }
+                if (tile instanceof TileEntityElectrolyzer) {
                     return new ContainerElectrolyzer(player.inventory, (TileEntityElectrolyzer) tile);
                 } else if (tile instanceof TileEntityGasLiquefier) {
                     return new ContainerGasLiquefier(player.inventory, (TileEntityGasLiquefier) tile);

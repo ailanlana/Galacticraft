@@ -2,11 +2,6 @@ package micdoodle8.mods.galacticraft.core.items;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.item.IItemOxygenSupply;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,6 +12,10 @@ import net.minecraft.util.EnumChatFormatting;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.item.IItemOxygenSupply;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class ItemCanisterOxygenInfinite extends ItemOxygenTank implements IItemOxygenSupply {
 
@@ -26,10 +25,9 @@ public class ItemCanisterOxygenInfinite extends ItemOxygenTank implements IItemO
         this.setContainerItem(GCItems.oilCanister);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs tabs, List list) {
+    public void getSubItems(Item item, CreativeTabs tabs, List<ItemStack> list) {
         list.add(new ItemStack(item, 1, 0));
     }
 
@@ -68,9 +66,9 @@ public class ItemCanisterOxygenInfinite extends ItemOxygenTank implements IItemO
         return ClientProxyCore.galacticraftItem;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advancedItemTooltips) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip,
+            boolean advancedItemTooltips) {
         tooltip.add(
                 GCCoreUtil.translate("gui.tank.oxygenRemaining") + ": "
                         + EnumChatFormatting.LIGHT_PURPLE

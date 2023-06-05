@@ -1,9 +1,5 @@
 package micdoodle8.mods.galacticraft.core.client.gui.element;
 
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.client.gui.screen.SmallFontRenderer;
-import micdoodle8.mods.galacticraft.core.util.ColorUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -12,6 +8,10 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.core.client.gui.screen.SmallFontRenderer;
+import micdoodle8.mods.galacticraft.core.util.ColorUtil;
 
 public class GuiElementSlider extends GuiButton {
 
@@ -108,7 +108,6 @@ public class GuiElementSlider extends GuiButton {
                         (double) this.xPosition + this.width,
                         (double) this.yPosition + this.sliderPos + 1,
                         this.zLevel);
-                tessellator.draw();
             } else {
                 tessellator.startDrawingQuads();
                 tessellator.setColorRGBA_F(0, 0, 0, 1.0F);
@@ -189,8 +188,8 @@ public class GuiElementSlider extends GuiButton {
                         (double) this.xPosition + this.sliderPos + 1,
                         (double) this.yPosition + this.height,
                         this.zLevel);
-                tessellator.draw();
             }
+            tessellator.draw();
 
             GL11.glShadeModel(GL11.GL_FLAT);
             GL11.glDisable(GL11.GL_BLEND);

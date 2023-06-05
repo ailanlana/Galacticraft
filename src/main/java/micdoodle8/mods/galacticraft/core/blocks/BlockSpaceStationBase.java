@@ -1,10 +1,5 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.tile.IMultiBlock;
-import micdoodle8.mods.galacticraft.core.tile.TileEntitySpaceStationBase;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.ITileEntityProvider;
@@ -19,6 +14,10 @@ import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.tile.IMultiBlock;
+import micdoodle8.mods.galacticraft.core.tile.TileEntitySpaceStationBase;
 
 public class BlockSpaceStationBase extends BlockContainer implements ITileEntityProvider {
 
@@ -51,12 +50,10 @@ public class BlockSpaceStationBase extends BlockContainer implements ITileEntity
 
     @Override
     public IIcon getIcon(int par1, int par2) {
-        switch (par1) {
-            case 1:
-                return this.spaceStationIcons[0];
-            default:
-                return this.spaceStationIcons[1];
-        }
+        return switch (par1) {
+            case 1 -> this.spaceStationIcons[0];
+            default -> this.spaceStationIcons[1];
+        };
     }
 
     @Override

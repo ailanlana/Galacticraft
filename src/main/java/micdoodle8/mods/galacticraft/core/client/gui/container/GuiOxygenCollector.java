@@ -3,6 +3,11 @@ package micdoodle8.mods.galacticraft.core.client.gui.container;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementInfoRegion;
 import micdoodle8.mods.galacticraft.core.energy.EnergyDisplayHelper;
@@ -10,11 +15,6 @@ import micdoodle8.mods.galacticraft.core.inventory.ContainerOxygenCollector;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenCollector;
 import micdoodle8.mods.galacticraft.core.util.EnumColor;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
 
 public class GuiOxygenCollector extends GuiContainerGC {
 
@@ -110,7 +110,7 @@ public class GuiOxygenCollector extends GuiContainerGC {
     private String getStatus() {
         final String returnValue = this.collector.getGUIstatus();
 
-        if (returnValue.equals(EnumColor.DARK_GREEN + GCCoreUtil.translate("gui.status.active.name"))
+        if ((EnumColor.DARK_GREEN + GCCoreUtil.translate("gui.status.active.name")).equals(returnValue)
                 && this.collector.lastOxygenCollected <= 0.0F) {
             return EnumColor.DARK_RED + GCCoreUtil.translate("gui.status.missingleaves.name");
         }

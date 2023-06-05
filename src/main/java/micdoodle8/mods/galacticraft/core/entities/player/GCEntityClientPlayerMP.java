@@ -2,11 +2,6 @@ package micdoodle8.mods.galacticraft.core.entities.player;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.event.ZeroGravityEvent;
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
-import micdoodle8.mods.galacticraft.api.world.IZeroGDimension;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -25,6 +20,10 @@ import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.event.ZeroGravityEvent;
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
+import micdoodle8.mods.galacticraft.api.world.IZeroGDimension;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 
 public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
 
@@ -282,7 +281,7 @@ public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
                         axisalignedbb = this.boundingBox.expand(1.0D, 0.5D, 1.0D);
                     }
 
-                    final List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, axisalignedbb);
+                    final List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, axisalignedbb);
 
                     if (list != null) {
                         for (final Object element : list) {
@@ -340,19 +339,13 @@ public class GCEntityClientPlayerMP extends EntityClientPlayerMP {
                 }
 
                 return stats.landingTicks < this.lastLandingTicks;
-            } else {
-                this.lastLandingTicks = 0;
             }
+            this.lastLandingTicks = 0;
             if (stats.pjumpticks > 0) {
                 return true;
             }
-            if (ClientProxyCore.sneakRenderOverride) {
-                if (FreefallHandler.testFreefall(this)) {
-                    return false;
-                }
-                if (stats.inFreefall) {
-                    return false;
-                }
+            if (ClientProxyCore.sneakRenderOverride && (FreefallHandler.testFreefall(this) || stats.inFreefall)) {
+                return false;
             }
         }
         return super.isSneaking();

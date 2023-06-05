@@ -10,6 +10,36 @@ import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.server.S07PacketRespawn;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityEvent;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.api.event.oxygen.GCCoreOxygenSuffocationEvent;
 import micdoodle8.mods.galacticraft.api.item.IItemThermal;
@@ -50,37 +80,6 @@ import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 import micdoodle8.mods.galacticraft.core.wrappers.Footprint;
 import micdoodle8.mods.galacticraft.planets.asteroids.dimension.WorldProviderAsteroids;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.S07PacketRespawn;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.EntityEvent;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 public class GCPlayerHandler {
 
     private static final int OXYGENHEIGHTLIMIT = 450;
@@ -103,7 +102,7 @@ public class GCPlayerHandler {
     @SubscribeEvent
     public void onPlayerLogout(PlayerLoggedOutEvent event) {
         if (event.player instanceof EntityPlayerMP) {
-            this.onPlayerLogout((EntityPlayerMP) event.player);
+            this.onPlayerLogout();
         }
     }
 
@@ -154,7 +153,7 @@ public class GCPlayerHandler {
                 .sendTo(new PacketSimple(EnumSimplePacket.C_UPDATE_STATS, new Object[] { stats.buildFlags }), player);
     }
 
-    private void onPlayerLogout(EntityPlayerMP player) {}
+    private void onPlayerLogout() {}
 
     private void onPlayerRespawn(EntityPlayerMP player) {
         final GCPlayerStats oldData = this.playerStatsMap.remove(player.getPersistentID());
@@ -478,10 +477,9 @@ public class GCPlayerHandler {
                         && thermalPaddingBoots != null;
 
                 if (!playerStats.thermalLevelNormalising) {
-                    if ((player.ticksExisted - 1) % thermalLevelTickCooldown == 0) {
-                        if (Math.abs(playerStats.thermalLevel) >= 22) {
-                            player.attackEntityFrom(DamageSourceGC.thermal, 1.5F);
-                        }
+                    if ((player.ticksExisted - 1) % thermalLevelTickCooldown == 0
+                            && Math.abs(playerStats.thermalLevel) >= 22) {
+                        player.attackEntityFrom(DamageSourceGC.thermal, 1.5F);
                     }
 
                     if (playerStats.thermalLevel < -15) {
@@ -574,28 +572,26 @@ public class GCPlayerHandler {
                         toTake = 0;
                     }
                 }
-            } else {
-                if ((player.ticksExisted - 1) % 60 == 0) {
-                    if (OxygenUtil.isAABBInBreathableAirBlock(player)) {
-                        if (playerStats.airRemaining < 90 && tankInSlot != null) {
-                            playerStats.airRemaining = Math.min(
-                                    playerStats.airRemaining + 1,
-                                    tankInSlot.getMaxDamage() - tankInSlot.getItemDamage());
-                        }
+            } else if ((player.ticksExisted - 1) % 60 == 0) {
+                if (OxygenUtil.isAABBInBreathableAirBlock(player)) {
+                    if (playerStats.airRemaining < 90 && tankInSlot != null) {
+                        playerStats.airRemaining = Math.min(
+                                playerStats.airRemaining + 1,
+                                tankInSlot.getMaxDamage() - tankInSlot.getItemDamage());
+                    }
 
-                        if (playerStats.airRemaining2 < 90 && tankInSlot2 != null) {
-                            playerStats.airRemaining2 = Math.min(
-                                    playerStats.airRemaining2 + 1,
-                                    tankInSlot2.getMaxDamage() - tankInSlot2.getItemDamage());
-                        }
-                    } else {
-                        if (playerStats.airRemaining > 0) {
-                            playerStats.airRemaining--;
-                        }
+                    if (playerStats.airRemaining2 < 90 && tankInSlot2 != null) {
+                        playerStats.airRemaining2 = Math.min(
+                                playerStats.airRemaining2 + 1,
+                                tankInSlot2.getMaxDamage() - tankInSlot2.getItemDamage());
+                    }
+                } else {
+                    if (playerStats.airRemaining > 0) {
+                        playerStats.airRemaining--;
+                    }
 
-                        if (playerStats.airRemaining2 > 0) {
-                            playerStats.airRemaining2--;
-                        }
+                    if (playerStats.airRemaining2 > 0) {
+                        playerStats.airRemaining2--;
                     }
                 }
             }
@@ -651,65 +647,64 @@ public class GCPlayerHandler {
 
     protected void throwMeteors(EntityPlayerMP player) {
         final World world = player.worldObj;
-        if (world.provider instanceof IGalacticraftWorldProvider && !world.isRemote) {
-            if (((IGalacticraftWorldProvider) world.provider).getMeteorFrequency() > 0
-                    && ConfigManagerCore.meteorSpawnMod > 0.0) {
-                final int f = (int) (((IGalacticraftWorldProvider) world.provider).getMeteorFrequency() * 1000D
-                        * (1.0 / ConfigManagerCore.meteorSpawnMod));
+        if (world.provider instanceof IGalacticraftWorldProvider && !world.isRemote
+                && ((IGalacticraftWorldProvider) world.provider).getMeteorFrequency() > 0
+                && ConfigManagerCore.meteorSpawnMod > 0.0) {
+            final int f = (int) (((IGalacticraftWorldProvider) world.provider).getMeteorFrequency() * 1000D
+                    * (1.0 / ConfigManagerCore.meteorSpawnMod));
 
-                if (world.rand.nextInt(f) == 0) {
-                    final EntityPlayer closestPlayer = world.getClosestPlayerToEntity(player, 100);
+            if (world.rand.nextInt(f) == 0) {
+                final EntityPlayer closestPlayer = world.getClosestPlayerToEntity(player, 100);
 
-                    if (closestPlayer == null || closestPlayer.getEntityId() <= player.getEntityId()) {
-                        int x, y, z;
-                        double motX, motZ;
-                        x = world.rand.nextInt(20) - 10;
-                        y = world.rand.nextInt(20) + 200;
-                        z = world.rand.nextInt(20) - 10;
-                        motX = world.rand.nextDouble() * 5;
-                        motZ = world.rand.nextDouble() * 5;
+                if (closestPlayer == null || closestPlayer.getEntityId() <= player.getEntityId()) {
+                    int x, y, z;
+                    double motX, motZ;
+                    x = world.rand.nextInt(20) - 10;
+                    y = world.rand.nextInt(20) + 200;
+                    z = world.rand.nextInt(20) - 10;
+                    motX = world.rand.nextDouble() * 5;
+                    motZ = world.rand.nextDouble() * 5;
 
-                        final EntityMeteor meteor = new EntityMeteor(
-                                world,
-                                player.posX + x,
-                                player.posY + y,
-                                player.posZ + z,
-                                motX - 2.5D,
-                                0,
-                                motZ - 2.5D,
-                                1);
+                    final EntityMeteor meteor = new EntityMeteor(
+                            world,
+                            player.posX + x,
+                            player.posY + y,
+                            player.posZ + z,
+                            motX - 2.5D,
+                            0,
+                            motZ - 2.5D,
+                            1);
 
-                        if (!world.isRemote) {
-                            world.spawnEntityInWorld(meteor);
-                        }
+                    if (!world.isRemote) {
+                        world.spawnEntityInWorld(meteor);
                     }
                 }
+            }
 
-                if (world.rand.nextInt(f * 3) == 0) {
-                    final EntityPlayer closestPlayer = world.getClosestPlayerToEntity(player, 100);
+            if (world.rand.nextInt(f * 3) == 0) {
+                final EntityPlayer closestPlayer = world.getClosestPlayerToEntity(player, 100);
 
-                    if (closestPlayer == null || closestPlayer.getEntityId() <= player.getEntityId()) {
-                        int x, y, z;
-                        double motX, motZ;
-                        x = world.rand.nextInt(20) - 10;
-                        y = world.rand.nextInt(20) + 200;
-                        z = world.rand.nextInt(20) - 10;
-                        motX = world.rand.nextDouble() * 5;
-                        motZ = world.rand.nextDouble() * 5;
+                if (closestPlayer == null || closestPlayer.getEntityId() <= player.getEntityId()) {
+                    int x, y, z;
+                    double motX, motZ;
+                    x = world.rand.nextInt(20) - 10;
+                    y = world.rand.nextInt(20) + 200;
+                    z = world.rand.nextInt(20) - 10;
+                    motX = world.rand.nextDouble() * 5;
+                    motZ = world.rand.nextDouble() * 5;
 
-                        final EntityMeteor meteor = new EntityMeteor(
-                                world,
-                                player.posX + x,
-                                player.posY + y,
-                                player.posZ + z,
-                                motX - 2.5D,
-                                0,
-                                motZ - 2.5D,
-                                6);
+                    final EntityMeteor meteor = new EntityMeteor(
+                            world,
+                            player.posX + x,
+                            player.posY + y,
+                            player.posZ + z,
+                            motX - 2.5D,
+                            0,
+                            motZ - 2.5D,
+                            6);
 
-                        if (!world.isRemote) {
-                            world.spawnEntityInWorld(meteor);
-                        }
+                    if (!world.isRemote) {
+                        world.spawnEntityInWorld(meteor);
                     }
                 }
             }
@@ -738,8 +733,7 @@ public class GCPlayerHandler {
                                 0);
                     }
                 }
-            } else {
-                // Is it a type of space torch?
+            } else // Is it a type of space torch?
                 if (this.torchItems.containsKey(theCurrentItem.getItem())) {
                     // Get overworld torch for this space torch
                     final Item torchItem = this.torchItems.get(theCurrentItem.getItem());
@@ -751,7 +745,6 @@ public class GCPlayerHandler {
                                 0);
                     }
                 }
-            }
         }
     }
 
@@ -787,49 +780,48 @@ public class GCPlayerHandler {
             final int iPosZ = MathHelper.floor_double(player.posZ);
 
             // If the block below is the moon block
-            if (player.worldObj.getBlock(iPosX, iPosY, iPosZ) == GCBlocks.blockMoon) {
-                // And is the correct metadata (moon turf)
-                if (player.worldObj.getBlockMetadata(iPosX, iPosY, iPosZ) == 5) {
-                    final GCPlayerStats playerStats = GCPlayerStats.get(player);
-                    // If it has been long enough since the last step
-                    if (playerStats.distanceSinceLastStep > 0.35D) {
-                        Vector3 pos = new Vector3(player);
-                        // Set the footprint position to the block below and add random number to stop
-                        // z-fighting
-                        pos.y = MathHelper.floor_double(player.posY - 1D) + player.worldObj.rand.nextFloat() / 100.0F;
+            // And is the correct metadata (moon turf)
+            if (player.worldObj.getBlock(iPosX, iPosY, iPosZ) == GCBlocks.blockMoon
+                    && player.worldObj.getBlockMetadata(iPosX, iPosY, iPosZ) == 5) {
+                final GCPlayerStats playerStats = GCPlayerStats.get(player);
+                // If it has been long enough since the last step
+                if (playerStats.distanceSinceLastStep > 0.35D) {
+                    Vector3 pos = new Vector3(player);
+                    // Set the footprint position to the block below and add random number to stop
+                    // z-fighting
+                    pos.y = MathHelper.floor_double(player.posY - 1D) + player.worldObj.rand.nextFloat() / 100.0F;
 
-                        // Adjust footprint to left or right depending on step count
-                        switch (playerStats.lastStep) {
-                            case 0:
-                                float a = (-player.rotationYaw + 90F) / 57.295779513F;
-                                pos.translate(new Vector3(MathHelper.sin(a) * 0.25F, 0, MathHelper.cos(a) * 0.25F));
-                                break;
-                            case 1:
-                                a = (-player.rotationYaw - 90F) / 57.295779513F;
-                                pos.translate(new Vector3(MathHelper.sin(a) * 0.25, 0, MathHelper.cos(a) * 0.25));
-                                break;
-                        }
-
-                        final float rotation = player.rotationYaw - 180;
-                        pos = WorldUtil.getFootprintPosition(player.worldObj, rotation, pos, new BlockVec3(player));
-
-                        final long chunkKey = ChunkCoordIntPair.chunkXZ2Int(pos.intX() >> 4, pos.intZ() >> 4);
-                        TickHandlerServer.addFootprint(
-                                chunkKey,
-                                new Footprint(
-                                        player.worldObj.provider.dimensionId,
-                                        pos,
-                                        rotation,
-                                        player.getCommandSenderName()),
-                                player.worldObj.provider.dimensionId);
-
-                        // Increment and cap step counter at 1
-                        playerStats.lastStep++;
-                        playerStats.lastStep %= 2;
-                        playerStats.distanceSinceLastStep = 0;
-                    } else {
-                        playerStats.distanceSinceLastStep += motionSqrd;
+                    // Adjust footprint to left or right depending on step count
+                    switch (playerStats.lastStep) {
+                        case 0:
+                            float a = (-player.rotationYaw + 90F) / (180F / (float) Math.PI);
+                            pos.translate(new Vector3(MathHelper.sin(a) * 0.25F, 0, MathHelper.cos(a) * 0.25F));
+                            break;
+                        case 1:
+                            a = (-player.rotationYaw - 90F) / (180F / (float) Math.PI);
+                            pos.translate(new Vector3(MathHelper.sin(a) * 0.25, 0, MathHelper.cos(a) * 0.25));
+                            break;
                     }
+
+                    final float rotation = player.rotationYaw - 180;
+                    pos = WorldUtil.getFootprintPosition(player.worldObj, rotation, pos, new BlockVec3(player));
+
+                    final long chunkKey = ChunkCoordIntPair.chunkXZ2Int(pos.intX() >> 4, pos.intZ() >> 4);
+                    TickHandlerServer.addFootprint(
+                            chunkKey,
+                            new Footprint(
+                                    player.worldObj.provider.dimensionId,
+                                    pos,
+                                    rotation,
+                                    player.getCommandSenderName()),
+                            player.worldObj.provider.dimensionId);
+
+                    // Increment and cap step counter at 1
+                    playerStats.lastStep++;
+                    playerStats.lastStep %= 2;
+                    playerStats.distanceSinceLastStep = 0;
+                } else {
+                    playerStats.distanceSinceLastStep += motionSqrd;
                 }
             }
         }
@@ -1069,7 +1061,7 @@ public class GCPlayerHandler {
             if (ConfigManagerCore.enableSpaceRaceManagerPopup && !GCPlayer.openedSpaceRaceManager) {
                 final SpaceRace race = SpaceRaceManager.getSpaceRaceFromPlayer(player.getGameProfile().getName());
 
-                if (race == null || race.teamName.equals(SpaceRace.DEFAULT_NAME)) {
+                if (race == null || SpaceRace.DEFAULT_NAME.equals(race.teamName)) {
                     GalacticraftCore.packetPipeline
                             .sendTo(new PacketSimple(EnumSimplePacket.C_OPEN_SPACE_RACE_GUI, new Object[] {}), player);
                 }
@@ -1197,34 +1189,32 @@ public class GCPlayerHandler {
         if (GCPlayer.chestSpawnCooldown > 0) {
             GCPlayer.chestSpawnCooldown--;
 
-            if (GCPlayer.chestSpawnCooldown == 180) {
-                if (GCPlayer.chestSpawnVector != null) {
-                    final EntityParachest chest = new EntityParachest(
-                            player.worldObj,
-                            GCPlayer.rocketStacks,
-                            GCPlayer.fuelLevel);
+            if (GCPlayer.chestSpawnCooldown == 180 && GCPlayer.chestSpawnVector != null) {
+                final EntityParachest chest = new EntityParachest(
+                        player.worldObj,
+                        GCPlayer.rocketStacks,
+                        GCPlayer.fuelLevel);
 
-                    chest.setPosition(
-                            GCPlayer.chestSpawnVector.x,
-                            GCPlayer.chestSpawnVector.y,
-                            GCPlayer.chestSpawnVector.z);
+                chest.setPosition(
+                        GCPlayer.chestSpawnVector.x,
+                        GCPlayer.chestSpawnVector.y,
+                        GCPlayer.chestSpawnVector.z);
 
-                    if (!player.worldObj.isRemote) {
-                        if (player.worldObj.isAirBlock(
-                                (int) GCPlayer.chestSpawnVector.x,
-                                (int) GCPlayer.chestSpawnVector.y,
-                                (int) GCPlayer.chestSpawnVector.z)) {
-                            player.worldObj.spawnEntityInWorld(chest);
-                        } else {
-                            for (final ItemStack stacks : GCPlayer.rocketStacks) {
-                                final EntityItem entityitem = new EntityItem(
-                                        player.worldObj,
-                                        GCPlayer.chestSpawnVector.x,
-                                        GCPlayer.chestSpawnVector.y + 1.0D,
-                                        GCPlayer.chestSpawnVector.z,
-                                        stacks);
-                                player.worldObj.spawnEntityInWorld(entityitem);
-                            }
+                if (!player.worldObj.isRemote) {
+                    if (player.worldObj.isAirBlock(
+                            (int) GCPlayer.chestSpawnVector.x,
+                            (int) GCPlayer.chestSpawnVector.y,
+                            (int) GCPlayer.chestSpawnVector.z)) {
+                        player.worldObj.spawnEntityInWorld(chest);
+                    } else {
+                        for (final ItemStack stacks : GCPlayer.rocketStacks) {
+                            final EntityItem entityitem = new EntityItem(
+                                    player.worldObj,
+                                    GCPlayer.chestSpawnVector.x,
+                                    GCPlayer.chestSpawnVector.y + 1.0D,
+                                    GCPlayer.chestSpawnVector.z,
+                                    stacks);
+                            player.worldObj.spawnEntityInWorld(entityitem);
                         }
                     }
                 }

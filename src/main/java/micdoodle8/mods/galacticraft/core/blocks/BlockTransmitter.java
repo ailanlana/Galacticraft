@@ -2,17 +2,6 @@ package micdoodle8.mods.galacticraft.core.blocks;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
-import micdoodle8.mods.galacticraft.api.transmission.tile.INetworkConnection;
-import micdoodle8.mods.galacticraft.api.transmission.tile.ITransmitter;
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.energy.EnergyUtil;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
-import micdoodle8.mods.galacticraft.core.util.OxygenUtil;
-import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityHydrogenPipe;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -23,6 +12,16 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
+import micdoodle8.mods.galacticraft.api.transmission.tile.INetworkConnection;
+import micdoodle8.mods.galacticraft.api.transmission.tile.ITransmitter;
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.energy.EnergyUtil;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
+import micdoodle8.mods.galacticraft.core.util.OxygenUtil;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityHydrogenPipe;
 
 public abstract class BlockTransmitter extends BlockContainer {
 
@@ -125,10 +124,9 @@ public abstract class BlockTransmitter extends BlockContainer {
 
     public abstract NetworkType getNetworkType();
 
-    @SuppressWarnings("rawtypes")
     @Override
-    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisalignedbb, List list,
-            Entity entity) {
+    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisalignedbb,
+            List<AxisAlignedBB> list, Entity entity) {
         this.setBlockBounds(
                 (float) this.minVector.x,
                 (float) this.minVector.y,
@@ -140,21 +138,12 @@ public abstract class BlockTransmitter extends BlockContainer {
 
         final TileEntity tileEntity = world.getTileEntity(x, y, z);
         if (tileEntity instanceof ITransmitter) {
-            TileEntity[] connectable;
-            switch (this.getNetworkType()) {
-                case OXYGEN:
-                    connectable = OxygenUtil.getAdjacentOxygenConnections(tileEntity);
-                    break;
-                case HYDROGEN:
-                    connectable = TileEntityHydrogenPipe.getAdjacentHydrogenConnections(tileEntity);
-                    break;
-                case POWER:
-                    connectable = EnergyUtil.getAdjacentPowerConnections(tileEntity);
-                    break;
-                default:
-                    connectable = new TileEntity[6];
-            }
-
+            TileEntity[] connectable = switch (this.getNetworkType()) {
+                case OXYGEN -> OxygenUtil.getAdjacentOxygenConnections(tileEntity);
+                case HYDROGEN -> TileEntityHydrogenPipe.getAdjacentHydrogenConnections(tileEntity);
+                case POWER -> EnergyUtil.getAdjacentPowerConnections(tileEntity);
+                default -> new TileEntity[6];
+            };
             if (connectable[4] != null) {
                 this.setBlockBounds(
                         0,

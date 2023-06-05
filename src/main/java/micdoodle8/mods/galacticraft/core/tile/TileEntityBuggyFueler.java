@@ -3,15 +3,6 @@ package micdoodle8.mods.galacticraft.core.tile;
 import java.util.HashSet;
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.entity.ICargoEntity;
-import micdoodle8.mods.galacticraft.api.entity.IDockable;
-import micdoodle8.mods.galacticraft.api.entity.IFuelable;
-import micdoodle8.mods.galacticraft.api.tile.IFuelDock;
-import micdoodle8.mods.galacticraft.api.tile.ILandingPadAttachable;
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.core.blocks.BlockMulti;
-import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -21,6 +12,14 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fluids.FluidStack;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import micdoodle8.mods.galacticraft.api.entity.ICargoEntity;
+import micdoodle8.mods.galacticraft.api.entity.IDockable;
+import micdoodle8.mods.galacticraft.api.entity.IFuelable;
+import micdoodle8.mods.galacticraft.api.tile.IFuelDock;
+import micdoodle8.mods.galacticraft.api.tile.ILandingPadAttachable;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.core.blocks.BlockMulti;
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 
 public class TileEntityBuggyFueler extends TileEntityMulti implements IMultiBlock, IFuelable, IFuelDock, ICargoEntity {
 
@@ -44,16 +43,14 @@ public class TileEntityBuggyFueler extends TileEntityMulti implements IMultiBloc
             boolean changed = false;
 
             for (final Object o : list) {
-                if (o != null && o instanceof IDockable && !this.worldObj.isRemote) {
-                    final IDockable fuelable = (IDockable) o;
+                if (o != null && o instanceof IDockable fuelable
+                        && !this.worldObj.isRemote
+                        && fuelable.isDockValid(this)) {
+                    this.dockedEntity = fuelable;
 
-                    if (fuelable.isDockValid(this)) {
-                        this.dockedEntity = fuelable;
+                    this.dockedEntity.setPad(this);
 
-                        this.dockedEntity.setPad(this);
-
-                        changed = true;
-                    }
+                    changed = true;
                 }
             }
 
@@ -167,9 +164,8 @@ public class TileEntityBuggyFueler extends TileEntityMulti implements IMultiBloc
                         final TileEntity tile = this.worldObj
                                 .getTileEntity(this.xCoord + x, this.yCoord, this.zCoord + z);
 
-                        if (tile != null && tile instanceof ILandingPadAttachable
-                                && ((ILandingPadAttachable) tile)
-                                        .canAttachToLandingPad(this.worldObj, this.xCoord, this.yCoord, this.zCoord)) {
+                        if (tile instanceof ILandingPadAttachable && ((ILandingPadAttachable) tile)
+                                .canAttachToLandingPad(this.worldObj, this.xCoord, this.yCoord, this.zCoord)) {
                             connectedTiles.add((ILandingPadAttachable) tile);
                         }
                     }
@@ -184,7 +180,7 @@ public class TileEntityBuggyFueler extends TileEntityMulti implements IMultiBloc
     public boolean isBlockAttachable(IBlockAccess world, int x, int y, int z) {
         final TileEntity tile = world.getTileEntity(x, y, z);
 
-        if (tile != null && tile instanceof ILandingPadAttachable) {
+        if (tile instanceof ILandingPadAttachable) {
             return ((ILandingPadAttachable) tile).canAttachToLandingPad(world, this.xCoord, this.yCoord, this.zCoord);
         }
 

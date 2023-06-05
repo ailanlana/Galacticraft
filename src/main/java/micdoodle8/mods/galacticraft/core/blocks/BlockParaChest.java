@@ -3,11 +3,6 @@ package micdoodle8.mods.galacticraft.core.blocks;
 import java.util.Iterator;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityParaChest;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.ITileEntityProvider;
@@ -29,6 +24,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityParaChest;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class BlockParaChest extends BlockContainer implements ITileEntityProvider, ItemBlockDesc.IBlockShiftDesc {
 
@@ -73,15 +72,14 @@ public class BlockParaChest extends BlockContainer implements ITileEntityProvide
             int par6, float par7, float par8, float par9) {
         if (par1World.isRemote) {
             return true;
-        } else {
-            final IInventory iinventory = this.getInventory(par1World, par2, par3, par4);
-
-            if (iinventory != null && par5EntityPlayer instanceof EntityPlayerMP) {
-                par5EntityPlayer.openGui(GalacticraftCore.instance, -1, par1World, par2, par3, par4);
-            }
-
-            return true;
         }
+        final IInventory iinventory = this.getInventory(par1World, par2, par3, par4);
+
+        if (iinventory != null && par5EntityPlayer instanceof EntityPlayerMP) {
+            par5EntityPlayer.openGui(GalacticraftCore.instance, -1, par1World, par2, par3, par4);
+        }
+
+        return true;
     }
 
     @Override
@@ -157,9 +155,8 @@ public class BlockParaChest extends BlockContainer implements ITileEntityProvide
         if (object == null || par1World.isSideSolid(par2, par3 + 1, par4, ForgeDirection.DOWN)
                 || BlockParaChest.isOcelotBlockingChest(par1World, par2, par3, par4)) {
             return null;
-        } else {
-            return (IInventory) object;
         }
+        return (IInventory) object;
     }
 
     public static boolean isOcelotBlockingChest(World par0World, int par1, int par2, int par3) {

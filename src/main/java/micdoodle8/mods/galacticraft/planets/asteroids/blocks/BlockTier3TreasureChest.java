@@ -3,13 +3,6 @@ package micdoodle8.mods.galacticraft.planets.asteroids.blocks;
 import java.util.Iterator;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-import micdoodle8.mods.galacticraft.planets.GalacticraftPlanets;
-import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
-import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityTreasureChestAsteroids;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.ITileEntityProvider;
@@ -33,6 +26,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+import micdoodle8.mods.galacticraft.planets.GalacticraftPlanets;
+import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
+import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityTreasureChestAsteroids;
 
 public class BlockTier3TreasureChest extends BlockContainer
         implements ITileEntityProvider, ItemBlockDesc.IBlockShiftDesc {
@@ -264,10 +263,10 @@ public class BlockTier3TreasureChest extends BlockContainer
             ++var5;
         }
 
-        return var5 <= 1 && (!this.isThereANeighborChest(par1World, par2 - 1, par3, par4)
+        return var5 <= 1 && !this.isThereANeighborChest(par1World, par2 - 1, par3, par4)
                 && !this.isThereANeighborChest(par1World, par2 + 1, par3, par4)
                 && !this.isThereANeighborChest(par1World, par2, par3, par4 - 1)
-                && !this.isThereANeighborChest(par1World, par2, par3, par4 + 1));
+                && !this.isThereANeighborChest(par1World, par2, par3, par4 + 1);
     }
 
     /**
@@ -347,65 +346,58 @@ public class BlockTier3TreasureChest extends BlockContainer
         if (var10 == null || par1World.isSideSolid(par2, par3 + 1, par4, ForgeDirection.DOWN)
                 || BlockTier3TreasureChest.isOcelotBlockingChest(par1World, par2, par3, par4)) {
             return true;
-        } else if (par1World.getBlock(par2 - 1, par3, par4) == this
+        }
+        if (par1World.getBlock(par2 - 1, par3, par4) == this
                 && (par1World.isSideSolid(par2 - 1, par3 + 1, par4, ForgeDirection.DOWN)
                         || BlockTier3TreasureChest.isOcelotBlockingChest(par1World, par2 - 1, par3, par4))) {
-                            return true;
-                        } else
-            if (par1World.getBlock(par2 + 1, par3, par4) == this
-                    && (par1World.isSideSolid(par2 + 1, par3 + 1, par4, ForgeDirection.DOWN)
-                            || BlockTier3TreasureChest.isOcelotBlockingChest(par1World, par2 + 1, par3, par4))) {
-                                return true;
-                            } else
-                if (par1World.getBlock(par2, par3, par4 - 1) == this
-                        && (par1World.isSideSolid(par2, par3 + 1, par4 - 1, ForgeDirection.DOWN)
-                                || BlockTier3TreasureChest.isOcelotBlockingChest(par1World, par2, par3, par4 - 1))) {
-                                    return true;
-                                } else
-                    if (par1World.getBlock(par2, par3, par4 + 1) == this && (par1World
-                            .isSideSolid(par2, par3 + 1, par4 + 1, ForgeDirection.DOWN)
-                            || BlockTier3TreasureChest.isOcelotBlockingChest(par1World, par2, par3, par4 + 1))) {
-                                return true;
-                            } else {
-                                if (par1World.getBlock(par2 - 1, par3, par4) == this) {
-                                    var10 = new InventoryLargeChest(
-                                            "container.chestDouble",
-                                            (TileEntityTreasureChestAsteroids) par1World
-                                                    .getTileEntity(par2 - 1, par3, par4),
-                                            (IInventory) var10);
-                                }
-
-                                if (par1World.getBlock(par2 + 1, par3, par4) == this) {
-                                    var10 = new InventoryLargeChest(
-                                            "container.chestDouble",
-                                            (IInventory) var10,
-                                            (TileEntityTreasureChestAsteroids) par1World
-                                                    .getTileEntity(par2 + 1, par3, par4));
-                                }
-
-                                if (par1World.getBlock(par2, par3, par4 - 1) == this) {
-                                    var10 = new InventoryLargeChest(
-                                            "container.chestDouble",
-                                            (TileEntityTreasureChestAsteroids) par1World
-                                                    .getTileEntity(par2, par3, par4 - 1),
-                                            (IInventory) var10);
-                                }
-
-                                if (par1World.getBlock(par2, par3, par4 + 1) == this) {
-                                    var10 = new InventoryLargeChest(
-                                            "container.chestDouble",
-                                            (IInventory) var10,
-                                            (TileEntityTreasureChestAsteroids) par1World
-                                                    .getTileEntity(par2, par3, par4 + 1));
-                                }
-
-                                if (par1World.isRemote) {
-                                    return true;
-                                } else {
-                                    par5EntityPlayer.displayGUIChest((IInventory) var10);
-                                    return true;
-                                }
+            return true;
+        }
+        if (par1World.getBlock(par2 + 1, par3, par4) == this
+                && (par1World.isSideSolid(par2 + 1, par3 + 1, par4, ForgeDirection.DOWN)
+                        || BlockTier3TreasureChest.isOcelotBlockingChest(par1World, par2 + 1, par3, par4))) {} else
+            if (par1World.getBlock(par2, par3, par4 - 1) == this
+                    && (par1World.isSideSolid(par2, par3 + 1, par4 - 1, ForgeDirection.DOWN)
+                            || BlockTier3TreasureChest.isOcelotBlockingChest(par1World, par2, par3, par4 - 1))) {} else
+                if (par1World.getBlock(par2, par3, par4 + 1) == this && (par1World
+                        .isSideSolid(par2, par3 + 1, par4 + 1, ForgeDirection.DOWN)
+                        || BlockTier3TreasureChest.isOcelotBlockingChest(par1World, par2, par3, par4 + 1))) {} else {
+                            if (par1World.getBlock(par2 - 1, par3, par4) == this) {
+                                var10 = new InventoryLargeChest(
+                                        "container.chestDouble",
+                                        (TileEntityTreasureChestAsteroids) par1World
+                                                .getTileEntity(par2 - 1, par3, par4),
+                                        (IInventory) var10);
                             }
+
+                            if (par1World.getBlock(par2 + 1, par3, par4) == this) {
+                                var10 = new InventoryLargeChest(
+                                        "container.chestDouble",
+                                        (IInventory) var10,
+                                        (TileEntityTreasureChestAsteroids) par1World
+                                                .getTileEntity(par2 + 1, par3, par4));
+                            }
+
+                            if (par1World.getBlock(par2, par3, par4 - 1) == this) {
+                                var10 = new InventoryLargeChest(
+                                        "container.chestDouble",
+                                        (TileEntityTreasureChestAsteroids) par1World
+                                                .getTileEntity(par2, par3, par4 - 1),
+                                        (IInventory) var10);
+                            }
+
+                            if (par1World.getBlock(par2, par3, par4 + 1) == this) {
+                                var10 = new InventoryLargeChest(
+                                        "container.chestDouble",
+                                        (IInventory) var10,
+                                        (TileEntityTreasureChestAsteroids) par1World
+                                                .getTileEntity(par2, par3, par4 + 1));
+                            }
+
+                            if (par1World.isRemote) {} else {
+                                par5EntityPlayer.displayGUIChest((IInventory) var10);
+                            }
+                        }
+        return true;
     }
 
     @Override
@@ -413,9 +405,8 @@ public class BlockTier3TreasureChest extends BlockContainer
         return new TileEntityTreasureChestAsteroids();
     }
 
-    @SuppressWarnings("rawtypes")
     public static boolean isOcelotBlockingChest(World par0World, int par1, int par2, int par3) {
-        final Iterator var4 = par0World.getEntitiesWithinAABB(
+        final Iterator<EntityOcelot> var4 = par0World.getEntitiesWithinAABB(
                 EntityOcelot.class,
                 AxisAlignedBB.getBoundingBox(par1, par2 + 1, par3, par1 + 1, par2 + 2, par3 + 1)).iterator();
         EntityOcelot var6;
@@ -425,7 +416,7 @@ public class BlockTier3TreasureChest extends BlockContainer
                 return false;
             }
 
-            final EntityOcelot var5 = (EntityOcelot) var4.next();
+            final EntityOcelot var5 = var4.next();
             var6 = var5;
         } while (!var6.isSitting());
 

@@ -1,7 +1,5 @@
 package micdoodle8.mods.galacticraft.core.inventory;
 
-import micdoodle8.mods.galacticraft.core.tile.TileEntityIngotCompressor;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -10,6 +8,8 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
+
+import micdoodle8.mods.galacticraft.core.tile.TileEntityIngotCompressor;
 
 public class ContainerIngotCompressor extends Container {
 
@@ -70,7 +70,7 @@ public class ContainerIngotCompressor extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1) {
         ItemStack var2 = null;
-        final Slot slot = (Slot) this.inventorySlots.get(par1);
+        final Slot slot = this.inventorySlots.get(par1);
 
         if (slot != null && slot.getHasStack()) {
             final ItemStack var4 = slot.getStack();
@@ -84,18 +84,16 @@ public class ContainerIngotCompressor extends Container {
                 if (par1 == 1) {
                     slot.onSlotChange(var4, var2);
                 }
-            } else {
-                if (TileEntityFurnace.getItemBurnTime(var4) > 0) {
-                    if (!this.mergeItemStack(var4, 9, 10, false)) {
-                        return null;
-                    }
-                } else if (par1 < 38) {
-                    if (!this.mergeItemStack(var4, 0, 9, false) && !this.mergeItemStack(var4, 38, 47, false)) {
-                        return null;
-                    }
-                } else if (!this.mergeItemStack(var4, 0, 9, false) && !this.mergeItemStack(var4, 11, 38, false)) {
+            } else if (TileEntityFurnace.getItemBurnTime(var4) > 0) {
+                if (!this.mergeItemStack(var4, 9, 10, false)) {
                     return null;
                 }
+            } else if (par1 < 38) {
+                if (!this.mergeItemStack(var4, 0, 9, false) && !this.mergeItemStack(var4, 38, 47, false)) {
+                    return null;
+                }
+            } else if (!this.mergeItemStack(var4, 0, 9, false) && !this.mergeItemStack(var4, 11, 38, false)) {
+                return null;
             }
 
             if (var4.stackSize == 0) {

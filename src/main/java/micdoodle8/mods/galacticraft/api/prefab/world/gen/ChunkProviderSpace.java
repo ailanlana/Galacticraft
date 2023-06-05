@@ -1,12 +1,9 @@
 package micdoodle8.mods.galacticraft.api.prefab.world.gen;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
-import micdoodle8.mods.galacticraft.api.prefab.core.BlockMetaPair;
-import micdoodle8.mods.galacticraft.core.perlin.generator.Gradient;
-import micdoodle8.mods.galacticraft.core.world.gen.EnumCraterSize;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
@@ -19,6 +16,10 @@ import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderGenerate;
+
+import micdoodle8.mods.galacticraft.api.prefab.core.BlockMetaPair;
+import micdoodle8.mods.galacticraft.core.perlin.generator.Gradient;
+import micdoodle8.mods.galacticraft.core.world.gen.EnumCraterSize;
 
 /**
  * Do not include this prefab class in your released mod download.
@@ -119,11 +120,11 @@ public abstract class ChunkProviderSpace extends ChunkProviderGenerate {
     private double lerp(double d1, double d2, double t) {
         if (t < 0.0) {
             return d1;
-        } else if (t > 1.0) {
-            return d2;
-        } else {
-            return d1 + (d2 - d1) * t;
         }
+        if (t > 1.0) {
+            return d2;
+        }
+        return d1 + (d2 - d1) * t;
     }
 
     private double fade(double n) {
@@ -341,28 +342,23 @@ public abstract class ChunkProviderSpace extends ChunkProviderGenerate {
         return "RandomLevelSource";
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public List getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int i, int j, int k) {
+    public List<SpawnListEntry> getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int i, int j, int k) {
         if (par1EnumCreatureType == EnumCreatureType.monster) {
-            final List monsters = new ArrayList();
+            final List<SpawnListEntry> monsters = new ArrayList<>();
 
-            for (final SpawnListEntry monster : this.getMonsters()) {
-                monsters.add(monster);
-            }
+            Collections.addAll(monsters, this.getMonsters());
 
             return monsters;
-        } else if (par1EnumCreatureType == EnumCreatureType.creature) {
-            final List creatures = new ArrayList();
+        }
+        if (par1EnumCreatureType == EnumCreatureType.creature) {
+            final List<SpawnListEntry> creatures = new ArrayList<>();
 
-            for (final SpawnListEntry creature : this.getCreatures()) {
-                creatures.add(creature);
-            }
+            Collections.addAll(creatures, this.getCreatures());
 
             return creatures;
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**

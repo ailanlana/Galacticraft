@@ -7,13 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import micdoodle8.mods.galacticraft.core.Constants;
-import micdoodle8.mods.galacticraft.core.obfuscation.FieldObfuscationEntry;
-import micdoodle8.mods.galacticraft.core.obfuscation.MethodObfuscationEntry;
-import micdoodle8.mods.galacticraft.core.obfuscation.ObfuscationEntry;
-import micdoodle8.mods.galacticraft.planets.mars.entities.EntitySlimeling;
-import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntitySlimelingEgg;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -40,6 +33,12 @@ import cpw.mods.fml.common.versioning.VersionParser;
 import cpw.mods.fml.relauncher.FMLInjectionData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.Constants;
+import micdoodle8.mods.galacticraft.core.obfuscation.FieldObfuscationEntry;
+import micdoodle8.mods.galacticraft.core.obfuscation.MethodObfuscationEntry;
+import micdoodle8.mods.galacticraft.core.obfuscation.ObfuscationEntry;
+import micdoodle8.mods.galacticraft.planets.mars.entities.EntitySlimeling;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntitySlimelingEgg;
 
 public class VersionUtil {
 
@@ -246,19 +245,17 @@ public class VersionUtil {
             String s = "";
             if (nbt.hasKey("OwnerUUID", 8)) {
                 s = nbt.getString("OwnerUUID");
-            } else {
-                if (mcVersion1_7_10) {
-                    Method m = (Method) reflectionCache.get(2);
+            } else if (mcVersion1_7_10) {
+                Method m = (Method) reflectionCache.get(2);
 
-                    if (m == null) {
-                        final Class<?> c = Class.forName(getNameDynamic(KEY_CLASS_YGG_CONVERTER).replace('/', '.'));
-                        m = c.getMethod(getNameDynamic(KEY_METHOD_CONVERT_UUID), String.class);
-                        reflectionCache.put(2, m);
-                    }
-
-                    final String s1 = nbt.getString("Owner");
-                    s = (String) m.invoke(null, s1);
+                if (m == null) {
+                    final Class<?> c = Class.forName(getNameDynamic(KEY_CLASS_YGG_CONVERTER).replace('/', '.'));
+                    m = c.getMethod(getNameDynamic(KEY_METHOD_CONVERT_UUID), String.class);
+                    reflectionCache.put(2, m);
                 }
+
+                final String s1 = nbt.getString("Owner");
+                s = (String) m.invoke(null, s1);
             }
 
             if (s.length() > 0) {
@@ -289,7 +286,8 @@ public class VersionUtil {
 
                 final Object nbtSizeTracker = c0.getConstructor(long.class).newInstance(2097152L);
                 return (NBTTagCompound) m.invoke(null, compressedNBT, nbtSizeTracker);
-            } else if (mcVersion1_7_2) {
+            }
+            if (mcVersion1_7_2) {
                 Method m = (Method) reflectionCache.get(6);
 
                 if (m == null) {
@@ -403,7 +401,8 @@ public class VersionUtil {
                 }
 
                 return (Boolean) m.invoke(player.mcServer.getConfigurationManager(), player.getGameProfile());
-            } else if (mcVersion1_7_2) {
+            }
+            if (mcVersion1_7_2) {
                 Method m = (Method) reflectionCache.get(14);
 
                 if (m == null) {
@@ -425,7 +424,7 @@ public class VersionUtil {
     public static ScaledResolution getScaledRes(Minecraft mc, int width, int height) {
         try {
             if (mcVersion1_7_10) {
-                Constructor m = (Constructor) reflectionCache.get(16);
+                Constructor<?> m = (Constructor<?>) reflectionCache.get(16);
 
                 if (m == null) {
                     final Class<?> c = Class.forName(getNameDynamic(KEY_CLASS_SCALED_RES).replace('/', '.'));
@@ -434,8 +433,9 @@ public class VersionUtil {
                 }
 
                 return (ScaledResolution) m.newInstance(mc, width, height);
-            } else if (mcVersion1_7_2) {
-                Constructor m = (Constructor) reflectionCache.get(16);
+            }
+            if (mcVersion1_7_2) {
+                Constructor<?> m = (Constructor<?>) reflectionCache.get(16);
 
                 if (m == null) {
                     final Class<?> c = Class.forName(getNameDynamic(KEY_CLASS_SCALED_RES).replace('/', '.'));
@@ -471,33 +471,31 @@ public class VersionUtil {
         return null;
     }
 
-    public static void putClassToIDMapping(Class mobClazz, int id) {
+    public static void putClassToIDMapping(Class<?> mobClazz, int id) {
         // Achieves this, with private field:
         // EntityList.classToIDMapping.put(mobClazz, id);
         try {
             final Class<?> c = Class.forName(getNameDynamic(KEY_CLASS_ENTITYLIST).replace('/', '.'));
             final Field f = c.getDeclaredField(getNameDynamic(KEY_FIELD_CLASSTOIDMAPPING));
             f.setAccessible(true);
-            final Map classToIDMapping = (Map) f.get(null);
+            @SuppressWarnings("unchecked")
+            final Map<Class<?>, Integer> classToIDMapping = (Map<Class<?>, Integer>) f.get(null);
             classToIDMapping.put(mobClazz, id);
-
-            return;
         } catch (final Throwable t) {
             t.printStackTrace();
         }
-
-        return;
     }
 
-    public static int getClassToIDMapping(Class mobClazz) {
+    public static int getClassToIDMapping(Class<?> mobClazz) {
         // Achieves this, with private field:
         // EntityList.classToIDMapping.put(mobClazz, id);
         try {
             final Class<?> c = Class.forName(getNameDynamic(KEY_CLASS_ENTITYLIST).replace('/', '.'));
             final Field f = c.getDeclaredField(getNameDynamic(KEY_FIELD_CLASSTOIDMAPPING));
             f.setAccessible(true);
-            final Map classToIDMapping = (Map) f.get(null);
-            final Integer i = (Integer) classToIDMapping.get(mobClazz);
+            @SuppressWarnings("unchecked")
+            final Map<Class<?>, Integer> classToIDMapping = (Map<Class<?>, Integer>) f.get(null);
+            final Integer i = classToIDMapping.get(mobClazz);
 
             return i != null ? i : 0;
         } catch (final Throwable t) {
@@ -519,9 +517,8 @@ public class VersionUtil {
         try {
             if (deobfuscated) {
                 return getName(keyName);
-            } else {
-                return getObfName(keyName);
             }
+            return getObfName(keyName);
         } catch (final NullPointerException e) {
             System.err.println("Could not find key: " + keyName);
             throw e;
@@ -542,7 +539,7 @@ public class VersionUtil {
 
             if (mcVersion1_7_2) {
                 return (GameProfile) c.getConstructor(String.class, String.class)
-                        .newInstance(uuid.toString().replaceAll("-", ""), strName);
+                        .newInstance(uuid.toString().replace("-", ""), strName);
             }
         } catch (final Throwable t) {
             t.printStackTrace();
@@ -560,7 +557,7 @@ public class VersionUtil {
             try {
                 Field f = (Field) reflectionCache.get(20);
                 if (f == null) {
-                    final Class c = Class.forName("net.minecraft.world.ChunkCache");
+                    final Class<?> c = Class.forName("net.minecraft.world.ChunkCache");
                     f = c.getDeclaredField(getNameDynamic(KEY_FIELD_CHUNKCACHE_WORLDOBJ));
                     f.setAccessible(true);
                     reflectionCache.put(20, f);
@@ -579,10 +576,10 @@ public class VersionUtil {
         try {
             Method m = (Method) reflectionCache.get(3);
             if (m == null) {
-                final Class c = Class.forName("net.minecraft.block.Block");
+                final Class<?> c = Class.forName("net.minecraft.block.Block");
                 final Method[] mm = c.getDeclaredMethods();
                 for (final Method testMethod : mm) {
-                    if (testMethod.getName().equals("func_149644_j")) {
+                    if ("func_149644_j".equals(testMethod.getName())) {
                         m = testMethod;
                         break;
                     }

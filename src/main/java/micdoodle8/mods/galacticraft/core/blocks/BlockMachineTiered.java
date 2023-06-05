@@ -2,13 +2,6 @@ package micdoodle8.mods.galacticraft.core.blocks;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical;
-import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityElectricFurnace;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityEnergyStorageModule;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -22,6 +15,13 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityElectricFurnace;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityEnergyStorageModule;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class BlockMachineTiered extends BlockTileGC implements ItemBlockDesc.IBlockShiftDesc {
 
@@ -135,8 +135,7 @@ public class BlockMachineTiered extends BlockTileGC implements ItemBlockDesc.IBl
                 }
                 return this.iconOutput;
             }
-            // If it is the back side
-            else if (side == (metaside ^ 1)) {
+            if (side == (metaside ^ 1)) {
                 if (metadata >= 8) {
                     return this.iconInputT2;
                 }
@@ -170,24 +169,7 @@ public class BlockMachineTiered extends BlockTileGC implements ItemBlockDesc.IBl
             return this.blockIcon;
         }
 
-        if ((metadata & 4) == BlockMachineTiered.ELECTRIC_FURNACE_METADATA) {
-            // If it is the front side
-            if (side == metaside) {
-                if (metadata >= 8) {
-                    return this.iconInputT2;
-                }
-                return this.iconInput;
-            }
-            // If it is the back side
-            else if (metaside == 2 && side == 4 || metaside == 3 && side == 5
-                    || metaside == 4 && side == 3
-                    || metaside == 5 && side == 2) {
-                        if (metadata >= 8) {
-                            return this.iconElectricFurnaceT2;
-                        }
-                        return this.iconElectricFurnace;
-                    }
-        } else {
+        if ((metadata & 4) != BlockMachineTiered.ELECTRIC_FURNACE_METADATA) {
             // If it is the front side
             if (side == metaside) {
                 if (metadata >= 8) {
@@ -195,8 +177,7 @@ public class BlockMachineTiered extends BlockTileGC implements ItemBlockDesc.IBl
                 }
                 return this.iconOutput;
             }
-            // If it is the back side
-            else if (side == (metaside ^ 1)) {
+            if (side == (metaside ^ 1)) {
                 if (metadata >= 8) {
                     return this.iconInputT2;
                 }
@@ -207,6 +188,21 @@ public class BlockMachineTiered extends BlockTileGC implements ItemBlockDesc.IBl
                 return this.iconEnergyStorageModuleT2[16];
             }
             return this.iconEnergyStorageModule[16];
+        }
+        // If it is the front side
+        if (side == metaside) {
+            if (metadata >= 8) {
+                return this.iconInputT2;
+            }
+            return this.iconInput;
+        }
+        if (metaside == 2 && side == 4 || metaside == 3 && side == 5
+                || metaside == 4 && side == 3
+                || metaside == 5 && side == 2) {
+            if (metadata >= 8) {
+                return this.iconElectricFurnaceT2;
+            }
+            return this.iconElectricFurnace;
         }
 
         if (metadata >= 8) {
@@ -294,9 +290,8 @@ public class BlockMachineTiered extends BlockTileGC implements ItemBlockDesc.IBl
 
         if ((metadata & 4) == BlockMachineTiered.ELECTRIC_FURNACE_METADATA) {
             return new TileEntityElectricFurnace(tier);
-        } else {
-            return new TileEntityEnergyStorageModule(tier);
         }
+        return new TileEntityEnergyStorageModule(tier);
     }
 
     public ItemStack getEnergyStorageModule() {
@@ -315,9 +310,8 @@ public class BlockMachineTiered extends BlockTileGC implements ItemBlockDesc.IBl
         return new ItemStack(this, 1, 8 + BlockMachineTiered.ELECTRIC_FURNACE_METADATA);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         par3List.add(this.getEnergyStorageModule());
         par3List.add(this.getElectricFurnace());
         if (GalacticraftCore.isPlanetsLoaded) {

@@ -13,6 +13,7 @@ import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+
 import cpw.mods.fml.common.eventhandler.Event;
 
 /**
@@ -210,6 +211,7 @@ public class GalaxyRegistry {
     /**
      * Returns a read-only map containing Planet Names and their associated Planets.
      */
+    @SuppressWarnings("unchecked")
     public static Map<String, Planet> getRegisteredPlanets() {
         return (Map<String, Planet>) GalaxyRegistry.planets.clone();
     }
@@ -224,6 +226,7 @@ public class GalaxyRegistry {
     /**
      * Returns a read-only map containing Moon Names and their associated Moons.
      */
+    @SuppressWarnings("unchecked")
     public static Map<String, Moon> getRegisteredMoons() {
         return (Map<String, Moon>) GalaxyRegistry.moons.clone();
     }

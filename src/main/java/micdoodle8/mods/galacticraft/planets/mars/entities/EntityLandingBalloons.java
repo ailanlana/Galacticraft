@@ -4,13 +4,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.api.entity.ICameraZoomEntity;
-import micdoodle8.mods.galacticraft.api.entity.IIgnoreShift;
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.entities.EntityLanderBase;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-import micdoodle8.mods.galacticraft.planets.mars.util.MarsUtil;
-
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -21,6 +14,12 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
+import micdoodle8.mods.galacticraft.api.entity.ICameraZoomEntity;
+import micdoodle8.mods.galacticraft.api.entity.IIgnoreShift;
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.core.entities.EntityLanderBase;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+import micdoodle8.mods.galacticraft.planets.mars.util.MarsUtil;
 
 public class EntityLandingBalloons extends EntityLanderBase implements IIgnoreShift, ICameraZoomEntity {
 
@@ -103,19 +102,17 @@ public class EntityLandingBalloons extends EntityLanderBase implements IIgnoreSh
             }
 
             return true;
-        } else if (this.riddenByEntity == null && this.onGround && var1 instanceof EntityPlayerMP) {
+        }
+        if (this.riddenByEntity == null && this.onGround && var1 instanceof EntityPlayerMP) {
             MarsUtil.openParachestInventory((EntityPlayerMP) var1, this);
-            return true;
         } else if (var1 instanceof EntityPlayerMP) {
             if (!this.onGround) {
                 return false;
             }
 
             var1.mountEntity(null);
-            return true;
-        } else {
-            return true;
         }
+        return true;
     }
 
     @Override
@@ -156,10 +153,8 @@ public class EntityLandingBalloons extends EntityLanderBase implements IIgnoreSh
             } else if (this.groundHitCount < 14 || this.shouldMove()) {
                 this.motionY *= 0.95D;
                 this.motionY -= 0.08D;
-            } else {
-                if (!this.shouldMove()) {
-                    this.motionY = this.motionX = this.motionZ = this.rotationPitchSpeed = this.rotationYawSpeed = 0.0F;
-                }
+            } else if (!this.shouldMove()) {
+                this.motionY = this.motionX = this.motionZ = this.rotationPitchSpeed = this.rotationYawSpeed = 0.0F;
             }
         }
     }
@@ -172,18 +167,16 @@ public class EntityLandingBalloons extends EntityLanderBase implements IIgnoreSh
 
     @Override
     public Vector3 getMotionVec() {
-        if (this.onGround) {
-            if (this.groundHitCount < 14) {
-                this.groundHitCount++;
-                final double mag = 1.0D / this.groundHitCount * 4.0D;
-                double mX = this.rand.nextDouble() - 0.5;
-                double mY = 1.0D;
-                double mZ = this.rand.nextDouble() - 0.5;
-                mX *= mag / 3.0D;
-                mY *= mag;
-                mZ *= mag / 3.0D;
-                return new Vector3(mX, mY, mZ);
-            }
+        if (this.onGround && this.groundHitCount < 14) {
+            this.groundHitCount++;
+            final double mag = 1.0D / this.groundHitCount * 4.0D;
+            double mX = this.rand.nextDouble() - 0.5;
+            double mY = 1.0D;
+            double mZ = this.rand.nextDouble() - 0.5;
+            mX *= mag / 3.0D;
+            mY *= mag;
+            mZ *= mag / 3.0D;
+            return new Vector3(mX, mY, mZ);
         }
 
         if (this.ticks >= 40 && this.ticks < 45) {
@@ -199,8 +192,7 @@ public class EntityLandingBalloons extends EntityLanderBase implements IIgnoreSh
 
     @Override
     public ArrayList<Object> getNetworkedData() {
-        final ArrayList<Object> objList = new ArrayList<>();
-        objList.addAll(super.getNetworkedData());
+        final ArrayList<Object> objList = new ArrayList<>(super.getNetworkedData());
         if (this.worldObj.isRemote && this.hasReceivedPacket && this.groundHitCount <= 14
                 || !this.worldObj.isRemote && this.groundHitCount == 14) {
             objList.add(this.groundHitCount);

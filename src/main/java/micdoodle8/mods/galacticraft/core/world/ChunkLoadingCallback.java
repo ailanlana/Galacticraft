@@ -12,8 +12,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 
-import micdoodle8.mods.galacticraft.core.util.GCLog;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -27,6 +25,8 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.config.Configuration;
+
+import micdoodle8.mods.galacticraft.core.util.GCLog;
 
 public class ChunkLoadingCallback implements LoadingCallback {
 
@@ -192,10 +192,8 @@ public class ChunkLoadingCallback implements LoadingCallback {
         if (DimensionManager.getWorld(0) != null) {
             final File saveDir = new File(DimensionManager.getCurrentSaveRootDirectory(), "galacticraft");
 
-            if (!saveDir.exists()) {
-                if (!saveDir.mkdirs()) {
-                    GCLog.severe("Could not create chunk loader save data folder: " + saveDir.getAbsolutePath());
-                }
+            if (!saveDir.exists() && !saveDir.mkdirs()) {
+                GCLog.severe("Could not create chunk loader save data folder: " + saveDir.getAbsolutePath());
             }
 
             return saveDir;
@@ -215,10 +213,8 @@ public class ChunkLoadingCallback implements LoadingCallback {
             final File saveDir = ChunkLoadingCallback.getSaveDir();
 
             if (saveDir != null) {
-                if (!saveDir.exists()) {
-                    if (!saveDir.mkdirs()) {
-                        GCLog.severe("Could not create chunk loader save data folder: " + saveDir.getAbsolutePath());
-                    }
+                if (!saveDir.exists() && !saveDir.mkdirs()) {
+                    GCLog.severe("Could not create chunk loader save data folder: " + saveDir.getAbsolutePath());
                 }
 
                 final File saveFile = new File(saveDir, "chunkloaders.dat");

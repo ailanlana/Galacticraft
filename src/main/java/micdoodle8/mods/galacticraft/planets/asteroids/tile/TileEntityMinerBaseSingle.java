@@ -2,9 +2,9 @@ package micdoodle8.mods.galacticraft.planets.asteroids.tile;
 
 import java.util.ArrayList;
 
-import micdoodle8.mods.galacticraft.planets.asteroids.blocks.AsteroidBlocks;
-
 import net.minecraft.tileentity.TileEntity;
+
+import micdoodle8.mods.galacticraft.planets.asteroids.blocks.AsteroidBlocks;
 
 public class TileEntityMinerBaseSingle extends TileEntity {
 
@@ -18,11 +18,10 @@ public class TileEntityMinerBaseSingle extends TileEntity {
                     for (int z = this.zCoord; z < this.zCoord + 2; z++) {
                         final TileEntity tile = this.worldObj.getTileEntity(x, y, z);
 
-                        if (tile instanceof TileEntityMinerBaseSingle) {
-                            attachedBaseBlocks.add(tile);
-                        } else {
+                        if (!(tile instanceof TileEntityMinerBaseSingle)) {
                             break SEARCH;
                         }
+                        attachedBaseBlocks.add(tile);
                     }
                 }
             }

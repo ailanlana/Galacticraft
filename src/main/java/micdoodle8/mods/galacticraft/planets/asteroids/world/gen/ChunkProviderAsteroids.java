@@ -5,16 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
-import micdoodle8.mods.galacticraft.core.perlin.NoiseModule;
-import micdoodle8.mods.galacticraft.core.perlin.generator.Billowed;
-import micdoodle8.mods.galacticraft.core.perlin.generator.Gradient;
-import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
-import micdoodle8.mods.galacticraft.planets.asteroids.ConfigManagerAsteroids;
-import micdoodle8.mods.galacticraft.planets.asteroids.blocks.AsteroidBlocks;
-import micdoodle8.mods.galacticraft.planets.asteroids.dimension.WorldProviderAsteroids;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockFalling;
@@ -31,6 +21,16 @@ import net.minecraft.world.gen.feature.WorldGenFlowers;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraft.world.gen.feature.WorldGenTallGrass;
 import net.minecraft.world.gen.feature.WorldGenTrees;
+
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+import micdoodle8.mods.galacticraft.core.perlin.NoiseModule;
+import micdoodle8.mods.galacticraft.core.perlin.generator.Billowed;
+import micdoodle8.mods.galacticraft.core.perlin.generator.Gradient;
+import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
+import micdoodle8.mods.galacticraft.planets.asteroids.ConfigManagerAsteroids;
+import micdoodle8.mods.galacticraft.planets.asteroids.blocks.AsteroidBlocks;
+import micdoodle8.mods.galacticraft.planets.asteroids.dimension.WorldProviderAsteroids;
 
 public class ChunkProviderAsteroids extends ChunkProviderGenerate {
 
@@ -394,12 +394,10 @@ public class ChunkProviderAsteroids extends ChunkProviderGenerate {
 
                     if (isHollow && distance <= hollowSize) {
                         distanceAbove += this.asteroidTurbulance.getNoise(xx, y + 1, zz);
-                        if (distanceAbove <= 1) {
-                            if (y - 1 == terrainYY) {
-                                final int index = indexBase | y + 1;
-                                blockArray[index] = this.LIGHT;
-                                metaArray[index] = this.LIGHT_META;
-                            }
+                        if (distanceAbove <= 1 && y - 1 == terrainYY) {
+                            final int index = indexBase | y + 1;
+                            blockArray[index] = this.LIGHT;
+                            metaArray[index] = this.LIGHT_META;
                         }
                     }
 
@@ -469,11 +467,10 @@ public class ChunkProviderAsteroids extends ChunkProviderGenerate {
                             final int index = indexBase | y;
                             final int indexAbove = indexBase | y + 1;
                             if (Blocks.air == blockArray[indexAbove]
-                                    && (blockArray[index] == this.ASTEROID_STONE || blockArray[index] == this.GRASS)) {
-                                if (this.rand.nextInt(GLOWSTONE_CHANCE) == 0) {
-                                    blockArray[index] = this.LIGHT;
-                                    metaArray[index] = this.LIGHT_META;
-                                }
+                                    && (blockArray[index] == this.ASTEROID_STONE || blockArray[index] == this.GRASS)
+                                    && this.rand.nextInt(GLOWSTONE_CHANCE) == 0) {
+                                blockArray[index] = this.LIGHT;
+                                metaArray[index] = this.LIGHT_META;
                             }
                         }
                     }
@@ -515,7 +512,7 @@ public class ChunkProviderAsteroids extends ChunkProviderGenerate {
         return (int) (asteroidY - asteroidSize / 4 + yMod * 1.5F);
     }
 
-    private final int getTerrainHeightAt(int x, int z, float[] yModArray, int xMin, int zMin, int zSize, int asteroidY,
+    private final int getTerrainHeightAt(int x, float[] yModArray, int xMin, int zMin, int zSize, int asteroidY,
             int asteroidSize) {
         final int index = (x - xMin) * zSize - zMin;
         if (index < yModArray.length && index >= 0) {
@@ -699,15 +696,7 @@ public class ChunkProviderAsteroids extends ChunkProviderGenerate {
                                 this.worldObj,
                                 this.rand,
                                 i,
-                                this.getTerrainHeightAt(
-                                        i - x,
-                                        k - z,
-                                        sizeYArray,
-                                        xMin,
-                                        zMin,
-                                        zSize,
-                                        asteroidY,
-                                        asteroidSize),
+                                this.getTerrainHeightAt(i - x, sizeYArray, xMin, zMin, zSize, asteroidY, asteroidSize),
                                 k)) {
                             break;
                         }
@@ -721,15 +710,7 @@ public class ChunkProviderAsteroids extends ChunkProviderGenerate {
                             this.worldObj,
                             this.rand,
                             i,
-                            this.getTerrainHeightAt(
-                                    i - x,
-                                    k - z,
-                                    sizeYArray,
-                                    xMin,
-                                    zMin,
-                                    zSize,
-                                    asteroidY,
-                                    asteroidSize),
+                            this.getTerrainHeightAt(i - x, sizeYArray, xMin, zMin, zSize, asteroidY, asteroidSize),
                             k);
                 }
                 if (this.rand.nextInt(ChunkProviderAsteroids.FLOWER_CHANCE) == 0) {
@@ -739,15 +720,7 @@ public class ChunkProviderAsteroids extends ChunkProviderGenerate {
                             this.worldObj,
                             this.rand,
                             i,
-                            this.getTerrainHeightAt(
-                                    i - x,
-                                    k - z,
-                                    sizeYArray,
-                                    xMin,
-                                    zMin,
-                                    zSize,
-                                    asteroidY,
-                                    asteroidSize),
+                            this.getTerrainHeightAt(i - x, sizeYArray, xMin, zMin, zSize, asteroidY, asteroidSize),
                             k);
                 }
                 if (this.rand.nextInt(ChunkProviderAsteroids.LAVA_CHANCE) == 0) {
@@ -757,15 +730,7 @@ public class ChunkProviderAsteroids extends ChunkProviderGenerate {
                             this.worldObj,
                             this.rand,
                             i,
-                            this.getTerrainHeightAt(
-                                    i - x,
-                                    k - z,
-                                    sizeYArray,
-                                    xMin,
-                                    zMin,
-                                    zSize,
-                                    asteroidY,
-                                    asteroidSize),
+                            this.getTerrainHeightAt(i - x, sizeYArray, xMin, zMin, zSize, asteroidY, asteroidSize),
                             k);
                 }
                 if (this.rand.nextInt(ChunkProviderAsteroids.WATER_CHANCE) == 0) {
@@ -775,15 +740,7 @@ public class ChunkProviderAsteroids extends ChunkProviderGenerate {
                             this.worldObj,
                             this.rand,
                             i,
-                            this.getTerrainHeightAt(
-                                    i - x,
-                                    k - z,
-                                    sizeYArray,
-                                    xMin,
-                                    zMin,
-                                    zSize,
-                                    asteroidY,
-                                    asteroidSize),
+                            this.getTerrainHeightAt(i - x, sizeYArray, xMin, zMin, zSize, asteroidY, asteroidSize),
                             k);
                 }
             }
@@ -860,10 +817,8 @@ public class ChunkProviderAsteroids extends ChunkProviderGenerate {
                                 && !(chunk.getBlock(x, y, z) instanceof BlockAir)) {
                             int count = 2;
 
-                            if (x > 1) {
-                                if (chunk.getBlock(x - 2, y, z) instanceof BlockAir) {
-                                    count += 2;
-                                }
+                            if (x > 1 && chunk.getBlock(x - 2, y, z) instanceof BlockAir) {
+                                count += 2;
                             }
                             if (x > 2) {
                                 if (chunk.getBlock(x - 3, y, z) instanceof BlockAir) {
@@ -937,9 +892,8 @@ public class ChunkProviderAsteroids extends ChunkProviderGenerate {
     public List getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int i, int j, int k) {
         if (par1EnumCreatureType == EnumCreatureType.monster) {
             return BiomeGenBaseAsteroids.asteroid.getSpawnableList(par1EnumCreatureType);
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
@@ -1004,7 +958,7 @@ public class ChunkProviderAsteroids extends ChunkProviderGenerate {
         chunksDone.clear();
     }
 
-    private class AsteroidData {
+    private static class AsteroidData {
 
         public boolean isHollow;
         public float[] sizeYArray;

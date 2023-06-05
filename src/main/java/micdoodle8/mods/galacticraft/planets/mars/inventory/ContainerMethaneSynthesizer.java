@@ -1,5 +1,11 @@
 package micdoodle8.mods.galacticraft.planets.mars.inventory;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+
 import micdoodle8.mods.galacticraft.api.item.IItemElectric;
 import micdoodle8.mods.galacticraft.core.inventory.SlotSpecific;
 import micdoodle8.mods.galacticraft.core.util.FluidUtil;
@@ -7,12 +13,6 @@ import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
 import micdoodle8.mods.galacticraft.planets.asteroids.items.ItemAtmosphericValve;
 import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityMethaneSynthesizer;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 
 public class ContainerMethaneSynthesizer extends Container {
 
@@ -69,7 +69,7 @@ public class ContainerMethaneSynthesizer extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1) {
         ItemStack var2 = null;
-        final Slot slot = (Slot) this.inventorySlots.get(par1);
+        final Slot slot = this.inventorySlots.get(par1);
 
         if (slot != null && slot.getHasStack()) {
             final ItemStack var4 = slot.getStack();
@@ -83,32 +83,28 @@ public class ContainerMethaneSynthesizer extends Container {
                 if (par1 == 2) {
                     slot.onSlotChange(var4, var2);
                 }
-            } else {
-                if (var4.getItem() instanceof IItemElectric) {
-                    if (!this.mergeItemStack(var4, 0, 1, false)) {
-                        return null;
-                    }
-                } else {
-                    if (var4.getItem() instanceof ItemAtmosphericValve) {
-                        if (!this.mergeItemStack(var4, 2, 3, false)) {
-                            return null;
-                        }
-                    } else if (var4.getItem() == MarsItems.carbonFragments) {
-                        if (!this.mergeItemStack(var4, 3, 4, false)) {
-                            return null;
-                        }
-                    } else if (FluidUtil.isEmptyContainer(var4, AsteroidsItems.methaneCanister)) {
-                        if (!this.mergeItemStack(var4, 4, 5, false)) {
-                            return null;
-                        }
-                    } else if (par1 < 32) {
-                        if (!this.mergeItemStack(var4, 32, 41, false)) {
-                            return null;
-                        }
-                    } else if (!this.mergeItemStack(var4, 5, 32, false)) {
-                        return null;
-                    }
+            } else if (var4.getItem() instanceof IItemElectric) {
+                if (!this.mergeItemStack(var4, 0, 1, false)) {
+                    return null;
                 }
+            } else if (var4.getItem() instanceof ItemAtmosphericValve) {
+                if (!this.mergeItemStack(var4, 2, 3, false)) {
+                    return null;
+                }
+            } else if (var4.getItem() == MarsItems.carbonFragments) {
+                if (!this.mergeItemStack(var4, 3, 4, false)) {
+                    return null;
+                }
+            } else if (FluidUtil.isEmptyContainer(var4, AsteroidsItems.methaneCanister)) {
+                if (!this.mergeItemStack(var4, 4, 5, false)) {
+                    return null;
+                }
+            } else if (par1 < 32) {
+                if (!this.mergeItemStack(var4, 32, 41, false)) {
+                    return null;
+                }
+            } else if (!this.mergeItemStack(var4, 5, 32, false)) {
+                return null;
             }
 
             if (var4.stackSize == 0) {

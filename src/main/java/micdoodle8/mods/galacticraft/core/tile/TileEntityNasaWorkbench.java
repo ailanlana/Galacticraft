@@ -1,11 +1,5 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.blocks.BlockMulti;
-import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
-import micdoodle8.mods.galacticraft.core.client.gui.GuiIdsCore;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -14,6 +8,11 @@ import net.minecraft.util.AxisAlignedBB;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.blocks.BlockMulti;
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+import micdoodle8.mods.galacticraft.core.client.gui.GuiIdsCore;
 
 public class TileEntityNasaWorkbench extends TileEntityMulti implements IMultiBlock {
 
@@ -47,10 +46,8 @@ public class TileEntityNasaWorkbench extends TileEntityMulti implements IMultiBl
                             placedPosition.y + y,
                             placedPosition.z + z);
 
-                    if (!vecToAdd.equals(placedPosition)) {
-                        if (Math.abs(x) != 1 || Math.abs(z) != 1) {
-                            ((BlockMulti) GCBlocks.fakeBlock).makeFakeBlock(this.worldObj, vecToAdd, placedPosition, 3);
-                        }
+                    if (!vecToAdd.equals(placedPosition) && (Math.abs(x) != 1 || Math.abs(z) != 1)) {
+                        ((BlockMulti) GCBlocks.fakeBlock).makeFakeBlock(this.worldObj, vecToAdd, placedPosition, 3);
                     }
                 }
             }

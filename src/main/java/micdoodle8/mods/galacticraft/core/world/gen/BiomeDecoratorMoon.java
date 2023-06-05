@@ -2,14 +2,14 @@ package micdoodle8.mods.galacticraft.core.world.gen;
 
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.api.event.wgen.GCCoreEventPopulate;
-import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
-import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
-
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.MinecraftForge;
+
+import micdoodle8.mods.galacticraft.api.event.wgen.GCCoreEventPopulate;
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 
 public class BiomeDecoratorMoon {
 
@@ -34,15 +34,14 @@ public class BiomeDecoratorMoon {
     public void decorate(World worldObj, Random rand, int chunkX, int chunkZ) {
         if (this.worldObj != null) {
             throw new RuntimeException("Already decorating!!");
-        } else {
-            this.worldObj = worldObj;
-            this.randomGenerator = rand;
-            this.chunkX = chunkX;
-            this.chunkZ = chunkZ;
-            this.generateMoon();
-            this.worldObj = null;
-            this.randomGenerator = null;
         }
+        this.worldObj = worldObj;
+        this.randomGenerator = rand;
+        this.chunkX = chunkX;
+        this.chunkZ = chunkZ;
+        this.generateMoon();
+        this.worldObj = null;
+        this.randomGenerator = null;
     }
 
     void genStandardOre1(int amountPerChunk, WorldGenerator worldGenerator, int minY, int maxY) {

@@ -4,20 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
-import micdoodle8.mods.galacticraft.api.entity.IEntityBreathable;
-import micdoodle8.mods.galacticraft.api.entity.IIgnoreShift;
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.items.GCItems;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityDungeonSpawner;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityTreasureChest;
-import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -53,6 +39,19 @@ import net.minecraftforge.common.ChestGenHooks;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
+import micdoodle8.mods.galacticraft.api.entity.IEntityBreathable;
+import micdoodle8.mods.galacticraft.api.entity.IIgnoreShift;
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.items.GCItems;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityDungeonSpawner;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityTreasureChest;
+import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class EntitySkeletonBoss extends EntityMob
         implements IEntityBreathable, IBossDisplayData, IRangedAttackMob, IBoss, IIgnoreShift {
@@ -178,7 +177,6 @@ public class EntitySkeletonBoss extends EntityMob
         return null;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected void onDeathUpdate() {
         ++this.deathTicks;
@@ -238,7 +236,7 @@ public class EntitySkeletonBoss extends EntityMob
             }
 
             if (!this.worldObj.isRemote) {
-                for (final TileEntity tile : new ArrayList<TileEntity>(this.worldObj.loadedTileEntityList)) {
+                for (final TileEntity tile : new ArrayList<>(this.worldObj.loadedTileEntityList)) {
                     if (tile instanceof TileEntityTreasureChest) {
                         final double d3 = tile.xCoord + 0.5D - this.posX;
                         final double d4 = tile.yCoord + 0.5D - this.posY;
@@ -364,8 +362,7 @@ public class EntitySkeletonBoss extends EntityMob
         new Vector3(this);
 
         if (this.roomCoords != null && this.roomSize != null) {
-            @SuppressWarnings("unchecked")
-            final List<Entity> entitiesWithin = this.worldObj.getEntitiesWithinAABB(
+            final List<EntityPlayer> entitiesWithin = this.worldObj.getEntitiesWithinAABB(
                     EntityPlayer.class,
                     AxisAlignedBB.getBoundingBox(
                             this.roomCoords.intX() - 1,
@@ -378,7 +375,6 @@ public class EntitySkeletonBoss extends EntityMob
             this.entitiesWithin = entitiesWithin.size();
 
             if (this.entitiesWithin == 0 && this.entitiesWithinLast != 0) {
-                @SuppressWarnings("unchecked")
                 final List<EntityPlayer> entitiesWithin2 = this.worldObj.getEntitiesWithinAABB(
                         EntityPlayer.class,
                         AxisAlignedBB.getBoundingBox(

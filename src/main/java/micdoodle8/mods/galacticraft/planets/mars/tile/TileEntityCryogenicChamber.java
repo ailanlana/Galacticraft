@@ -1,17 +1,5 @@
 package micdoodle8.mods.galacticraft.planets.mars.tile;
 
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.blocks.BlockMulti;
-import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
-import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
-import micdoodle8.mods.galacticraft.core.tile.IMultiBlock;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityMulti;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
-import micdoodle8.mods.galacticraft.planets.mars.network.PacketSimpleMars;
-import micdoodle8.mods.galacticraft.planets.mars.network.PacketSimpleMars.EnumSimplePacketMars;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayer.EnumStatus;
@@ -26,6 +14,17 @@ import net.minecraft.world.biome.BiomeGenBase;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.blocks.BlockMulti;
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
+import micdoodle8.mods.galacticraft.core.tile.IMultiBlock;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityMulti;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
+import micdoodle8.mods.galacticraft.planets.mars.network.PacketSimpleMars;
+import micdoodle8.mods.galacticraft.planets.mars.network.PacketSimpleMars.EnumSimplePacketMars;
 
 public class TileEntityCryogenicChamber extends TileEntityMulti implements IMultiBlock {
 
@@ -51,8 +50,8 @@ public class TileEntityCryogenicChamber extends TileEntityMulti implements IMult
 
         final EnumStatus enumstatus = this.sleepInBedAt(entityPlayer, this.xCoord, this.yCoord, this.zCoord);
 
-        switch (enumstatus) {
-            case OK:
+        return switch (enumstatus) {
+            case OK -> {
                 ((EntityPlayerMP) entityPlayer).playerNetServerHandler.setPlayerLocation(
                         entityPlayer.posX,
                         entityPlayer.posY,
@@ -64,18 +63,19 @@ public class TileEntityCryogenicChamber extends TileEntityMulti implements IMult
                                 EnumSimplePacketMars.C_BEGIN_CRYOGENIC_SLEEP,
                                 new Object[] { this.xCoord, this.yCoord, this.zCoord }),
                         (EntityPlayerMP) entityPlayer);
-                return true;
-            case NOT_POSSIBLE_NOW:
+                yield true;
+            }
+            case NOT_POSSIBLE_NOW -> {
                 entityPlayer.addChatMessage(
                         new ChatComponentText(
                                 GCCoreUtil.translateWithFormat(
                                         "gui.cryogenic.chat.cantUse",
                                         GCPlayerStats.get((EntityPlayerMP) entityPlayer).cryogenicChamberCooldown
                                                 / 20)));
-                return false;
-            default:
-                return false;
-        }
+                yield false;
+            }
+            default -> false;
+        };
     }
 
     public EnumStatus sleepInBedAt(EntityPlayer entityPlayer, int par1, int par2, int par3) {

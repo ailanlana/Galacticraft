@@ -1,5 +1,14 @@
 package micdoodle8.mods.galacticraft.core.network;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.EnumConnectionState;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ServerConnectionFromClientEvent;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.dimension.SpaceRace;
 import micdoodle8.mods.galacticraft.core.dimension.SpaceRaceManager;
@@ -13,16 +22,7 @@ import micdoodle8.mods.galacticraft.core.util.MapUtil;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 import micdoodle8.mods.galacticraft.core.world.ChunkLoadingCallback;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.EnumConnectionState;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent.ServerConnectionFromClientEvent;
-
+@SuppressWarnings("unchecked")
 public class ConnectionEvents {
 
     private static boolean clientConnected = false;
@@ -41,8 +41,7 @@ public class ConnectionEvents {
     public void onPlayerLogin(PlayerLoggedInEvent event) {
         ChunkLoadingCallback.onPlayerLogin(event.player);
 
-        if (event.player instanceof EntityPlayerMP) {
-            final EntityPlayerMP thePlayer = (EntityPlayerMP) event.player;
+        if (event.player instanceof EntityPlayerMP thePlayer) {
             final GCPlayerStats stats = GCPlayerStats.get(thePlayer);
             SpaceStationWorldData.checkAllStations(thePlayer, stats);
             GalacticraftCore.packetPipeline
@@ -70,11 +69,11 @@ public class ConnectionEvents {
     public void onConnectionReceived(ServerConnectionFromClientEvent event) {
         if (ConfigManagerCore.enableDebug) {
             final Integer[] idList = (Integer[]) WorldUtil.getPlanetList().get(0);
-            String ids = "";
+            StringBuilder ids = new StringBuilder();
             for (final Integer element : idList) {
-                ids += element.toString() + " ";
+                ids.append(element.toString()).append(" ");
             }
-            GCLog.info("Galacticraft server sending dimension IDs to connecting client: " + ids);
+            GCLog.info("Galacticraft server sending dimension IDs to connecting client: " + ids.toString());
         }
         event.manager.scheduleOutboundPacket(ConnectionPacket.createDimPacket(WorldUtil.getPlanetListInts()));
         event.manager.scheduleOutboundPacket(ConnectionPacket.createSSPacket(WorldUtil.getSpaceStationListInts()));

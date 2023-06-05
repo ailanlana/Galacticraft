@@ -2,9 +2,6 @@ package micdoodle8.mods.galacticraft.core.items;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumRarity;
@@ -14,6 +11,8 @@ import net.minecraft.util.IIcon;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 
 public class ItemParaChute extends Item {
 
@@ -37,7 +36,6 @@ public class ItemParaChute extends Item {
     protected IIcon[] icons;
 
     public ItemParaChute(String assetName) {
-        super();
         this.setMaxDamage(0);
         this.setHasSubtypes(true);
         this.setMaxStackSize(1);
@@ -50,9 +48,8 @@ public class ItemParaChute extends Item {
         return GalacticraftCore.galacticraftItemsTab;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         for (int i = 0; i < ItemParaChute.names.length; i++) {
             par3List.add(new ItemStack(par1, 1, i));
         }
@@ -70,7 +67,8 @@ public class ItemParaChute extends Item {
         this.icons = new IIcon[ItemParaChute.names.length];
 
         for (final String name : ItemParaChute.names) {
-            this.icons[i++] = iconRegister.registerIcon(this.getIconString() + "_" + name);
+            this.icons[i] = iconRegister.registerIcon(this.getIconString() + "_" + name);
+            i++;
         }
     }
 

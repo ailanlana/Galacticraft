@@ -377,8 +377,7 @@ public class Vector3 implements Cloneable {
     /**
      * Gets all entities inside of this position in block space.
      */
-    @SuppressWarnings("unchecked")
-    public List<Entity> getEntitiesWithin(World worldObj, Class<? extends Entity> par1Class) {
+    public <T extends Entity> List<T> getEntitiesWithin(World worldObj, Class<T> par1Class) {
         return worldObj.getEntitiesWithinAABB(
                 par1Class,
                 AxisAlignedBB.getBoundingBox(
@@ -660,7 +659,6 @@ public class Vector3 implements Cloneable {
                 .getBoundingBox(-checkBorder, -checkBorder, -checkBorder, checkBorder, checkBorder, checkBorder)
                 .offset(this.x, this.y, this.z);
 
-        @SuppressWarnings("unchecked")
         final List<Entity> entitiesHit = world.getEntitiesWithinAABBExcludingEntity(null, boxToScan);
         double closestEntity = reachDistance;
 
@@ -704,8 +702,7 @@ public class Vector3 implements Cloneable {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof Vector3) {
-            final Vector3 vector3 = (Vector3) o;
+        if (o instanceof Vector3 vector3) {
             return new EqualsBuilder().append(this.x, vector3.x).append(this.y, vector3.y).append(this.z, vector3.z)
                     .isEquals();
         }

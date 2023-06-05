@@ -3,8 +3,6 @@ package micdoodle8.mods.galacticraft.core.blocks;
 import java.util.List;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -16,9 +14,11 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+
 public class BlockSlabGC extends BlockSlab {
 
-    private static final String[] woodTypes = new String[] { "tin", "tin", "moon", "moonBricks", "mars", "marsBricks" };
+    private static final String[] woodTypes = { "tin", "tin", "moon", "moonBricks", "mars", "marsBricks" };
 
     private IIcon[] textures;
     private IIcon[] tinSideIcon;
@@ -81,8 +81,7 @@ public class BlockSlabGC extends BlockSlab {
     }
 
     @Override
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public void getSubBlocks(Item block, CreativeTabs creativeTabs, List list) {
+    public void getSubBlocks(Item block, CreativeTabs creativeTabs, List<ItemStack> list) {
         int max = 0;
 
         if (GalacticraftCore.isPlanetsLoaded) {
@@ -107,10 +106,8 @@ public class BlockSlabGC extends BlockSlab {
 
     @Override
     public Item getItemDropped(int meta, Random par2Random, int par3) {
-        if (this.isDoubleSlab) {
-            if (this == GCBlocks.slabGCDouble) {
-                return Item.getItemFromBlock(GCBlocks.slabGCHalf);
-            }
+        if (this.isDoubleSlab && this == GCBlocks.slabGCDouble) {
+            return Item.getItemFromBlock(GCBlocks.slabGCHalf);
         }
         return Item.getItemFromBlock(this);
     }
@@ -126,19 +123,10 @@ public class BlockSlabGC extends BlockSlab {
     @Override
     public float getBlockHardness(World world, int x, int y, int z) {
         final int meta = world.getBlockMetadata(x, y, z);
-        float hardness = this.blockHardness;
-
-        switch (getTypeFromMeta(meta)) {
-            case 2:
-            case 3:
-                hardness = 1.5F;
-                break;
-            default:
-                hardness = 2.0F;
-                break;
-        }
-
-        return hardness;
+        return switch (getTypeFromMeta(meta)) {
+            case 2, 3 -> 1.5F;
+            default -> 2.0F;
+        };
     }
 
     @Override

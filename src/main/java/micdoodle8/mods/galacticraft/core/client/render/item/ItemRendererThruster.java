@@ -1,19 +1,16 @@
 package micdoodle8.mods.galacticraft.core.client.render.item;
 
-import micdoodle8.mods.galacticraft.core.client.render.tile.TileEntityThrusterRenderer;
-
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import micdoodle8.mods.galacticraft.core.client.render.tile.TileEntityThrusterRenderer;
 
 public class ItemRendererThruster implements IItemRenderer {
 
-    private void renderThruster(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX,
-            float translateY, float translateZ) {
+    private void renderThruster(ItemRenderType type) {
         GL11.glPushMatrix();
 
         FMLClientHandler.instance().getClient().getTextureManager()
@@ -48,18 +45,13 @@ public class ItemRendererThruster implements IItemRenderer {
      */
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-        switch (type) {
-            case ENTITY:
-                return true;
-            case EQUIPPED:
-                return true;
-            case EQUIPPED_FIRST_PERSON:
-                return true;
-            case INVENTORY:
-                return true;
-            default:
-                return false;
-        }
+        return switch (type) {
+            case ENTITY -> true;
+            case EQUIPPED -> true;
+            case EQUIPPED_FIRST_PERSON -> true;
+            case INVENTORY -> true;
+            default -> false;
+        };
     }
 
     @Override
@@ -71,16 +63,16 @@ public class ItemRendererThruster implements IItemRenderer {
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         switch (type) {
             case EQUIPPED:
-                this.renderThruster(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderThruster(type);
                 break;
             case EQUIPPED_FIRST_PERSON:
-                this.renderThruster(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderThruster(type);
                 break;
             case INVENTORY:
-                this.renderThruster(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderThruster(type);
                 break;
             case ENTITY:
-                this.renderThruster(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderThruster(type);
                 break;
             default:
         }

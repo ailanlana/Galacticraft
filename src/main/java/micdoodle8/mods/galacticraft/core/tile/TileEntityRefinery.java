@@ -1,15 +1,5 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
-import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseElectricBlockWithInventory;
-import micdoodle8.mods.galacticraft.core.items.GCItems;
-import micdoodle8.mods.galacticraft.core.items.ItemCanisterGeneric;
-import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
-import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
-import micdoodle8.mods.galacticraft.core.util.FluidUtil;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -24,6 +14,15 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
 import cpw.mods.fml.relauncher.Side;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
+import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseElectricBlockWithInventory;
+import micdoodle8.mods.galacticraft.core.items.GCItems;
+import micdoodle8.mods.galacticraft.core.items.ItemCanisterGeneric;
+import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
+import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
+import micdoodle8.mods.galacticraft.core.util.FluidUtil;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class TileEntityRefinery extends TileBaseElectricBlockWithInventory implements ISidedInventory, IFluidHandler {
 
@@ -69,28 +68,26 @@ public class TileEntityRefinery extends TileBaseElectricBlockWithInventory imple
                     if (liquid != null) {
                         final boolean isOil = FluidRegistry.getFluidName(liquid).startsWith("oil");
 
-                        if (isOil) {
-                            if (this.oilTank.getFluid() == null
-                                    || this.oilTank.getFluid().amount + liquid.amount <= this.oilTank.getCapacity()) {
-                                this.oilTank.fill(new FluidStack(GalacticraftCore.fluidOil, liquid.amount), true);
+                        if (isOil && (this.oilTank.getFluid() == null
+                                || this.oilTank.getFluid().amount + liquid.amount <= this.oilTank.getCapacity())) {
+                            this.oilTank.fill(new FluidStack(GalacticraftCore.fluidOil, liquid.amount), true);
 
-                                if (FluidContainerRegistry.isBucket(this.containingItems[1])
-                                        && FluidContainerRegistry.isFilledContainer(this.containingItems[1])) {
-                                    final int amount = this.containingItems[1].stackSize;
-                                    if (amount > 1) {
-                                        this.oilTank.fill(
-                                                new FluidStack(
-                                                        GalacticraftCore.fluidOil,
-                                                        (amount - 1) * FluidContainerRegistry.BUCKET_VOLUME),
-                                                true);
-                                    }
-                                    this.containingItems[1] = new ItemStack(Items.bucket, amount);
-                                } else {
-                                    this.containingItems[1].stackSize--;
+                            if (FluidContainerRegistry.isBucket(this.containingItems[1])
+                                    && FluidContainerRegistry.isFilledContainer(this.containingItems[1])) {
+                                final int amount = this.containingItems[1].stackSize;
+                                if (amount > 1) {
+                                    this.oilTank.fill(
+                                            new FluidStack(
+                                                    GalacticraftCore.fluidOil,
+                                                    (amount - 1) * FluidContainerRegistry.BUCKET_VOLUME),
+                                            true);
+                                }
+                                this.containingItems[1] = new ItemStack(Items.bucket, amount);
+                            } else {
+                                this.containingItems[1].stackSize--;
 
-                                    if (this.containingItems[1].stackSize == 0) {
-                                        this.containingItems[1] = null;
-                                    }
+                                if (this.containingItems[1].stackSize == 0) {
+                                    this.containingItems[1] = null;
                                 }
                             }
                         }
@@ -103,11 +100,9 @@ public class TileEntityRefinery extends TileBaseElectricBlockWithInventory imple
             if (this.canProcess() && this.hasEnoughEnergyToRun) {
                 if (this.processTicks == 0) {
                     this.processTicks = TileEntityRefinery.PROCESS_TIME_REQUIRED;
-                } else {
-                    if (--this.processTicks <= 0) {
-                        this.smeltItem();
-                        this.processTicks = this.canProcess() ? TileEntityRefinery.PROCESS_TIME_REQUIRED : 0;
-                    }
+                } else if (--this.processTicks <= 0) {
+                    this.smeltItem();
+                    this.processTicks = this.canProcess() ? TileEntityRefinery.PROCESS_TIME_REQUIRED : 0;
                 }
             } else {
                 this.processTicks = 0;
@@ -128,11 +123,7 @@ public class TileEntityRefinery extends TileBaseElectricBlockWithInventory imple
     }
 
     public boolean canProcess() {
-        if (this.oilTank.getFluidAmount() <= 0) {
-            return false;
-        }
-
-        if (this.fuelTank.getFluidAmount() >= this.fuelTank.getCapacity()) {
+        if (this.oilTank.getFluidAmount() <= 0 || this.fuelTank.getFluidAmount() >= this.fuelTank.getCapacity()) {
             return false;
         }
 
@@ -214,16 +205,12 @@ public class TileEntityRefinery extends TileBaseElectricBlockWithInventory imple
     @Override
     public boolean canInsertItem(int slotID, ItemStack itemstack, int side) {
         if (itemstack != null && this.isItemValidForSlot(slotID, itemstack)) {
-            switch (slotID) {
-                case 0:
-                    return ItemElectricBase.isElectricItemCharged(itemstack);
-                case 1:
-                    return FluidUtil.isOilContainerAny(itemstack);
-                case 2:
-                    return FluidUtil.isEmptyContainer(itemstack, GCItems.fuelCanister);
-                default:
-                    return false;
-            }
+            return switch (slotID) {
+                case 0 -> ItemElectricBase.isElectricItemCharged(itemstack);
+                case 1 -> FluidUtil.isOilContainerAny(itemstack);
+                case 2 -> FluidUtil.isEmptyContainer(itemstack, GCItems.fuelCanister);
+                default -> false;
+            };
         }
         return false;
     }
@@ -231,16 +218,12 @@ public class TileEntityRefinery extends TileBaseElectricBlockWithInventory imple
     @Override
     public boolean canExtractItem(int slotID, ItemStack itemstack, int side) {
         if (itemstack != null && this.isItemValidForSlot(slotID, itemstack)) {
-            switch (slotID) {
-                case 0:
-                    return ItemElectricBase.isElectricItemEmpty(itemstack) || !this.shouldPullEnergy();
-                case 1:
-                    return FluidUtil.isEmptyContainer(itemstack);
-                case 2:
-                    return FluidUtil.isFullContainer(itemstack);
-                default:
-                    return false;
-            }
+            return switch (slotID) {
+                case 0 -> ItemElectricBase.isElectricItemEmpty(itemstack) || !this.shouldPullEnergy();
+                case 1 -> FluidUtil.isEmptyContainer(itemstack);
+                case 2 -> FluidUtil.isFullContainer(itemstack);
+                default -> false;
+            };
         }
         return false;
     }
@@ -331,7 +314,7 @@ public class TileEntityRefinery extends TileBaseElectricBlockWithInventory imple
 
     @Override
     public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-        FluidTankInfo[] tankInfo = new FluidTankInfo[] {};
+        FluidTankInfo[] tankInfo = {};
 
         if (from == ForgeDirection.getOrientation(this.getBlockMetadata() + 2)) {
             tankInfo = new FluidTankInfo[] { new FluidTankInfo(this.oilTank) };

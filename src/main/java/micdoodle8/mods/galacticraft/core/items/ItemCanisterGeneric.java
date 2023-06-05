@@ -2,9 +2,6 @@ package micdoodle8.mods.galacticraft.core.items;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.EnumRarity;
@@ -21,6 +18,8 @@ import net.minecraftforge.fluids.ItemFluidContainer;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 
 public abstract class ItemCanisterGeneric extends ItemFluidContainer {
 
@@ -48,10 +47,9 @@ public abstract class ItemCanisterGeneric extends ItemFluidContainer {
         return GalacticraftCore.galacticraftItemsTab;
     }
 
-    @SuppressWarnings({ "unchecked" })
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         par3List.add(new ItemStack(par1, 1, 1));
     }
 
@@ -63,7 +61,7 @@ public abstract class ItemCanisterGeneric extends ItemFluidContainer {
             final int imax = Math.max(st.length, 5);
             for (int i = 1; i < imax; i++) {
                 final String ste = st[i].getClassName();
-                if (ste.equals("thermalexpansion.block.machine.TileTransposer")) {
+                if ("thermalexpansion.block.machine.TileTransposer".equals(ste)) {
                     return null;
                 }
             }

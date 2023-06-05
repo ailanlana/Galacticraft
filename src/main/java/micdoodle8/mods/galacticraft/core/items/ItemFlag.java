@@ -1,11 +1,5 @@
 package micdoodle8.mods.galacticraft.core.items;
 
-import micdoodle8.mods.galacticraft.api.item.IHoldableItem;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.entities.EntityFlag;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,13 +16,17 @@ import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.item.IHoldableItem;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.entities.EntityFlag;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class ItemFlag extends Item implements IHoldableItem {
 
     public int placeProgress;
 
     public ItemFlag(String assetName) {
-        super();
         this.setMaxDamage(0);
         this.setMaxStackSize(1);
         this.setUnlocalizedName(assetName);
@@ -92,10 +90,9 @@ public class ItemFlag extends Item implements IHoldableItem {
             if (placed) {
                 final int var2 = this.getInventorySlotContainItem(par3EntityPlayer, par1ItemStack);
 
-                if (var2 >= 0 && !par3EntityPlayer.capabilities.isCreativeMode) {
-                    if (--par3EntityPlayer.inventory.mainInventory[var2].stackSize <= 0) {
-                        par3EntityPlayer.inventory.mainInventory[var2] = null;
-                    }
+                if (var2 >= 0 && !par3EntityPlayer.capabilities.isCreativeMode
+                        && --par3EntityPlayer.inventory.mainInventory[var2].stackSize <= 0) {
+                    par3EntityPlayer.inventory.mainInventory[var2] = null;
                 }
             }
         }

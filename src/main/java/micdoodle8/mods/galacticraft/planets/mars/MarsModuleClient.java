@@ -2,6 +2,32 @@ package micdoodle8.mods.galacticraft.planets.mars;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.particle.EntityDropParticleFX;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.model.AdvancedModelLoader;
+import net.minecraftforge.client.model.IModelCustom;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import micdoodle8.mods.galacticraft.core.client.CloudRenderer;
@@ -52,33 +78,6 @@ import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityLaunchController
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityMethaneSynthesizer;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityTerraformer;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityTreasureChestMars;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.particle.EntityDropParticleFX;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class MarsModuleClient implements IPlanetsModuleClient {
 
@@ -160,9 +159,11 @@ public class MarsModuleClient implements IPlanetsModuleClient {
             if (ID == GuiIdsPlanets.MACHINE_MARS) {
                 if (tile instanceof TileEntityTerraformer) {
                     return new GuiTerraformer(player.inventory, (TileEntityTerraformer) tile);
-                } else if (tile instanceof TileEntityLaunchController) {
+                }
+                if (tile instanceof TileEntityLaunchController) {
                     return new GuiLaunchController(player.inventory, (TileEntityLaunchController) tile);
-                } else if (tile instanceof TileEntityElectrolyzer) {
+                }
+                if (tile instanceof TileEntityElectrolyzer) {
                     return new GuiWaterElectrolyzer(player.inventory, (TileEntityElectrolyzer) tile);
                 } else if (tile instanceof TileEntityGasLiquefier) {
                     return new GuiGasLiquefier(player.inventory, (TileEntityGasLiquefier) tile);
@@ -179,9 +180,11 @@ public class MarsModuleClient implements IPlanetsModuleClient {
     public int getBlockRenderID(Block block) {
         if (block == MarsBlocks.vine) {
             return MarsModuleClient.vineRenderID;
-        } else if (block == MarsBlocks.hydrogenPipe) {
+        }
+        if (block == MarsBlocks.hydrogenPipe) {
             return MarsModuleClient.renderIdHydrogenPipe;
-        } else if (block == MarsBlocks.rock) {
+        }
+        if (block == MarsBlocks.rock) {
             return MarsModuleClient.eggRenderID;
         } else if (block == MarsBlocks.machine || block == MarsBlocks.machineT2) {
             return MarsModuleClient.machineRenderID;
@@ -204,14 +207,14 @@ public class MarsModuleClient implements IPlanetsModuleClient {
             final double maxDistSqrd = 64.0D;
 
             if (dPosX * dPosX + dPosY * dPosY + dPosZ * dPosZ < maxDistSqrd * maxDistSqrd) {
-                if (particleID.equals("sludgeDrip")) {
+                if ("sludgeDrip".equals(particleID)) {
                     particle = new EntityDropParticleFX(
                             mc.theWorld,
                             position.x,
                             position.y,
                             position.z,
                             Material.water);
-                } else if (particleID.equals("bacterialDrip")) {
+                } else if ("bacterialDrip".equals(particleID)) {
                     particle = new EntityBacterialDripFX(mc.theWorld, position.x, position.y, position.z);
                 }
             }
@@ -250,15 +253,13 @@ public class MarsModuleClient implements IPlanetsModuleClient {
 
             final WorldClient world = minecraft.theWorld;
 
-            if (world != null) {
-                if (world.provider instanceof WorldProviderMars) {
-                    if (world.provider.getSkyRenderer() == null) {
-                        world.provider.setSkyRenderer(new SkyProviderMars((IGalacticraftWorldProvider) world.provider));
-                    }
+            if (world != null && world.provider instanceof WorldProviderMars) {
+                if (world.provider.getSkyRenderer() == null) {
+                    world.provider.setSkyRenderer(new SkyProviderMars((IGalacticraftWorldProvider) world.provider));
+                }
 
-                    if (world.provider.getCloudRenderer() == null) {
-                        world.provider.setCloudRenderer(new CloudRenderer());
-                    }
+                if (world.provider.getCloudRenderer() == null) {
+                    world.provider.setCloudRenderer(new CloudRenderer());
                 }
             }
         }

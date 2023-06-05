@@ -2,9 +2,6 @@ package micdoodle8.mods.galacticraft.core.items;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumRarity;
@@ -14,6 +11,8 @@ import net.minecraft.util.IIcon;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 
 public class ItemRocketEngineGC extends Item {
 
@@ -23,7 +22,6 @@ public class ItemRocketEngineGC extends Item {
     protected IIcon[] icons = new IIcon[ItemRocketEngineGC.names.length];
 
     public ItemRocketEngineGC(String assetName) {
-        super();
         this.setMaxDamage(0);
         this.setHasSubtypes(true);
         this.setUnlocalizedName(assetName);
@@ -47,7 +45,8 @@ public class ItemRocketEngineGC extends Item {
         int i = 0;
 
         for (final String name : ItemRocketEngineGC.names) {
-            this.icons[i++] = iconRegister.registerIcon(this.getIconString() + "." + name);
+            this.icons[i] = iconRegister.registerIcon(this.getIconString() + "." + name);
+            i++;
         }
     }
 
@@ -65,9 +64,8 @@ public class ItemRocketEngineGC extends Item {
         return super.getIconFromDamage(damage);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         for (int i = 0; i < ItemRocketEngineGC.names.length; i++) {
             par3List.add(new ItemStack(par1, 1, i));
         }

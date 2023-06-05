@@ -3,15 +3,6 @@ package micdoodle8.mods.galacticraft.planets.mars.blocks;
 import java.util.List;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-import micdoodle8.mods.galacticraft.core.util.VersionUtil;
-import micdoodle8.mods.galacticraft.planets.GalacticraftPlanets;
-import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
-import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
-import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntitySlimelingEgg;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -32,6 +23,14 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+import micdoodle8.mods.galacticraft.core.util.VersionUtil;
+import micdoodle8.mods.galacticraft.planets.GalacticraftPlanets;
+import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
+import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntitySlimelingEgg;
 
 public class BlockSlimelingEgg extends Block implements ITileEntityProvider, ItemBlockDesc.IBlockShiftDesc {
 
@@ -70,23 +69,22 @@ public class BlockSlimelingEgg extends Block implements ITileEntityProvider, Ite
     private boolean beginHatch(World world, int x, int y, int z, EntityPlayer player) {
         final int l = world.getBlockMetadata(x, y, z);
 
-        if (l < 3) {
-            world.setBlockMetadataWithNotify(x, y, z, l + 3, 2);
-
-            final TileEntity tile = world.getTileEntity(x, y, z);
-
-            if (tile instanceof TileEntitySlimelingEgg) {
-                ((TileEntitySlimelingEgg) tile).timeToHatch = world.rand.nextInt(50) + 20;
-                ((TileEntitySlimelingEgg) tile).lastTouchedPlayerUUID = VersionUtil.mcVersion1_7_2
-                        ? player.getCommandSenderName()
-                        : player.getUniqueID().toString();
-                ((TileEntitySlimelingEgg) tile).lastTouchedPlayerName = player.getCommandSenderName();
-            }
-
-            return true;
-        } else {
+        if (l >= 3) {
             return false;
         }
+        world.setBlockMetadataWithNotify(x, y, z, l + 3, 2);
+
+        final TileEntity tile = world.getTileEntity(x, y, z);
+
+        if (tile instanceof TileEntitySlimelingEgg) {
+            ((TileEntitySlimelingEgg) tile).timeToHatch = world.rand.nextInt(50) + 20;
+            ((TileEntitySlimelingEgg) tile).lastTouchedPlayerUUID = VersionUtil.mcVersion1_7_2
+                    ? player.getCommandSenderName()
+                    : player.getUniqueID().toString();
+            ((TileEntitySlimelingEgg) tile).lastTouchedPlayerName = player.getCommandSenderName();
+        }
+
+        return true;
     }
 
     @Override
@@ -95,10 +93,9 @@ public class BlockSlimelingEgg extends Block implements ITileEntityProvider, Ite
         if (currentStack != null && currentStack.getItem() instanceof ItemPickaxe
                 || player.capabilities.isCreativeMode) {
             return world.setBlockToAir(x, y, z);
-        } else {
-            this.beginHatch(world, x, y, z, player);
-            return false;
         }
+        this.beginHatch(world, x, y, z, player);
+        return false;
     }
 
     @Override
@@ -163,10 +160,9 @@ public class BlockSlimelingEgg extends Block implements ITileEntityProvider, Ite
         return 1;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @SideOnly(Side.CLIENT)
     @Override
-    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         for (int var4 = 0; var4 < BlockSlimelingEgg.names.length; ++var4) {
             par3List.add(new ItemStack(par1, 1, var4));
         }
@@ -177,18 +173,20 @@ public class BlockSlimelingEgg extends Block implements ITileEntityProvider, Ite
         return new TileEntitySlimelingEgg();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
         final int metadata = world.getBlockMetadata(x, y, z);
 
-        if (metadata == 3) {
-            return new ItemStack(Item.getItemFromBlock(this), 1, 0);
-        }
-        if (metadata == 4) {
-            return new ItemStack(Item.getItemFromBlock(this), 1, 1);
-        }
-        if (metadata == 5) {
-            return new ItemStack(Item.getItemFromBlock(this), 1, 2);
+        switch (metadata) {
+            case 3:
+                return new ItemStack(Item.getItemFromBlock(this), 1, 0);
+            case 4:
+                return new ItemStack(Item.getItemFromBlock(this), 1, 1);
+            case 5:
+                return new ItemStack(Item.getItemFromBlock(this), 1, 2);
+            default:
+                break;
         }
         return super.getPickBlock(target, world, x, y, z);
     }

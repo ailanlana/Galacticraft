@@ -19,6 +19,58 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.MusicTicker;
+import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.renderer.IImageBuffer;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
+import net.minecraft.item.Item;
+import net.minecraft.network.INetHandler;
+import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.IFluidBlock;
+
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+
+import api.player.client.ClientPlayerAPI;
+import api.player.model.ModelPlayerAPI;
+import api.player.render.RenderPlayerAPI;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import micdoodle8.mods.galacticraft.api.entity.ICameraZoomEntity;
 import micdoodle8.mods.galacticraft.api.event.client.CelestialBodyRenderEvent;
 import micdoodle8.mods.galacticraft.api.prefab.entity.EntityAutoRocket;
@@ -120,62 +172,8 @@ import micdoodle8.mods.galacticraft.core.tile.TileEntityTreasureChest;
 import micdoodle8.mods.galacticraft.core.util.VersionUtil;
 import micdoodle8.mods.galacticraft.core.wrappers.BlockMetaList;
 import micdoodle8.mods.galacticraft.core.wrappers.PlayerGearData;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.MusicTicker;
-import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.entity.EntityClientPlayerMP;
-import net.minecraft.client.entity.EntityOtherPlayerMP;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.renderer.IImageBuffer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.Item;
-import net.minecraft.network.INetHandler;
-import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldProvider;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.IFluidBlock;
-
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-
 import tconstruct.client.tabs.InventoryTabVanilla;
 import tconstruct.client.tabs.TabRegistry;
-import api.player.client.ClientPlayerAPI;
-import api.player.model.ModelPlayerAPI;
-import api.player.render.RenderPlayerAPI;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ClientProxyCore extends CommonProxyCore {
 
@@ -273,7 +271,7 @@ public class ClientProxyCore extends CommonProxyCore {
 
     @Override
     public void init(FMLInitializationEvent event) {
-        final Class[][] commonTypes = {
+        final Class<?>[][] commonTypes = {
                 { MusicTicker.MusicType.class, ResourceLocation.class, int.class, int.class }, };
         MUSIC_TYPE_MARS = EnumHelper.addEnum(
                 commonTypes,
@@ -508,9 +506,11 @@ public class ClientProxyCore extends CommonProxyCore {
     public int getBlockRender(Block blockID) {
         if (blockID == GCBlocks.breatheableAir || blockID == GCBlocks.brightBreatheableAir) {
             return ClientProxyCore.renderIdBreathableAir;
-        } else if (blockID == GCBlocks.oxygenPipe) {
+        }
+        if (blockID == GCBlocks.oxygenPipe) {
             return ClientProxyCore.renderIdOxygenPipe;
-        } else if (blockID == GCBlocks.fallenMeteor) {
+        }
+        if (blockID == GCBlocks.fallenMeteor) {
             return ClientProxyCore.renderIdMeteor;
         } else if (blockID == GCBlocks.nasaWorkbench) {
             return ClientProxyCore.renderIdCraftingTable;
@@ -561,11 +561,10 @@ public class ClientProxyCore extends CommonProxyCore {
     }
 
     public static void renderLiquidOverlays(float partialTicks) {
-        if (ClientProxyCore.isInsideOfFluid(ClientProxyCore.mc.thePlayer, GalacticraftCore.fluidOil)) {
-            ClientProxyCore.mc.getTextureManager().bindTexture(ClientProxyCore.underOilTexture);
-        } else {
+        if (!ClientProxyCore.isInsideOfFluid(ClientProxyCore.mc.thePlayer, GalacticraftCore.fluidOil)) {
             return;
         }
+        ClientProxyCore.mc.getTextureManager().bindTexture(ClientProxyCore.underOilTexture);
 
         final Tessellator tessellator = Tessellator.instance;
         final float f1 = ClientProxyCore.mc.thePlayer.getBrightness(partialTicks) / 3.0F;
@@ -599,19 +598,17 @@ public class ClientProxyCore extends CommonProxyCore {
         final int k = MathHelper.floor_double(entity.posZ);
         final Block block = entity.worldObj.getBlock(i, j, k);
 
-        if (block != null && block instanceof IFluidBlock
-                && ((IFluidBlock) block).getFluid() != null
-                && ((IFluidBlock) block).getFluid().getName().equals(fluid.getName())) {
-            double filled = ((IFluidBlock) block).getFilledPercentage(entity.worldObj, i, j, k);
-            if (filled < 0) {
-                filled *= -1;
-                return d0 > j + (1 - filled);
-            } else {
-                return d0 < j + filled;
-            }
-        } else {
+        if (block == null || !(block instanceof IFluidBlock)
+                || ((IFluidBlock) block).getFluid() == null
+                || !((IFluidBlock) block).getFluid().getName().equals(fluid.getName())) {
             return false;
         }
+        double filled = ((IFluidBlock) block).getFilledPercentage(entity.worldObj, i, j, k);
+        if (filled < 0) {
+            filled *= -1;
+            return d0 > j + (1 - filled);
+        }
+        return d0 < j + filled;
     }
 
     public static void renderFootprints(float partialTicks) {
@@ -724,14 +721,12 @@ public class ClientProxyCore extends CommonProxyCore {
                                         public BufferedImage parseUserSkin(BufferedImage p_78432_1_) {
                                             if (p_78432_1_ == null) {
                                                 return null;
-                                            } else {
-                                                final BufferedImage bufferedimage1 = new BufferedImage(512, 256, 2);
-                                                final Graphics graphics = bufferedimage1.getGraphics();
-                                                graphics.drawImage(p_78432_1_, 0, 0, null);
-                                                graphics.dispose();
-                                                p_78432_1_ = bufferedimage1;
                                             }
-                                            return p_78432_1_;
+                                            final BufferedImage bufferedimage1 = new BufferedImage(512, 256, 2);
+                                            final Graphics graphics = bufferedimage1.getGraphics();
+                                            graphics.drawImage(p_78432_1_, 0, 0, null);
+                                            graphics.dispose();
+                                            return bufferedimage1;
                                         }
 
                                         @Override
@@ -765,7 +760,8 @@ public class ClientProxyCore extends CommonProxyCore {
                         + (player.field_71085_bR - player.field_71097_bO) * event.partialRenderTick
                         - (player.prevPosZ + (player.posZ - player.prevPosZ) * event.partialRenderTick);
                 f4 = (player.prevRenderYawOffset
-                        + (player.renderYawOffset - player.prevRenderYawOffset) * event.partialRenderTick) / 57.29578F;
+                        + (player.renderYawOffset - player.prevRenderYawOffset) * event.partialRenderTick)
+                        / (180F / (float) Math.PI);
                 final double d1 = MathHelper.sin(f4);
                 final double d2 = -MathHelper.cos(f4);
                 float f5 = (float) d4 * 10.0F;
@@ -818,7 +814,7 @@ public class ClientProxyCore extends CommonProxyCore {
         if (ClientProxyCore.smallMoonActive && (offsetX != 0.0D || offsetY != 0.0D || offsetZ != 0.0D)) {
             final EntityPlayerSP player = ClientProxyCore.mc.thePlayer;
             if (player.posY > ClientProxyCore.terrainHeight + 8F && player.ridingEntity != entity && player != entity) {
-                final double globalArc = ClientProxyCore.globalRadius / 57.2957795D;
+                final double globalArc = ClientProxyCore.globalRadius / (180D / Math.PI);
 
                 final int pX = MathHelper.floor_double(player.posX / 16D) << 4;
                 final int pZ = MathHelper.floor_double(player.posZ / 16D) << 4;
@@ -886,68 +882,66 @@ public class ClientProxyCore extends CommonProxyCore {
         if (ClientProxyCore.smallMoonActive && (offsetX != 0.0D || offsetY != 0.0D || offsetZ != 0.0D)) {
             final EntityPlayerSP player = ClientProxyCore.mc.thePlayer;
             final WorldProvider provider = ClientProxyCore.mc.theWorld.provider;
-            if (provider instanceof WorldProviderMoon) {
-                if (player.posY > ClientProxyCore.terrainHeight + 8F) {
-                    final double globalArc = ClientProxyCore.globalRadius / 57.2957795D;
+            if (provider instanceof WorldProviderMoon && player.posY > ClientProxyCore.terrainHeight + 8F) {
+                final double globalArc = ClientProxyCore.globalRadius / (180D / Math.PI);
 
-                    final int pX = MathHelper.floor_double(player.posX / 16D) << 4;
-                    final int pZ = MathHelper.floor_double(player.posZ / 16D) << 4;
+                final int pX = MathHelper.floor_double(player.posX / 16D) << 4;
+                final int pZ = MathHelper.floor_double(player.posZ / 16D) << 4;
 
-                    final int eX = tile.xCoord / 16 << 4;
-                    final int eY = tile.yCoord / 16 << 4;
-                    final int eZ = tile.zCoord / 16 << 4;
+                final int eX = tile.xCoord / 16 << 4;
+                final int eY = tile.yCoord / 16 << 4;
+                final int eZ = tile.zCoord / 16 << 4;
 
-                    float dX = eX - pX;
-                    float dZ = eZ - pZ;
+                float dX = eX - pX;
+                float dZ = eZ - pZ;
 
-                    final float floatPX = (float) player.posX;
-                    final float floatPZ = (float) player.posZ;
+                final float floatPX = (float) player.posX;
+                final float floatPZ = (float) player.posZ;
 
+                if (dX > 0) {
+                    dX -= 16F;
                     if (dX > 0) {
-                        dX -= 16F;
-                        if (dX > 0) {
-                            dX -= floatPX - pX;
-                        }
-                    } else if (dX < 0) {
-                        dX += 16F;
-                        if (dX < 0) {
-                            dX += 16F - floatPX + pX;
-                        }
+                        dX -= floatPX - pX;
                     }
-
-                    if (dZ > 0) {
-                        dZ -= 16F;
-                        if (dZ > 0) {
-                            dZ -= floatPZ - pZ;
-                        }
-                    } else if (dZ < 0) {
-                        dZ += 16F;
-                        if (dZ < 0) {
-                            dZ += 16F - floatPZ + pZ;
-                        }
+                } else if (dX < 0) {
+                    dX += 16F;
+                    if (dX < 0) {
+                        dX += 16F - floatPX + pX;
                     }
-
-                    float theta = (float) MathHelper.wrapAngleTo180_double(dX / globalArc);
-                    float phi = (float) MathHelper.wrapAngleTo180_double(dZ / globalArc);
-                    if (theta < 0) {
-                        theta += 360F;
-                    }
-                    if (phi < 0) {
-                        phi += 360F;
-                    }
-                    final float ytranslate = ClientProxyCore.globalRadius + (float) player.posY
-                            - tile.yCoord
-                            + eY
-                            - ClientProxyCore.terrainHeight;
-                    GL11.glTranslatef(-dX - floatPX + eX + 8F, -ytranslate, -dZ - floatPZ + eZ + 8F);
-                    if (theta > 0) {
-                        GL11.glRotatef(theta, 0, 0, -1);
-                    }
-                    if (phi > 0) {
-                        GL11.glRotatef(phi, 1, 0, 0);
-                    }
-                    GL11.glTranslatef(floatPX - eX - 8F, ytranslate, floatPZ - eZ - 8F);
                 }
+
+                if (dZ > 0) {
+                    dZ -= 16F;
+                    if (dZ > 0) {
+                        dZ -= floatPZ - pZ;
+                    }
+                } else if (dZ < 0) {
+                    dZ += 16F;
+                    if (dZ < 0) {
+                        dZ += 16F - floatPZ + pZ;
+                    }
+                }
+
+                float theta = (float) MathHelper.wrapAngleTo180_double(dX / globalArc);
+                float phi = (float) MathHelper.wrapAngleTo180_double(dZ / globalArc);
+                if (theta < 0) {
+                    theta += 360F;
+                }
+                if (phi < 0) {
+                    phi += 360F;
+                }
+                final float ytranslate = ClientProxyCore.globalRadius + (float) player.posY
+                        - tile.yCoord
+                        + eY
+                        - ClientProxyCore.terrainHeight;
+                GL11.glTranslatef(-dX - floatPX + eX + 8F, -ytranslate, -dZ - floatPZ + eZ + 8F);
+                if (theta > 0) {
+                    GL11.glRotatef(theta, 0, 0, -1);
+                }
+                if (phi > 0) {
+                    GL11.glRotatef(phi, 1, 0, 0);
+                }
+                GL11.glTranslatef(floatPX - eX - 8F, ytranslate, floatPZ - eZ - 8F);
             }
         }
     }
@@ -1045,7 +1039,7 @@ public class ClientProxyCore extends CommonProxyCore {
 
                 if (entitylivingbase.posY > ClientProxyCore.terrainHeight + 8F) {
                     ClientProxyCore.smallMoonActive = true;
-                    final double globalArc = ClientProxyCore.globalRadius / 57.2957795D;
+                    final double globalArc = ClientProxyCore.globalRadius / (180D / Math.PI);
                     final float globeRadius = ClientProxyCore.globalRadius - ClientProxyCore.terrainHeight;
 
                     final int pX = MathHelper.floor_double(entitylivingbase.posX / 16D) << 4;
@@ -1155,9 +1149,8 @@ public class ClientProxyCore extends CommonProxyCore {
     public EntityPlayer getPlayerFromNetHandler(INetHandler handler) {
         if (handler instanceof NetHandlerPlayServer) {
             return ((NetHandlerPlayServer) handler).playerEntity;
-        } else {
-            return FMLClientHandler.instance().getClientPlayerEntity();
         }
+        return FMLClientHandler.instance().getClientPlayerEntity();
     }
 
     // For testing purposes only

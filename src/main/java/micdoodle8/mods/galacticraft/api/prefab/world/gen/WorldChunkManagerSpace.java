@@ -87,24 +87,22 @@ public abstract class WorldChunkManagerSpace extends WorldChunkManager {
             final BiomeGenBase[] var9 = this.biomeCache.getCachedBiomes(par2, par3);
             System.arraycopy(var9, 0, par1ArrayOfBiomeGenBase, 0, par4 * par5);
             return par1ArrayOfBiomeGenBase;
-        } else {
-            for (int var8 = 0; var8 < par4 * par5; ++var8) {
-                par1ArrayOfBiomeGenBase[var8] = this.getBiome();
-            }
-
-            return par1ArrayOfBiomeGenBase;
         }
+        for (int var8 = 0; var8 < par4 * par5; ++var8) {
+            par1ArrayOfBiomeGenBase[var8] = this.getBiome();
+        }
+
+        return par1ArrayOfBiomeGenBase;
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
-    public boolean areBiomesViable(int par1, int par2, int par3, List par4List) {
+    public boolean areBiomesViable(int par1, int par2, int par3, List<BiomeGenBase> par4List) {
         return par4List.contains(this.getBiome());
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
-    public ChunkPosition findBiomePosition(int par1, int par2, int par3, List par4List, Random par5Random) {
+    public ChunkPosition findBiomePosition(int par1, int par2, int par3, List<BiomeGenBase> par4List,
+            Random par5Random) {
         final int var6 = par1 - par3 >> 2;
         final int var7 = par2 - par3 >> 2;
         final int var8 = par1 + par3 >> 2;

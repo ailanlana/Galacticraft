@@ -2,12 +2,6 @@ package micdoodle8.mods.galacticraft.core.tile;
 
 import java.util.EnumSet;
 
-import micdoodle8.mods.galacticraft.api.world.IAtmosphericGas;
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
-import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
-import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,6 +16,11 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.relauncher.Side;
+import micdoodle8.mods.galacticraft.api.world.IAtmosphericGas;
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
+import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
+import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class TileEntityOxygenCollector extends TileEntityOxygen implements IInventory, ISidedInventory {
 
@@ -151,12 +150,11 @@ public class TileEntityOxygenCollector extends TileEntityOxygen implements IInve
                                         // Test for the two most common blocks (air
                                         // and breatheable air) without looking up
                                         // in the blocksList
-                                        if (!(block instanceof BlockAir)) {
-                                            if (block.isLeaves(this.worldObj, x, y, z) || block instanceof IPlantable
-                                                    && ((IPlantable) block).getPlantType(this.worldObj, x, y, z)
-                                                            == EnumPlantType.Crop) {
-                                                nearbyLeaves += 0.075F * 10F;
-                                            }
+                                        if (!(block instanceof BlockAir) && (block.isLeaves(this.worldObj, x, y, z)
+                                                || block instanceof IPlantable
+                                                        && ((IPlantable) block).getPlantType(this.worldObj, x, y, z)
+                                                                == EnumPlantType.Crop)) {
+                                            nearbyLeaves += 0.075F * 10F;
                                         }
                                     }
                                 }
@@ -225,25 +223,22 @@ public class TileEntityOxygenCollector extends TileEntityOxygen implements IInve
 
     @Override
     public ItemStack decrStackSize(int par1, int par2) {
-        if (this.containingItems[par1] != null) {
-            ItemStack var3;
-
-            if (this.containingItems[par1].stackSize <= par2) {
-                var3 = this.containingItems[par1];
-                this.containingItems[par1] = null;
-                return var3;
-            } else {
-                var3 = this.containingItems[par1].splitStack(par2);
-
-                if (this.containingItems[par1].stackSize == 0) {
-                    this.containingItems[par1] = null;
-                }
-
-                return var3;
-            }
-        } else {
+        if (this.containingItems[par1] == null) {
             return null;
         }
+        ItemStack var3;
+
+        if (this.containingItems[par1].stackSize <= par2) {
+            var3 = this.containingItems[par1];
+            this.containingItems[par1] = null;
+        } else {
+            var3 = this.containingItems[par1].splitStack(par2);
+
+            if (this.containingItems[par1].stackSize == 0) {
+                this.containingItems[par1] = null;
+            }
+        }
+        return var3;
     }
 
     @Override
@@ -252,9 +247,8 @@ public class TileEntityOxygenCollector extends TileEntityOxygen implements IInve
             final ItemStack var2 = this.containingItems[par1];
             this.containingItems[par1] = null;
             return var2;
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override

@@ -4,14 +4,6 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import micdoodle8.mods.galacticraft.api.recipe.CompressorRecipes;
-import micdoodle8.mods.galacticraft.core.Constants;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
-import micdoodle8.mods.galacticraft.core.items.GCItems;
-import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
-import micdoodle8.mods.galacticraft.core.util.RecipeUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -29,6 +21,13 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
+import micdoodle8.mods.galacticraft.api.recipe.CompressorRecipes;
+import micdoodle8.mods.galacticraft.core.Constants;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+import micdoodle8.mods.galacticraft.core.items.GCItems;
+import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
+import micdoodle8.mods.galacticraft.core.util.RecipeUtil;
 
 public class NEIGalacticraftConfig implements IConfigureNEI {
 
@@ -298,17 +297,13 @@ public class NEIGalacticraftConfig implements IConfigureNEI {
     private void addIngotCompressorRecipes() {
         for (final IRecipe rec : CompressorRecipes.getRecipeList()) {
             final HashMap<Integer, PositionedStack> input1 = new HashMap<>();
-            if (rec instanceof ShapedRecipes) {
-                final ShapedRecipes recipe = (ShapedRecipes) rec;
-
+            if (rec instanceof ShapedRecipes recipe) {
                 for (int j = 0; j < recipe.recipeItems.length; j++) {
                     final ItemStack stack = recipe.recipeItems[j];
 
                     input1.put(j, new PositionedStack(stack, 21 + j % 3 * 18, 26 + j / 3 * 18));
                 }
-            } else if (rec instanceof ShapelessOreRecipe) {
-                final ShapelessOreRecipe recipe = (ShapelessOreRecipe) rec;
-
+            } else if (rec instanceof ShapelessOreRecipe recipe) {
                 for (int j = 0; j < recipe.getInput().size(); j++) {
                     final Object obj = recipe.getInput().get(j);
 
@@ -317,10 +312,9 @@ public class NEIGalacticraftConfig implements IConfigureNEI {
             }
 
             final ItemStack resultItemStack = rec.getRecipeOutput();
-            if (ConfigManagerCore.quickMode) {
-                if (resultItemStack.getItem().getUnlocalizedName(resultItemStack).contains("compressed")) {
-                    resultItemStack.stackSize *= 2;
-                }
+            if (ConfigManagerCore.quickMode
+                    && resultItemStack.getItem().getUnlocalizedName(resultItemStack).contains("compressed")) {
+                resultItemStack.stackSize *= 2;
             }
 
             this.registerIngotCompressorRecipe(input1, new PositionedStack(resultItemStack, 140, 46));

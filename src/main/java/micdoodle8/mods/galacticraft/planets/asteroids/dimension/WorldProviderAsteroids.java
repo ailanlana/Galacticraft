@@ -4,6 +4,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.TreeMap;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.world.biome.WorldChunkManager;
+import net.minecraft.world.chunk.IChunkProvider;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
 import micdoodle8.mods.galacticraft.api.prefab.world.gen.WorldProviderSpace;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
@@ -17,19 +25,10 @@ import micdoodle8.mods.galacticraft.planets.asteroids.entities.EntityAstroMiner;
 import micdoodle8.mods.galacticraft.planets.asteroids.world.gen.ChunkProviderAsteroids;
 import micdoodle8.mods.galacticraft.planets.asteroids.world.gen.WorldChunkManagerAsteroids;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.biome.WorldChunkManager;
-import net.minecraft.world.chunk.IChunkProvider;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 public class WorldProviderAsteroids extends WorldProviderSpace implements ISolarLevel {
 
     // Used to list asteroid centres to external code that needs to know them
-    private final HashSet<AsteroidData> asteroids = new HashSet();
+    private final HashSet<AsteroidData> asteroids = new HashSet<>();
     private boolean dataNotLoaded = true;
     private AsteroidSaveData datafile;
     private double solarMultiplier = -1D;
@@ -274,7 +273,7 @@ public class WorldProviderAsteroids extends WorldProviderSpace implements ISolar
         int lowestDistance = Integer.MAX_VALUE;
 
         for (final AsteroidData test : this.asteroids) {
-            if ((test.sizeAndLandedFlag & 128) > 0) {
+            if ((test.sizeAndLandedFlag & 128) != 0) {
                 continue;
             }
 
@@ -306,7 +305,7 @@ public class WorldProviderAsteroids extends WorldProviderSpace implements ISolar
             return null;
         }
 
-        final TreeMap<Integer, BlockVec3> targets = new TreeMap();
+        final TreeMap<Integer, BlockVec3> targets = new TreeMap<>();
 
         for (final AsteroidData roid : this.asteroids) {
             final BlockVec3 test = roid.centre;
@@ -345,7 +344,7 @@ public class WorldProviderAsteroids extends WorldProviderSpace implements ISolar
             return null;
         }
 
-        final ArrayList<BlockVec3> returnValues = new ArrayList();
+        final ArrayList<BlockVec3> returnValues = new ArrayList<>();
         int i = 0;
         final int offset = EntityAstroMiner.MINE_LENGTH_AST / 2;
         for (final BlockVec3 target : targets.values()) {
@@ -366,7 +365,8 @@ public class WorldProviderAsteroids extends WorldProviderSpace implements ISolar
                     break;
             }
             returnValues.add(coords);
-            if (++i >= count) {
+            i++;
+            if (i >= count) {
                 break;
             }
         }
@@ -423,9 +423,8 @@ public class WorldProviderAsteroids extends WorldProviderSpace implements ISolar
         public int hashCode() {
             if (this.centre != null) {
                 return this.centre.hashCode();
-            } else {
-                return 0;
             }
+            return 0;
         }
 
         @Override
@@ -435,8 +434,7 @@ public class WorldProviderAsteroids extends WorldProviderSpace implements ISolar
                 return this.centre.x == vector.x && this.centre.y == vector.y && this.centre.z == vector.z;
             }
 
-            if (o instanceof BlockVec3) {
-                final BlockVec3 vector = (BlockVec3) o;
+            if (o instanceof BlockVec3 vector) {
                 return this.centre.x == vector.x && this.centre.y == vector.y && this.centre.z == vector.z;
             }
 

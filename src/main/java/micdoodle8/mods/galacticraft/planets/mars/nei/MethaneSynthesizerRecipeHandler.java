@@ -9,12 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
-import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
-import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
-import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -29,6 +23,11 @@ import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
+import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
+import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
+import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
 
 public class MethaneSynthesizerRecipeHandler extends TemplateRecipeHandler {
 
@@ -150,22 +149,18 @@ public class MethaneSynthesizerRecipeHandler extends TemplateRecipeHandler {
 
         this.fillAtmos = inputItem == AsteroidsItems.atmosphericValve;
 
-        if (this.ticksPassed % 144 > 40) {
-            final ArrayList<PositionedStack> stacks = new ArrayList<>();
-            if (inputItem != MarsItems.carbonFragments) {
-                stacks.add(
-                        new PositionedStack(
-                                new ItemStack(inputItem, 1, inputItem.getMaxDamage()),
-                                input.relx,
-                                input.rely));
-            } else if (this.ticksPassed % 144 < 104) {
-                final int number = 24 - (this.ticksPassed % 144 - 40) * 3 / 8;
-                stacks.add(new PositionedStack(new ItemStack(inputItem, number, 0), input.relx, input.rely));
-            }
-            return stacks;
-        } else {
+        if (this.ticksPassed % 144 <= 40) {
             return (ArrayList<PositionedStack>) this.arecipes.get(recipe).getIngredients();
         }
+        final ArrayList<PositionedStack> stacks = new ArrayList<>();
+        if (inputItem != MarsItems.carbonFragments) {
+            stacks.add(
+                    new PositionedStack(new ItemStack(inputItem, 1, inputItem.getMaxDamage()), input.relx, input.rely));
+        } else if (this.ticksPassed % 144 < 104) {
+            final int number = 24 - (this.ticksPassed % 144 - 40) * 3 / 8;
+            stacks.add(new PositionedStack(new ItemStack(inputItem, number, 0), input.relx, input.rely));
+        }
+        return stacks;
     }
 
     @Override
@@ -177,9 +172,8 @@ public class MethaneSynthesizerRecipeHandler extends TemplateRecipeHandler {
                     new ItemStack(outputItem, 1, outputItem.getMaxDamage()),
                     output.relx,
                     output.rely);
-        } else {
-            return this.arecipes.get(recipe).getResult();
         }
+        return this.arecipes.get(recipe).getResult();
     }
 
     public class CachedSynthesizerRecipe extends TemplateRecipeHandler.CachedRecipe {
@@ -198,7 +192,6 @@ public class MethaneSynthesizerRecipeHandler extends TemplateRecipeHandler {
         }
 
         public CachedSynthesizerRecipe(PositionedStack pstack1, PositionedStack pstack2) {
-            super();
             this.input = pstack1;
             this.output = pstack2;
         }

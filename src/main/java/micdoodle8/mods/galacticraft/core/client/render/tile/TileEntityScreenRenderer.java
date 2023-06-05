@@ -1,11 +1,5 @@
 package micdoodle8.mods.galacticraft.core.client.render.tile;
 
-import java.nio.FloatBuffer;
-
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityScreen;
-
-import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -18,6 +12,8 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityScreen;
 
 @SideOnly(Side.CLIENT)
 public class TileEntityScreenRenderer extends TileEntitySpecialRenderer {
@@ -36,7 +32,6 @@ public class TileEntityScreenRenderer extends TileEntitySpecialRenderer {
     public static final IModelCustom screenModel4 = AdvancedModelLoader
             .loadModel(new ResourceLocation(GalacticraftCore.ASSET_PREFIX, "models/screen0Quarters.obj"));
     private final TextureManager renderEngine = FMLClientHandler.instance().getClient().renderEngine;
-    private static final FloatBuffer colorBuffer = GLAllocation.createDirectFloatBuffer(16);
 
     private final float yPlane = 0.91F;
     float frame = 0.098F;
@@ -164,12 +159,12 @@ public class TileEntityScreenRenderer extends TileEntitySpecialRenderer {
         }
         final int totalLR = tileEntity.connectionsLeft + tileEntity.connectionsRight;
         final int totalUD = tileEntity.connectionsUp + tileEntity.connectionsDown;
-        if (totalLR > 1 && totalUD > 1 && !cornerblock) {
-            // centre block
-            if (tileEntity.connectionsLeft == tileEntity.connectionsRight - (totalLR | 1)) {
-                if (tileEntity.connectionsUp == tileEntity.connectionsDown - (totalUD | 1)) {
-                    cornerblock = true;
-                }
+        // centre block
+        if (totalLR > 1 && totalUD > 1
+                && !cornerblock
+                && tileEntity.connectionsLeft == tileEntity.connectionsRight - (totalLR | 1)) {
+            if (tileEntity.connectionsUp == tileEntity.connectionsDown - (totalUD | 1)) {
+                cornerblock = true;
             }
         }
         tileEntity.screen.drawScreen(tileEntity.imageType, f + tileEntity.getWorldObj().getWorldTime(), cornerblock);

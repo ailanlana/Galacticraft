@@ -1,10 +1,5 @@
 package micdoodle8.mods.galacticraft.core.entities;
 
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.items.GCItems;
-import micdoodle8.mods.galacticraft.core.util.ClientUtil;
-import micdoodle8.mods.galacticraft.core.wrappers.FlagData;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.client.Minecraft;
@@ -16,6 +11,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.core.items.GCItems;
+import micdoodle8.mods.galacticraft.core.util.ClientUtil;
+import micdoodle8.mods.galacticraft.core.wrappers.FlagData;
 
 public class EntityFlag extends Entity {
 
@@ -46,43 +46,41 @@ public class EntityFlag extends Entity {
         final boolean flag = par1DamageSource.getEntity() instanceof EntityPlayer
                 && ((EntityPlayer) par1DamageSource.getEntity()).capabilities.isCreativeMode;
 
-        if (!this.worldObj.isRemote && !this.isDead && !this.indestructable) {
-            if (this.isEntityInvulnerable()) {
-                return false;
-            } else {
-                this.setBeenAttacked();
-                this.setDamage(this.getDamage() + par2 * 10);
-                this.worldObj.playSoundEffect(
-                        this.posX,
-                        this.posY,
-                        this.posZ,
-                        Block.soundTypeMetal.getBreakSound(),
-                        Block.soundTypeMetal.getVolume(),
-                        Block.soundTypeMetal.getPitch() + 1.0F);
-
-                if (par1DamageSource.getEntity() instanceof EntityPlayer
-                        && ((EntityPlayer) par1DamageSource.getEntity()).capabilities.isCreativeMode) {
-                    this.setDamage(100.0F);
-                }
-
-                if (flag || this.getDamage() > 40) {
-                    if (this.riddenByEntity != null) {
-                        this.riddenByEntity.mountEntity(this);
-                    }
-
-                    if (flag) {
-                        this.setDead();
-                    } else {
-                        this.setDead();
-                        this.dropItemStack();
-                    }
-                }
-
-                return true;
-            }
-        } else {
+        if (this.worldObj.isRemote || this.isDead || this.indestructable) {
             return true;
         }
+        if (this.isEntityInvulnerable()) {
+            return false;
+        }
+        this.setBeenAttacked();
+        this.setDamage(this.getDamage() + par2 * 10);
+        this.worldObj.playSoundEffect(
+                this.posX,
+                this.posY,
+                this.posZ,
+                Block.soundTypeMetal.getBreakSound(),
+                Block.soundTypeMetal.getVolume(),
+                Block.soundTypeMetal.getPitch() + 1.0F);
+
+        if (par1DamageSource.getEntity() instanceof EntityPlayer
+                && ((EntityPlayer) par1DamageSource.getEntity()).capabilities.isCreativeMode) {
+            this.setDamage(100.0F);
+        }
+
+        if (flag || this.getDamage() > 40) {
+            if (this.riddenByEntity != null) {
+                this.riddenByEntity.mountEntity(this);
+            }
+
+            if (flag) {
+                this.setDead();
+            } else {
+                this.setDead();
+                this.dropItemStack();
+            }
+        }
+
+        return true;
     }
 
     @Override
@@ -126,9 +124,9 @@ public class EntityFlag extends Entity {
     @Override
     protected void entityInit() {
         this.dataWatcher.addObject(17, "");
-        this.dataWatcher.addObject(18, new Float(0.0F));
-        this.dataWatcher.addObject(19, new Integer(-1));
-        this.dataWatcher.addObject(20, new Integer(-1));
+        this.dataWatcher.addObject(18, 0.0F);
+        this.dataWatcher.addObject(19, -1);
+        this.dataWatcher.addObject(20, -1);
     }
 
     @Override

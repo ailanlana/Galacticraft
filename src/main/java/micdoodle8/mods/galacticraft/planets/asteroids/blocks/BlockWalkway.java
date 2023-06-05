@@ -2,19 +2,6 @@ package micdoodle8.mods.galacticraft.planets.asteroids.blocks;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.blocks.BlockTransmitter;
-import micdoodle8.mods.galacticraft.core.energy.EnergyUtil;
-import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityAluminumWire;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenPipe;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-import micdoodle8.mods.galacticraft.core.util.OxygenUtil;
-import micdoodle8.mods.galacticraft.planets.GalacticraftPlanets;
-import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -27,6 +14,18 @@ import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.blocks.BlockTransmitter;
+import micdoodle8.mods.galacticraft.core.energy.EnergyUtil;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityAluminumWire;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenPipe;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+import micdoodle8.mods.galacticraft.core.util.OxygenUtil;
+import micdoodle8.mods.galacticraft.planets.GalacticraftPlanets;
+import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
 
 public class BlockWalkway extends BlockTransmitter implements ITileEntityProvider, ItemBlockDesc.IBlockShiftDesc {
 
@@ -159,7 +158,7 @@ public class BlockWalkway extends BlockTransmitter implements ITileEntityProvide
         }
     }
 
-    private void addCollisionBox(World world, int x, int y, int z, AxisAlignedBB aabb, List list) {
+    private void addCollisionBox(World world, int x, int y, int z, AxisAlignedBB aabb, List<AxisAlignedBB> list) {
         final AxisAlignedBB axisalignedbb1 = this.getCollisionBoundingBoxFromPool(world, x, y, z);
 
         if (axisalignedbb1 != null && aabb.intersectsWith(axisalignedbb1)) {
@@ -167,10 +166,9 @@ public class BlockWalkway extends BlockTransmitter implements ITileEntityProvide
         }
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
-    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisalignedbb, List list,
-            Entity entity) {
+    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisalignedbb,
+            List<AxisAlignedBB> list, Entity entity) {
         final TileEntity tileEntity = world.getTileEntity(x, y, z);
         TileEntity[] connectable = new TileEntity[6];
 
@@ -272,9 +270,11 @@ public class BlockWalkway extends BlockTransmitter implements ITileEntityProvide
     public String getShiftDescription(int meta) {
         if (this == AsteroidBlocks.blockWalkway) {
             return GCCoreUtil.translate("tile.walkway.description");
-        } else if (this == AsteroidBlocks.blockWalkwayWire) {
+        }
+        if (this == AsteroidBlocks.blockWalkwayWire) {
             return GCCoreUtil.translate("tile.walkwayAluminumWire.description");
-        } else if (this == AsteroidBlocks.blockWalkwayOxygenPipe) {
+        }
+        if (this == AsteroidBlocks.blockWalkwayOxygenPipe) {
             return GCCoreUtil.translate("tile.walkwayOxygenPipe.description");
         }
 

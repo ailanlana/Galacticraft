@@ -1,8 +1,5 @@
 package micdoodle8.mods.galacticraft.core.client.render.item;
 
-import micdoodle8.mods.galacticraft.core.client.model.ModelKey;
-
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
@@ -13,6 +10,7 @@ import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import micdoodle8.mods.galacticraft.core.client.model.ModelKey;
 
 public class ItemRendererKey implements IItemRenderer {
 
@@ -24,8 +22,7 @@ public class ItemRendererKey implements IItemRenderer {
         this.treasureChestTexture = resourceLocation;
     }
 
-    private void renderKey(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX, float translateY,
-            float translateZ, Object... data) {
+    private void renderKey(ItemRenderType type, Object... data) {
         GL11.glPushMatrix();
 
         EntityItem entityItem = null;
@@ -73,18 +70,13 @@ public class ItemRendererKey implements IItemRenderer {
      */
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-        switch (type) {
-            case ENTITY:
-                return true;
-            case EQUIPPED:
-                return true;
-            case EQUIPPED_FIRST_PERSON:
-                return true;
-            case INVENTORY:
-                return true;
-            default:
-                return false;
-        }
+        return switch (type) {
+            case ENTITY -> true;
+            case EQUIPPED -> true;
+            case EQUIPPED_FIRST_PERSON -> true;
+            case INVENTORY -> true;
+            default -> false;
+        };
     }
 
     @Override
@@ -96,16 +88,16 @@ public class ItemRendererKey implements IItemRenderer {
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         switch (type) {
             case EQUIPPED:
-                this.renderKey(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f, data);
+                this.renderKey(type, data);
                 break;
             case EQUIPPED_FIRST_PERSON:
-                this.renderKey(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f, data);
+                this.renderKey(type, data);
                 break;
             case INVENTORY:
-                this.renderKey(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f, data);
+                this.renderKey(type, data);
                 break;
             case ENTITY:
-                this.renderKey(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f, data);
+                this.renderKey(type, data);
                 break;
             default:
         }

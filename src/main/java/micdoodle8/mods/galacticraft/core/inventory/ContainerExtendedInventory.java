@@ -1,12 +1,12 @@
 package micdoodle8.mods.galacticraft.core.inventory;
 
-import micdoodle8.mods.galacticraft.core.items.ItemOxygenTank;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import micdoodle8.mods.galacticraft.core.items.ItemOxygenTank;
 
 public class ContainerExtendedInventory extends Container {
 
@@ -54,7 +54,7 @@ public class ContainerExtendedInventory extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1) {
         ItemStack var2 = null;
-        final Slot slot = (Slot) this.inventorySlots.get(par1);
+        final Slot slot = this.inventorySlots.get(par1);
 
         if (slot != null && slot.getHasStack()) {
             final ItemStack stack = slot.getStack();
@@ -129,7 +129,7 @@ public class ContainerExtendedInventory extends Container {
             ItemStack slotStack;
 
             for (int k = par2; k < par3; k++) {
-                slot = (Slot) this.inventorySlots.get(k);
+                slot = this.inventorySlots.get(k);
                 slotStack = slot.getStack();
 
                 if (slotStack == null) {

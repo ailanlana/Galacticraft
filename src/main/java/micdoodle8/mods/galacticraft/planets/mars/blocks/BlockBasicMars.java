@@ -3,16 +3,6 @@ package micdoodle8.mods.galacticraft.planets.mars.blocks;
 import java.util.List;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.api.block.IDetectableResource;
-import micdoodle8.mods.galacticraft.api.block.IPlantableBlock;
-import micdoodle8.mods.galacticraft.api.block.ITerraformableBlock;
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.planets.GalacticraftPlanets;
-import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
-import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
-import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityDungeonSpawnerMars;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.MapColor;
@@ -35,6 +25,15 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.block.IDetectableResource;
+import micdoodle8.mods.galacticraft.api.block.IPlantableBlock;
+import micdoodle8.mods.galacticraft.api.block.ITerraformableBlock;
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.planets.GalacticraftPlanets;
+import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
+import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityDungeonSpawnerMars;
 
 public class BlockBasicMars extends Block
         implements IDetectableResource, IPlantableBlock, ITileEntityProvider, ITerraformableBlock {
@@ -51,14 +50,11 @@ public class BlockBasicMars extends Block
 
     @Override
     public MapColor getMapColor(int meta) {
-        switch (meta) {
-            case 7:
-                return MapColor.greenColor;
-            case 5:
-                return MapColor.dirtColor;
-            default:
-                return MapColor.redColor;
-        }
+        return switch (meta) {
+            case 7 -> MapColor.greenColor;
+            case 5 -> MapColor.dirtColor;
+            default -> MapColor.redColor;
+        };
     }
 
     public BlockBasicMars() {
@@ -195,7 +191,8 @@ public class BlockBasicMars extends Block
     public Item getItemDropped(int meta, Random random, int par3) {
         if (meta == 2) {
             return MarsItems.marsItemBasic;
-        } else if (meta == 10) {
+        }
+        if (meta == 10) {
             return Item.getItemFromBlock(Blocks.air);
         }
 
@@ -206,11 +203,11 @@ public class BlockBasicMars extends Block
     public int damageDropped(int meta) {
         if (meta == 9) {
             return 4;
-        } else if (meta == 2) {
-            return 0;
-        } else {
-            return meta;
         }
+        if (meta == 2) {
+            return 0;
+        }
+        return meta;
     }
 
     @Override
@@ -222,17 +219,17 @@ public class BlockBasicMars extends Block
     public int quantityDropped(int meta, int fortune, Random random) {
         if (meta == 10) {
             return 0;
-        } else if (meta == 2 && fortune >= 1) {
+        }
+        if (meta == 2 && fortune >= 1) {
             return random.nextFloat() < fortune * 0.29F - 0.25F ? 2 : 1;
         }
 
         return 1;
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     @SideOnly(Side.CLIENT)
     @Override
-    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         int var4;
 
         for (var4 = 0; var4 < 11; ++var4) {
@@ -244,18 +241,13 @@ public class BlockBasicMars extends Block
 
     @Override
     public boolean isValueable(int metadata) {
-        switch (metadata) {
-            case 0:
-                return true;
-            case 1:
-                return true;
-            case 2:
-                return true;
-            case 3:
-                return true;
-            default:
-                return false;
-        }
+        return switch (metadata) {
+            case 0 -> true;
+            case 1 -> true;
+            case 2 -> true;
+            case 3 -> true;
+            default -> false;
+        };
     }
 
     @Override
@@ -309,17 +301,19 @@ public class BlockBasicMars extends Block
         return metadata < 10;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
         final int metadata = world.getBlockMetadata(x, y, z);
-        if (metadata == 2) {
-            return new ItemStack(Item.getItemFromBlock(this), 1, metadata);
-        }
-        if (metadata == 9) {
-            return new ItemStack(Item.getItemFromBlock(this), 1, metadata);
-        }
-        if (metadata == 10) {
-            return null;
+        switch (metadata) {
+            case 2:
+                return new ItemStack(Item.getItemFromBlock(this), 1, metadata);
+            case 9:
+                return new ItemStack(Item.getItemFromBlock(this), 1, metadata);
+            case 10:
+                return null;
+            default:
+                break;
         }
 
         return super.getPickBlock(target, world, x, y, z);

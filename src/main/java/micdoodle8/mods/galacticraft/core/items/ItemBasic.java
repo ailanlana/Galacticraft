@@ -2,11 +2,6 @@ package micdoodle8.mods.galacticraft.core.items;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-import micdoodle8.mods.galacticraft.core.util.EnumColor;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -22,6 +17,10 @@ import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
+import micdoodle8.mods.galacticraft.core.util.EnumColor;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class ItemBasic extends Item {
 
@@ -35,7 +34,6 @@ public class ItemBasic extends Item {
     protected IIcon[] icons = new IIcon[ItemBasic.names.length];
 
     public ItemBasic(String assetName) {
-        super();
         this.setMaxDamage(0);
         this.setHasSubtypes(true);
         this.setUnlocalizedName(assetName);
@@ -59,7 +57,8 @@ public class ItemBasic extends Item {
         int i = 0;
 
         for (final String name : ItemBasic.names) {
-            this.icons[i++] = iconRegister.registerIcon(this.getIconString() + "." + name);
+            this.icons[i] = iconRegister.registerIcon(this.getIconString() + "." + name);
+            i++;
         }
     }
 
@@ -81,9 +80,8 @@ public class ItemBasic extends Item {
         return super.getIconFromDamage(damage);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         for (int i = 0; i < ItemBasic.names.length; i++) {
             par3List.add(new ItemStack(par1, 1, i));
         }
@@ -95,9 +93,9 @@ public class ItemBasic extends Item {
     }
 
     @Override
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List,
+            boolean par4) {
         if (par1ItemStack.getItemDamage() > 14 && par1ItemStack.getItemDamage() < 19) {
             par3List.add(
                     EnumColor.BRIGHT_GREEN + GCCoreUtil.translate(
@@ -111,33 +109,23 @@ public class ItemBasic extends Item {
     }
 
     public int getHealAmount(ItemStack par1ItemStack) {
-        switch (par1ItemStack.getItemDamage()) {
-            case 15:
-                return 8;
-            case 16:
-                return 8;
-            case 17:
-                return 4;
-            case 18:
-                return 2;
-            default:
-                return 0;
-        }
+        return switch (par1ItemStack.getItemDamage()) {
+            case 15 -> 8;
+            case 16 -> 8;
+            case 17 -> 4;
+            case 18 -> 2;
+            default -> 0;
+        };
     }
 
     public float getSaturationModifier(ItemStack par1ItemStack) {
-        switch (par1ItemStack.getItemDamage()) {
-            case 15:
-                return 0.3F;
-            case 16:
-                return 0.6F;
-            case 17:
-                return 0.3F;
-            case 18:
-                return 0.3F;
-            default:
-                return 0.0F;
-        }
+        return switch (par1ItemStack.getItemDamage()) {
+            case 15 -> 0.3F;
+            case 16 -> 0.6F;
+            case 17 -> 0.3F;
+            case 18 -> 0.3F;
+            default -> 0.0F;
+        };
     }
 
     @Override

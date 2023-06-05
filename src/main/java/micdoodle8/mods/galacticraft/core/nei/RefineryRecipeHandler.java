@@ -6,10 +6,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.items.GCItems;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -19,6 +15,9 @@ import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.items.GCItems;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class RefineryRecipeHandler extends TemplateRecipeHandler {
 
@@ -105,9 +104,8 @@ public class RefineryRecipeHandler extends TemplateRecipeHandler {
                             this.arecipes.get(recipe).getIngredients().get(0).relx,
                             this.arecipes.get(recipe).getIngredients().get(0).rely));
             return stacks;
-        } else {
-            return (ArrayList<PositionedStack>) this.arecipes.get(recipe).getIngredients();
         }
+        return (ArrayList<PositionedStack>) this.arecipes.get(recipe).getIngredients();
     }
 
     @Override
@@ -117,9 +115,8 @@ public class RefineryRecipeHandler extends TemplateRecipeHandler {
                     new ItemStack(GCItems.oilCanister, 1, GCItems.oilCanister.getMaxDamage()),
                     this.arecipes.get(recipe).getResult().relx,
                     this.arecipes.get(recipe).getResult().rely);
-        } else {
-            return this.arecipes.get(recipe).getResult();
         }
+        return this.arecipes.get(recipe).getResult();
     }
 
     public class CachedRefineryRecipe extends TemplateRecipeHandler.CachedRecipe {
@@ -138,7 +135,6 @@ public class RefineryRecipeHandler extends TemplateRecipeHandler {
         }
 
         public CachedRefineryRecipe(PositionedStack pstack1, PositionedStack pstack2) {
-            super();
             this.input = pstack1;
             this.output = pstack2;
         }

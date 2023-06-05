@@ -1,9 +1,6 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.client.render.item;
 
-import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
-
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -16,6 +13,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
 
 public class ItemRendererGrappleHook implements IItemRenderer {
 
@@ -29,8 +27,7 @@ public class ItemRendererGrappleHook implements IItemRenderer {
         ItemRendererGrappleHook.modelGrapple = modelGrapple;
     }
 
-    private void renderGrappleGun(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX,
-            float translateY, float translateZ) {
+    private void renderGrappleGun(ItemRenderType type) {
         if (type == ItemRenderType.INVENTORY) {
             GL11.glPushMatrix();
             GL11.glScalef(0.7F, 0.75F, 0.5F);
@@ -103,18 +100,13 @@ public class ItemRendererGrappleHook implements IItemRenderer {
      */
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-        switch (type) {
-            case ENTITY:
-                return true;
-            case EQUIPPED:
-                return true;
-            case EQUIPPED_FIRST_PERSON:
-                return true;
-            case INVENTORY:
-                return true;
-            default:
-                return false;
-        }
+        return switch (type) {
+            case ENTITY -> true;
+            case EQUIPPED -> true;
+            case EQUIPPED_FIRST_PERSON -> true;
+            case INVENTORY -> true;
+            default -> false;
+        };
     }
 
     @Override
@@ -126,16 +118,16 @@ public class ItemRendererGrappleHook implements IItemRenderer {
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         switch (type) {
             case EQUIPPED:
-                this.renderGrappleGun(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderGrappleGun(type);
                 break;
             case EQUIPPED_FIRST_PERSON:
-                this.renderGrappleGun(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderGrappleGun(type);
                 break;
             case INVENTORY:
-                this.renderGrappleGun(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderGrappleGun(type);
                 break;
             case ENTITY:
-                this.renderGrappleGun(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderGrappleGun(type);
                 break;
             default:
                 break;

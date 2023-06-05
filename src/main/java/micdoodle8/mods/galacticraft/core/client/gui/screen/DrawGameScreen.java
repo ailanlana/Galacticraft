@@ -1,17 +1,8 @@
 package micdoodle8.mods.galacticraft.core.client.gui.screen;
 
-import java.nio.FloatBuffer;
-
-import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
-import micdoodle8.mods.galacticraft.api.client.IScreenManager;
-import micdoodle8.mods.galacticraft.core.util.GCLog;
-import micdoodle8.mods.galacticraft.core.util.MapUtil;
-
-import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
@@ -19,12 +10,13 @@ import net.minecraft.world.WorldProvider;
 
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.client.FMLClientHandler;
+import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
+import micdoodle8.mods.galacticraft.api.client.IScreenManager;
+import micdoodle8.mods.galacticraft.core.util.GCLog;
+import micdoodle8.mods.galacticraft.core.util.MapUtil;
 
 public class DrawGameScreen extends IScreenManager {
 
-    private final TextureManager renderEngine = FMLClientHandler.instance().getClient().renderEngine;
-    private static final FloatBuffer colorBuffer = GLAllocation.createDirectFloatBuffer(16);
     private static int texCount = 1;
 
     private float tickDrawn = -1F;
@@ -39,7 +31,7 @@ public class DrawGameScreen extends IScreenManager {
     private final float scaleZ;
 
     public TileEntity driver;
-    public Class telemetryLastClass;
+    public Class<?> telemetryLastClass;
     public String telemetryLastName;
     public Entity telemetryLastEntity;
     public Render telemetryLastRender;
@@ -85,12 +77,10 @@ public class DrawGameScreen extends IScreenManager {
         }
 
         if (cornerBlock) {
-            if ((this.mapFirstTick || (int) ticks % 400 == 0) && !this.mapDone) {
-                if (this.tickMapDone != (int) ticks) {
-                    this.tickMapDone = (int) ticks;
-                    this.makeMap();
-                    this.mapFirstTick = false;
-                }
+            if ((this.mapFirstTick || (int) ticks % 400 == 0) && !this.mapDone && this.tickMapDone != (int) ticks) {
+                this.tickMapDone = (int) ticks;
+                this.makeMap();
+                this.mapFirstTick = false;
             }
             this.doDraw(type, ticks);
             this.initialise = true;
@@ -110,10 +100,8 @@ public class DrawGameScreen extends IScreenManager {
                 return;
             }
 
-            if (!this.readyToInitialise) {
-                if (ticks == this.tickDrawn) {
-                    return;
-                }
+            if (!this.readyToInitialise && ticks == this.tickDrawn) {
+                return;
             }
 
             if (!this.readyToInitialise) {
@@ -121,15 +109,15 @@ public class DrawGameScreen extends IScreenManager {
                 this.tickDrawn = ticks;
                 this.tileCount = 1;
                 return;
-            } else if (ticks == this.tickDrawn) {
+            }
+            if (ticks == this.tickDrawn) {
                 this.tileCount++;
                 return;
-            } else {
-                // Start normal operations
-                this.initialise = false;
-                this.initialiseLast = false;
-                this.readyToInitialise = false;
             }
+            // Start normal operations
+            this.initialise = false;
+            this.initialiseLast = false;
+            this.readyToInitialise = false;
         }
 
         if (++this.callCount < this.tileCount) {
@@ -137,12 +125,9 @@ public class DrawGameScreen extends IScreenManager {
             if (this.callCount == 1 || this.tickDrawn == ticks) {
                 this.tickDrawn = ticks;
                 return;
-            } else
-            // The callCount last tick was less than the tileCount, reinitialise
-            {
-                this.initialise = true;
-                // but draw this tick [probably a tileEntity moved out of the frustum]
             }
+            this.initialise = true;
+            // but draw this tick [probably a tileEntity moved out of the frustum]
         }
 
         if (this.callCount == this.tileCount) {

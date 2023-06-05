@@ -1,8 +1,5 @@
 package micdoodle8.mods.galacticraft.core.inventory;
 
-import micdoodle8.mods.galacticraft.core.items.GCItems;
-import micdoodle8.mods.galacticraft.core.util.RecipeUtil;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
@@ -13,6 +10,9 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import micdoodle8.mods.galacticraft.core.items.GCItems;
+import micdoodle8.mods.galacticraft.core.util.RecipeUtil;
 
 public class ContainerSchematicTier1Rocket extends Container {
 
@@ -143,7 +143,7 @@ public class ContainerSchematicTier1Rocket extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1) {
         ItemStack var2 = null;
-        final Slot var3 = (Slot) this.inventorySlots.get(par1);
+        final Slot var3 = this.inventorySlots.get(par1);
 
         if (var3 != null && var3.getHasStack()) {
             final ItemStack var4 = var3.getStack();
@@ -181,10 +181,8 @@ public class ContainerSchematicTier1Rocket extends Container {
                 if (!this.mergeItemStack(var4, 45, 54, false)) {
                     return null;
                 }
-            } else if (par1 >= 45 && par1 < 54) {
-                if (!this.mergeItemStack(var4, 18, 45, false)) {
-                    return null;
-                }
+            } else if (par1 >= 45 && par1 < 54 && !this.mergeItemStack(var4, 18, 45, false)) {
+                return null;
             }
 
             if (var4.stackSize == 0) {
@@ -215,7 +213,7 @@ public class ContainerSchematicTier1Rocket extends Container {
             ItemStack slotStack;
 
             for (int k = par2; k < par3; k++) {
-                slot = (Slot) this.inventorySlots.get(k);
+                slot = this.inventorySlots.get(k);
                 slotStack = slot.getStack();
 
                 if (slotStack == null) {

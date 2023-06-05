@@ -1,10 +1,7 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.client.render.item;
 
-import micdoodle8.mods.galacticraft.core.util.VersionUtil;
-
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -14,11 +11,11 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import micdoodle8.mods.galacticraft.core.util.VersionUtil;
 
 public class ItemRendererThermalArmor implements IItemRenderer {
 
-    private void renderThermalArmor(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX,
-            float translateY, float translateZ) {
+    private void renderThermalArmor(ItemStack item) {
         GL11.glPushMatrix();
         OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         GL11.glEnable(GL11.GL_BLEND);
@@ -76,35 +73,28 @@ public class ItemRendererThermalArmor implements IItemRenderer {
      */
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-        switch (type) {
-            case ENTITY:
-                return false;
-            case EQUIPPED:
-                return false;
-            case EQUIPPED_FIRST_PERSON:
-                return false;
-            case INVENTORY:
-                return true;
-            default:
-                return false;
-        }
+        return switch (type) {
+            case ENTITY -> false;
+            case EQUIPPED -> false;
+            case EQUIPPED_FIRST_PERSON -> false;
+            case INVENTORY -> true;
+            default -> false;
+        };
     }
 
     @Override
     public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-        switch (helper) {
-            case INVENTORY_BLOCK:
-                return false;
-            default:
-                return false;
-        }
+        return switch (helper) {
+            case INVENTORY_BLOCK -> false;
+            default -> false;
+        };
     }
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         switch (type) {
             case INVENTORY:
-                this.renderThermalArmor(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderThermalArmor(item);
                 break;
             default:
                 break;

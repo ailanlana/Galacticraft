@@ -11,6 +11,19 @@ import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.api.vector.Vector2;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
@@ -31,20 +44,6 @@ import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
 import micdoodle8.mods.galacticraft.core.util.ColorUtil;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.core.wrappers.FlagData;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.client.FMLClientHandler;
 
 public class GuiNewSpaceRace extends GuiScreen implements ICheckBoxCallback, ITextBoxCallback {
 
@@ -136,7 +135,6 @@ public class GuiNewSpaceRace extends GuiScreen implements ICheckBoxCallback, ITe
         return this.mc.thePlayer.getGameProfile().getName().equals(this.spaceRaceData.getPlayerNames().get(0));
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void initGui() {
         float sliderR = 0;
@@ -742,17 +740,15 @@ public class GuiNewSpaceRace extends GuiScreen implements ICheckBoxCallback, ITe
                         + ": "
                         + ((int) Math.floor(this.sliderEraserSize.getNormalizedValue() * 10) + 1);
             }
-        } else if (this.currentState == EnumSpaceRaceGui.MAIN) {
-            if (this.lastMousePressed && !Mouse.isButtonDown(0)) {
-                if (this.buttonFlag_hover) {
-                    this.currentState = EnumSpaceRaceGui.DESIGN_FLAG;
-                    this.initGui();
-                }
+        } else if (this.currentState == EnumSpaceRaceGui.MAIN && this.lastMousePressed && !Mouse.isButtonDown(0)) {
+            if (this.buttonFlag_hover) {
+                this.currentState = EnumSpaceRaceGui.DESIGN_FLAG;
+                this.initGui();
+            }
 
-                if (this.buttonTeamColor_hover) {
-                    this.currentState = EnumSpaceRaceGui.CHANGE_TEAM_COLOR;
-                    this.initGui();
-                }
+            if (this.buttonTeamColor_hover) {
+                this.currentState = EnumSpaceRaceGui.CHANGE_TEAM_COLOR;
+                this.initGui();
             }
         }
 
@@ -1289,17 +1285,15 @@ public class GuiNewSpaceRace extends GuiScreen implements ICheckBoxCallback, ITe
                     this.checkboxColorSelector.isSelected = false;
                 }
             }
-        } else if (checkbox.equals(this.checkboxColorSelector)) {
-            if (newSelected) {
-                if (this.checkboxEraser.isSelected) {
-                    this.sliderEraserSize.visible = false;
-                    this.checkboxEraser.isSelected = false;
-                } else if (this.checkboxPaintbrush.isSelected) {
-                    this.sliderBrushSize.visible = false;
-                    this.checkboxPaintbrush.isSelected = false;
-                } else if (this.checkboxSelector.isSelected) {
-                    this.checkboxSelector.isSelected = false;
-                }
+        } else if (checkbox.equals(this.checkboxColorSelector) && newSelected) {
+            if (this.checkboxEraser.isSelected) {
+                this.sliderEraserSize.visible = false;
+                this.checkboxEraser.isSelected = false;
+            } else if (this.checkboxPaintbrush.isSelected) {
+                this.sliderBrushSize.visible = false;
+                this.checkboxPaintbrush.isSelected = false;
+            } else if (this.checkboxSelector.isSelected) {
+                this.checkboxSelector.isSelected = false;
             }
         }
     }
@@ -1327,11 +1321,9 @@ public class GuiNewSpaceRace extends GuiScreen implements ICheckBoxCallback, ITe
 
     @Override
     public void onTextChanged(GuiElementTextBox textBox, String newText) {
-        if (textBox == this.textBoxRename) {
-            if (!newText.equals(this.spaceRaceData.getTeamName())) {
-                this.spaceRaceData.setTeamName(newText);
-                this.markDirty();
-            }
+        if (textBox == this.textBoxRename && !newText.equals(this.spaceRaceData.getTeamName())) {
+            this.spaceRaceData.setTeamName(newText);
+            this.markDirty();
         }
     }
 

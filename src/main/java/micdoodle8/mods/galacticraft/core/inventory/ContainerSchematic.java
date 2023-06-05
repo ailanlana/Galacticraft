@@ -1,7 +1,5 @@
 package micdoodle8.mods.galacticraft.core.inventory;
 
-import micdoodle8.mods.galacticraft.api.recipe.ISchematicItem;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -10,6 +8,8 @@ import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import micdoodle8.mods.galacticraft.api.recipe.ISchematicItem;
 
 public class ContainerSchematic extends Container {
 
@@ -62,7 +62,7 @@ public class ContainerSchematic extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
         ItemStack var3 = null;
-        final Slot var4 = (Slot) this.inventorySlots.get(par2);
+        final Slot var4 = this.inventorySlots.get(par2);
 
         if (var4 != null && var4.getHasStack()) {
             final ItemStack var5 = var4.getStack();

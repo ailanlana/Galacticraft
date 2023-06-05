@@ -1,8 +1,5 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.inventory;
 
-import micdoodle8.mods.galacticraft.core.inventory.SlotRocketBenchResult;
-import micdoodle8.mods.galacticraft.planets.mars.util.RecipeUtilMars;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
@@ -13,6 +10,9 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import micdoodle8.mods.galacticraft.core.inventory.SlotRocketBenchResult;
+import micdoodle8.mods.galacticraft.planets.mars.util.RecipeUtilMars;
 
 public class ContainerSchematicTier3Rocket extends Container {
 
@@ -208,7 +208,7 @@ public class ContainerSchematicTier3Rocket extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1) {
         ItemStack var2 = null;
-        final Slot var3 = (Slot) this.inventorySlots.get(par1);
+        final Slot var3 = this.inventorySlots.get(par1);
 
         if (var3 != null && var3.getHasStack()) {
             final ItemStack var4 = var3.getStack();
@@ -223,7 +223,7 @@ public class ContainerSchematicTier3Rocket extends Container {
             } else {
                 boolean valid = false;
                 for (int i = 1; i < 19; i++) {
-                    final Slot testSlot = (Slot) this.inventorySlots.get(i);
+                    final Slot testSlot = this.inventorySlots.get(i);
                     if (!testSlot.getHasStack() && testSlot.isItemValid(var2)) {
                         valid = true;
                         break;
@@ -233,22 +233,20 @@ public class ContainerSchematicTier3Rocket extends Container {
                     if (!this.mergeOneItemTestValid(var4, 1, 19, false)) {
                         return null;
                     }
-                } else {
-                    if (var2.getItem() == Item.getItemFromBlock(Blocks.chest)) {
-                        if (!this.mergeOneItemTestValid(var4, 19, 22, false)) {
-                            return null;
-                        }
-                    } else if (par1 >= 22 && par1 < 49) {
-                        if (!this.mergeItemStack(var4, 49, 58, false)) {
-                            return null;
-                        }
-                    } else if (par1 >= 49 && par1 < 58) {
-                        if (!this.mergeItemStack(var4, 22, 49, false)) {
-                            return null;
-                        }
-                    } else if (!this.mergeItemStack(var4, 22, 58, false)) {
+                } else if (var2.getItem() == Item.getItemFromBlock(Blocks.chest)) {
+                    if (!this.mergeOneItemTestValid(var4, 19, 22, false)) {
                         return null;
                     }
+                } else if (par1 >= 22 && par1 < 49) {
+                    if (!this.mergeItemStack(var4, 49, 58, false)) {
+                        return null;
+                    }
+                } else if (par1 >= 49 && par1 < 58) {
+                    if (!this.mergeItemStack(var4, 22, 49, false)) {
+                        return null;
+                    }
+                } else if (!this.mergeItemStack(var4, 22, 58, false)) {
+                    return null;
                 }
             }
 
@@ -275,7 +273,7 @@ public class ContainerSchematicTier3Rocket extends Container {
             ItemStack slotStack;
 
             for (int k = par2; k < par3; k++) {
-                slot = (Slot) this.inventorySlots.get(k);
+                slot = this.inventorySlots.get(k);
                 slotStack = slot.getStack();
 
                 if (slotStack == null && slot.isItemValid(par1ItemStack)) {

@@ -1,8 +1,5 @@
 package micdoodle8.mods.galacticraft.core.items;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.EnumRarity;
@@ -11,6 +8,8 @@ import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 
 public class ItemArmorGC extends ItemArmor {
 
@@ -36,9 +35,11 @@ public class ItemArmorGC extends ItemArmor {
         if (this.getArmorMaterial() == GCItems.ARMOR_STEEL) {
             if (stack.getItem() == GCItems.steelHelmet) {
                 return GalacticraftCore.TEXTURE_PREFIX + "textures/model/armor/steel_1.png";
-            } else if (stack.getItem() == GCItems.steelChestplate || stack.getItem() == GCItems.steelBoots) {
+            }
+            if (stack.getItem() == GCItems.steelChestplate || stack.getItem() == GCItems.steelBoots) {
                 return GalacticraftCore.TEXTURE_PREFIX + "textures/model/armor/steel_2.png";
-            } else if (stack.getItem() == GCItems.steelLeggings) {
+            }
+            if (stack.getItem() == GCItems.steelLeggings) {
                 return GalacticraftCore.TEXTURE_PREFIX + "textures/model/armor/steel_3.png";
             }
         }

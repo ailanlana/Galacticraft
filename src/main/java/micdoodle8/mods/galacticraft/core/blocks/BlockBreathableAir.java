@@ -2,10 +2,6 @@ package micdoodle8.mods.galacticraft.core.blocks;
 
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.oxygen.OxygenPressureProtocol;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.init.Blocks;
@@ -13,6 +9,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.oxygen.OxygenPressureProtocol;
 
 public class BlockBreathableAir extends BlockAir {
 
@@ -54,9 +54,8 @@ public class BlockBreathableAir extends BlockAir {
         final Block block = par1IBlockAccess.getBlock(par2, par3, par4);
         if (block == this || block == GCBlocks.brightBreatheableAir) {
             return false;
-        } else {
-            return (block == null || block.isAir(par1IBlockAccess, par2, par3, par4)) && par5 >= 0 && par5 <= 5;
         }
+        return (block == null || block.isAir(par1IBlockAccess, par2, par3, par4)) && par5 >= 0 && par5 <= 5;
     }
 
     @Override

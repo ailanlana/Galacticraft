@@ -5,12 +5,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import micdoodle8.mods.galacticraft.core.items.GCItems;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
-import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
-import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.Item;
@@ -23,6 +17,11 @@ import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
+import micdoodle8.mods.galacticraft.core.items.GCItems;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
+import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
+import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
 
 public class GasLiquefierRecipeHandler extends TemplateRecipeHandler {
 
@@ -170,9 +169,8 @@ public class GasLiquefierRecipeHandler extends TemplateRecipeHandler {
             stacks.add(
                     new PositionedStack(new ItemStack(inputItem, 1, inputItem.getMaxDamage()), input.relx, input.rely));
             return stacks;
-        } else {
-            return (ArrayList<PositionedStack>) this.arecipes.get(recipe).getIngredients();
         }
+        return (ArrayList<PositionedStack>) this.arecipes.get(recipe).getIngredients();
     }
 
     @Override
@@ -193,9 +191,8 @@ public class GasLiquefierRecipeHandler extends TemplateRecipeHandler {
                     new ItemStack(outputItem, 1, outputItem.getMaxDamage()),
                     output.relx,
                     output.rely);
-        } else {
-            return this.arecipes.get(recipe).getResult();
         }
+        return this.arecipes.get(recipe).getResult();
     }
 
     public class CachedLiquefierRecipe extends TemplateRecipeHandler.CachedRecipe {
@@ -214,7 +211,6 @@ public class GasLiquefierRecipeHandler extends TemplateRecipeHandler {
         }
 
         public CachedLiquefierRecipe(PositionedStack pstack1, PositionedStack pstack2) {
-            super();
             this.input = pstack1;
             this.output = pstack2;
         }

@@ -1,12 +1,5 @@
 package micdoodle8.mods.galacticraft.core.inventory;
 
-import micdoodle8.mods.galacticraft.core.Constants;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.items.GCItems;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
-import micdoodle8.mods.galacticraft.core.util.RecipeUtil;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
@@ -15,6 +8,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import micdoodle8.mods.galacticraft.core.Constants;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.items.GCItems;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
+import micdoodle8.mods.galacticraft.core.util.RecipeUtil;
 
 public class SlotBuggyBench extends Slot {
 
@@ -59,9 +58,11 @@ public class SlotBuggyBench extends Slot {
     public boolean isItemValid(ItemStack itemStack) {
         if (this.index == 1) {
             return itemStack.getItem() == GCItems.basicItem && itemStack.getItemDamage() == 19;
-        } else if (this.index == 2) {
+        }
+        if (this.index == 2) {
             return itemStack.getItem() == GCItems.partBuggy && itemStack.getItemDamage() == 1;
-        } else if (this.index == 3 && GalacticraftCore.isGalaxySpaceLoaded) {
+        }
+        if (this.index == 3 && GalacticraftCore.isGalaxySpaceLoaded) {
             return itemStack.getItem()
                     == GameRegistry.findItem(Constants.MOD_ID_GALAXYSPACE, "item.RocketControlComputer")
                     && itemStack.getItemDamage() == 100;

@@ -1,9 +1,5 @@
 package micdoodle8.mods.galacticraft.planets.mars.client.render.item;
 
-import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
-import micdoodle8.mods.galacticraft.planets.mars.blocks.BlockMachineMars;
-
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
@@ -12,15 +8,14 @@ import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
+import micdoodle8.mods.galacticraft.planets.mars.blocks.BlockMachineMars;
 
 public class ItemRendererMachine implements IItemRenderer {
 
     private static final ResourceLocation chamberTexture0 = new ResourceLocation(
             MarsModule.ASSET_PREFIX,
             "textures/model/chamber_dark.png");
-    private static final ResourceLocation chamberTexture1 = new ResourceLocation(
-            MarsModule.ASSET_PREFIX,
-            "textures/model/chamber2_dark.png");
 
     private final IModelCustom model;
 
@@ -28,8 +23,7 @@ public class ItemRendererMachine implements IItemRenderer {
         this.model = model;
     }
 
-    private void renderCryogenicChamber(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX,
-            float translateY, float translateZ) {
+    private void renderCryogenicChamber(ItemRenderType type) {
         GL11.glPushMatrix();
 
         this.transform(type);
@@ -89,23 +83,17 @@ public class ItemRendererMachine implements IItemRenderer {
      */
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-        if (item.getItemDamage() >= BlockMachineMars.CRYOGENIC_CHAMBER_METADATA
-                && item.getItemDamage() < BlockMachineMars.LAUNCH_CONTROLLER_METADATA) {
-            switch (type) {
-                case ENTITY:
-                    return true;
-                case EQUIPPED:
-                    return true;
-                case EQUIPPED_FIRST_PERSON:
-                    return true;
-                case INVENTORY:
-                    return true;
-                default:
-                    return false;
-            }
-        } else {
+        if (item.getItemDamage() < BlockMachineMars.CRYOGENIC_CHAMBER_METADATA
+                || item.getItemDamage() >= BlockMachineMars.LAUNCH_CONTROLLER_METADATA) {
             return false;
         }
+        return switch (type) {
+            case ENTITY -> true;
+            case EQUIPPED -> true;
+            case EQUIPPED_FIRST_PERSON -> true;
+            case INVENTORY -> true;
+            default -> false;
+        };
     }
 
     @Override
@@ -119,16 +107,16 @@ public class ItemRendererMachine implements IItemRenderer {
                 && item.getItemDamage() < BlockMachineMars.LAUNCH_CONTROLLER_METADATA) {
             switch (type) {
                 case EQUIPPED:
-                    this.renderCryogenicChamber(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                    this.renderCryogenicChamber(type);
                     break;
                 case EQUIPPED_FIRST_PERSON:
-                    this.renderCryogenicChamber(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                    this.renderCryogenicChamber(type);
                     break;
                 case INVENTORY:
-                    this.renderCryogenicChamber(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                    this.renderCryogenicChamber(type);
                     break;
                 case ENTITY:
-                    this.renderCryogenicChamber(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                    this.renderCryogenicChamber(type);
                     break;
                 default:
                     break;

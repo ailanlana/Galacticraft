@@ -2,12 +2,6 @@ package micdoodle8.mods.galacticraft.core.items;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.item.IHoldableItem;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.entities.EntityBuggy;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,11 +19,15 @@ import net.minecraftforge.fluids.FluidStack;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.item.IHoldableItem;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.entities.EntityBuggy;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class ItemBuggy extends Item implements IHoldableItem {
 
     public ItemBuggy(String assetName) {
-        super();
         this.setUnlocalizedName(assetName);
         this.setTextureName("arrow");
         this.setMaxStackSize(1);
@@ -46,9 +44,8 @@ public class ItemBuggy extends Item implements IHoldableItem {
         return ClientProxyCore.galacticraftItem;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         for (int i = 0; i < 4; i++) {
             par3List.add(new ItemStack(par1, 1, i));
         }
@@ -79,79 +76,70 @@ public class ItemBuggy extends Item implements IHoldableItem {
 
         if (var24 == null) {
             return par1ItemStack;
-        } else {
-            final Vec3 var25 = par3EntityPlayer.getLook(var4);
-            boolean var26 = false;
-            final float var27 = 1.0F;
-            final List<?> var28 = par2World.getEntitiesWithinAABBExcludingEntity(
-                    par3EntityPlayer,
-                    par3EntityPlayer.boundingBox
-                            .addCoord(var25.xCoord * var21, var25.yCoord * var21, var25.zCoord * var21)
-                            .expand(var27, var27, var27));
-            int var29;
+        }
+        final Vec3 var25 = par3EntityPlayer.getLook(var4);
+        boolean var26 = false;
+        final float var27 = 1.0F;
+        final List<?> var28 = par2World.getEntitiesWithinAABBExcludingEntity(
+                par3EntityPlayer,
+                par3EntityPlayer.boundingBox.addCoord(var25.xCoord * var21, var25.yCoord * var21, var25.zCoord * var21)
+                        .expand(var27, var27, var27));
+        int var29;
 
-            for (var29 = 0; var29 < var28.size(); ++var29) {
-                final Entity var30 = (Entity) var28.get(var29);
+        for (var29 = 0; var29 < var28.size(); ++var29) {
+            final Entity var30 = (Entity) var28.get(var29);
 
-                if (var30.canBeCollidedWith()) {
-                    final float var31 = var30.getCollisionBorderSize();
-                    final AxisAlignedBB var32 = var30.boundingBox.expand(var31, var31, var31);
+            if (var30.canBeCollidedWith()) {
+                final float var31 = var30.getCollisionBorderSize();
+                final AxisAlignedBB var32 = var30.boundingBox.expand(var31, var31, var31);
 
-                    if (var32.isVecInside(var13)) {
-                        var26 = true;
-                    }
+                if (var32.isVecInside(var13)) {
+                    var26 = true;
                 }
-            }
-
-            if (var26) {
-                return par1ItemStack;
-            } else {
-                if (var24.typeOfHit == MovingObjectType.BLOCK) {
-                    var29 = var24.blockX;
-                    int var33 = var24.blockY;
-                    final int var34 = var24.blockZ;
-
-                    if (par2World.getBlock(var29, var33, var34) == Blocks.snow) {
-                        --var33;
-                    }
-
-                    final EntityBuggy var35 = new EntityBuggy(
-                            par2World,
-                            var29 + 0.5F,
-                            var33 + 1.0F,
-                            var34 + 0.5F,
-                            par1ItemStack.getItemDamage());
-
-                    if (!par2World.getCollidingBoundingBoxes(var35, var35.boundingBox.expand(-0.1D, -0.1D, -0.1D))
-                            .isEmpty()) {
-                        return par1ItemStack;
-                    }
-
-                    if (par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("BuggyFuel")) {
-                        var35.buggyFuelTank.setFluid(
-                                new FluidStack(
-                                        GalacticraftCore.fluidFuel,
-                                        par1ItemStack.getTagCompound().getInteger("BuggyFuel")));
-                    }
-
-                    if (!par2World.isRemote) {
-                        par2World.spawnEntityInWorld(var35);
-                    }
-
-                    if (!par3EntityPlayer.capabilities.isCreativeMode) {
-                        --par1ItemStack.stackSize;
-                    }
-                }
-
-                return par1ItemStack;
             }
         }
+
+        if (!var26 && var24.typeOfHit == MovingObjectType.BLOCK) {
+            var29 = var24.blockX;
+            int var33 = var24.blockY;
+            final int var34 = var24.blockZ;
+
+            if (par2World.getBlock(var29, var33, var34) == Blocks.snow) {
+                --var33;
+            }
+
+            final EntityBuggy var35 = new EntityBuggy(
+                    par2World,
+                    var29 + 0.5F,
+                    var33 + 1.0F,
+                    var34 + 0.5F,
+                    par1ItemStack.getItemDamage());
+
+            if (!par2World.getCollidingBoundingBoxes(var35, var35.boundingBox.expand(-0.1D, -0.1D, -0.1D)).isEmpty()) {
+                return par1ItemStack;
+            }
+
+            if (par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("BuggyFuel")) {
+                var35.buggyFuelTank.setFluid(
+                        new FluidStack(
+                                GalacticraftCore.fluidFuel,
+                                par1ItemStack.getTagCompound().getInteger("BuggyFuel")));
+            }
+
+            if (!par2World.isRemote) {
+                par2World.spawnEntityInWorld(var35);
+            }
+
+            if (!par3EntityPlayer.capabilities.isCreativeMode) {
+                --par1ItemStack.stackSize;
+            }
+        }
+        return par1ItemStack;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack par1ItemStack, EntityPlayer player, List par2List, boolean b) {
+    public void addInformation(ItemStack par1ItemStack, EntityPlayer player, List<String> par2List, boolean b) {
         if (par1ItemStack.getItemDamage() != 0) {
             par2List.add(GCCoreUtil.translate("gui.buggy.storageSpace") + ": " + par1ItemStack.getItemDamage() * 18);
         }

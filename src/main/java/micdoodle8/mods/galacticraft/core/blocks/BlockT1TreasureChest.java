@@ -3,11 +3,6 @@ package micdoodle8.mods.galacticraft.core.blocks;
 import java.util.Iterator;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityTreasureChest;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.ITileEntityProvider;
@@ -31,6 +26,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityTreasureChest;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class BlockT1TreasureChest extends BlockContainer implements ITileEntityProvider, ItemBlockDesc.IBlockShiftDesc {
 
@@ -336,65 +335,56 @@ public class BlockT1TreasureChest extends BlockContainer implements ITileEntityP
         if (var10 == null || par1World.isSideSolid(par2, par3 + 1, par4, ForgeDirection.DOWN)
                 || BlockT1TreasureChest.isOcelotBlockingChest(par1World, par2, par3, par4)) {
             return true;
-        } else if (par1World.getBlock(par2 - 1, par3, par4) == this
+        }
+        if (par1World.getBlock(par2 - 1, par3, par4) == this
                 && (par1World.isSideSolid(par2 - 1, par3 + 1, par4, ForgeDirection.DOWN)
                         || BlockT1TreasureChest.isOcelotBlockingChest(par1World, par2 - 1, par3, par4))) {
-                            return true;
-                        } else
-            if (par1World.getBlock(par2 + 1, par3, par4) == this
-                    && (par1World.isSideSolid(par2 + 1, par3 + 1, par4, ForgeDirection.DOWN)
-                            || BlockT1TreasureChest.isOcelotBlockingChest(par1World, par2 + 1, par3, par4))) {
-                                return true;
-                            } else
-                if (par1World.getBlock(par2, par3, par4 - 1) == this
-                        && (par1World.isSideSolid(par2, par3 + 1, par4 - 1, ForgeDirection.DOWN)
-                                || BlockT1TreasureChest.isOcelotBlockingChest(par1World, par2, par3, par4 - 1))) {
-                                    return true;
-                                } else
-                    if (par1World.getBlock(par2, par3, par4 + 1) == this
-                            && (par1World.isSideSolid(par2, par3 + 1, par4 + 1, ForgeDirection.DOWN)
-                                    || BlockT1TreasureChest.isOcelotBlockingChest(par1World, par2, par3, par4 + 1))) {
-                                        return true;
-                                    } else {
-                                        if (par1World.getBlock(par2 - 1, par3, par4) == this) {
-                                            var10 = new InventoryLargeChest(
-                                                    "container.chestDouble",
-                                                    (TileEntityTreasureChest) par1World
-                                                            .getTileEntity(par2 - 1, par3, par4),
-                                                    (IInventory) var10);
-                                        }
-
-                                        if (par1World.getBlock(par2 + 1, par3, par4) == this) {
-                                            var10 = new InventoryLargeChest(
-                                                    "container.chestDouble",
-                                                    (IInventory) var10,
-                                                    (TileEntityTreasureChest) par1World
-                                                            .getTileEntity(par2 + 1, par3, par4));
-                                        }
-
-                                        if (par1World.getBlock(par2, par3, par4 - 1) == this) {
-                                            var10 = new InventoryLargeChest(
-                                                    "container.chestDouble",
-                                                    (TileEntityTreasureChest) par1World
-                                                            .getTileEntity(par2, par3, par4 - 1),
-                                                    (IInventory) var10);
-                                        }
-
-                                        if (par1World.getBlock(par2, par3, par4 + 1) == this) {
-                                            var10 = new InventoryLargeChest(
-                                                    "container.chestDouble",
-                                                    (IInventory) var10,
-                                                    (TileEntityTreasureChest) par1World
-                                                            .getTileEntity(par2, par3, par4 + 1));
-                                        }
-
-                                        if (par1World.isRemote) {
-                                            return true;
-                                        } else {
-                                            par5EntityPlayer.displayGUIChest((IInventory) var10);
-                                            return true;
-                                        }
+            return true;
+        }
+        if (par1World.getBlock(par2 + 1, par3, par4) == this
+                && (par1World.isSideSolid(par2 + 1, par3 + 1, par4, ForgeDirection.DOWN)
+                        || BlockT1TreasureChest.isOcelotBlockingChest(par1World, par2 + 1, par3, par4))) {} else
+            if (par1World.getBlock(par2, par3, par4 - 1) == this
+                    && (par1World.isSideSolid(par2, par3 + 1, par4 - 1, ForgeDirection.DOWN)
+                            || BlockT1TreasureChest.isOcelotBlockingChest(par1World, par2, par3, par4 - 1))) {} else
+                if (par1World.getBlock(par2, par3, par4 + 1) == this
+                        && (par1World.isSideSolid(par2, par3 + 1, par4 + 1, ForgeDirection.DOWN) || BlockT1TreasureChest
+                                .isOcelotBlockingChest(par1World, par2, par3, par4 + 1))) {} else {
+                                    if (par1World.getBlock(par2 - 1, par3, par4) == this) {
+                                        var10 = new InventoryLargeChest(
+                                                "container.chestDouble",
+                                                (TileEntityTreasureChest) par1World.getTileEntity(par2 - 1, par3, par4),
+                                                (IInventory) var10);
                                     }
+
+                                    if (par1World.getBlock(par2 + 1, par3, par4) == this) {
+                                        var10 = new InventoryLargeChest(
+                                                "container.chestDouble",
+                                                (IInventory) var10,
+                                                (TileEntityTreasureChest) par1World
+                                                        .getTileEntity(par2 + 1, par3, par4));
+                                    }
+
+                                    if (par1World.getBlock(par2, par3, par4 - 1) == this) {
+                                        var10 = new InventoryLargeChest(
+                                                "container.chestDouble",
+                                                (TileEntityTreasureChest) par1World.getTileEntity(par2, par3, par4 - 1),
+                                                (IInventory) var10);
+                                    }
+
+                                    if (par1World.getBlock(par2, par3, par4 + 1) == this) {
+                                        var10 = new InventoryLargeChest(
+                                                "container.chestDouble",
+                                                (IInventory) var10,
+                                                (TileEntityTreasureChest) par1World
+                                                        .getTileEntity(par2, par3, par4 + 1));
+                                    }
+
+                                    if (par1World.isRemote) {} else {
+                                        par5EntityPlayer.displayGUIChest((IInventory) var10);
+                                    }
+                                }
+        return true;
     }
 
     @Override
@@ -402,9 +392,8 @@ public class BlockT1TreasureChest extends BlockContainer implements ITileEntityP
         return new TileEntityTreasureChest(1);
     }
 
-    @SuppressWarnings("rawtypes")
     public static boolean isOcelotBlockingChest(World par0World, int par1, int par2, int par3) {
-        final Iterator var4 = par0World.getEntitiesWithinAABB(
+        final Iterator<EntityOcelot> var4 = par0World.getEntitiesWithinAABB(
                 EntityOcelot.class,
                 AxisAlignedBB.getBoundingBox(par1, par2 + 1, par3, par1 + 1, par2 + 2, par3 + 1)).iterator();
         EntityOcelot var6;
@@ -414,7 +403,7 @@ public class BlockT1TreasureChest extends BlockContainer implements ITileEntityP
                 return false;
             }
 
-            var6 = (EntityOcelot) var4.next();
+            var6 = var4.next();
         } while (!var6.isSitting());
 
         return true;

@@ -5,6 +5,18 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.UUID;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
@@ -20,19 +32,6 @@ import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
 import micdoodle8.mods.galacticraft.planets.asteroids.network.PacketSimpleAsteroids;
 import micdoodle8.mods.galacticraft.planets.asteroids.network.PacketSimpleAsteroids.EnumSimplePacketAsteroids;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 public class TileEntityMinerBase extends TileBaseElectricBlockWithInventory implements ISidedInventory, IMultiBlock {
 
     public static final int HOLDSIZE = 72;
@@ -41,7 +40,7 @@ public class TileEntityMinerBase extends TileBaseElectricBlockWithInventory impl
     public boolean isMaster = false;
     public int facing;
     private BlockVec3 mainBlockPosition;
-    private final LinkedList<BlockVec3> targetPoints = new LinkedList();
+    private final LinkedList<BlockVec3> targetPoints = new LinkedList<>();
     private WeakReference<TileEntityMinerBase> masterTile = null;
     public boolean updateClientFlag;
     public boolean findTargetPointsFlag;
@@ -107,23 +106,19 @@ public class TileEntityMinerBase extends TileBaseElectricBlockWithInventory impl
 
     public boolean spawnMiner(EntityPlayerMP player) {
         if (this.isMaster) {
-            if (this.linkedMiner != null) {
-                if (this.linkedMiner.isDead) {
-                    this.unlinkMiner();
-                }
+            if (this.linkedMiner != null && this.linkedMiner.isDead) {
+                this.unlinkMiner();
             }
-            if (this.linkedMinerID == null) {
-                if (EntityAstroMiner.spawnMinerAtBase(
-                        this.worldObj,
-                        this.xCoord + 1,
-                        this.yCoord + 1,
-                        this.zCoord + 1,
-                        this.facing + 2 ^ 1,
-                        new BlockVec3(this),
-                        player)) {
-                    this.findTargetPoints();
-                    return true;
-                }
+            if (this.linkedMinerID == null && EntityAstroMiner.spawnMinerAtBase(
+                    this.worldObj,
+                    this.xCoord + 1,
+                    this.yCoord + 1,
+                    this.zCoord + 1,
+                    this.facing + 2 ^ 1,
+                    new BlockVec3(this),
+                    player)) {
+                this.findTargetPoints();
+                return true;
             }
             return false;
         }
@@ -142,10 +137,8 @@ public class TileEntityMinerBase extends TileBaseElectricBlockWithInventory impl
         if (this.masterTile == null) {
             final TileEntity tileEntity = this.mainBlockPosition.getTileEntity(this.worldObj);
 
-            if (tileEntity != null) {
-                if (tileEntity instanceof TileEntityMinerBase) {
-                    this.masterTile = new WeakReference<>((TileEntityMinerBase) tileEntity);
-                }
+            if (tileEntity != null && tileEntity instanceof TileEntityMinerBase) {
+                this.masterTile = new WeakReference<>((TileEntityMinerBase) tileEntity);
             }
         }
 
@@ -156,9 +149,8 @@ public class TileEntityMinerBase extends TileBaseElectricBlockWithInventory impl
 
             if (master != null) {
                 return master;
-            } else {
-                this.worldObj.removeTileEntity(this.xCoord, this.yCoord, this.zCoord);
             }
+            this.worldObj.removeTileEntity(this.xCoord, this.yCoord, this.zCoord);
         }
 
         return null;
@@ -369,24 +361,23 @@ public class TileEntityMinerBase extends TileBaseElectricBlockWithInventory impl
 
     @Override
     public boolean onActivated(EntityPlayer entityPlayer) {
-        if (this.isMaster) {
-            final ItemStack holding = entityPlayer.getCurrentEquippedItem();
-            if (holding != null && holding.getItem() == AsteroidsItems.astroMiner) {
-                return false;
-            }
-
-            entityPlayer.openGui(
-                    GalacticraftPlanets.instance,
-                    GuiIdsPlanets.MACHINE_ASTEROIDS,
-                    this.worldObj,
-                    this.xCoord,
-                    this.yCoord,
-                    this.zCoord);
-            return true;
-        } else {
+        if (!this.isMaster) {
             final TileEntityMinerBase master = this.getMaster();
             return master != null && master.onActivated(entityPlayer);
         }
+        final ItemStack holding = entityPlayer.getCurrentEquippedItem();
+        if (holding != null && holding.getItem() == AsteroidsItems.astroMiner) {
+            return false;
+        }
+
+        entityPlayer.openGui(
+                GalacticraftPlanets.instance,
+                GuiIdsPlanets.MACHINE_ASTEROIDS,
+                this.worldObj,
+                this.xCoord,
+                this.yCoord,
+                this.zCoord);
+        return true;
     }
 
     @Override
@@ -606,8 +597,6 @@ public class TileEntityMinerBase extends TileBaseElectricBlockWithInventory impl
         if (master != null) {
             master.setInventorySlotContents(par1, par2ItemStack);
         }
-
-        return;
     }
 
     @Override
@@ -705,7 +694,6 @@ public class TileEntityMinerBase extends TileBaseElectricBlockWithInventory impl
         }
 
         this.markDirty();
-        return;
     }
 
     @Override

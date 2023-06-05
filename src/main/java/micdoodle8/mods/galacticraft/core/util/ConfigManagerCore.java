@@ -8,14 +8,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.vector.BlockTuple;
-import micdoodle8.mods.galacticraft.core.Constants;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.energy.EnergyConfigHandler;
-import micdoodle8.mods.galacticraft.core.recipe.RecipeManagerGC;
-import micdoodle8.mods.galacticraft.core.tick.TickHandlerClient;
-import micdoodle8.mods.galacticraft.planets.asteroids.world.gen.BiomeGenBaseAsteroids;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -24,8 +16,6 @@ import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
-import org.lwjgl.input.Keyboard;
-
 import com.google.common.primitives.Ints;
 
 import cpw.mods.fml.client.config.IConfigElement;
@@ -33,6 +23,13 @@ import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.vector.BlockTuple;
+import micdoodle8.mods.galacticraft.core.Constants;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.energy.EnergyConfigHandler;
+import micdoodle8.mods.galacticraft.core.recipe.RecipeManagerGC;
+import micdoodle8.mods.galacticraft.core.tick.TickHandlerClient;
+import micdoodle8.mods.galacticraft.planets.asteroids.world.gen.BiomeGenBaseAsteroids;
 
 public class ConfigManagerCore {
 
@@ -148,10 +145,8 @@ public class ConfigManagerCore {
         try {
             Property prop;
 
-            if (!config.isChild) {
-                if (load) {
-                    config.load();
-                }
+            if (!config.isChild && load) {
+                config.load();
             }
 
             prop = config.get(Constants.CONFIG_CATEGORY_GENERAL, "Enable Debug Messages", false);
@@ -727,10 +722,10 @@ public class ConfigManagerCore {
 
     private static void challengeModeUpdate() {
         if (challengeMode) {
-            challengeRecipes = (challengeFlags & 1) > 0;
-            challengeMobDropsAndSpawning = (challengeFlags & 2) > 0;
-            challengeAsteroidPopulation = (challengeFlags & 4) > 0;
-            challengeSpawnHandling = (challengeFlags & 8) > 0;
+            challengeRecipes = (challengeFlags & 1) != 0;
+            challengeMobDropsAndSpawning = (challengeFlags & 2) != 0;
+            challengeAsteroidPopulation = (challengeFlags & 4) != 0;
+            challengeSpawnHandling = (challengeFlags & 8) != 0;
         } else {
             challengeRecipes = false;
             challengeMobDropsAndSpawning = false;
@@ -761,9 +756,10 @@ public class ConfigManagerCore {
         return false;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static List<IConfigElement> getConfigElements() {
-        final List<IConfigElement> list = new ArrayList<>();
-        list.addAll(new ConfigElement(config.getCategory(Constants.CONFIG_CATEGORY_DIMENSIONS)).getChildElements());
+        final List<IConfigElement> list = new ArrayList<>(
+                new ConfigElement(config.getCategory(Constants.CONFIG_CATEGORY_DIMENSIONS)).getChildElements());
         list.addAll(new ConfigElement(config.getCategory(Constants.CONFIG_CATEGORY_SCHEMATIC)).getChildElements());
         list.addAll(new ConfigElement(config.getCategory(Constants.CONFIG_CATEGORY_ACHIEVEMENTS)).getChildElements());
         list.addAll(new ConfigElement(config.getCategory(Constants.CONFIG_CATEGORY_ENTITIES)).getChildElements());
@@ -824,7 +820,7 @@ public class ConfigManagerCore {
     }
 
     public static List<Object> getServerConfigOverride() {
-        final ArrayList<Object> returnList = new ArrayList();
+        final ArrayList<Object> returnList = new ArrayList<>();
         int modeFlags = ConfigManagerCore.hardMode ? 1 : 0;
         modeFlags += ConfigManagerCore.quickMode ? 2 : 0;
         modeFlags += ConfigManagerCore.challengeMode ? 4 : 0;
@@ -850,7 +846,8 @@ public class ConfigManagerCore {
     @SideOnly(Side.CLIENT)
     public static void setConfigOverride(List<Object> configs) {
         int dataCount = 0;
-        final int modeFlag = (Integer) configs.get(dataCount++);
+        final int modeFlag = (Integer) configs.get(dataCount);
+        dataCount++;
         ConfigManagerCore.hardMode = (modeFlag & 1) != 0;
         ConfigManagerCore.quickMode = (modeFlag & 2) != 0;
         ConfigManagerCore.challengeMode = (modeFlag & 4) != 0;
@@ -905,85 +902,5 @@ public class ConfigManagerCore {
         if (ConfigManagerCore.clientSave != null) {
             ConfigManagerCore.setConfigOverride(clientSave);
         }
-    }
-
-    private static int parseKeyValue(String key) {
-        if (key.equals("KEY_A")) {
-            return Keyboard.KEY_A;
-        } else if (key.equals("KEY_B")) {
-            return Keyboard.KEY_B;
-        } else if (key.equals("KEY_C")) {
-            return Keyboard.KEY_C;
-        } else if (key.equals("KEY_D")) {
-            return Keyboard.KEY_D;
-        } else if (key.equals("KEY_E")) {
-            return Keyboard.KEY_E;
-        } else if (key.equals("KEY_F")) {
-            return Keyboard.KEY_F;
-        } else if (key.equals("KEY_G")) {
-            return Keyboard.KEY_G;
-        } else if (key.equals("KEY_H")) {
-            return Keyboard.KEY_H;
-        } else if (key.equals("KEY_I")) {
-            return Keyboard.KEY_I;
-        } else if (key.equals("KEY_J")) {
-            return Keyboard.KEY_J;
-        } else if (key.equals("KEY_K")) {
-            return Keyboard.KEY_K;
-        } else if (key.equals("KEY_L")) {
-            return Keyboard.KEY_L;
-        } else if (key.equals("KEY_M")) {
-            return Keyboard.KEY_M;
-        } else if (key.equals("KEY_N")) {
-            return Keyboard.KEY_N;
-        } else if (key.equals("KEY_O")) {
-            return Keyboard.KEY_O;
-        } else if (key.equals("KEY_P")) {
-            return Keyboard.KEY_P;
-        } else if (key.equals("KEY_Q")) {
-            return Keyboard.KEY_Q;
-        } else if (key.equals("KEY_R")) {
-            return Keyboard.KEY_R;
-        } else if (key.equals("KEY_S")) {
-            return Keyboard.KEY_S;
-        } else if (key.equals("KEY_T")) {
-            return Keyboard.KEY_T;
-        } else if (key.equals("KEY_U")) {
-            return Keyboard.KEY_U;
-        } else if (key.equals("KEY_V")) {
-            return Keyboard.KEY_V;
-        } else if (key.equals("KEY_W")) {
-            return Keyboard.KEY_W;
-        } else if (key.equals("KEY_X")) {
-            return Keyboard.KEY_X;
-        } else if (key.equals("KEY_Y")) {
-            return Keyboard.KEY_Y;
-        } else if (key.equals("KEY_Z")) {
-            return Keyboard.KEY_Z;
-        } else if (key.equals("KEY_1")) {
-            return Keyboard.KEY_1;
-        } else if (key.equals("KEY_2")) {
-            return Keyboard.KEY_2;
-        } else if (key.equals("KEY_3")) {
-            return Keyboard.KEY_3;
-        } else if (key.equals("KEY_4")) {
-            return Keyboard.KEY_4;
-        } else if (key.equals("KEY_5")) {
-            return Keyboard.KEY_5;
-        } else if (key.equals("KEY_6")) {
-            return Keyboard.KEY_6;
-        } else if (key.equals("KEY_7")) {
-            return Keyboard.KEY_7;
-        } else if (key.equals("KEY_8")) {
-            return Keyboard.KEY_8;
-        } else if (key.equals("KEY_9")) {
-            return Keyboard.KEY_9;
-        } else if (key.equals("KEY_0")) {
-            return Keyboard.KEY_0;
-        }
-
-        GCLog.severe("Failed to parse keyboard key: " + key + "... Use values A-Z or 0-9");
-
-        return 0;
     }
 }

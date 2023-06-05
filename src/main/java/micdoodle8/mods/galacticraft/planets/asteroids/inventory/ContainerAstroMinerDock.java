@@ -1,15 +1,15 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.inventory;
 
-import micdoodle8.mods.galacticraft.api.item.IItemElectric;
-import micdoodle8.mods.galacticraft.core.inventory.SlotSpecific;
-import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityMinerBase;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import micdoodle8.mods.galacticraft.api.item.IItemElectric;
+import micdoodle8.mods.galacticraft.core.inventory.SlotSpecific;
+import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityMinerBase;
 
 public class ContainerAstroMinerDock extends Container {
 
@@ -49,7 +49,7 @@ public class ContainerAstroMinerDock extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
         ItemStack var3 = null;
-        final Slot slot = (Slot) this.inventorySlots.get(par2);
+        final Slot slot = this.inventorySlots.get(par2);
         final int b = TileEntityMinerBase.HOLDSIZE + 1;
 
         if (slot != null && slot.getHasStack()) {
@@ -60,18 +60,16 @@ public class ContainerAstroMinerDock extends Container {
                 if (!this.mergeItemStack(var5, b, b + 36, true)) {
                     return null;
                 }
-            } else {
-                if (var5.getItem() instanceof IItemElectric) {
-                    if (!this.mergeItemStack(var5, 0, 1, false)) {
-                        return null;
-                    }
-                } else if (par2 < b + 27) {
-                    if (!this.mergeItemStack(var5, 1, b, false) && !this.mergeItemStack(var5, b + 27, b + 36, false)) {
-                        return null;
-                    }
-                } else if (!this.mergeItemStack(var5, 1, b, false) && !this.mergeItemStack(var5, b, b + 27, false)) {
+            } else if (var5.getItem() instanceof IItemElectric) {
+                if (!this.mergeItemStack(var5, 0, 1, false)) {
                     return null;
                 }
+            } else if (par2 < b + 27) {
+                if (!this.mergeItemStack(var5, 1, b, false) && !this.mergeItemStack(var5, b + 27, b + 36, false)) {
+                    return null;
+                }
+            } else if (!this.mergeItemStack(var5, 1, b, false) && !this.mergeItemStack(var5, b, b + 27, false)) {
+                return null;
             }
 
             if (var5.stackSize == 0) {

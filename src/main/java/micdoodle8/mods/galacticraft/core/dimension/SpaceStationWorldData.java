@@ -2,13 +2,6 @@ package micdoodle8.mods.galacticraft.core.dimension;
 
 import java.util.ArrayList;
 
-import micdoodle8.mods.galacticraft.api.galaxies.GalaxyRegistry;
-import micdoodle8.mods.galacticraft.api.galaxies.Satellite;
-import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
-import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
-import micdoodle8.mods.galacticraft.core.util.GCLog;
-import micdoodle8.mods.galacticraft.core.util.WorldUtil;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,6 +9,13 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraftforge.common.DimensionManager;
+
+import micdoodle8.mods.galacticraft.api.galaxies.GalaxyRegistry;
+import micdoodle8.mods.galacticraft.api.galaxies.Satellite;
+import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
+import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
+import micdoodle8.mods.galacticraft.core.util.GCLog;
+import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 
 public class SpaceStationWorldData extends WorldSavedData {
 
@@ -31,16 +31,14 @@ public class SpaceStationWorldData extends WorldSavedData {
     public SpaceStationWorldData(String par1Str) {
         super(par1Str);
 
-        this.allowedPlayers = new ArrayList<String>() {
+        this.allowedPlayers = new ArrayList<>() {
 
             private static final long serialVersionUID = 1079079229788066770L;
 
             // Override contains so it ignores case.
             @Override
             public boolean contains(Object o) {
-                if (o instanceof String) {
-                    final String paramStr = (String) o;
-
+                if (o instanceof String paramStr) {
                     for (final String s : this) {
                         if (paramStr.equalsIgnoreCase(s)) {
                             return true;
@@ -207,49 +205,46 @@ public class SpaceStationWorldData extends WorldSavedData {
 
         if (!foundMatch) {
             return null;
-        } else {
-            final String stationIdentifier = SpaceStationWorldData.getSpaceStationID(stationID);
-            SpaceStationWorldData stationData = (SpaceStationWorldData) world
-                    .loadItemData(SpaceStationWorldData.class, stationIdentifier);
-
-            if (stationData == null) {
-                stationData = new SpaceStationWorldData(stationIdentifier);
-                world.setItemData(stationIdentifier, stationData);
-                stationData.dataCompound = new NBTTagCompound();
-
-                if (owner != null) {
-                    stationData.owner = owner.getGameProfile().getName().replace(".", "");
-                }
-
-                stationData.spaceStationName = "Station: " + stationData.owner;
-
-                if (owner != null) {
-                    stationData.allowedPlayers.add(owner.getGameProfile().getName());
-                }
-
-                if (homeID == -1) {
-                    throw new RuntimeException("Space station being created on bad home planet ID!");
-                } else {
-                    stationData.homePlanet = homeID;
-                }
-
-                if (providerIdDynamic == -1 || providerIdStatic == -1) {
-                    throw new RuntimeException("Space station being created on bad provider IDs!");
-                } else {
-                    stationData.dimensionIdDynamic = providerIdDynamic;
-                    stationData.dimensionIdStatic = providerIdStatic;
-                }
-
-                stationData.markDirty();
-            }
-
-            if (stationData.getSpaceStationName().replace(" ", "").isEmpty()) {
-                stationData.setSpaceStationName("Station: " + stationData.owner);
-                stationData.markDirty();
-            }
-
-            return stationData;
         }
+        final String stationIdentifier = SpaceStationWorldData.getSpaceStationID(stationID);
+        SpaceStationWorldData stationData = (SpaceStationWorldData) world
+                .loadItemData(SpaceStationWorldData.class, stationIdentifier);
+
+        if (stationData == null) {
+            stationData = new SpaceStationWorldData(stationIdentifier);
+            world.setItemData(stationIdentifier, stationData);
+            stationData.dataCompound = new NBTTagCompound();
+
+            if (owner != null) {
+                stationData.owner = owner.getGameProfile().getName().replace(".", "");
+            }
+
+            stationData.spaceStationName = "Station: " + stationData.owner;
+
+            if (owner != null) {
+                stationData.allowedPlayers.add(owner.getGameProfile().getName());
+            }
+
+            if (homeID == -1) {
+                throw new RuntimeException("Space station being created on bad home planet ID!");
+            }
+            stationData.homePlanet = homeID;
+
+            if (providerIdDynamic == -1 || providerIdStatic == -1) {
+                throw new RuntimeException("Space station being created on bad provider IDs!");
+            }
+            stationData.dimensionIdDynamic = providerIdDynamic;
+            stationData.dimensionIdStatic = providerIdStatic;
+
+            stationData.markDirty();
+        }
+
+        if (stationData.getSpaceStationName().replace(" ", "").isEmpty()) {
+            stationData.setSpaceStationName("Station: " + stationData.owner);
+            stationData.markDirty();
+        }
+
+        return stationData;
     }
 
     public static SpaceStationWorldData getMPSpaceStationData(World var0, int var1, EntityPlayer player) {

@@ -3,14 +3,6 @@ package micdoodle8.mods.galacticraft.core.client.model;
 import java.lang.reflect.Constructor;
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.item.IHoldableItem;
-import micdoodle8.mods.galacticraft.api.prefab.entity.EntityTieredRocket;
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-import micdoodle8.mods.galacticraft.core.wrappers.PlayerGearData;
-
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.model.ModelBase;
@@ -35,7 +27,15 @@ import api.player.model.ModelPlayerAPI;
 import api.player.model.ModelPlayerBase;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.Loader;
+import micdoodle8.mods.galacticraft.api.item.IHoldableItem;
+import micdoodle8.mods.galacticraft.api.prefab.entity.EntityTieredRocket;
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
+import micdoodle8.mods.galacticraft.core.wrappers.PlayerGearData;
 
+@SuppressWarnings("unchecked")
 public class ModelPlayerBaseGC extends ModelPlayerBase {
 
     public ModelRenderer[] parachute = new ModelRenderer[3];
@@ -66,14 +66,14 @@ public class ModelPlayerBaseGC extends ModelPlayerBase {
             "textures/model/frequencyModule.png");
 
     public static boolean isSmartMovingLoaded;
-    private static Class modelRotationGCSmartMoving;
-    private static Constructor modelRotationGCSmartMovingInit;
+    private static Class<? extends ModelRenderer> modelRotationGCSmartMoving;
+    private static Constructor<? extends ModelRenderer> modelRotationGCSmartMovingInit;
 
     static {
         isSmartMovingLoaded = Loader.isModLoaded("SmartRender");
         if (isSmartMovingLoaded) {
             try {
-                modelRotationGCSmartMoving = Class
+                modelRotationGCSmartMoving = (Class<? extends ModelRenderer>) Class
                         .forName("micdoodle8.mods.galacticraft.core.client.model.ModelRotationRendererGC");
                 modelRotationGCSmartMovingInit = modelRotationGCSmartMoving
                         .getConstructor(ModelBase.class, int.class, int.class, ModelRenderer.class, int.class);
@@ -99,25 +99,20 @@ public class ModelPlayerBaseGC extends ModelPlayerBase {
     private ModelRenderer createModelRenderer(ModelPlayer player, int texOffsetX, int texOffsetY, int type) {
         if (isSmartMovingLoaded) {
             try {
-                switch (type) {
-                    // Helmet and Frequency Module are head modules
-                    case 0:
-                    case 15:
-                        return (ModelRenderer) modelRotationGCSmartMovingInit.newInstance(
-                                player,
-                                texOffsetX,
-                                texOffsetY,
-                                SmartRender.getPlayerBase(this.modelPlayer).getHead(),
-                                type);
-                    // Oxygen gear etc are body
-                    default:
-                        return (ModelRenderer) modelRotationGCSmartMovingInit.newInstance(
-                                player,
-                                texOffsetX,
-                                texOffsetY,
-                                SmartRender.getPlayerBase(this.modelPlayer).getBody(),
-                                type);
-                }
+                return switch (type) {
+                    case 0, 15 -> modelRotationGCSmartMovingInit.newInstance(
+                            player,
+                            texOffsetX,
+                            texOffsetY,
+                            SmartRender.getPlayerBase(this.modelPlayer).getHead(),
+                            type);
+                    default -> modelRotationGCSmartMovingInit.newInstance(
+                            player,
+                            texOffsetX,
+                            texOffsetY,
+                            SmartRender.getPlayerBase(this.modelPlayer).getBody(),
+                            type);
+                };
             } catch (final Exception e) {
                 e.printStackTrace();
             }
@@ -343,11 +338,10 @@ public class ModelPlayerBaseGC extends ModelPlayerBase {
     public void afterSetRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6,
             Entity par7Entity) {
         super.afterSetRotationAngles(par1, par2, par3, par4, par5, par6, par7Entity);
-        if (!(par7Entity instanceof EntityPlayer)) {
+        if (!(par7Entity instanceof EntityPlayer player)) {
             return; // Deal with RenderPlayerAPIEnhancer calling this for skeletons etc
         }
 
-        final EntityPlayer player = (EntityPlayer) par7Entity;
         final ItemStack currentItemStack = player.inventory.getCurrentItem();
 
         if (!par7Entity.onGround && par7Entity.worldObj.provider instanceof IGalacticraftWorldProvider
@@ -424,12 +418,10 @@ public class ModelPlayerBaseGC extends ModelPlayerBase {
                         200,
                         player.posZ + 20));
 
-        for (int i = 0; i < l.size(); i++) {
-            final Entity e = (Entity) l.get(i);
+        for (Object element : l) {
+            final Entity e = (Entity) element;
 
-            if (e instanceof EntityTieredRocket) {
-                final EntityTieredRocket ship = (EntityTieredRocket) e;
-
+            if (e instanceof EntityTieredRocket ship) {
                 if (ship.riddenByEntity != null && !ship.riddenByEntity.equals(player)
                         && (ship.getLaunched() || ship.timeUntilLaunch < 390)) {
                     this.modelPlayer.bipedRightArm.rotateAngleZ -= (float) (Math.PI / 8)
@@ -446,22 +438,15 @@ public class ModelPlayerBaseGC extends ModelPlayerBase {
         super.afterRender(var1, var2, var3, var4, var5, var6, var7);
 
         // Smart Moving will render through ModelRotationRendererGC instead
-        if (ModelPlayerBaseGC.isSmartMovingLoaded) {
-            return;
-        }
 
         // Deal with RenderPlayerAPIEnhancer calling this for skeletons etc
-        if (!(var1 instanceof EntityPlayer)) {
-            return;
-        }
-
         // Do not render GC equipment on top of armor - only on top of player - see
         // .init() method
-        if (this.oxygenMask == null) {
+        if (ModelPlayerBaseGC.isSmartMovingLoaded || !(var1 instanceof EntityPlayer player)
+                || this.oxygenMask == null) {
             return;
         }
 
-        final EntityPlayer player = (EntityPlayer) var1;
         final PlayerGearData gearData = ClientProxyCore.playerItemData.get(player.getCommandSenderName());
 
         if (var1 instanceof AbstractClientPlayer && gearData != null) {

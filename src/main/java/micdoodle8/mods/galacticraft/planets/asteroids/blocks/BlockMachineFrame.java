@@ -3,9 +3,6 @@ package micdoodle8.mods.galacticraft.planets.asteroids.blocks;
 import java.util.List;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -16,6 +13,8 @@ import net.minecraft.util.IIcon;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
 
 public class BlockMachineFrame extends Block {
 
@@ -54,10 +53,9 @@ public class BlockMachineFrame extends Block {
 
     @Override
     public Item getItemDropped(int meta, Random random, int par3) {
-        switch (meta) {
-            default:
-                return super.getItemDropped(meta, random, par3);
-        }
+        return switch (meta) {
+            default -> super.getItemDropped(meta, random, par3);
+        };
     }
 
     @Override
@@ -67,10 +65,9 @@ public class BlockMachineFrame extends Block {
 
     @Override
     public int quantityDropped(int meta, int fortune, Random random) {
-        switch (meta) {
-            default:
-                return 1;
-        }
+        return switch (meta) {
+            default -> 1;
+        };
     }
 
     @Override
@@ -78,10 +75,9 @@ public class BlockMachineFrame extends Block {
         return false;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @SideOnly(Side.CLIENT)
     @Override
-    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         int var4;
 
         for (var4 = 0; var4 < this.blockIcons.length; ++var4) {

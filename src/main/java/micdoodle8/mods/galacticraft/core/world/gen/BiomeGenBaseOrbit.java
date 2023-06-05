@@ -1,17 +1,16 @@
 package micdoodle8.mods.galacticraft.core.world.gen;
 
+import net.minecraft.world.biome.BiomeGenBase;
+
 import micdoodle8.mods.galacticraft.core.entities.EntityEvolvedSpider;
 import micdoodle8.mods.galacticraft.core.entities.EntityEvolvedZombie;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
-
-import net.minecraft.world.biome.BiomeGenBase;
 
 public class BiomeGenBaseOrbit extends BiomeGenBase {
 
     public static final BiomeGenBase space = new BiomeGenBaseOrbit(ConfigManagerCore.biomeIDbase + 3)
             .setBiomeName("space");
 
-    @SuppressWarnings("unchecked")
     private BiomeGenBaseOrbit(int var1) {
         super(var1);
         this.spawnableMonsterList.clear();

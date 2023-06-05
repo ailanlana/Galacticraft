@@ -1,5 +1,17 @@
 package micdoodle8.mods.galacticraft.core.tick;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
+
+import org.lwjgl.input.Keyboard;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Type;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.api.prefab.entity.EntityAutoRocket;
 import micdoodle8.mods.galacticraft.api.prefab.entity.EntitySpaceshipBase;
 import micdoodle8.mods.galacticraft.core.Constants;
@@ -13,19 +25,6 @@ import micdoodle8.mods.galacticraft.core.network.PacketSimple;
 import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.Entity;
-
-import org.lwjgl.input.Keyboard;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Type;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class KeyHandlerClient extends KeyHandler {
 
@@ -132,34 +131,28 @@ public class KeyHandlerClient extends KeyHandler {
 
             final Entity entityTest = mc.thePlayer.ridingEntity;
 
-            if (entityTest instanceof IControllableEntity && keyNum != -1) {
+            if (entityTest instanceof IControllableEntity entity && keyNum != -1) {
 
-                final IControllableEntity entity = (IControllableEntity) entityTest;
                 if (kb.getKeyCode() == mc.gameSettings.keyBindInventory.getKeyCode()) {
                     KeyBinding.setKeyBindState(mc.gameSettings.keyBindInventory.getKeyCode(), false);
                 }
                 entity.pressKey(keyNum);
 
-            } else if (entityTest instanceof EntityAutoRocket) {
-
-                final EntityAutoRocket autoRocket = (EntityAutoRocket) entityTest;
-                if (autoRocket.landing) {
-                    if (kb == leftShiftKey) {
-                        autoRocket.motionY -= 0.02D;
-                        GalacticraftCore.packetPipeline.sendToServer(
-                                new PacketSimple(
-                                        EnumSimplePacket.S_UPDATE_SHIP_MOTION_Y,
-                                        new Object[] { autoRocket.getEntityId(), false }));
-                    }
-                    if (kb == spaceKey) {
-                        autoRocket.motionY += 0.02D;
-                        GalacticraftCore.packetPipeline.sendToServer(
-                                new PacketSimple(
-                                        EnumSimplePacket.S_UPDATE_SHIP_MOTION_Y,
-                                        new Object[] { autoRocket.getEntityId(), true }));
-                    }
+            } else if (entityTest instanceof EntityAutoRocket autoRocket && autoRocket.landing) {
+                if (kb == leftShiftKey) {
+                    autoRocket.motionY -= 0.02D;
+                    GalacticraftCore.packetPipeline.sendToServer(
+                            new PacketSimple(
+                                    EnumSimplePacket.S_UPDATE_SHIP_MOTION_Y,
+                                    new Object[] { autoRocket.getEntityId(), false }));
                 }
-
+                if (kb == spaceKey) {
+                    autoRocket.motionY += 0.02D;
+                    GalacticraftCore.packetPipeline.sendToServer(
+                            new PacketSimple(
+                                    EnumSimplePacket.S_UPDATE_SHIP_MOTION_Y,
+                                    new Object[] { autoRocket.getEntityId(), true }));
+                }
             }
 
         }

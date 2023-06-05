@@ -1,11 +1,5 @@
 package micdoodle8.mods.galacticraft.planets.mars.client.render.entity;
 
-import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
-import micdoodle8.mods.galacticraft.planets.mars.client.gui.GuiSlimeling;
-import micdoodle8.mods.galacticraft.planets.mars.client.gui.GuiSlimelingInventory;
-import micdoodle8.mods.galacticraft.planets.mars.client.model.ModelSlimeling;
-import micdoodle8.mods.galacticraft.planets.mars.entities.EntitySlimeling;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
@@ -19,6 +13,11 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
+import micdoodle8.mods.galacticraft.planets.mars.client.gui.GuiSlimeling;
+import micdoodle8.mods.galacticraft.planets.mars.client.gui.GuiSlimelingInventory;
+import micdoodle8.mods.galacticraft.planets.mars.client.model.ModelSlimeling;
+import micdoodle8.mods.galacticraft.planets.mars.entities.EntitySlimeling;
 
 @SideOnly(Side.CLIENT)
 public class RenderSlimeling extends RenderLiving {
@@ -58,20 +57,20 @@ public class RenderSlimeling extends RenderLiving {
     protected int shouldRenderPass(EntityLivingBase par1EntityLivingBase, int par2, float par3) {
         if (par1EntityLivingBase.isInvisible()) {
             return 0;
-        } else if (par2 == 0) {
+        }
+        if (par2 == 0) {
             this.setRenderPassModel(this.renderPassModel);
             GL11.glEnable(GL11.GL_NORMALIZE);
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             return 1;
-        } else {
-            if (par2 == 1) {
-                GL11.glDisable(GL11.GL_BLEND);
-                GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            }
-
-            return -1;
         }
+        if (par2 == 1) {
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        }
+
+        return -1;
     }
 
     @Override
@@ -163,7 +162,7 @@ public class RenderSlimeling extends RenderLiving {
             final Tessellator tessellator = Tessellator.instance;
             byte b0 = 0;
 
-            if (par2Str.equals("deadmau5")) {
+            if ("deadmau5".equals(par2Str)) {
                 b0 = -10;
             }
 

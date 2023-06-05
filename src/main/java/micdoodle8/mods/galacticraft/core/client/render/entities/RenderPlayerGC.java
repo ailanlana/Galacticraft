@@ -1,17 +1,5 @@
 package micdoodle8.mods.galacticraft.core.client.render.entities;
 
-import micdoodle8.mods.galacticraft.api.entity.ICameraZoomEntity;
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
-import micdoodle8.mods.galacticraft.api.world.IZeroGDimension;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
-import micdoodle8.mods.galacticraft.core.client.model.ModelPlayerGC;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityMulti;
-import micdoodle8.mods.galacticraft.core.wrappers.PlayerGearData;
-import micdoodle8.mods.galacticraft.planets.mars.blocks.BlockMachineMars;
-import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -30,6 +18,17 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.Loader;
+import micdoodle8.mods.galacticraft.api.entity.ICameraZoomEntity;
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
+import micdoodle8.mods.galacticraft.api.world.IZeroGDimension;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+import micdoodle8.mods.galacticraft.core.client.model.ModelPlayerGC;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityMulti;
+import micdoodle8.mods.galacticraft.core.wrappers.PlayerGearData;
+import micdoodle8.mods.galacticraft.planets.mars.blocks.BlockMachineMars;
+import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
 
 /**
  * This renders the thermal armor (unless RenderPlayerAPI is installed). The thermal armor render is done after the
@@ -55,7 +54,6 @@ public class RenderPlayerGC extends RenderPlayer {
     }
 
     public RenderPlayerGC() {
-        super();
         this.mainModel = new ModelPlayerGC(0.0F);
         this.modelBipedMain = (ModelPlayerGC) this.mainModel;
         this.modelArmorChestplate = new ModelPlayerGC(1.0F);
@@ -76,9 +74,7 @@ public class RenderPlayerGC extends RenderPlayer {
 
     public static void renderModelS(RendererLivingEntity inst, EntityLivingBase par1EntityLivingBase, float par2,
             float par3, float par4, float par5, float par6, float par7) {
-        if (inst instanceof RenderPlayer) {
-            final RenderPlayer thisInst = (RenderPlayer) inst;
-
+        if (inst instanceof RenderPlayer thisInst) {
             if (isSmartRenderLoaded == null) {
                 isSmartRenderLoaded = Loader.isModLoaded("SmartRender");
             }

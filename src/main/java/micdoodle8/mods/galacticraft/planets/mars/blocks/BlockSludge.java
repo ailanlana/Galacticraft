@@ -3,12 +3,6 @@ package micdoodle8.mods.galacticraft.planets.mars.blocks;
 import java.util.List;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.planets.GalacticraftPlanets;
-import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
-import micdoodle8.mods.galacticraft.planets.mars.entities.EntitySludgeling;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -21,6 +15,11 @@ import net.minecraftforge.fluids.BlockFluidClassic;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.planets.GalacticraftPlanets;
+import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
+import micdoodle8.mods.galacticraft.planets.mars.entities.EntitySludgeling;
 
 public class BlockSludge extends BlockFluidClassic {
 
@@ -113,14 +112,12 @@ public class BlockSludge extends BlockFluidClassic {
                     0.00001F + rand.nextFloat() * 0.5F,
                     false);
         }
-        if (rand.nextInt(10) == 0) {
-            if (World.doesBlockHaveSolidTopSurface(world, x, y - 1, z)
-                    && !world.getBlock(x, y - 2, z).getMaterial().blocksMovement()) {
-                GalacticraftPlanets.spawnParticle(
-                        "bacterialDrip",
-                        new Vector3(x + rand.nextFloat(), y - 1.05D, z + rand.nextFloat()),
-                        new Vector3(0, 0, 0));
-            }
+        if (rand.nextInt(10) == 0 && World.doesBlockHaveSolidTopSurface(world, x, y - 1, z)
+                && !world.getBlock(x, y - 2, z).getMaterial().blocksMovement()) {
+            GalacticraftPlanets.spawnParticle(
+                    "bacterialDrip",
+                    new Vector3(x + rand.nextFloat(), y - 1.05D, z + rand.nextFloat()),
+                    new Vector3(0, 0, 0));
         }
     }
 }

@@ -2,11 +2,6 @@ package micdoodle8.mods.galacticraft.core.tile;
 
 import java.util.EnumSet;
 
-import micdoodle8.mods.galacticraft.core.blocks.BlockOxygenCompressor;
-import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
-import micdoodle8.mods.galacticraft.core.items.ItemOxygenTank;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -14,6 +9,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import micdoodle8.mods.galacticraft.core.blocks.BlockOxygenCompressor;
+import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
+import micdoodle8.mods.galacticraft.core.items.ItemOxygenTank;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class TileEntityOxygenDecompressor extends TileEntityOxygen implements IInventory, ISidedInventory {
 
@@ -93,25 +93,22 @@ public class TileEntityOxygenDecompressor extends TileEntityOxygen implements II
 
     @Override
     public ItemStack decrStackSize(int par1, int par2) {
-        if (this.containingItems[par1] != null) {
-            ItemStack var3;
-
-            if (this.containingItems[par1].stackSize <= par2) {
-                var3 = this.containingItems[par1];
-                this.containingItems[par1] = null;
-                return var3;
-            } else {
-                var3 = this.containingItems[par1].splitStack(par2);
-
-                if (this.containingItems[par1].stackSize == 0) {
-                    this.containingItems[par1] = null;
-                }
-
-                return var3;
-            }
-        } else {
+        if (this.containingItems[par1] == null) {
             return null;
         }
+        ItemStack var3;
+
+        if (this.containingItems[par1].stackSize <= par2) {
+            var3 = this.containingItems[par1];
+            this.containingItems[par1] = null;
+        } else {
+            var3 = this.containingItems[par1].splitStack(par2);
+
+            if (this.containingItems[par1].stackSize == 0) {
+                this.containingItems[par1] = null;
+            }
+        }
+        return var3;
     }
 
     @Override
@@ -120,9 +117,8 @@ public class TileEntityOxygenDecompressor extends TileEntityOxygen implements II
             final ItemStack var2 = this.containingItems[par1];
             this.containingItems[par1] = null;
             return var2;
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
@@ -166,14 +162,11 @@ public class TileEntityOxygenDecompressor extends TileEntityOxygen implements II
     @Override
     public boolean canInsertItem(int slotID, ItemStack itemstack, int side) {
         if (this.isItemValidForSlot(slotID, itemstack)) {
-            switch (slotID) {
-                case 0:
-                    return itemstack.getItemDamage() < itemstack.getMaxDamage();
-                case 1:
-                    return ItemElectricBase.isElectricItemCharged(itemstack);
-                default:
-                    return false;
-            }
+            return switch (slotID) {
+                case 0 -> itemstack.getItemDamage() < itemstack.getMaxDamage();
+                case 1 -> ItemElectricBase.isElectricItemCharged(itemstack);
+                default -> false;
+            };
         }
         return false;
     }
@@ -181,14 +174,11 @@ public class TileEntityOxygenDecompressor extends TileEntityOxygen implements II
     @Override
     public boolean canExtractItem(int slotID, ItemStack itemstack, int side) {
         if (this.isItemValidForSlot(slotID, itemstack)) {
-            switch (slotID) {
-                case 0:
-                    return itemstack.getItemDamage() == itemstack.getMaxDamage();
-                case 1:
-                    return ItemElectricBase.isElectricItemEmpty(itemstack);
-                default:
-                    return false;
-            }
+            return switch (slotID) {
+                case 0 -> itemstack.getItemDamage() == itemstack.getMaxDamage();
+                case 1 -> ItemElectricBase.isElectricItemEmpty(itemstack);
+                default -> false;
+            };
         }
         return false;
     }

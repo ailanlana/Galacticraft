@@ -3,23 +3,6 @@ package micdoodle8.mods.galacticraft.core.util;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
-import micdoodle8.mods.galacticraft.api.item.IBreathableArmor;
-import micdoodle8.mods.galacticraft.api.item.IBreathableArmor.EnumGearType;
-import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
-import micdoodle8.mods.galacticraft.api.transmission.tile.IConnector;
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3Dim;
-import micdoodle8.mods.galacticraft.api.world.IAtmosphericGas;
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
-import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
-import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
-import micdoodle8.mods.galacticraft.core.items.ItemOxygenGear;
-import micdoodle8.mods.galacticraft.core.items.ItemOxygenMask;
-import micdoodle8.mods.galacticraft.core.items.ItemOxygenTank;
-import micdoodle8.mods.galacticraft.core.oxygen.OxygenPressureProtocol;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenDistributor;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEnchantmentTable;
 import net.minecraft.block.BlockFarmland;
@@ -48,6 +31,22 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
+import micdoodle8.mods.galacticraft.api.item.IBreathableArmor;
+import micdoodle8.mods.galacticraft.api.item.IBreathableArmor.EnumGearType;
+import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
+import micdoodle8.mods.galacticraft.api.transmission.tile.IConnector;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3Dim;
+import micdoodle8.mods.galacticraft.api.world.IAtmosphericGas;
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
+import micdoodle8.mods.galacticraft.core.items.ItemOxygenGear;
+import micdoodle8.mods.galacticraft.core.items.ItemOxygenMask;
+import micdoodle8.mods.galacticraft.core.items.ItemOxygenTank;
+import micdoodle8.mods.galacticraft.core.oxygen.OxygenPressureProtocol;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenDistributor;
 
 public class OxygenUtil {
 
@@ -98,7 +97,6 @@ public class OxygenUtil {
         return isAABBInBreathableAirBlock(world, bb, false);
     }
 
-    @SuppressWarnings("rawtypes")
     public static boolean isAABBInBreathableAirBlock(World world, AxisAlignedBB bb, boolean testThermal) {
         final double avgX = (bb.minX + bb.maxX) / 2.0D;
         final double avgY = (bb.minY + bb.maxY) / 2.0D;
@@ -123,7 +121,7 @@ public class OxygenUtil {
         final int i1 = MathHelper.floor_double(bb.minZ);
         final int j1 = MathHelper.floor_double(bb.maxZ);
 
-        OxygenUtil.checked = new HashSet();
+        OxygenUtil.checked = new HashSet<>();
         if (world.checkChunksExist(i, k, i1, j, l, j1)) {
             for (int x = i; x <= j; ++x) {
                 for (int y = k; y <= l; ++y) {
@@ -148,7 +146,7 @@ public class OxygenUtil {
         final int i1 = MathHelper.floor_double(bb.minZ);
         final int j1 = MathHelper.floor_double(bb.maxZ);
 
-        OxygenUtil.checked = new HashSet();
+        OxygenUtil.checked = new HashSet<>();
         if (world.checkChunksExist(i, k, i1, j, l, j1)) {
             for (int x = i; x <= j; ++x) {
                 for (int y = k; y <= l; ++y) {
@@ -175,7 +173,7 @@ public class OxygenUtil {
         if (OxygenUtil.inOxygenBubble(world, x + 0.5D, y + 0.6D, z + 0.5D)) {
             return true;
         }
-        OxygenUtil.checked = new HashSet();
+        OxygenUtil.checked = new HashSet<>();
         final BlockVec3 vec = new BlockVec3(x, y, z);
         for (int side = 0; side < 6; side++) {
             final BlockVec3 sidevec = vec.newVecSide(side);
@@ -208,12 +206,11 @@ public class OxygenUtil {
         boolean permeableFlag = false;
         if (!(block instanceof BlockLeavesBase)) {
             if (block.isOpaqueCube()) {
-                if (block instanceof BlockGravel || block.getMaterial() == Material.cloth
-                        || block instanceof BlockSponge) {
-                    permeableFlag = true;
-                } else {
+                if (!(block instanceof BlockGravel) && block.getMaterial() != Material.cloth
+                        && !(block instanceof BlockSponge)) {
                     return -1;
                 }
+                permeableFlag = true;
             } else
                 if (block instanceof BlockGlass || block instanceof BlockStainedGlass || block instanceof BlockLiquid) {
                     return -1;
@@ -311,10 +308,9 @@ public class OxygenUtil {
                 if (armorStack != null && armorStack.getItem() instanceof IBreathableArmor) {
                     final IBreathableArmor breathableArmor = (IBreathableArmor) armorStack.getItem();
 
-                    if (breathableArmor.handleGearType(EnumGearType.HELMET)) {
-                        if (breathableArmor.canBreathe(armorStack, player, EnumGearType.HELMET)) {
-                            handled = true;
-                        }
+                    if (breathableArmor.handleGearType(EnumGearType.HELMET)
+                            && breathableArmor.canBreathe(armorStack, player, EnumGearType.HELMET)) {
+                        handled = true;
                     }
                 }
             }
@@ -332,10 +328,9 @@ public class OxygenUtil {
                 if (armorStack != null && armorStack.getItem() instanceof IBreathableArmor) {
                     final IBreathableArmor breathableArmor = (IBreathableArmor) armorStack.getItem();
 
-                    if (breathableArmor.handleGearType(EnumGearType.GEAR)) {
-                        if (breathableArmor.canBreathe(armorStack, player, EnumGearType.GEAR)) {
-                            handled = true;
-                        }
+                    if (breathableArmor.handleGearType(EnumGearType.GEAR)
+                            && breathableArmor.canBreathe(armorStack, player, EnumGearType.GEAR)) {
+                        handled = true;
                     }
                 }
             }
@@ -355,16 +350,14 @@ public class OxygenUtil {
                 if (armorStack != null && armorStack.getItem() instanceof IBreathableArmor) {
                     final IBreathableArmor breathableArmor = (IBreathableArmor) armorStack.getItem();
 
-                    if (breathableArmor.handleGearType(EnumGearType.TANK1)) {
-                        if (breathableArmor.canBreathe(armorStack, player, EnumGearType.TANK1)) {
-                            handled = true;
-                        }
+                    if (breathableArmor.handleGearType(EnumGearType.TANK1)
+                            && breathableArmor.canBreathe(armorStack, player, EnumGearType.TANK1)) {
+                        handled = true;
                     }
 
-                    if (breathableArmor.handleGearType(EnumGearType.TANK2)) {
-                        if (breathableArmor.canBreathe(armorStack, player, EnumGearType.TANK2)) {
-                            handled = true;
-                        }
+                    if (breathableArmor.handleGearType(EnumGearType.TANK2)
+                            && breathableArmor.canBreathe(armorStack, player, EnumGearType.TANK2)) {
+                        handled = true;
                     }
                 }
             }
@@ -399,10 +392,9 @@ public class OxygenUtil {
         for (final ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
             final TileEntity tileEntity = thisVec.getTileEntityOnSide(world, direction);
 
-            if (tileEntity instanceof IConnector) {
-                if (((IConnector) tileEntity).canConnect(direction.getOpposite(), NetworkType.OXYGEN)) {
-                    adjacentConnections[direction.ordinal()] = tileEntity;
-                }
+            if (tileEntity instanceof IConnector
+                    && ((IConnector) tileEntity).canConnect(direction.getOpposite(), NetworkType.OXYGEN)) {
+                adjacentConnections[direction.ordinal()] = tileEntity;
             }
         }
 
@@ -422,10 +414,9 @@ public class OxygenUtil {
         for (final BlockVec3Dim blockVec : TileEntityOxygenDistributor.loadedTiles) {
             if (blockVec != null && blockVec.dim == worldObj.provider.dimensionId) {
                 final TileEntity tile = worldObj.getTileEntity(blockVec.x, blockVec.y, blockVec.z);
-                if (tile instanceof TileEntityOxygenDistributor) {
-                    if (((TileEntityOxygenDistributor) tile).inBubble(avgX, avgY, avgZ)) {
-                        return true;
-                    }
+                if (tile instanceof TileEntityOxygenDistributor
+                        && ((TileEntityOxygenDistributor) tile).inBubble(avgX, avgY, avgZ)) {
+                    return true;
                 }
             }
         }

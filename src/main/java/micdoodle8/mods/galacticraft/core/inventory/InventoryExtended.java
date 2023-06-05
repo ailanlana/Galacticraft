@@ -1,11 +1,11 @@
 package micdoodle8.mods.galacticraft.core.inventory;
 
-import micdoodle8.mods.galacticraft.api.inventory.IInventoryGC;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+
+import micdoodle8.mods.galacticraft.api.inventory.IInventoryGC;
 
 public class InventoryExtended implements IInventoryGC {
 
@@ -23,25 +23,22 @@ public class InventoryExtended implements IInventoryGC {
 
     @Override
     public ItemStack decrStackSize(int i, int j) {
-        if (this.inventoryStacks[i] != null) {
-            ItemStack var3;
-
-            if (this.inventoryStacks[i].stackSize <= j) {
-                var3 = this.inventoryStacks[i];
-                this.inventoryStacks[i] = null;
-                return var3;
-            } else {
-                var3 = this.inventoryStacks[i].splitStack(j);
-
-                if (this.inventoryStacks[i].stackSize == 0) {
-                    this.inventoryStacks[i] = null;
-                }
-
-                return var3;
-            }
-        } else {
+        if (this.inventoryStacks[i] == null) {
             return null;
         }
+        ItemStack var3;
+
+        if (this.inventoryStacks[i].stackSize <= j) {
+            var3 = this.inventoryStacks[i];
+            this.inventoryStacks[i] = null;
+        } else {
+            var3 = this.inventoryStacks[i].splitStack(j);
+
+            if (this.inventoryStacks[i].stackSize == 0) {
+                this.inventoryStacks[i] = null;
+            }
+        }
+        return var3;
     }
 
     @Override
@@ -114,10 +111,8 @@ public class InventoryExtended implements IInventoryGC {
             final int j = nbttagcompound.getByte("Slot") & 255;
             final ItemStack itemstack = ItemStack.loadItemStackFromNBT(nbttagcompound);
 
-            if (itemstack != null) {
-                if (j >= 200 && j < this.inventoryStacks.length + 200 - 1) {
-                    this.inventoryStacks[j - 200] = itemstack;
-                }
+            if (itemstack != null && j >= 200 && j < this.inventoryStacks.length + 200 - 1) {
+                this.inventoryStacks[j - 200] = itemstack;
             }
         }
     }

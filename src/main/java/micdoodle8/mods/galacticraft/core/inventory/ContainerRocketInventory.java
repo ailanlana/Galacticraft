@@ -1,12 +1,12 @@
 package micdoodle8.mods.galacticraft.core.inventory;
 
-import micdoodle8.mods.galacticraft.api.entity.IRocketType.EnumRocketType;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import micdoodle8.mods.galacticraft.api.entity.IRocketType.EnumRocketType;
 
 public class ContainerRocketInventory extends Container {
 
@@ -84,7 +84,7 @@ public class ContainerRocketInventory extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
         ItemStack var3 = null;
-        final Slot var4 = (Slot) this.inventorySlots.get(par2);
+        final Slot var4 = this.inventorySlots.get(par2);
         final int b = this.inventorySlots.size() - 36;
 
         if (var4 != null && var4.getHasStack()) {

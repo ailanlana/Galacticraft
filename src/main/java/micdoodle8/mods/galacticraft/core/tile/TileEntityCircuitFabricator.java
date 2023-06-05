@@ -3,6 +3,12 @@ package micdoodle8.mods.galacticraft.core.tile;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+import cpw.mods.fml.relauncher.Side;
 import micdoodle8.mods.galacticraft.api.recipe.CircuitFabricatorRecipes;
 import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
 import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseElectricBlockWithInventory;
@@ -11,13 +17,6 @@ import micdoodle8.mods.galacticraft.core.items.ItemBasic;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityCircuitFabricator extends TileBaseElectricBlockWithInventory implements ISidedInventory {
 
@@ -44,24 +43,15 @@ public class TileEntityCircuitFabricator extends TileBaseElectricBlockWithInvent
         if (!this.worldObj.isRemote) {
             boolean updateInv = false;
 
-            if (this.hasEnoughEnergyToRun) {
-                if (this.canCompress()) {
-                    ++this.processTicks;
+            if (this.hasEnoughEnergyToRun && this.canCompress()) {
+                ++this.processTicks;
 
-                    if (this.processTicks == TileEntityCircuitFabricator.PROCESS_TIME_REQUIRED) {
-                        this.worldObj.playSoundEffect(
-                                this.xCoord,
-                                this.yCoord,
-                                this.zCoord,
-                                "random.anvil_land",
-                                0.2F,
-                                0.5F);
-                        this.processTicks = 0;
-                        this.compressItems();
-                        updateInv = true;
-                    }
-                } else {
+                if (this.processTicks == TileEntityCircuitFabricator.PROCESS_TIME_REQUIRED) {
+                    this.worldObj
+                            .playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "random.anvil_land", 0.2F, 0.5F);
                     this.processTicks = 0;
+                    this.compressItems();
+                    updateInv = true;
                 }
             } else {
                 this.processTicks = 0;
@@ -103,13 +93,11 @@ public class TileEntityCircuitFabricator extends TileBaseElectricBlockWithInvent
     public void compressItems() {
         if (this.canCompress()) {
             final ItemStack resultItemStack = this.producingStack.copy();
-            if (ConfigManagerCore.quickMode) {
-                if (resultItemStack.getItem() == GCItems.basicItem) {
-                    if (resultItemStack.getItemDamage() == ItemBasic.WAFER_BASIC) {
-                        resultItemStack.stackSize = 5;
-                    } else if (resultItemStack.getItemDamage() == ItemBasic.WAFER_ADVANCED) {
-                        resultItemStack.stackSize = 2;
-                    }
+            if (ConfigManagerCore.quickMode && resultItemStack.getItem() == GCItems.basicItem) {
+                if (resultItemStack.getItemDamage() == ItemBasic.WAFER_BASIC) {
+                    resultItemStack.stackSize = 5;
+                } else if (resultItemStack.getItemDamage() == ItemBasic.WAFER_ADVANCED) {
+                    resultItemStack.stackSize = 2;
                 }
             }
 

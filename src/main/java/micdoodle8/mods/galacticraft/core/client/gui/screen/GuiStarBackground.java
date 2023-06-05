@@ -1,8 +1,5 @@
 package micdoodle8.mods.galacticraft.core.client.gui.screen;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.util.ClientUtil;
-
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
@@ -12,6 +9,9 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
+
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.util.ClientUtil;
 
 public abstract class GuiStarBackground extends GuiScreen {
 
@@ -45,7 +45,7 @@ public abstract class GuiStarBackground extends GuiScreen {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    private void drawPanorama2(float par1) {
+    private void drawPanorama2() {
         final Tessellator var4 = Tessellator.instance;
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glPushMatrix();
@@ -72,11 +72,8 @@ public abstract class GuiStarBackground extends GuiScreen {
             float mY;
             float mX;
 
-            if (Mouse.getY() < this.height) {
-                mY = (-this.height + Mouse.getY()) / 100F;
-            } else {
-                mY = (-this.height + Mouse.getY()) / 100F;
-            }
+            if (Mouse.getY() < this.height) {}
+            mY = (-this.height + Mouse.getY()) / 100F;
 
             mX = (this.width - Mouse.getX()) / 100F;
 
@@ -169,11 +166,8 @@ public abstract class GuiStarBackground extends GuiScreen {
             float mY;
             float mX;
 
-            if (Mouse.getY() < this.height) {
-                mY = (-this.height + Mouse.getY()) / 100F;
-            } else {
-                mY = (-this.height + Mouse.getY()) / 100F;
-            }
+            if (Mouse.getY() < this.height) {}
+            mY = (-this.height + Mouse.getY()) / 100F;
 
             mX = (this.width - Mouse.getX()) / 100F;
 
@@ -246,7 +240,7 @@ public abstract class GuiStarBackground extends GuiScreen {
         GL11.glPushMatrix();
         GL11.glScalef(1.0F, 0.0F, 1.0F);
         this.drawPanorama(1);
-        this.drawPanorama2(1);
+        this.drawPanorama2();
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         this.rotateAndBlurSkybox();

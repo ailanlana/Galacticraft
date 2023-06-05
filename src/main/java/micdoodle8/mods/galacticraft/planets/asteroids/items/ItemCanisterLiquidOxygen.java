@@ -3,12 +3,6 @@ package micdoodle8.mods.galacticraft.planets.asteroids.items;
 import java.util.HashMap;
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.item.IItemOxygenSupply;
-import micdoodle8.mods.galacticraft.core.Constants;
-import micdoodle8.mods.galacticraft.core.items.ItemCanisterGeneric;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -16,11 +10,16 @@ import net.minecraft.util.IIcon;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.item.IItemOxygenSupply;
+import micdoodle8.mods.galacticraft.core.Constants;
+import micdoodle8.mods.galacticraft.core.items.ItemCanisterGeneric;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
 
 public class ItemCanisterLiquidOxygen extends ItemCanisterGeneric implements IItemOxygenSupply {
 
     protected IIcon[] icons = new IIcon[7];
-    private static final HashMap<ItemStack, Integer> craftingvalues = new HashMap();
+    private static final HashMap<ItemStack, Integer> craftingvalues = new HashMap<>();
 
     public ItemCanisterLiquidOxygen(String assetName) {
         super(assetName);
@@ -60,10 +59,10 @@ public class ItemCanisterLiquidOxygen extends ItemCanisterGeneric implements IIt
         return super.getIconFromDamage(damage);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List,
+            boolean par4) {
         if (ItemCanisterGeneric.EMPTY - par1ItemStack.getItemDamage() > 0) {
             par3List.add(
                     GCCoreUtil.translate("item.canister.LOX.name") + ": "

@@ -4,14 +4,14 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
 import micdoodle8.mods.galacticraft.api.transmission.tile.INetworkConnection;
 import micdoodle8.mods.galacticraft.api.transmission.tile.ITransmitter;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Check if a conductor connects with another.
@@ -33,11 +33,10 @@ public class PathfinderChecker extends Pathfinder {
                     final BlockVec3 position = currentNode.clone().modifyPositionFromSide(direction);
                     final TileEntity connectedBlock = position.getTileEntity(world);
 
-                    if (connectedBlock instanceof ITransmitter
-                            && !Arrays.asList(ignoreConnector).contains(connectedBlock)) {
-                        if (((ITransmitter) connectedBlock).canConnect(direction.getOpposite(), networkType)) {
-                            neighbors.add(position);
-                        }
+                    if (connectedBlock instanceof ITransmitter transmitter
+                            && !Arrays.asList(ignoreConnector).contains(transmitter)
+                            && transmitter.canConnect(direction.getOpposite(), networkType)) {
+                        neighbors.add(position);
                     }
                 }
 

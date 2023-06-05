@@ -1,5 +1,10 @@
 package micdoodle8.mods.galacticraft.core.command;
 
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
+import net.minecraft.entity.player.EntityPlayerMP;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.energy.EnergyConfigHandler;
 import micdoodle8.mods.galacticraft.core.network.PacketSimple;
@@ -7,27 +12,22 @@ import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
 
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
-import net.minecraft.entity.player.EntityPlayerMP;
-
 public class CommandGCEnergyUnits extends CommandBase {
 
     @Override
     public String getCommandUsage(ICommandSender var1) {
-        String options = " [gJ";
+        StringBuilder options = new StringBuilder(" [gJ");
         if (EnergyConfigHandler.isBuildcraftLoaded()) {
-            options = options + "|MJ";
+            options.append("|MJ");
         }
         if (EnergyConfigHandler.isIndustrialCraft2Loaded()) {
-            options = options + "|EU";
+            options.append("|EU");
         }
         if (EnergyConfigHandler.isMekanismLoaded()) {
-            options = options + "|J";
+            options.append("|J");
         }
-        options = options + "|RF";
-        return "/" + this.getCommandName() + options + "]";
+        options.append("|RF");
+        return "/" + this.getCommandName() + options.append("]").toString();
     }
 
     @Override
@@ -125,7 +125,6 @@ public class CommandGCEnergyUnits extends CommandBase {
             EnergyConfigHandler.displayEnergyUnitsIC2 = false;
             EnergyConfigHandler.displayEnergyUnitsMek = false;
             EnergyConfigHandler.displayEnergyUnitsRF = true;
-            return;
         }
     }
 }

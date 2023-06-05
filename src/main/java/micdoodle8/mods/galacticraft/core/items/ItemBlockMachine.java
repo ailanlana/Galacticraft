@@ -1,11 +1,5 @@
 package micdoodle8.mods.galacticraft.core.items;
 
-import micdoodle8.mods.galacticraft.core.blocks.BlockMachine;
-import micdoodle8.mods.galacticraft.core.blocks.BlockMachine2;
-import micdoodle8.mods.galacticraft.core.blocks.BlockMachineTiered;
-import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +9,11 @@ import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.blocks.BlockMachine;
+import micdoodle8.mods.galacticraft.core.blocks.BlockMachine2;
+import micdoodle8.mods.galacticraft.core.blocks.BlockMachineTiered;
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 
 public class ItemBlockMachine extends ItemBlockDesc {
 
@@ -43,25 +42,33 @@ public class ItemBlockMachine extends ItemBlockDesc {
         if (this.field_150939_a == GCBlocks.machineBase) {
             index = typenum / 4;
         } else if (this.field_150939_a == GCBlocks.machineTiered) {
-            if (typenum == BlockMachineTiered.ELECTRIC_FURNACE_METADATA) {
-                return "tile.machine.2";
-            } else if (typenum == BlockMachineTiered.STORAGE_MODULE_METADATA) {
-                return "tile.machine.1";
-            }
 
             // Tier 2 versions of the same
-            if (typenum == 8 + BlockMachineTiered.ELECTRIC_FURNACE_METADATA) {
-                return "tile.machine.7";
-            } else if (typenum == 8 + BlockMachineTiered.STORAGE_MODULE_METADATA) {
-                return "tile.machine.8";
+            switch (typenum) {
+                case BlockMachineTiered.ELECTRIC_FURNACE_METADATA:
+                    return "tile.machine.2";
+                case BlockMachineTiered.STORAGE_MODULE_METADATA:
+                    return "tile.machine.1";
+                case 8 + BlockMachineTiered.ELECTRIC_FURNACE_METADATA:
+                    return "tile.machine.7";
+                case 8 + BlockMachineTiered.STORAGE_MODULE_METADATA:
+                    return "tile.machine.8";
+                default:
+                    break;
             }
         } else {
-            if (typenum == BlockMachine2.OXYGEN_STORAGE_MODULE_METADATA) {
-                index = 6;
-            } else if (typenum == BlockMachine2.CIRCUIT_FABRICATOR_METADATA) {
-                index = 5;
-            } else if (typenum == BlockMachine2.ELECTRIC_COMPRESSOR_METADATA) {
-                index = 4;
+            switch (typenum) {
+                case BlockMachine2.OXYGEN_STORAGE_MODULE_METADATA:
+                    index = 6;
+                    break;
+                case BlockMachine2.CIRCUIT_FABRICATOR_METADATA:
+                    index = 5;
+                    break;
+                case BlockMachine2.ELECTRIC_COMPRESSOR_METADATA:
+                    index = 4;
+                    break;
+                default:
+                    break;
             }
         }
 

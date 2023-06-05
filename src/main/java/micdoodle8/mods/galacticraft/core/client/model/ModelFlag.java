@@ -1,15 +1,15 @@
 package micdoodle8.mods.galacticraft.core.client.model;
 
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
-import micdoodle8.mods.galacticraft.core.entities.EntityFlag;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
 
 import org.lwjgl.opengl.GL11;
+
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
+import micdoodle8.mods.galacticraft.core.entities.EntityFlag;
 
 public class ModelFlag extends ModelBase {
 
@@ -37,8 +37,7 @@ public class ModelFlag extends ModelBase {
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
 
-        if (entity instanceof EntityFlag) {
-            final EntityFlag flag = (EntityFlag) entity;
+        if (entity instanceof EntityFlag flag) {
             this.renderPole(flag, f5);
             this.renderFlag(flag, flag.ticksExisted);
         }

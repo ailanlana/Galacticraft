@@ -1,11 +1,11 @@
 package micdoodle8.mods.galacticraft.core.entities.player;
 
-import micdoodle8.mods.galacticraft.api.world.IZeroGDimension;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 import api.player.client.ClientPlayerAPI;
 import api.player.client.ClientPlayerBase;
 import cpw.mods.fml.common.Loader;
+import micdoodle8.mods.galacticraft.api.world.IZeroGDimension;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
+import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 
 public class GCPlayerBaseSP extends ClientPlayerBase {
 
@@ -104,19 +104,14 @@ public class GCPlayerBaseSP extends ClientPlayerBase {
                 }
 
                 return stats.landingTicks < this.lastLandingTicks;
-            } else {
-                this.lastLandingTicks = 0;
             }
+            this.lastLandingTicks = 0;
             if (stats.pjumpticks > 0) {
                 return true;
             }
-            if (ClientProxyCore.sneakRenderOverride) {
-                if (FreefallHandler.testFreefall(this.player)) {
-                    return false;
-                }
-                if (stats.inFreefall) {
-                    return false;
-                }
+            if (ClientProxyCore.sneakRenderOverride
+                    && (FreefallHandler.testFreefall(this.player) || stats.inFreefall)) {
+                return false;
             }
         }
         return super.isSneaking();

@@ -3,15 +3,15 @@ package micdoodle8.mods.galacticraft.planets.mars.world.gen.dungeon;
 import java.util.ArrayList;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.core.world.gen.dungeon.DungeonBoundingBox;
-import micdoodle8.mods.galacticraft.core.world.gen.dungeon.DungeonRoom;
-import micdoodle8.mods.galacticraft.core.world.gen.dungeon.MapGenDungeon;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import micdoodle8.mods.galacticraft.core.world.gen.dungeon.DungeonBoundingBox;
+import micdoodle8.mods.galacticraft.core.world.gen.dungeon.DungeonRoom;
+import micdoodle8.mods.galacticraft.core.world.gen.dungeon.MapGenDungeon;
 
 public class RoomSpawnerMars extends DungeonRoom {
 
@@ -104,17 +104,12 @@ public class RoomSpawnerMars extends DungeonRoom {
     }
 
     private static String getMob(Random rand) {
-        switch (rand.nextInt(6)) {
-            case 0:
-                return "GalacticraftCore.EvolvedSpider";
-            case 1:
-                return "GalacticraftCore.EvolvedZombie";
-            case 2:
-                return "GalacticraftCore.EvolvedCreeper";
-            case 3:
-                return "GalacticraftCore.EvolvedSkeleton";
-            default:
-                return "GalacticraftCore.EvolvedCreeper";
-        }
+        return switch (rand.nextInt(6)) {
+            case 0 -> "GalacticraftCore.EvolvedSpider";
+            case 1 -> "GalacticraftCore.EvolvedZombie";
+            case 2 -> "GalacticraftCore.EvolvedCreeper";
+            case 3 -> "GalacticraftCore.EvolvedSkeleton";
+            default -> "GalacticraftCore.EvolvedCreeper";
+        };
     }
 }

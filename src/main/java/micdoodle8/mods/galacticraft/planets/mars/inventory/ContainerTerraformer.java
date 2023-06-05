@@ -5,10 +5,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.item.IItemElectric;
-import micdoodle8.mods.galacticraft.core.inventory.SlotSpecific;
-import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityTerraformer;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,6 +14,10 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import micdoodle8.mods.galacticraft.api.item.IItemElectric;
+import micdoodle8.mods.galacticraft.core.inventory.SlotSpecific;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityTerraformer;
 
 public class ContainerTerraformer extends Container {
 
@@ -44,16 +44,21 @@ public class ContainerTerraformer extends Container {
         for (var6 = 0; var6 < 3; ++var6) {
             final List<ItemStack> stacks = new ArrayList<>();
 
-            if (var6 == 0) {
-                stacks.add(new ItemStack(Items.dye, 1, 15));
-            } else if (var6 == 1) {
-                if (ContainerTerraformer.saplingList == null) {
-                    initSaplingList();
-                }
-
-                stacks.addAll(ContainerTerraformer.saplingList);
-            } else if (var6 == 2) {
-                stacks.add(new ItemStack(Items.wheat_seeds));
+            switch (var6) {
+                case 0:
+                    stacks.add(new ItemStack(Items.dye, 1, 15));
+                    break;
+                case 1:
+                    if (ContainerTerraformer.saplingList == null) {
+                        initSaplingList();
+                    }
+                    stacks.addAll(ContainerTerraformer.saplingList);
+                    break;
+                case 2:
+                    stacks.add(new ItemStack(Items.wheat_seeds));
+                    break;
+                default:
+                    break;
             }
 
             for (var7 = 0; var7 < 4; ++var7) {
@@ -95,7 +100,7 @@ public class ContainerTerraformer extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1) {
         ItemStack var2 = null;
-        final Slot slot = (Slot) this.inventorySlots.get(par1);
+        final Slot slot = this.inventorySlots.get(par1);
         final int b = this.inventorySlots.size();
 
         if (slot != null && slot.getHasStack()) {
@@ -106,34 +111,32 @@ public class ContainerTerraformer extends Container {
                 if (!this.mergeItemStack(var4, b - 36, b, true)) {
                     return null;
                 }
-            } else {
-                if (var4.getItem() instanceof IItemElectric) {
-                    if (!this.mergeItemStack(var4, 1, 2, false)) {
-                        return null;
-                    }
-                } else if (var4.getItem() == Items.water_bucket) {
-                    if (!this.mergeItemStack(var4, 0, 1, false)) {
-                        return null;
-                    }
-                } else if (var4.getItem() == Items.dye && var4.getItemDamage() == 15) {
-                    if (!this.mergeItemStack(var4, 2, 6, false)) {
-                        return null;
-                    }
-                } else if (this.getSlot(6).isItemValid(var4)) {
-                    if (!this.mergeItemStack(var4, 6, 10, false)) {
-                        return null;
-                    }
-                } else if (var4.getItem() == Items.wheat_seeds) {
-                    if (!this.mergeItemStack(var4, 10, 14, false)) {
-                        return null;
-                    }
-                } else if (par1 < b - 9) {
-                    if (!this.mergeItemStack(var4, b - 9, b, false)) {
-                        return null;
-                    }
-                } else if (!this.mergeItemStack(var4, b - 36, b - 9, false)) {
+            } else if (var4.getItem() instanceof IItemElectric) {
+                if (!this.mergeItemStack(var4, 1, 2, false)) {
                     return null;
                 }
+            } else if (var4.getItem() == Items.water_bucket) {
+                if (!this.mergeItemStack(var4, 0, 1, false)) {
+                    return null;
+                }
+            } else if (var4.getItem() == Items.dye && var4.getItemDamage() == 15) {
+                if (!this.mergeItemStack(var4, 2, 6, false)) {
+                    return null;
+                }
+            } else if (this.getSlot(6).isItemValid(var4)) {
+                if (!this.mergeItemStack(var4, 6, 10, false)) {
+                    return null;
+                }
+            } else if (var4.getItem() == Items.wheat_seeds) {
+                if (!this.mergeItemStack(var4, 10, 14, false)) {
+                    return null;
+                }
+            } else if (par1 < b - 9) {
+                if (!this.mergeItemStack(var4, b - 9, b, false)) {
+                    return null;
+                }
+            } else if (!this.mergeItemStack(var4, b - 36, b - 9, false)) {
+                return null;
             }
 
             if (var4.stackSize == 0) {
@@ -167,8 +170,8 @@ public class ContainerTerraformer extends Container {
     }
 
     private static void initSaplingList() {
-        ContainerTerraformer.saplingList = new LinkedList();
-        final Iterator iterator = Block.blockRegistry.getKeys().iterator();
+        ContainerTerraformer.saplingList = new LinkedList<>();
+        final Iterator<?> iterator = Block.blockRegistry.getKeys().iterator();
 
         while (iterator.hasNext()) {
             final Block b = (Block) Block.blockRegistry.getObject((String) iterator.next());
@@ -183,7 +186,7 @@ public class ContainerTerraformer extends Container {
                         for (int i = 1; i < 16; i++) {
                             final ItemStack testStack = new ItemStack(item, 1, i);
                             final String testName = item.getUnlocalizedName(testStack);
-                            if (testName == null || testName.equals("") || testName.equals(basicName)) {
+                            if (testName == null || "".equals(testName) || testName.equals(basicName)) {
                                 break;
                             }
                             ContainerTerraformer.saplingList.add(testStack);

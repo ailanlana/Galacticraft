@@ -1,23 +1,5 @@
 package micdoodle8.mods.galacticraft.planets.mars;
 
-import micdoodle8.mods.galacticraft.api.event.wgen.GCCoreEventPopulate;
-import micdoodle8.mods.galacticraft.api.tile.IFuelDock;
-import micdoodle8.mods.galacticraft.api.tile.ILandingPadAttachable;
-import micdoodle8.mods.galacticraft.core.client.render.entities.RenderPlayerGC.RotatePlayerEvent;
-import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
-import micdoodle8.mods.galacticraft.core.event.EventHandlerGC.OrientCameraEvent;
-import micdoodle8.mods.galacticraft.core.event.EventLandingPadRemoval;
-import micdoodle8.mods.galacticraft.core.event.EventWakePlayer;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityMulti;
-import micdoodle8.mods.galacticraft.core.util.WorldUtil;
-import micdoodle8.mods.galacticraft.planets.mars.blocks.BlockMachineMars;
-import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
-import micdoodle8.mods.galacticraft.planets.mars.dimension.WorldProviderMars;
-import micdoodle8.mods.galacticraft.planets.mars.entities.EntitySlimeling;
-import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityCryogenicChamber;
-import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityLaunchController;
-import micdoodle8.mods.galacticraft.planets.mars.world.gen.WorldGenEggs;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -39,17 +21,32 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.event.wgen.GCCoreEventPopulate;
+import micdoodle8.mods.galacticraft.api.tile.IFuelDock;
+import micdoodle8.mods.galacticraft.api.tile.ILandingPadAttachable;
+import micdoodle8.mods.galacticraft.core.client.render.entities.RenderPlayerGC.RotatePlayerEvent;
+import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
+import micdoodle8.mods.galacticraft.core.event.EventHandlerGC.OrientCameraEvent;
+import micdoodle8.mods.galacticraft.core.event.EventLandingPadRemoval;
+import micdoodle8.mods.galacticraft.core.event.EventWakePlayer;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityMulti;
+import micdoodle8.mods.galacticraft.core.util.WorldUtil;
+import micdoodle8.mods.galacticraft.planets.mars.blocks.BlockMachineMars;
+import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
+import micdoodle8.mods.galacticraft.planets.mars.dimension.WorldProviderMars;
+import micdoodle8.mods.galacticraft.planets.mars.entities.EntitySlimeling;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityCryogenicChamber;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityLaunchController;
+import micdoodle8.mods.galacticraft.planets.mars.world.gen.WorldGenEggs;
 
 public class EventHandlerMars {
 
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
-        if (event.source.damageType.equals("slimeling") && event.source instanceof EntityDamageSource) {
-            final EntityDamageSource source = (EntityDamageSource) event.source;
-
-            if (source.getEntity() instanceof EntitySlimeling && !source.getEntity().worldObj.isRemote) {
-                ((EntitySlimeling) source.getEntity()).kills++;
-            }
+        if ("slimeling".equals(event.source.damageType) && event.source instanceof EntityDamageSource source
+                && source.getEntity() instanceof EntitySlimeling
+                && !source.getEntity().worldObj.isRemote) {
+            ((EntitySlimeling) source.getEntity()).kills++;
         }
     }
 
@@ -60,13 +57,9 @@ public class EventHandlerMars {
                 && (!event.source.isFireDamage() || !event.entityLiving.isPotionActive(Potion.fireResistance))) {
             final Entity entity = event.source.getEntity();
 
-            if (entity instanceof EntitySlimeling) {
-                final EntitySlimeling entitywolf = (EntitySlimeling) entity;
-
-                if (entitywolf.isTamed()) {
-                    event.entityLiving.recentlyHit = 100;
-                    event.entityLiving.attackingPlayer = null;
-                }
+            if (entity instanceof EntitySlimeling entitywolf && entitywolf.isTamed()) {
+                event.entityLiving.recentlyHit = 100;
+                event.entityLiving.attackingPlayer = null;
             }
         }
     }
@@ -80,16 +73,14 @@ public class EventHandlerMars {
         if (blockID == MarsBlocks.machine && metadata >= BlockMachineMars.CRYOGENIC_CHAMBER_METADATA) {
             if (!event.flag1 && event.flag2 && event.flag3) {
                 event.result = EnumStatus.NOT_POSSIBLE_HERE;
-            } else if (!event.flag1 && !event.flag2 && event.flag3) {
-                if (!event.entityPlayer.worldObj.isRemote) {
-                    event.entityPlayer.heal(5.0F);
-                    GCPlayerStats.get((EntityPlayerMP) event.entityPlayer).cryogenicChamberCooldown = 6000;
+            } else if (!event.flag1 && !event.flag2 && event.flag3 && !event.entityPlayer.worldObj.isRemote) {
+                event.entityPlayer.heal(5.0F);
+                GCPlayerStats.get((EntityPlayerMP) event.entityPlayer).cryogenicChamberCooldown = 6000;
 
-                    final WorldServer ws = (WorldServer) event.entityPlayer.worldObj;
-                    ws.updateAllPlayersSleepingFlag();
-                    if (ws.areAllPlayersAsleep() && ws.getGameRules().getGameRuleBooleanValue("doDaylightCycle")) {
-                        WorldUtil.setNextMorning(ws);
-                    }
+                final WorldServer ws = (WorldServer) event.entityPlayer.worldObj;
+                ws.updateAllPlayersSleepingFlag();
+                if (ws.areAllPlayersAsleep() && ws.getGameRules().getGameRuleBooleanValue("doDaylightCycle")) {
+                    WorldUtil.setNextMorning(ws);
                 }
             }
         }
@@ -195,9 +186,7 @@ public class EventHandlerMars {
     public void onLandingPadRemoved(EventLandingPadRemoval event) {
         final TileEntity tile = event.world.getTileEntity(event.x, event.y, event.z);
 
-        if (tile instanceof IFuelDock) {
-            final IFuelDock dock = (IFuelDock) tile;
-
+        if (tile instanceof IFuelDock dock) {
             for (final ILandingPadAttachable connectedTile : dock.getConnectedTiles()) {
                 if (connectedTile instanceof TileEntityLaunchController) {
                     final TileEntityLaunchController launchController = (TileEntityLaunchController) event.world

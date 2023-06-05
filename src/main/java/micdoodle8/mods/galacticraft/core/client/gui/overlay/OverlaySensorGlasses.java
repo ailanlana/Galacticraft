@@ -1,15 +1,5 @@
 package micdoodle8.mods.galacticraft.core.client.gui.overlay;
 
-import java.util.Iterator;
-
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStatsClient;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-import micdoodle8.mods.galacticraft.core.util.ClientUtil;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.ScaledResolution;
@@ -24,6 +14,13 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStatsClient;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
+import micdoodle8.mods.galacticraft.core.util.ClientUtil;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
 
 @SideOnly(Side.CLIENT)
 public class OverlaySensorGlasses extends Overlay {
@@ -79,7 +76,6 @@ public class OverlaySensorGlasses extends Overlay {
 
     public static void renderSensorGlassesValueableBlocks(ItemStack stack, EntityPlayer player,
             ScaledResolution resolution, float partialTicks, boolean hasScreen, int mouseX, int mouseY) {
-        final Iterator<BlockVec3> var51 = ClientProxyCore.valueableBlocks.iterator();
         double var52;
         double var58;
         double var59;
@@ -87,9 +83,7 @@ public class OverlaySensorGlasses extends Overlay {
         double var21;
         float var60;
 
-        while (var51.hasNext()) {
-            final BlockVec3 coords = var51.next();
-
+        for (BlockVec3 coords : ClientProxyCore.valueableBlocks) {
             var52 = ClientProxyCore.playerPosX - coords.x - 0.5D;
             var58 = ClientProxyCore.playerPosY - coords.y - 0.5D;
             var59 = ClientProxyCore.playerPosZ - coords.z - 0.5D;

@@ -1,9 +1,5 @@
 package micdoodle8.mods.galacticraft.core.client.render.item;
 
-import micdoodle8.mods.galacticraft.api.entity.IRocketType.EnumRocketType;
-import micdoodle8.mods.galacticraft.api.prefab.entity.EntitySpaceshipBase;
-import micdoodle8.mods.galacticraft.core.entities.EntityTier1Rocket;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -17,6 +13,9 @@ import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import micdoodle8.mods.galacticraft.api.entity.IRocketType.EnumRocketType;
+import micdoodle8.mods.galacticraft.api.prefab.entity.EntitySpaceshipBase;
+import micdoodle8.mods.galacticraft.core.entities.EntityTier1Rocket;
 
 public class ItemRendererTier1Rocket implements IItemRenderer {
 
@@ -91,7 +90,7 @@ public class ItemRendererTier1Rocket implements IItemRenderer {
             GL11.glTranslatef(0F, 2.0F, 0F);
             GL11.glScalef(5.2F, 5.2F, 5.2F);
 
-            if (player != null && player.ridingEntity != null && player.ridingEntity instanceof EntityTier1Rocket) {
+            if (player != null && player.ridingEntity instanceof EntityTier1Rocket) {
                 GL11.glScalef(0.0F, 0.0F, 0.0F);
             }
         }
@@ -103,7 +102,7 @@ public class ItemRendererTier1Rocket implements IItemRenderer {
             GL11.glRotatef(73, 1.0F, 0, 0);
             GL11.glScalef(5.2F, 5.2F, 5.2F);
 
-            if (player != null && player.ridingEntity != null && player.ridingEntity instanceof EntityTier1Rocket) {
+            if (player != null && player.ridingEntity instanceof EntityTier1Rocket) {
                 GL11.glScalef(0.0F, 0.0F, 0.0F);
             }
         }
@@ -132,18 +131,13 @@ public class ItemRendererTier1Rocket implements IItemRenderer {
      */
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-        switch (type) {
-            case ENTITY:
-                return true;
-            case EQUIPPED:
-                return true;
-            case EQUIPPED_FIRST_PERSON:
-                return true;
-            case INVENTORY:
-                return true;
-            default:
-                return false;
-        }
+        return switch (type) {
+            case ENTITY -> true;
+            case EQUIPPED -> true;
+            case EQUIPPED_FIRST_PERSON -> true;
+            case INVENTORY -> true;
+            default -> false;
+        };
     }
 
     @Override

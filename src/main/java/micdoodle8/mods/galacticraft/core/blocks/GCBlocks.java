@@ -2,6 +2,16 @@ package micdoodle8.mods.galacticraft.core.blocks;
 
 import java.util.ArrayList;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.MapColor;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
+
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.registry.GameRegistry;
 import micdoodle8.mods.galacticraft.core.items.ItemBlockAirLock;
 import micdoodle8.mods.galacticraft.core.items.ItemBlockAluminumWire;
 import micdoodle8.mods.galacticraft.core.items.ItemBlockArclamp;
@@ -21,17 +31,6 @@ import micdoodle8.mods.galacticraft.core.items.ItemBlockSolar;
 import micdoodle8.mods.galacticraft.core.items.ItemBlockThruster;
 import micdoodle8.mods.galacticraft.core.items.ItemBlockWallGC;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
-
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class GCBlocks {
 
@@ -250,11 +249,11 @@ public class GCBlocks {
             try {
                 try {
                     // This is the more recent TConstruct class
-                    final Class clazz = Class.forName("slimeknights.tconstruct.gadgets.TinkerGadgets");
+                    final Class<?> clazz = Class.forName("slimeknights.tconstruct.gadgets.TinkerGadgets");
                     modTorch = (Block) clazz.getField("stoneTorch").get(null);
                 } catch (final Exception e) {
                     // This is the older TConstruct class
-                    final Class clazz = Class.forName("tconstruct.world.TinkerWorld");
+                    final Class<?> clazz = Class.forName("tconstruct.world.TinkerWorld");
                     modTorch = (Block) clazz.getField("stoneTorch").get(null);
                 }
             } catch (final Exception e) {}

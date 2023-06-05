@@ -2,11 +2,6 @@ package micdoodle8.mods.galacticraft.planets.asteroids.items;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.item.IItemThermal;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumRarity;
@@ -16,6 +11,10 @@ import net.minecraft.util.IIcon;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.item.IItemThermal;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
+import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
 
 public class ItemThermalPadding extends Item implements IItemThermal {
 
@@ -24,7 +23,6 @@ public class ItemThermalPadding extends Item implements IItemThermal {
     protected IIcon[] icons = new IIcon[ItemThermalPadding.names.length];
 
     public ItemThermalPadding(String assetName) {
-        super();
         this.setMaxDamage(0);
         this.setHasSubtypes(true);
         this.setMaxStackSize(1);
@@ -34,10 +32,8 @@ public class ItemThermalPadding extends Item implements IItemThermal {
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIconFromDamageForRenderPass(int damage, int pass) {
-        if (pass == 1) {
-            if (this.icons.length > damage + 4) {
-                return this.icons[damage + 4];
-            }
+        if (pass == 1 && this.icons.length > damage + 4) {
+            return this.icons[damage + 4];
         }
 
         return this.getIconFromDamage(damage);
@@ -67,7 +63,8 @@ public class ItemThermalPadding extends Item implements IItemThermal {
         int i = 0;
 
         for (final String name : ItemThermalPadding.names) {
-            this.icons[i++] = iconRegister.registerIcon(AsteroidsModule.TEXTURE_PREFIX + name);
+            this.icons[i] = iconRegister.registerIcon(AsteroidsModule.TEXTURE_PREFIX + name);
+            i++;
         }
     }
 
@@ -80,9 +77,8 @@ public class ItemThermalPadding extends Item implements IItemThermal {
         return super.getIconFromDamage(damage);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         for (int i = 0; i < ItemThermalPadding.names.length / 2; i++) {
             par3List.add(new ItemStack(par1, 1, i));
         }

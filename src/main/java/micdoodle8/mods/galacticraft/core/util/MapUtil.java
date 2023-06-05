@@ -20,14 +20,6 @@ import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageInputStream;
 import javax.imageio.stream.ImageOutputStream;
 
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.client.DynamicTextureProper;
-import micdoodle8.mods.galacticraft.core.client.gui.screen.DrawGameScreen;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -48,6 +40,13 @@ import org.apache.commons.io.FileUtils;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.client.DynamicTextureProper;
+import micdoodle8.mods.galacticraft.core.client.gui.screen.DrawGameScreen;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
 
 public class MapUtil {
 
@@ -62,8 +61,8 @@ public class MapUtil {
     // public static int WORLD_BORDER = 14992;
     private static final int SIZE_STD = 176;
     public static final int SIZE_STD2 = SIZE_STD * 2;
-    private static final LinkedList<MapGen> queuedMaps = new LinkedList();
-    public static LinkedList<String> clientRequests = new LinkedList();
+    private static final LinkedList<MapGen> queuedMaps = new LinkedList<>();
+    public static LinkedList<String> clientRequests = new LinkedList<>();
 
     static {
         // TODO: Deal with mods like ExtraBiomes
@@ -322,7 +321,7 @@ public class MapUtil {
             if (map.BiomeMapOneTick()) {
                 // Finished
                 map.writeOutputFile(true);
-                if (map.biomeMapFile.getName().equals("Overworld192.bin")) {
+                if ("Overworld192.bin".equals(map.biomeMapFile.getName())) {
                     doneOverworldTexture = true;
                 }
                 if (doingSlow) {
@@ -352,8 +351,8 @@ public class MapUtil {
                 overworldImage.getWidth(),
                 overworldImage.getHeight(),
                 BufferedImage.TYPE_INT_RGB);
-        final TreeMap<Integer, Integer> mapColPos = new TreeMap();
-        final TreeMap<Integer, Integer> mapColPosB = new TreeMap();
+        final TreeMap<Integer, Integer> mapColPos = new TreeMap<>();
+        final TreeMap<Integer, Integer> mapColPosB = new TreeMap<>();
         int count = 0;
         for (int x = 0; x < overworldImage.getWidth(); x += 4) {
             for (int z = 0; z < overworldImage.getHeight(); z += 4) {
@@ -417,8 +416,8 @@ public class MapUtil {
         final ImageReadParam param = reader.getDefaultReadParam();
 
         ImageTypeSpecifier typeToUse = null;
-        for (final Iterator i = reader.getImageTypes(0); i.hasNext();) {
-            final ImageTypeSpecifier type = (ImageTypeSpecifier) i.next();
+        for (final Iterator<ImageTypeSpecifier> i = reader.getImageTypes(0); i.hasNext();) {
+            final ImageTypeSpecifier type = i.next();
             if (type.getColorModel().getColorSpace().isCS_sRGB()) {
                 typeToUse = type;
             }
@@ -723,12 +722,10 @@ public class MapUtil {
             final BlockVec3 bv = MapUtil.biomeColours.get(in);
             if (bv == null) {
                 rv = BiomeGenBase.getBiome(in).color;
+            } else if (bv.z > 0 && MapUtil.rand.nextInt(100) < bv.z) {
+                rv = bv.y;
             } else {
-                if (bv.z > 0 && MapUtil.rand.nextInt(100) < bv.z) {
-                    rv = bv.y;
-                } else {
-                    rv = bv.x;
-                }
+                rv = bv.x;
             }
         }
         if (rv == 0x9c2424 && MapUtil.rand.nextInt(2) == 0) {

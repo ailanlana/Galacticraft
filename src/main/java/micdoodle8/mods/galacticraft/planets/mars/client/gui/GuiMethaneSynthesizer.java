@@ -3,6 +3,16 @@ package micdoodle8.mods.galacticraft.planets.mars.client.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.gui.container.GuiContainerGC;
 import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementInfoRegion;
@@ -16,17 +26,6 @@ import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
 import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
 import micdoodle8.mods.galacticraft.planets.mars.inventory.ContainerMethaneSynthesizer;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityMethaneSynthesizer;
-
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-
-import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiMethaneSynthesizer extends GuiContainerGC {
@@ -86,7 +85,6 @@ public class GuiMethaneSynthesizer extends GuiContainerGC {
         this.ySize = 168;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void initGui() {
         super.initGui();
@@ -163,8 +161,7 @@ public class GuiMethaneSynthesizer extends GuiContainerGC {
                         this.height,
                         this));
 
-        fuelSlotDesc = new ArrayList<>();
-        fuelSlotDesc.addAll(GCCoreUtil.translateWithSplit("gui.hydrogenInput.desc.0"));
+        fuelSlotDesc = new ArrayList<>(GCCoreUtil.translateWithSplit("gui.hydrogenInput.desc.0"));
         fuelSlotDesc.addAll(GCCoreUtil.translateWithSplit("gui.hydrogenInput.desc.1"));
         fuelSlotDesc.add("(" + GCCoreUtil.translate("gui.message.withAtmosphere0.name"));
         fuelSlotDesc.add(GCCoreUtil.lowerCaseNoun("fluid.hydrogen"));
@@ -321,7 +318,7 @@ public class GuiMethaneSynthesizer extends GuiContainerGC {
         FluidStack gasTankContents = this.tileEntity.gasTank != null ? this.tileEntity.gasTank.getFluid() : null;
         if (gasTankContents != null) {
             String gasname = FluidRegistry.getFluid("hydrogen").getUnlocalizedName();
-            if (gasname == null || gasname.equals("fluid.hydrogen")) {
+            if (gasname == null || "fluid.hydrogen".equals(gasname)) {
                 gasname = GCCoreUtil.translate(gasTankContents.getFluid().getUnlocalizedName());
             }
             gasTankDesc.add("(" + gasname + ")");
@@ -339,7 +336,7 @@ public class GuiMethaneSynthesizer extends GuiContainerGC {
         gasTankContents = this.tileEntity.gasTank2 != null ? this.tileEntity.gasTank2.getFluid() : null;
         if (gasTankContents != null) {
             String gasname = FluidRegistry.getFluid("carbondioxide").getUnlocalizedName();
-            if (gasname == null || gasname.equals("fluid.carbondioxide")) {
+            if (gasname == null || "fluid.carbondioxide".equals(gasname)) {
                 gasname = GCCoreUtil.translate(gasTankContents.getFluid().getUnlocalizedName());
             }
             gasTankDesc.add("(" + gasname + ")");
@@ -356,7 +353,7 @@ public class GuiMethaneSynthesizer extends GuiContainerGC {
         gasTankContents = this.tileEntity.liquidTank != null ? this.tileEntity.liquidTank.getFluid() : null;
         if (gasTankContents != null) {
             String gasname = FluidRegistry.getFluid("methane").getUnlocalizedName();
-            if (gasname == null || gasname.equals("fluid.methane")) {
+            if (gasname == null || "fluid.methane".equals(gasname)) {
                 gasname = GCCoreUtil.translate(gasTankContents.getFluid().getUnlocalizedName());
             }
             fuelTankDesc.add("(" + gasname + ")");

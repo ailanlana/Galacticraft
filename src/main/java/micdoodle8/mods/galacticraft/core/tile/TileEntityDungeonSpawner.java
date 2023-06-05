@@ -4,14 +4,6 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.entities.EntityEvolvedCreeper;
-import micdoodle8.mods.galacticraft.core.entities.EntityEvolvedSkeleton;
-import micdoodle8.mods.galacticraft.core.entities.EntityEvolvedSpider;
-import micdoodle8.mods.galacticraft.core.entities.EntityEvolvedZombie;
-import micdoodle8.mods.galacticraft.core.entities.EntitySkeletonBoss;
-import micdoodle8.mods.galacticraft.core.entities.IBoss;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntityMob;
@@ -19,6 +11,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.core.entities.EntityEvolvedCreeper;
+import micdoodle8.mods.galacticraft.core.entities.EntityEvolvedSkeleton;
+import micdoodle8.mods.galacticraft.core.entities.EntityEvolvedSpider;
+import micdoodle8.mods.galacticraft.core.entities.EntityEvolvedZombie;
+import micdoodle8.mods.galacticraft.core.entities.EntitySkeletonBoss;
+import micdoodle8.mods.galacticraft.core.entities.IBoss;
 
 public class TileEntityDungeonSpawner extends TileEntityAdvanced {
 
@@ -40,7 +40,6 @@ public class TileEntityDungeonSpawner extends TileEntityAdvanced {
         this.bossClass = bossClass;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void updateEntity() {
         super.updateEntity();
@@ -51,7 +50,7 @@ public class TileEntityDungeonSpawner extends TileEntityAdvanced {
 
         if (!this.worldObj.isRemote) {
             final Vector3 thisVec = new Vector3(this);
-            final List<Entity> l = this.worldObj.getEntitiesWithinAABB(
+            final List<? extends IBoss> l = this.worldObj.getEntitiesWithinAABB(
                     this.bossClass,
                     AxisAlignedBB.getBoundingBox(
                             thisVec.x - 15,
@@ -61,16 +60,16 @@ public class TileEntityDungeonSpawner extends TileEntityAdvanced {
                             thisVec.y + 15,
                             thisVec.z + 15));
 
-            for (final Entity e : l) {
-                if (!e.isDead) {
-                    this.boss = (IBoss) e;
+            for (final IBoss e : l) {
+                if (!((Entity) e).isDead) {
+                    this.boss = e;
                     this.boss.setRoom(this.roomCoords, this.roomSize);
                     this.spawned = true;
                     this.isBossDefeated = false;
                 }
             }
 
-            List<Entity> entitiesWithin = this.worldObj.getEntitiesWithinAABB(
+            List<EntityMob> entitiesWithin = this.worldObj.getEntitiesWithinAABB(
                     EntityMob.class,
                     AxisAlignedBB.getBoundingBox(
                             this.roomCoords.intX() - 4,
@@ -97,7 +96,7 @@ public class TileEntityDungeonSpawner extends TileEntityAdvanced {
                 }
             }
 
-            entitiesWithin = this.worldObj.getEntitiesWithinAABB(
+            List<EntityPlayer> playersWithin = this.worldObj.getEntitiesWithinAABB(
                     EntityPlayer.class,
                     AxisAlignedBB.getBoundingBox(
                             this.roomCoords.intX() - 1,
@@ -107,26 +106,22 @@ public class TileEntityDungeonSpawner extends TileEntityAdvanced {
                             this.roomCoords.intY() + this.roomSize.intY(),
                             this.roomCoords.intZ() + this.roomSize.intZ()));
 
-            if (this.playerCheated) {
-                if (!entitiesWithin.isEmpty()) {
-                    this.isBossDefeated = false;
-                    this.spawned = false;
-                    this.lastPlayerInRange = false;
-                    this.playerCheated = false;
-                }
+            if (this.playerCheated && !playersWithin.isEmpty()) {
+                this.isBossDefeated = false;
+                this.spawned = false;
+                this.lastPlayerInRange = false;
+                this.playerCheated = false;
             }
 
-            this.playerInRange = !entitiesWithin.isEmpty();
+            this.playerInRange = !playersWithin.isEmpty();
 
-            if (this.playerInRange && !this.lastPlayerInRange) {
-                if (this.boss != null && !this.spawned) {
-                    if (this.boss instanceof Entity) {
-                        this.worldObj.spawnEntityInWorld((EntityLiving) this.boss);
-                        this.playSpawnSound((Entity) this.boss);
-                        this.spawned = true;
-                        this.boss.onBossSpawned(this);
-                        this.boss.setRoom(this.roomCoords, this.roomSize);
-                    }
+            if (this.playerInRange && !this.lastPlayerInRange && this.boss != null && !this.spawned) {
+                if (this.boss instanceof Entity) {
+                    this.worldObj.spawnEntityInWorld((EntityLiving) this.boss);
+                    this.playSpawnSound((Entity) this.boss);
+                    this.spawned = true;
+                    this.boss.onBossSpawned(this);
+                    this.boss.setRoom(this.roomCoords, this.roomSize);
                 }
             }
 

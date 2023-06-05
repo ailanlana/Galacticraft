@@ -3,13 +3,6 @@ package micdoodle8.mods.galacticraft.core.util;
 import java.util.Arrays;
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.entities.EntityLanderBase;
-import micdoodle8.mods.galacticraft.core.inventory.ContainerBuggy;
-import micdoodle8.mods.galacticraft.core.inventory.ContainerParaChest;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -27,6 +20,12 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.entities.EntityLanderBase;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerBuggy;
+import micdoodle8.mods.galacticraft.core.inventory.ContainerParaChest;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
 
 public class GCCoreUtil {
 
@@ -99,6 +98,7 @@ public class GCCoreUtil {
         return eggID;
     }
 
+    @SuppressWarnings("deprecation")
     public static void registerGalacticraftNonMobEntity(Class<? extends Entity> var0, String var1, int trackingDistance,
             int updateFreq, boolean sendVel) {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
@@ -169,7 +169,7 @@ public class GCCoreUtil {
 
     public static String lowerCaseNoun(String string) {
         final Language l = Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage();
-        if (l.getLanguageCode().equals("de_DE")) {
+        if ("de_DE".equals(l.getLanguageCode())) {
             return string;
         }
         return GCCoreUtil.translate(string).toLowerCase();

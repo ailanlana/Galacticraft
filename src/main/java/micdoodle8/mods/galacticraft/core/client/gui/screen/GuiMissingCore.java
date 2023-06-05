@@ -2,9 +2,6 @@ package micdoodle8.mods.galacticraft.core.client.gui.screen;
 
 import java.net.URI;
 
-import micdoodle8.mods.galacticraft.core.util.ColorUtil;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -13,6 +10,8 @@ import net.minecraft.util.EnumChatFormatting;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.util.ColorUtil;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 @SideOnly(Side.CLIENT)
 public class GuiMissingCore extends GuiScreen {
@@ -83,7 +82,7 @@ public class GuiMissingCore extends GuiScreen {
         if (x > this.urlX && x < this.urlX + this.urlWidth && y > this.urlY && y < this.urlY + this.urlHeight) {
             try {
                 final Class<?> oclass = Class.forName("java.awt.Desktop");
-                final Object object = oclass.getMethod("getDesktop", new Class[0]).invoke(null);
+                final Object object = oclass.getMethod("getDesktop").invoke(null);
                 oclass.getMethod("browse", URI.class)
                         .invoke(object, new URI("https://github.com/GTNewHorizons/Galacticraft"));
             } catch (final Throwable throwable) {

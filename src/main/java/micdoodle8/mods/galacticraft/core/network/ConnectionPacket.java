@@ -3,12 +3,8 @@ package micdoodle8.mods.galacticraft.core.network;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-
-import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
-import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
-import micdoodle8.mods.galacticraft.core.util.GCLog;
-import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,6 +19,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
+import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
+import micdoodle8.mods.galacticraft.core.util.GCLog;
+import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 
 public class ConnectionPacket {
 
@@ -71,18 +71,14 @@ public class ConnectionPacket {
     }
 
     public static FMLProxyPacket createDimPacket(Integer[] dims) {
-        final ArrayList<Integer> data = new ArrayList();
-        for (final Integer dim : dims) {
-            data.add(dim);
-        }
+        final ArrayList<Integer> data = new ArrayList<>();
+        Collections.addAll(data, dims);
         return createPacket((byte) 101, data);
     }
 
     public static FMLProxyPacket createSSPacket(Integer[] dims) {
-        final ArrayList<Integer> data = new ArrayList();
-        for (final Integer dim : dims) {
-            data.add(dim);
-        }
+        final ArrayList<Integer> data = new ArrayList<>();
+        Collections.addAll(data, dims);
         return createPacket((byte) 102, data);
     }
 

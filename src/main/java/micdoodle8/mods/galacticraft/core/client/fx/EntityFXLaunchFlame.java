@@ -2,11 +2,6 @@ package micdoodle8.mods.galacticraft.core.client.fx;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
-
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
@@ -17,6 +12,10 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
 
 @SideOnly(Side.CLIENT)
 public class EntityFXLaunchFlame extends EntityFX {
@@ -118,17 +117,15 @@ public class EntityFXLaunchFlame extends EntityFX {
                 .getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(1.0D, 0.5D, 1.0D));
 
         if (var3 != null) {
-            for (int var4 = 0; var4 < var3.size(); ++var4) {
-                final Entity var5 = (Entity) var3.get(var4);
+            for (Object element : var3) {
+                final Entity var5 = (Entity) element;
 
-                if (var5 instanceof EntityLivingBase) {
-                    if (!var5.isDead && !var5.isBurning() && !var5.equals(this.ridingEntity)) {
-                        var5.setFire(3);
-                        GalacticraftCore.packetPipeline.sendToServer(
-                                new PacketSimple(
-                                        EnumSimplePacket.S_SET_ENTITY_FIRE,
-                                        new Object[] { var5.getEntityId() }));
-                    }
+                if (var5 instanceof EntityLivingBase && !var5.isDead
+                        && !var5.isBurning()
+                        && !var5.equals(this.ridingEntity)) {
+                    var5.setFire(3);
+                    GalacticraftCore.packetPipeline.sendToServer(
+                            new PacketSimple(EnumSimplePacket.S_SET_ENTITY_FIRE, new Object[] { var5.getEntityId() }));
                 }
             }
         }

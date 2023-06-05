@@ -4,17 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
-import micdoodle8.mods.galacticraft.api.entity.ITelemetry;
-import micdoodle8.mods.galacticraft.api.prefab.entity.EntitySpaceshipBase;
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3Dim;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
-import micdoodle8.mods.galacticraft.core.util.GCLog;
-import micdoodle8.mods.galacticraft.core.util.WorldUtil;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -33,11 +22,22 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.WorldProvider;
 
 import com.mojang.authlib.GameProfile;
+
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import micdoodle8.mods.galacticraft.api.entity.ITelemetry;
+import micdoodle8.mods.galacticraft.api.prefab.entity.EntitySpaceshipBase;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3Dim;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
+import micdoodle8.mods.galacticraft.core.util.GCLog;
+import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 
 public class TileEntityTelemetry extends TileEntity {
 
-    public Class clientClass;
+    public Class<? extends Entity> clientClass;
     public int[] clientData = { -1 };
     public String clientName;
     public GameProfile clientGameProfile = null;
@@ -87,7 +87,7 @@ public class TileEntityTelemetry extends TileEntity {
                     if (this.linkedEntity instanceof EntityPlayerMP) {
                         name = "$" + this.linkedEntity.getCommandSenderName();
                     } else {
-                        name = (String) EntityList.classToStringMapping.get(this.linkedEntity.getClass());
+                        name = EntityList.classToStringMapping.get(this.linkedEntity.getClass());
                     }
 
                     if (name == null) {
@@ -107,8 +107,7 @@ public class TileEntityTelemetry extends TileEntity {
 
                     if (this.linkedEntity instanceof ITelemetry) {
                         ((ITelemetry) this.linkedEntity).transmitData(data);
-                    } else if (this.linkedEntity instanceof EntityLivingBase) {
-                        final EntityLivingBase eLiving = (EntityLivingBase) this.linkedEntity;
+                    } else if (this.linkedEntity instanceof EntityLivingBase eLiving) {
                         data[0] = eLiving.hurtTime;
 
                         // Calculate a "pulse rate" based on motion and taking damage
@@ -288,10 +287,8 @@ public class TileEntityTelemetry extends TileEntity {
     public static void updateLinkedPlayer(EntityPlayerMP playerOld, EntityPlayerMP playerNew) {
         for (final BlockVec3Dim telemeter : loadedList) {
             final TileEntity te = telemeter.getTileEntityNoLoad();
-            if (te instanceof TileEntityTelemetry) {
-                if (((TileEntityTelemetry) te).linkedEntity == playerOld) {
-                    ((TileEntityTelemetry) te).linkedEntity = playerNew;
-                }
+            if (te instanceof TileEntityTelemetry && ((TileEntityTelemetry) te).linkedEntity == playerOld) {
+                ((TileEntityTelemetry) te).linkedEntity = playerNew;
             }
         }
     }

@@ -4,6 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
+import com.google.common.collect.Maps;
+
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.gui.container.GuiContainerGC;
 import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementInfoRegion;
@@ -18,16 +28,6 @@ import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
 import micdoodle8.mods.galacticraft.planets.asteroids.inventory.ContainerShortRangeTelepad;
 import micdoodle8.mods.galacticraft.planets.asteroids.network.PacketSimpleAsteroids;
 import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityShortRangeTelepad;
-
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
-import com.google.common.collect.Maps;
 
 public class GuiShortRangeTelepad extends GuiContainerGC implements ITextBoxCallback {
 
@@ -63,20 +63,14 @@ public class GuiShortRangeTelepad extends GuiContainerGC implements ITextBoxCall
 
     @Override
     protected void keyTyped(char keyChar, int keyID) {
-        if (keyID != Keyboard.KEY_ESCAPE && keyID != this.mc.gameSettings.keyBindInventory.getKeyCode()) {
-            if (this.address.keyTyped(keyChar, keyID)) {
-                return;
-            }
-
-            if (this.targetAddress.keyTyped(keyChar, keyID)) {
-                return;
-            }
+        if (keyID != Keyboard.KEY_ESCAPE && keyID != this.mc.gameSettings.keyBindInventory.getKeyCode()
+                && (this.address.keyTyped(keyChar, keyID) || this.targetAddress.keyTyped(keyChar, keyID))) {
+            return;
         }
 
         super.keyTyped(keyChar, keyID);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void initGui() {
         super.initGui();
@@ -114,8 +108,7 @@ public class GuiShortRangeTelepad extends GuiContainerGC implements ITextBoxCall
                         this.width,
                         this.height,
                         this));
-        batterySlotDesc = new ArrayList<>();
-        batterySlotDesc.addAll(GCCoreUtil.translateWithSplit("gui.telepad.desc.0"));
+        batterySlotDesc = new ArrayList<>(GCCoreUtil.translateWithSplit("gui.telepad.desc.0"));
         this.infoRegions.add(
                 new GuiElementInfoRegion(
                         (this.width - this.xSize) / 2 + 5,
@@ -126,8 +119,7 @@ public class GuiShortRangeTelepad extends GuiContainerGC implements ITextBoxCall
                         this.width,
                         this.height,
                         this));
-        batterySlotDesc = new ArrayList<>();
-        batterySlotDesc.addAll(GCCoreUtil.translateWithSplit("gui.telepad.desc.1"));
+        batterySlotDesc = new ArrayList<>(GCCoreUtil.translateWithSplit("gui.telepad.desc.1"));
         this.infoRegions.add(
                 new GuiElementInfoRegion(
                         (this.width - this.xSize) / 2 + 5,
@@ -234,7 +226,8 @@ public class GuiShortRangeTelepad extends GuiContainerGC implements ITextBoxCall
     public String getInitialText(GuiElementTextBox textBox) {
         if (textBox.equals(this.address)) {
             return String.valueOf(this.telepad.address);
-        } else if (textBox.equals(this.targetAddress)) {
+        }
+        if (textBox.equals(this.targetAddress)) {
             return String.valueOf(this.telepad.targetAddress);
         }
 
@@ -246,7 +239,8 @@ public class GuiShortRangeTelepad extends GuiContainerGC implements ITextBoxCall
         if (textBox.equals(this.address)) {
             return this.telepad.addressValid ? ColorUtil.to32BitColor(255, 20, 255, 20)
                     : ColorUtil.to32BitColor(255, 255, 25, 25);
-        } else if (textBox.equals(this.targetAddress)) {
+        }
+        if (textBox.equals(this.targetAddress)) {
             return this.telepad.targetAddressResult == TileEntityShortRangeTelepad.EnumTelepadSearchResult.VALID
                     ? ColorUtil.to32BitColor(255, 20, 255, 20)
                     : ColorUtil.to32BitColor(255, 255, 25, 25);

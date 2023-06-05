@@ -2,12 +2,6 @@ package micdoodle8.mods.galacticraft.planets.asteroids.tile;
 
 import java.util.LinkedList;
 
-import micdoodle8.mods.galacticraft.api.power.ILaserNode;
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityAdvanced;
-import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -15,6 +9,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
 import cpw.mods.fml.relauncher.Side;
+import micdoodle8.mods.galacticraft.api.power.ILaserNode;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityAdvanced;
+import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
 
 public abstract class TileEntityBeamOutput extends TileEntityAdvanced implements ILaserNode {
 
@@ -34,7 +33,7 @@ public abstract class TileEntityBeamOutput extends TileEntityAdvanced implements
             final TileEntity tileAtTarget = this.worldObj
                     .getTileEntity(this.preLoadTarget.x, this.preLoadTarget.y, this.preLoadTarget.z);
 
-            if (tileAtTarget != null && tileAtTarget instanceof ILaserNode) {
+            if (tileAtTarget instanceof ILaserNode) {
                 this.setTarget((ILaserNode) tileAtTarget);
                 this.preLoadTarget = null;
             }
@@ -208,7 +207,8 @@ public abstract class TileEntityBeamOutput extends TileEntityAdvanced implements
 
         if (thisDistance < otherDistance) {
             return 1;
-        } else if (thisDistance > otherDistance) {
+        }
+        if (thisDistance > otherDistance) {
             return -1;
         }
 
@@ -230,15 +230,14 @@ public abstract class TileEntityBeamOutput extends TileEntityAdvanced implements
                 }
             }
 
-            if (index == -1) {
-                // This shouldn't happen, but just in case...
-                this.initiateReflector();
-            } else {
+            if (index != -1) {
                 index++;
                 index %= this.nodeList.size();
                 this.setTarget(this.nodeList.get(index));
                 return true;
             }
+            // This shouldn't happen, but just in case...
+            this.initiateReflector();
         }
 
         return false;
@@ -250,11 +249,9 @@ public abstract class TileEntityBeamOutput extends TileEntityAdvanced implements
             final TileEntity tileAtTarget = this.worldObj
                     .getTileEntity(this.targetVec.x, this.targetVec.y, this.targetVec.z);
 
-            if (tileAtTarget != null && tileAtTarget instanceof ILaserNode) {
+            if (tileAtTarget instanceof ILaserNode) {
                 return (ILaserNode) tileAtTarget;
             }
-
-            return null;
         }
 
         return null;

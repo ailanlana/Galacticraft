@@ -2,6 +2,27 @@ package micdoodle8.mods.galacticraft.planets.asteroids;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.model.AdvancedModelLoader;
+import net.minecraftforge.client.model.IModelCustom;
+import net.minecraftforge.common.MinecraftForge;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.relauncher.Side;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.planets.GuiIdsPlanets;
 import micdoodle8.mods.galacticraft.planets.IPlanetsModuleClient;
@@ -43,28 +64,6 @@ import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityBeamReflect
 import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityMinerBase;
 import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityShortRangeTelepad;
 import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityTreasureChestAsteroids;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
-import net.minecraftforge.common.MinecraftForge;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.relauncher.Side;
 
 public class AsteroidsModuleClient implements IPlanetsModuleClient {
 
@@ -186,15 +185,13 @@ public class AsteroidsModuleClient implements IPlanetsModuleClient {
             EntityFX particle = null;
             final double viewDistance = 64.0D;
 
-            if (dX * dX + dY * dY + dZ * dZ < viewDistance * viewDistance) {
-                if (particleID.equals("portalBlue")) {
-                    particle = new EntityFXTeleport(
-                            mc.theWorld,
-                            position,
-                            motion,
-                            (TileEntityShortRangeTelepad) extraData[0],
-                            (Boolean) extraData[1]);
-                }
+            if (dX * dX + dY * dY + dZ * dZ < viewDistance * viewDistance && "portalBlue".equals(particleID)) {
+                particle = new EntityFXTeleport(
+                        mc.theWorld,
+                        position,
+                        motion,
+                        (TileEntityShortRangeTelepad) extraData[0],
+                        (Boolean) extraData[1]);
             }
 
             if (particle != null) {

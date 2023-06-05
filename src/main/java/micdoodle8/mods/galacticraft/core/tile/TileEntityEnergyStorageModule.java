@@ -4,14 +4,6 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
-import micdoodle8.mods.galacticraft.api.item.IItemElectricBase;
-import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
-import micdoodle8.mods.galacticraft.api.transmission.tile.IConnector;
-import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
-import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
-import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectricalSource;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -19,6 +11,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import micdoodle8.mods.galacticraft.api.item.IItemElectricBase;
+import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
+import micdoodle8.mods.galacticraft.api.transmission.tile.IConnector;
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
+import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectricalSource;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class TileEntityEnergyStorageModule extends TileBaseUniversalElectricalSource
         implements ISidedInventory, IConnector {
@@ -75,11 +75,10 @@ public class TileEntityEnergyStorageModule extends TileBaseUniversalElectricalSo
         }
 
         final float energy = this.storage.getEnergyStoredGC();
-        if (this.getTierGC() == 1 && !this.worldObj.isRemote) {
-            if (this.lastEnergy - energy > this.storage.getMaxExtract() - 1) {
-                // Deplete faster if being drained at maximum output
-                this.storage.extractEnergyGC(25, false);
-            }
+        if (this.getTierGC() == 1 && !this.worldObj.isRemote
+                && this.lastEnergy - energy > this.storage.getMaxExtract() - 1) {
+            // Deplete faster if being drained at maximum output
+            this.storage.extractEnergyGC(25, false);
         }
         this.lastEnergy = energy;
 
@@ -171,25 +170,22 @@ public class TileEntityEnergyStorageModule extends TileBaseUniversalElectricalSo
 
     @Override
     public ItemStack decrStackSize(int par1, int par2) {
-        if (this.containingItems[par1] != null) {
-            ItemStack var3;
-
-            if (this.containingItems[par1].stackSize <= par2) {
-                var3 = this.containingItems[par1];
-                this.containingItems[par1] = null;
-                return var3;
-            } else {
-                var3 = this.containingItems[par1].splitStack(par2);
-
-                if (this.containingItems[par1].stackSize == 0) {
-                    this.containingItems[par1] = null;
-                }
-
-                return var3;
-            }
-        } else {
+        if (this.containingItems[par1] == null) {
             return null;
         }
+        ItemStack var3;
+
+        if (this.containingItems[par1].stackSize <= par2) {
+            var3 = this.containingItems[par1];
+            this.containingItems[par1] = null;
+        } else {
+            var3 = this.containingItems[par1].splitStack(par2);
+
+            if (this.containingItems[par1].stackSize == 0) {
+                this.containingItems[par1] = null;
+            }
+        }
+        return var3;
     }
 
     @Override
@@ -198,9 +194,8 @@ public class TileEntityEnergyStorageModule extends TileBaseUniversalElectricalSo
             final ItemStack var2 = this.containingItems[par1];
             this.containingItems[par1] = null;
             return var2;
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
@@ -248,7 +243,8 @@ public class TileEntityEnergyStorageModule extends TileBaseUniversalElectricalSo
         if (itemstack.getItem() instanceof IItemElectricBase) {
             if (slotID == 0) {
                 return ((IItemElectricBase) itemstack.getItem()).getTransfer(itemstack) > 0;
-            } else if (slotID == 1) {
+            }
+            if (slotID == 1) {
                 return ((IItemElectricBase) itemstack.getItem()).getElectricityStored(itemstack) > 0;
             }
         }
@@ -260,7 +256,8 @@ public class TileEntityEnergyStorageModule extends TileBaseUniversalElectricalSo
         if (itemstack.getItem() instanceof IItemElectricBase) {
             if (slotID == 0) {
                 return ((IItemElectricBase) itemstack.getItem()).getTransfer(itemstack) <= 0;
-            } else if (slotID == 1) {
+            }
+            if (slotID == 1) {
                 return ((IItemElectricBase) itemstack.getItem()).getElectricityStored(itemstack) <= 0
                         || this.getEnergyStoredGC() >= this.getMaxEnergyStoredGC();
             }
@@ -288,7 +285,7 @@ public class TileEntityEnergyStorageModule extends TileBaseUniversalElectricalSo
 
     @Override
     public boolean canConnect(ForgeDirection direction, NetworkType type) {
-        if (direction == null || direction.equals(ForgeDirection.UNKNOWN) || type != NetworkType.POWER) {
+        if (direction == null || ForgeDirection.UNKNOWN.equals(direction) || type != NetworkType.POWER) {
             return false;
         }
 

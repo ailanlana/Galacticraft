@@ -1,10 +1,5 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.client.render.item;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
-import micdoodle8.mods.galacticraft.planets.asteroids.blocks.AsteroidBlocks;
-
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -15,6 +10,9 @@ import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
+import micdoodle8.mods.galacticraft.planets.asteroids.blocks.AsteroidBlocks;
 
 public class ItemRendererWalkway implements IItemRenderer {
 
@@ -34,8 +32,7 @@ public class ItemRendererWalkway implements IItemRenderer {
                 .loadModel(new ResourceLocation(AsteroidsModule.ASSET_PREFIX, "models/walkway.obj"));
     }
 
-    private void renderWalkway(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX,
-            float translateY, float translateZ) {
+    private void renderWalkway(ItemRenderType type, ItemStack item) {
         GL11.glPushMatrix();
         this.transform(type);
 
@@ -94,18 +91,13 @@ public class ItemRendererWalkway implements IItemRenderer {
      */
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-        switch (type) {
-            case ENTITY:
-                return true;
-            case EQUIPPED:
-                return true;
-            case EQUIPPED_FIRST_PERSON:
-                return true;
-            case INVENTORY:
-                return true;
-            default:
-                return false;
-        }
+        return switch (type) {
+            case ENTITY -> true;
+            case EQUIPPED -> true;
+            case EQUIPPED_FIRST_PERSON -> true;
+            case INVENTORY -> true;
+            default -> false;
+        };
     }
 
     @Override
@@ -117,16 +109,16 @@ public class ItemRendererWalkway implements IItemRenderer {
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         switch (type) {
             case EQUIPPED:
-                this.renderWalkway(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderWalkway(type, item);
                 break;
             case EQUIPPED_FIRST_PERSON:
-                this.renderWalkway(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderWalkway(type, item);
                 break;
             case INVENTORY:
-                this.renderWalkway(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderWalkway(type, item);
                 break;
             case ENTITY:
-                this.renderWalkway(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderWalkway(type, item);
                 break;
             default:
                 break;

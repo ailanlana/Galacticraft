@@ -5,22 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import micdoodle8.mods.galacticraft.api.entity.IDockable;
-import micdoodle8.mods.galacticraft.api.tile.IFuelDock;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.items.GCItems;
-import micdoodle8.mods.galacticraft.core.network.IPacketReceiver;
-import micdoodle8.mods.galacticraft.core.network.NetworkUtil;
-import micdoodle8.mods.galacticraft.core.network.PacketControllableEntity;
-import micdoodle8.mods.galacticraft.core.network.PacketDynamic;
-import micdoodle8.mods.galacticraft.core.network.PacketEntityUpdate;
-import micdoodle8.mods.galacticraft.core.network.PacketEntityUpdate.IEntityFullSync;
-import micdoodle8.mods.galacticraft.core.tick.KeyHandlerClient;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityBuggyFueler;
-import micdoodle8.mods.galacticraft.core.util.FluidUtil;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-import micdoodle8.mods.galacticraft.core.util.WorldUtil;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.Entity;
@@ -44,6 +28,21 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
+import micdoodle8.mods.galacticraft.api.entity.IDockable;
+import micdoodle8.mods.galacticraft.api.tile.IFuelDock;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.items.GCItems;
+import micdoodle8.mods.galacticraft.core.network.IPacketReceiver;
+import micdoodle8.mods.galacticraft.core.network.NetworkUtil;
+import micdoodle8.mods.galacticraft.core.network.PacketControllableEntity;
+import micdoodle8.mods.galacticraft.core.network.PacketDynamic;
+import micdoodle8.mods.galacticraft.core.network.PacketEntityUpdate;
+import micdoodle8.mods.galacticraft.core.network.PacketEntityUpdate.IEntityFullSync;
+import micdoodle8.mods.galacticraft.core.tick.KeyHandlerClient;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityBuggyFueler;
+import micdoodle8.mods.galacticraft.core.util.FluidUtil;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 
 public class EntityBuggy extends Entity
         implements IInventory, IPacketReceiver, IDockable, IControllableEntity, IEntityFullSync {
@@ -82,9 +81,9 @@ public class EntityBuggy extends Entity
         this.rockDirection = 20;
         this.speed = 0.0D;
         this.preventEntitySpawning = true;
-        this.dataWatcher.addObject(this.currentDamage, new Integer(0));
-        this.dataWatcher.addObject(this.timeSinceHit, new Integer(0));
-        this.dataWatcher.addObject(this.rockDirection, new Integer(1));
+        this.dataWatcher.addObject(this.currentDamage, 0);
+        this.dataWatcher.addObject(this.timeSinceHit, 0);
+        this.dataWatcher.addObject(this.rockDirection, 0);
         this.ignoreFrustumCheck = true;
         this.isImmuneToFire = true;
 
@@ -198,52 +197,47 @@ public class EntityBuggy extends Entity
     public boolean attackEntityFrom(DamageSource var1, float var2) {
         if (this.isDead || var1.equals(DamageSource.cactus)) {
             return true;
-        } else {
-            final Entity e = var1.getEntity();
-            final boolean flag = var1.getEntity() instanceof EntityPlayer
-                    && ((EntityPlayer) var1.getEntity()).capabilities.isCreativeMode;
-
-            if (this.isEntityInvulnerable() || e instanceof EntityLivingBase && !(e instanceof EntityPlayer)) {
-                return false;
-            } else {
-                this.dataWatcher.updateObject(
-                        this.rockDirection,
-                        Integer.valueOf(-this.dataWatcher.getWatchableObjectInt(this.rockDirection)));
-                this.dataWatcher.updateObject(this.timeSinceHit, Integer.valueOf(10));
-                this.dataWatcher.updateObject(
-                        this.currentDamage,
-                        Integer.valueOf(
-                                (int) (this.dataWatcher.getWatchableObjectInt(this.currentDamage) + var2 * 10)));
-                this.setBeenAttacked();
-
-                if (e instanceof EntityPlayer && ((EntityPlayer) e).capabilities.isCreativeMode) {
-                    this.dataWatcher.updateObject(this.currentDamage, 100);
-                }
-
-                if (flag || this.dataWatcher.getWatchableObjectInt(this.currentDamage) > 2) {
-                    if (this.riddenByEntity != null) {
-                        this.riddenByEntity.mountEntity(this);
-                    }
-
-                    if (!this.worldObj.isRemote) {
-                        if (this.riddenByEntity != null) {
-                            this.riddenByEntity.mountEntity(this);
-                        }
-                    }
-                    if (flag) {
-                        this.setDead();
-                    } else {
-                        this.setDead();
-                        if (!this.worldObj.isRemote) {
-                            this.dropBuggyAsItem();
-                        }
-                    }
-                    this.setDead();
-                }
-
-                return true;
-            }
         }
+        final Entity e = var1.getEntity();
+        final boolean flag = var1.getEntity() instanceof EntityPlayer
+                && ((EntityPlayer) var1.getEntity()).capabilities.isCreativeMode;
+
+        if (this.isEntityInvulnerable() || e instanceof EntityLivingBase && !(e instanceof EntityPlayer)) {
+            return false;
+        }
+        this.dataWatcher.updateObject(
+                this.rockDirection,
+                Integer.valueOf(-this.dataWatcher.getWatchableObjectInt(this.rockDirection)));
+        this.dataWatcher.updateObject(this.timeSinceHit, Integer.valueOf(10));
+        this.dataWatcher.updateObject(
+                this.currentDamage,
+                Integer.valueOf((int) (this.dataWatcher.getWatchableObjectInt(this.currentDamage) + var2 * 10)));
+        this.setBeenAttacked();
+
+        if (e instanceof EntityPlayer && ((EntityPlayer) e).capabilities.isCreativeMode) {
+            this.dataWatcher.updateObject(this.currentDamage, 100);
+        }
+
+        if (flag || this.dataWatcher.getWatchableObjectInt(this.currentDamage) > 2) {
+            if (this.riddenByEntity != null) {
+                this.riddenByEntity.mountEntity(this);
+            }
+
+            if (!this.worldObj.isRemote && this.riddenByEntity != null) {
+                this.riddenByEntity.mountEntity(this);
+            }
+            if (flag) {
+                this.setDead();
+            } else {
+                this.setDead();
+                if (!this.worldObj.isRemote) {
+                    this.dropBuggyAsItem();
+                }
+            }
+            this.setDead();
+        }
+
+        return true;
     }
 
     public void dropBuggyAsItem() {
@@ -504,25 +498,22 @@ public class EntityBuggy extends Entity
 
     @Override
     public ItemStack decrStackSize(int var1, int var2) {
-        if (this.cargoItems[var1] != null) {
-            ItemStack var3;
-
-            if (this.cargoItems[var1].stackSize <= var2) {
-                var3 = this.cargoItems[var1];
-                this.cargoItems[var1] = null;
-                return var3;
-            } else {
-                var3 = this.cargoItems[var1].splitStack(var2);
-
-                if (this.cargoItems[var1].stackSize == 0) {
-                    this.cargoItems[var1] = null;
-                }
-
-                return var3;
-            }
-        } else {
+        if (this.cargoItems[var1] == null) {
             return null;
         }
+        ItemStack var3;
+
+        if (this.cargoItems[var1].stackSize <= var2) {
+            var3 = this.cargoItems[var1];
+            this.cargoItems[var1] = null;
+        } else {
+            var3 = this.cargoItems[var1].splitStack(var2);
+
+            if (this.cargoItems[var1].stackSize == 0) {
+                this.cargoItems[var1] = null;
+            }
+        }
+        return var3;
     }
 
     @Override
@@ -531,9 +522,8 @@ public class EntityBuggy extends Entity
             final ItemStack var2 = this.cargoItems[var1];
             this.cargoItems[var1] = null;
             return var2;
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
@@ -597,17 +587,15 @@ public class EntityBuggy extends Entity
             }
 
             return true;
-        } else {
-            if (this.riddenByEntity != null) {
-                if (this.riddenByEntity == var1) {
-                    var1.mountEntity(null);
-                }
-                return true;
-            } else {
-                var1.mountEntity(this);
-                return true;
-            }
         }
+        if (this.riddenByEntity != null) {
+            if (this.riddenByEntity == var1) {
+                var1.mountEntity(null);
+            }
+        } else {
+            var1.mountEntity(this);
+        }
+        return true;
     }
 
     @Override
@@ -679,24 +667,23 @@ public class EntityBuggy extends Entity
                     }
 
                     return EnumCargoLoadingState.SUCCESS;
-                } else {
-                    // Part of the stack can fill this slot but there will be some left over
-                    final int origSize = stackAt.stackSize;
-                    final int surplus = origSize + stack.stackSize - stackAt.getMaxStackSize();
-
-                    if (doAdd) {
-                        this.cargoItems[count].stackSize = stackAt.getMaxStackSize();
-                        this.markDirty();
-                    }
-
-                    stack.stackSize = surplus;
-                    if (this.addCargo(stack, doAdd) == EnumCargoLoadingState.SUCCESS) {
-                        return EnumCargoLoadingState.SUCCESS;
-                    }
-
-                    this.cargoItems[count].stackSize = origSize;
-                    return EnumCargoLoadingState.FULL;
                 }
+                // Part of the stack can fill this slot but there will be some left over
+                final int origSize = stackAt.stackSize;
+                final int surplus = origSize + stack.stackSize - stackAt.getMaxStackSize();
+
+                if (doAdd) {
+                    this.cargoItems[count].stackSize = stackAt.getMaxStackSize();
+                    this.markDirty();
+                }
+
+                stack.stackSize = surplus;
+                if (this.addCargo(stack, doAdd) == EnumCargoLoadingState.SUCCESS) {
+                    return EnumCargoLoadingState.SUCCESS;
+                }
+
+                this.cargoItems[count].stackSize = origSize;
+                return EnumCargoLoadingState.FULL;
             }
         }
 

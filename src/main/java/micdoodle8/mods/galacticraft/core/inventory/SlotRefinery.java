@@ -2,12 +2,12 @@ package micdoodle8.mods.galacticraft.core.inventory;
 
 import java.lang.reflect.Field;
 
-import micdoodle8.mods.galacticraft.core.items.ItemOilCanister;
-
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import micdoodle8.mods.galacticraft.core.items.ItemOilCanister;
 
 public class SlotRefinery extends Slot {
 
@@ -20,9 +20,10 @@ public class SlotRefinery extends Slot {
         Class<?> buildCraftClass = null;
 
         try {
-            if ((buildCraftClass = Class.forName("buildcraft.BuildCraftEnergy")) != null) {
+            buildCraftClass = Class.forName("buildcraft.BuildCraftEnergy");
+            if (buildCraftClass != null) {
                 for (final Field f : buildCraftClass.getFields()) {
-                    if (f.getName().equals("bucketOil")) {
+                    if ("bucketOil".equals(f.getName())) {
                         final Item item = (Item) f.get(null);
 
                         if (par1ItemStack.getItem() == item) {

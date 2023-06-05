@@ -2,6 +2,14 @@ package micdoodle8.mods.galacticraft.planets.asteroids.entities;
 
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
+
 import micdoodle8.mods.galacticraft.api.prefab.entity.EntityTieredRocket;
 import micdoodle8.mods.galacticraft.api.prefab.world.gen.WorldProviderSpace;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
@@ -11,14 +19,6 @@ import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
 import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
 import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.World;
 
 public class EntityTier3Rocket extends EntityTieredRocket {
 
@@ -66,7 +66,6 @@ public class EntityTier3Rocket extends EntityTieredRocket {
         return 1.75D;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void onUpdate() {
         super.onUpdate();
@@ -99,7 +98,7 @@ public class EntityTier3Rocket extends EntityTieredRocket {
                 }
 
                 if (d != 0.0) {
-                    this.motionY = -d * 2.5D * Math.cos((this.rotationPitch - 180) / 57.2957795D);
+                    this.motionY = -d * 2.5D * Math.cos((this.rotationPitch - 180) / (180D / Math.PI));
                 }
             } else {
                 this.motionY -= 0.008D;
@@ -121,11 +120,11 @@ public class EntityTier3Rocket extends EntityTieredRocket {
                     this.stopRocketSound();
                 }
             }
-        } else if (!this.hasValidFuel() && this.getLaunched() && !this.worldObj.isRemote) {
-            if (Math.abs(Math.sin(this.timeSinceLaunch / 1000)) / 10 != 0.0) {
-                this.motionY -= Math.abs(Math.sin(this.timeSinceLaunch / 1000)) / 20;
-            }
-        }
+        } else if (!this.hasValidFuel() && this.getLaunched()
+                && !this.worldObj.isRemote
+                && Math.abs(Math.sin(this.timeSinceLaunch / 1000)) / 10 != 0.0) {
+                    this.motionY -= Math.abs(Math.sin(this.timeSinceLaunch / 1000)) / 20;
+                }
     }
 
     @Override
@@ -149,9 +148,11 @@ public class EntityTier3Rocket extends EntityTieredRocket {
 
     protected void spawnParticles(boolean launched) {
         if (!this.isDead) {
-            double x1 = 3.2 * Math.cos(this.rotationYaw / 57.2957795D) * Math.sin(this.rotationPitch / 57.2957795D);
-            double z1 = 3.2 * Math.sin(this.rotationYaw / 57.2957795D) * Math.sin(this.rotationPitch / 57.2957795D);
-            double y1 = 3.2 * Math.cos((this.rotationPitch - 180) / 57.2957795D);
+            double x1 = 3.2 * Math.cos(this.rotationYaw / (180D / Math.PI))
+                    * Math.sin(this.rotationPitch / (180D / Math.PI));
+            double z1 = 3.2 * Math.sin(this.rotationYaw / (180D / Math.PI))
+                    * Math.sin(this.rotationPitch / (180D / Math.PI));
+            double y1 = 3.2 * Math.cos((this.rotationPitch - 180) / (180D / Math.PI));
             if (this.landing && this.targetVec != null) {
                 double modifier = this.posY - this.targetVec.y;
                 modifier = Math.max(modifier, 180.0);

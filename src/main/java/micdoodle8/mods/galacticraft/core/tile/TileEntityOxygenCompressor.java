@@ -2,12 +2,6 @@ package micdoodle8.mods.galacticraft.core.tile;
 
 import java.util.EnumSet;
 
-import micdoodle8.mods.galacticraft.api.item.IItemOxygenSupply;
-import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
-import micdoodle8.mods.galacticraft.core.items.ItemOxygenTank;
-import micdoodle8.mods.galacticraft.core.util.FluidUtil;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -15,6 +9,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import micdoodle8.mods.galacticraft.api.item.IItemOxygenSupply;
+import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
+import micdoodle8.mods.galacticraft.core.items.ItemOxygenTank;
+import micdoodle8.mods.galacticraft.core.util.FluidUtil;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class TileEntityOxygenCompressor extends TileEntityOxygen implements IInventory, ISidedInventory {
 
@@ -49,12 +49,10 @@ public class TileEntityOxygenCompressor extends TileEntityOxygen implements IInv
             if (this.storedOxygen > 0 && this.hasEnoughEnergyToRun) {
                 final ItemStack tank0 = this.containingItems[0];
 
-                if (tank0 != null) {
-                    if (tank0.getItem() instanceof ItemOxygenTank && tank0.getItemDamage() > 0) {
-                        tank0.setItemDamage(tank0.getItemDamage() - TileEntityOxygenCompressor.TANK_TRANSFER_SPEED);
-                        this.storedOxygen -= TileEntityOxygenCompressor.TANK_TRANSFER_SPEED;
-                        this.usingEnergy = true;
-                    }
+                if (tank0 != null && tank0.getItem() instanceof ItemOxygenTank && tank0.getItemDamage() > 0) {
+                    tank0.setItemDamage(tank0.getItemDamage() - TileEntityOxygenCompressor.TANK_TRANSFER_SPEED);
+                    this.storedOxygen -= TileEntityOxygenCompressor.TANK_TRANSFER_SPEED;
+                    this.usingEnergy = true;
                 }
             }
         }
@@ -107,25 +105,22 @@ public class TileEntityOxygenCompressor extends TileEntityOxygen implements IInv
 
     @Override
     public ItemStack decrStackSize(int par1, int par2) {
-        if (this.containingItems[par1] != null) {
-            ItemStack var3;
-
-            if (this.containingItems[par1].stackSize <= par2) {
-                var3 = this.containingItems[par1];
-                this.containingItems[par1] = null;
-                return var3;
-            } else {
-                var3 = this.containingItems[par1].splitStack(par2);
-
-                if (this.containingItems[par1].stackSize == 0) {
-                    this.containingItems[par1] = null;
-                }
-
-                return var3;
-            }
-        } else {
+        if (this.containingItems[par1] == null) {
             return null;
         }
+        ItemStack var3;
+
+        if (this.containingItems[par1].stackSize <= par2) {
+            var3 = this.containingItems[par1];
+            this.containingItems[par1] = null;
+        } else {
+            var3 = this.containingItems[par1].splitStack(par2);
+
+            if (this.containingItems[par1].stackSize == 0) {
+                this.containingItems[par1] = null;
+            }
+        }
+        return var3;
     }
 
     @Override
@@ -134,9 +129,8 @@ public class TileEntityOxygenCompressor extends TileEntityOxygen implements IInv
             final ItemStack var2 = this.containingItems[par1];
             this.containingItems[par1] = null;
             return var2;
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
@@ -180,32 +174,24 @@ public class TileEntityOxygenCompressor extends TileEntityOxygen implements IInv
     @Override
     public boolean canInsertItem(int slotID, ItemStack itemstack, int side) {
         if (this.isItemValidForSlot(slotID, itemstack)) {
-            switch (slotID) {
-                case 0:
-                    return itemstack.getItemDamage() > 1;
-                case 1:
-                    return ItemElectricBase.isElectricItemCharged(itemstack);
-                case 2:
-                    return itemstack.getItemDamage() < itemstack.getItem().getMaxDamage();
-                default:
-                    return false;
-            }
+            return switch (slotID) {
+                case 0 -> itemstack.getItemDamage() > 1;
+                case 1 -> ItemElectricBase.isElectricItemCharged(itemstack);
+                case 2 -> itemstack.getItemDamage() < itemstack.getItem().getMaxDamage();
+                default -> false;
+            };
         }
         return false;
     }
 
     @Override
     public boolean canExtractItem(int slotID, ItemStack itemstack, int side) {
-        switch (slotID) {
-            case 0:
-                return itemstack.getItem() instanceof ItemOxygenTank && itemstack.getItemDamage() == 0;
-            case 1:
-                return ItemElectricBase.isElectricItemEmpty(itemstack);
-            case 2:
-                return FluidUtil.isEmptyContainer(itemstack);
-            default:
-                return false;
-        }
+        return switch (slotID) {
+            case 0 -> itemstack.getItem() instanceof ItemOxygenTank && itemstack.getItemDamage() == 0;
+            case 1 -> ItemElectricBase.isElectricItemEmpty(itemstack);
+            case 2 -> FluidUtil.isEmptyContainer(itemstack);
+            default -> false;
+        };
     }
 
     @Override

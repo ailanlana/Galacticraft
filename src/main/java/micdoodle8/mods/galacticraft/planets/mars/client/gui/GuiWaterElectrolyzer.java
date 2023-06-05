@@ -3,6 +3,15 @@ package micdoodle8.mods.galacticraft.planets.mars.client.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.gui.container.GuiContainerGC;
 import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementInfoRegion;
@@ -17,25 +26,12 @@ import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
 import micdoodle8.mods.galacticraft.planets.mars.inventory.ContainerElectrolyzer;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityElectrolyzer;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
-
-import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 @SideOnly(Side.CLIENT)
 public class GuiWaterElectrolyzer extends GuiContainerGC {
 
     private static final ResourceLocation refineryTexture = new ResourceLocation(
             MarsModule.ASSET_PREFIX,
             "textures/gui/gasLiquefier.png");
-    private static final ResourceLocation terraformerGui = new ResourceLocation(
-            MarsModule.ASSET_PREFIX,
-            "textures/gui/terraformer.png");
 
     private static final ResourceLocation gasTextures = new ResourceLocation(
             AsteroidsModule.ASSET_PREFIX,
@@ -88,7 +84,6 @@ public class GuiWaterElectrolyzer extends GuiContainerGC {
         this.ySize = 168;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void initGui() {
         super.initGui();
@@ -132,8 +127,7 @@ public class GuiWaterElectrolyzer extends GuiContainerGC {
         // 131, (this.height - this.ySize)
         // / 2 + 6, 18, 18, fuelSlotDesc, this.width, this.height, this));
 
-        final List<String> fuelSlotDesc = new ArrayList<>();
-        fuelSlotDesc.addAll(GCCoreUtil.translateWithSplit("gui.waterBucketSlot.desc"));
+        final List<String> fuelSlotDesc = new ArrayList<>(GCCoreUtil.translateWithSplit("gui.waterBucketSlot.desc"));
         this.infoRegions.add(
                 new GuiElementInfoRegion(
                         (this.width - this.xSize) / 2 + 6,

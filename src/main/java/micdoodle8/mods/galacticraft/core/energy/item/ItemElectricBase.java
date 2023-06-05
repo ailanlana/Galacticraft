@@ -2,13 +2,6 @@ package micdoodle8.mods.galacticraft.core.energy.item;
 
 import java.util.List;
 
-import mekanism.api.energy.IEnergizedItem;
-import micdoodle8.mods.galacticraft.api.item.ElectricItemHelper;
-import micdoodle8.mods.galacticraft.api.item.IItemElectricBase;
-import micdoodle8.mods.galacticraft.core.energy.EnergyConfigHandler;
-import micdoodle8.mods.galacticraft.core.energy.EnergyDisplayHelper;
-import micdoodle8.mods.galacticraft.core.items.ItemBatteryInfinite;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -23,10 +16,14 @@ import cofh.api.energy.IEnergyContainerItem;
 import cpw.mods.fml.common.Optional.Interface;
 import cpw.mods.fml.common.Optional.InterfaceList;
 import cpw.mods.fml.common.Optional.Method;
-import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
-import cpw.mods.fml.relauncher.FMLInjectionData;
 import ic2.api.item.IElectricItemManager;
 import ic2.api.item.ISpecialElectricItem;
+import mekanism.api.energy.IEnergizedItem;
+import micdoodle8.mods.galacticraft.api.item.ElectricItemHelper;
+import micdoodle8.mods.galacticraft.api.item.IItemElectricBase;
+import micdoodle8.mods.galacticraft.core.energy.EnergyConfigHandler;
+import micdoodle8.mods.galacticraft.core.energy.EnergyDisplayHelper;
+import micdoodle8.mods.galacticraft.core.items.ItemBatteryInfinite;
 
 @InterfaceList({ @Interface(modid = "CoFHAPI|energy", iface = "cofh.api.energy.IEnergyContainerItem"),
         @Interface(modid = "IC2API", iface = "ic2.api.item.ISpecialElectricItem"),
@@ -36,16 +33,12 @@ public abstract class ItemElectricBase extends Item
 
     private static Object itemManagerIC2;
     public float transferMax;
-    private final DefaultArtifactVersion mcVersion;
 
     public ItemElectricBase() {
-        super();
         this.setMaxStackSize(1);
         this.setMaxDamage(100);
         this.setNoRepair();
         this.setMaxTransfer();
-
-        this.mcVersion = new DefaultArtifactVersion((String) FMLInjectionData.data()[4]);
 
         if (EnergyConfigHandler.isIndustrialCraft2Loaded()) {
             itemManagerIC2 = new ElectricItemManagerIC2_1710();
@@ -61,9 +54,8 @@ public abstract class ItemElectricBase extends Item
         return this.transferMax;
     }
 
-    @SuppressWarnings({ "unchecked" })
     @Override
-    public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean par4) {
+    public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List<String> list, boolean par4) {
         String color;
         final float joules = this.getElectricityStored(itemStack);
 
@@ -166,9 +158,8 @@ public abstract class ItemElectricBase extends Item
         return energyStored;
     }
 
-    @SuppressWarnings({ "unchecked" })
     @Override
-    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         par3List.add(ElectricItemHelper.getUncharged(new ItemStack(this)));
         par3List.add(
                 ElectricItemHelper
@@ -197,10 +188,8 @@ public abstract class ItemElectricBase extends Item
             return ((IItemElectricBase) item).getElectricityStored(itemstack) <= 0;
         }
 
-        if (EnergyConfigHandler.isIndustrialCraft2Loaded()) {
-            if (item instanceof ic2.api.item.ISpecialElectricItem) {
-                return !((ic2.api.item.ISpecialElectricItem) item).canProvideEnergy(itemstack);
-            }
+        if (EnergyConfigHandler.isIndustrialCraft2Loaded() && item instanceof ic2.api.item.ISpecialElectricItem) {
+            return !((ic2.api.item.ISpecialElectricItem) item).canProvideEnergy(itemstack);
         }
 
         return false;
@@ -216,10 +205,8 @@ public abstract class ItemElectricBase extends Item
             return ((IItemElectricBase) item).getElectricityStored(itemstack) > 0;
         }
 
-        if (EnergyConfigHandler.isIndustrialCraft2Loaded()) {
-            if (item instanceof ic2.api.item.ISpecialElectricItem) {
-                return ((ic2.api.item.ISpecialElectricItem) item).canProvideEnergy(itemstack);
-            }
+        if (EnergyConfigHandler.isIndustrialCraft2Loaded() && item instanceof ic2.api.item.ISpecialElectricItem) {
+            return ((ic2.api.item.ISpecialElectricItem) item).canProvideEnergy(itemstack);
         }
 
         return false;

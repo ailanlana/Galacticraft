@@ -2,11 +2,11 @@ package micdoodle8.mods.galacticraft.api.prefab.world.gen;
 
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.api.event.wgen.GCCoreEventPopulate;
-
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.MinecraftForge;
+
+import micdoodle8.mods.galacticraft.api.event.wgen.GCCoreEventPopulate;
 
 /**
  * Do not include this prefab class in your released mod download.
@@ -21,17 +21,16 @@ public abstract class BiomeDecoratorSpace {
     public void decorate(World world, Random random, int chunkX, int chunkZ) {
         if (this.getCurrentWorld() != null) {
             throw new RuntimeException("Already decorating!!");
-        } else {
-            this.setCurrentWorld(world);
-            this.rand = random;
-            this.chunkX = chunkX;
-            this.chunkZ = chunkZ;
-            MinecraftForge.EVENT_BUS.post(new GCCoreEventPopulate.Pre(world, this.rand, this.chunkX, this.chunkZ));
-            this.decorate();
-            MinecraftForge.EVENT_BUS.post(new GCCoreEventPopulate.Post(world, this.rand, this.chunkX, this.chunkZ));
-            this.setCurrentWorld(null);
-            this.rand = null;
         }
+        this.setCurrentWorld(world);
+        this.rand = random;
+        this.chunkX = chunkX;
+        this.chunkZ = chunkZ;
+        MinecraftForge.EVENT_BUS.post(new GCCoreEventPopulate.Pre(world, this.rand, this.chunkX, this.chunkZ));
+        this.decorate();
+        MinecraftForge.EVENT_BUS.post(new GCCoreEventPopulate.Post(world, this.rand, this.chunkX, this.chunkZ));
+        this.setCurrentWorld(null);
+        this.rand = null;
     }
 
     protected abstract void setCurrentWorld(World world);

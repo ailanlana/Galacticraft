@@ -2,11 +2,6 @@ package micdoodle8.mods.galacticraft.planets.mars.items;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,6 +12,10 @@ import net.minecraft.util.IIcon;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
 
 public class ItemBasicMars extends Item {
 
@@ -25,7 +24,6 @@ public class ItemBasicMars extends Item {
     protected IIcon[] icons = new IIcon[ItemBasicMars.names.length];
 
     public ItemBasicMars() {
-        super();
         this.setMaxDamage(0);
         this.setHasSubtypes(true);
     }
@@ -48,7 +46,8 @@ public class ItemBasicMars extends Item {
         int i = 0;
 
         for (final String name : ItemBasicMars.names) {
-            this.icons[i++] = iconRegister.registerIcon(MarsModule.TEXTURE_PREFIX + name);
+            this.icons[i] = iconRegister.registerIcon(MarsModule.TEXTURE_PREFIX + name);
+            i++;
         }
     }
 
@@ -61,9 +60,8 @@ public class ItemBasicMars extends Item {
         return super.getIconFromDamage(damage);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         for (int i = 0; i < ItemBasicMars.names.length; i++) {
             par3List.add(new ItemStack(par1, 1, i));
         }
@@ -78,10 +76,10 @@ public class ItemBasicMars extends Item {
         return "unnamed";
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List,
+            boolean par4) {
         if (par1ItemStack != null && par1ItemStack.getItemDamage() == 3) {
             par3List.add(GCCoreUtil.translate("item.tier2.desc"));
         }

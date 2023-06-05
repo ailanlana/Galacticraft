@@ -3,16 +3,16 @@ package micdoodle8.mods.galacticraft.planets.mars.world.gen.dungeon;
 import java.util.HashSet;
 import java.util.Random;
 
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import micdoodle8.mods.galacticraft.core.world.gen.dungeon.DungeonBoundingBox;
 import micdoodle8.mods.galacticraft.core.world.gen.dungeon.DungeonRoom;
 import micdoodle8.mods.galacticraft.core.world.gen.dungeon.MapGenDungeon;
 import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityTreasureChestMars;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class RoomTreasureMars extends DungeonRoom {
 
@@ -52,14 +52,12 @@ public class RoomTreasureMars extends DungeonRoom {
                                 cz,
                                 this.dungeonInstance.DUNGEON_WALL_ID,
                                 this.dungeonInstance.DUNGEON_WALL_META);
-                    } else {
-                        if ((i == this.posX || i == this.posX + this.sizeX - 1)
-                                && (k == this.posZ || k == this.posZ + this.sizeZ - 1)) {
-                            this.placeBlock(chunk, meta, i, j, k, cx, cz, Blocks.glowstone, 0);
-                        } else {
-                            this.placeBlock(chunk, meta, i, j, k, cx, cz, Blocks.air, 0);
-                        }
-                    }
+                    } else if ((i == this.posX || i == this.posX + this.sizeX - 1)
+                            && (k == this.posZ || k == this.posZ + this.sizeZ - 1)) {
+                                this.placeBlock(chunk, meta, i, j, k, cx, cz, Blocks.glowstone, 0);
+                            } else {
+                                this.placeBlock(chunk, meta, i, j, k, cx, cz, Blocks.air, 0);
+                            }
                 }
             }
         }

@@ -1,16 +1,16 @@
 package micdoodle8.mods.galacticraft.core.inventory;
 
-import micdoodle8.mods.galacticraft.api.item.IItemElectric;
-import micdoodle8.mods.galacticraft.api.item.IItemOxygenSupply;
-import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseElectricBlock;
-import micdoodle8.mods.galacticraft.core.items.ItemOxygenTank;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenCompressor;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import micdoodle8.mods.galacticraft.api.item.IItemElectric;
+import micdoodle8.mods.galacticraft.api.item.IItemOxygenSupply;
+import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseElectricBlock;
+import micdoodle8.mods.galacticraft.core.items.ItemOxygenTank;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenCompressor;
 
 public class ContainerOxygenCompressor extends Container {
 
@@ -46,7 +46,7 @@ public class ContainerOxygenCompressor extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1) {
         ItemStack var2 = null;
-        final Slot slot = (Slot) this.inventorySlots.get(par1);
+        final Slot slot = this.inventorySlots.get(par1);
         final int b = this.inventorySlots.size();
 
         if (slot != null && slot.getHasStack()) {
@@ -57,28 +57,24 @@ public class ContainerOxygenCompressor extends Container {
                 if (!this.mergeItemStack(stack, b - 36, b, true)) {
                     return null;
                 }
-            } else {
-                if (stack.getItem() instanceof IItemElectric) {
-                    if (!this.mergeItemStack(stack, 1, 2, false)) {
-                        return null;
-                    }
-                } else if (stack.getItem() instanceof IItemOxygenSupply) {
-                    if (!this.mergeItemStack(stack, 2, 3, false)) {
-                        return null;
-                    }
-                } else if (stack.getItem() instanceof ItemOxygenTank && stack.getItemDamage() > 0) {
-                    if (!this.mergeItemStack(stack, 0, 1, false)) {
-                        return null;
-                    }
-                } else {
-                    if (par1 < b - 9) {
-                        if (!this.mergeItemStack(stack, b - 9, b, false)) {
-                            return null;
-                        }
-                    } else if (!this.mergeItemStack(stack, b - 36, b - 9, false)) {
-                        return null;
-                    }
+            } else if (stack.getItem() instanceof IItemElectric) {
+                if (!this.mergeItemStack(stack, 1, 2, false)) {
+                    return null;
                 }
+            } else if (stack.getItem() instanceof IItemOxygenSupply) {
+                if (!this.mergeItemStack(stack, 2, 3, false)) {
+                    return null;
+                }
+            } else if (stack.getItem() instanceof ItemOxygenTank && stack.getItemDamage() > 0) {
+                if (!this.mergeItemStack(stack, 0, 1, false)) {
+                    return null;
+                }
+            } else if (par1 < b - 9) {
+                if (!this.mergeItemStack(stack, b - 9, b, false)) {
+                    return null;
+                }
+            } else if (!this.mergeItemStack(stack, b - 36, b - 9, false)) {
+                return null;
             }
 
             if (stack.stackSize == 0) {

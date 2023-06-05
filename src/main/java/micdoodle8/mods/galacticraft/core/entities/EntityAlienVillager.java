@@ -1,7 +1,5 @@
 package micdoodle8.mods.galacticraft.core.entities;
 
-import micdoodle8.mods.galacticraft.api.entity.IEntityBreathable;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
@@ -30,6 +28,7 @@ import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.entity.IEntityBreathable;
 
 public class EntityAlienVillager extends EntityAgeable implements IEntityBreathable {
 
@@ -235,7 +234,7 @@ public class EntityAlienVillager extends EntityAgeable implements IEntityBreatha
                 } else if (entity instanceof IMob) {
                     this.villageObj.endMatingSeason();
                 }
-            } else if (entity == null) {
+            } else {
                 final EntityPlayer entityplayer = this.worldObj.getClosestPlayerToEntity(this, 16.0D);
 
                 if (entityplayer != null) {
@@ -270,14 +269,19 @@ public class EntityAlienVillager extends EntityAgeable implements IEntityBreatha
     @Override
     @SideOnly(Side.CLIENT)
     public void handleHealthUpdate(byte par1) {
-        if (par1 == 12) {
-            this.generateRandomParticles("heart");
-        } else if (par1 == 13) {
-            this.generateRandomParticles("angryVillager");
-        } else if (par1 == 14) {
-            this.generateRandomParticles("happyVillager");
-        } else {
-            super.handleHealthUpdate(par1);
+        switch (par1) {
+            case 12:
+                this.generateRandomParticles("heart");
+                break;
+            case 13:
+                this.generateRandomParticles("angryVillager");
+                break;
+            case 14:
+                this.generateRandomParticles("happyVillager");
+                break;
+            default:
+                super.handleHealthUpdate(par1);
+                break;
         }
     }
 

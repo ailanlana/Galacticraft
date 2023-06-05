@@ -8,7 +8,7 @@ import net.minecraft.util.StatCollector;
 
 public class EnergyDisplayHelper {
 
-    public static void getEnergyDisplayTooltip(float energyVal, float maxEnergy, List strList) {
+    public static void getEnergyDisplayTooltip(float energyVal, float maxEnergy, List<String> strList) {
         strList.add(
                 EnumChatFormatting.GREEN + StatCollector.translateToLocal("gui.message.energy")
                         + ": "
@@ -22,38 +22,40 @@ public class EnergyDisplayHelper {
     public static String getEnergyDisplayS(float energyVal) {
         if (EnergyConfigHandler.displayEnergyUnitsIC2) {
             return getEnergyDisplayIC2(energyVal * EnergyConfigHandler.TO_IC2_RATIOdisp);
-        } else if (EnergyConfigHandler.displayEnergyUnitsBC) {
+        }
+        if (EnergyConfigHandler.displayEnergyUnitsBC) {
             return getEnergyDisplayBC(energyVal * EnergyConfigHandler.TO_BC_RATIOdisp);
-        } else if (EnergyConfigHandler.displayEnergyUnitsMek) {
+        }
+        if (EnergyConfigHandler.displayEnergyUnitsMek) {
             return getEnergyDisplayMek(energyVal * EnergyConfigHandler.TO_MEKANISM_RATIOdisp);
         } else if (EnergyConfigHandler.displayEnergyUnitsRF) {
             return getEnergyDisplayRF(energyVal * EnergyConfigHandler.TO_RF_RATIOdisp);
         }
         final String val = String.valueOf(getEnergyDisplayI(energyVal));
-        String newVal = "";
+        StringBuilder newVal = new StringBuilder();
 
         for (int i = val.length() - 1; i >= 0; i--) {
-            newVal += val.charAt(val.length() - 1 - i);
+            newVal.append(val.charAt(val.length() - 1 - i));
             if (i % 3 == 0 && i != 0) {
-                newVal += ',';
+                newVal.append(',');
             }
         }
 
-        return newVal + " gJ";
+        return newVal.append(" gJ").toString();
     }
 
     public static String getEnergyDisplayIC2(float energyVal) {
         final String val = String.valueOf(getEnergyDisplayI(energyVal));
-        String newVal = "";
+        StringBuilder newVal = new StringBuilder();
 
         for (int i = val.length() - 1; i >= 0; i--) {
-            newVal += val.charAt(val.length() - 1 - i);
+            newVal.append(val.charAt(val.length() - 1 - i));
             if (i % 3 == 0 && i != 0) {
-                newVal += ',';
+                newVal.append(',');
             }
         }
 
-        return newVal + " EU";
+        return newVal.append(" EU").toString();
     }
 
     public static String getEnergyDisplayBC(float energyVal) {
@@ -66,13 +68,13 @@ public class EnergyDisplayHelper {
         if (energyVal < 1000) {
             final String val = String.valueOf(getEnergyDisplayI(energyVal));
             return val + " J";
-        } else if (energyVal < 1000000) {
+        }
+        if (energyVal < 1000000) {
             final String val = getEnergyDisplay1DP(energyVal / 1000);
             return val + " kJ";
-        } else {
-            final String val = getEnergyDisplay1DP(energyVal / 1000000);
-            return val + " MJ";
         }
+        final String val = getEnergyDisplay1DP(energyVal / 1000000);
+        return val + " MJ";
     }
 
     public static String getEnergyDisplayRF(float energyVal) {

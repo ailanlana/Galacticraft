@@ -4,12 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.api.entity.ICameraZoomEntity;
-import micdoodle8.mods.galacticraft.api.entity.IIgnoreShift;
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.client.fx.EntityFXLanderFlame;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,6 +15,11 @@ import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.entity.ICameraZoomEntity;
+import micdoodle8.mods.galacticraft.api.entity.IIgnoreShift;
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.core.client.fx.EntityFXLanderFlame;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class EntityLander extends EntityLanderBase implements IIgnoreShift, ICameraZoomEntity {
 
@@ -91,16 +90,15 @@ public class EntityLander extends EntityLanderBase implements IIgnoreShift, ICam
         if (this.riddenByEntity == null && var1 instanceof EntityPlayerMP) {
             GCCoreUtil.openParachestInv((EntityPlayerMP) var1, this);
             return true;
-        } else if (var1 instanceof EntityPlayerMP) {
+        }
+        if (var1 instanceof EntityPlayerMP) {
             if (!this.onGround) {
                 return false;
             }
 
             var1.mountEntity(null);
-            return true;
-        } else {
-            return true;
         }
+        return true;
     }
 
     @Override
@@ -197,16 +195,14 @@ public class EntityLander extends EntityLanderBase implements IIgnoreShift, ICam
 
     @Override
     public void onGroundHit() {
-        if (!this.worldObj.isRemote) {
-            if (Math.abs(this.lastMotionY) > 2.0D) {
-                if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayerMP) {
-                    this.riddenByEntity.mountEntity(this);
-                }
-
-                this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 12, true);
-
-                this.setDead();
+        if (!this.worldObj.isRemote && Math.abs(this.lastMotionY) > 2.0D) {
+            if (this.riddenByEntity instanceof EntityPlayerMP) {
+                this.riddenByEntity.mountEntity(this);
             }
+
+            this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 12, true);
+
+            this.setDead();
         }
     }
 

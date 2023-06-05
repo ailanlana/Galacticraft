@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.GalacticraftConfigAccess;
-
 import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -16,6 +14,8 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+
+import micdoodle8.mods.galacticraft.api.GalacticraftConfigAccess;
 
 public class CompressorRecipes {
 
@@ -30,7 +30,8 @@ public class CompressorRecipes {
         int k = 0;
 
         if (inputList[i] instanceof String[]) {
-            final String[] astring = (String[]) inputList[i++];
+            final String[] astring = (String[]) inputList[i];
+            i++;
 
             for (final String s1 : astring) {
                 ++k;
@@ -39,7 +40,8 @@ public class CompressorRecipes {
             }
         } else {
             while (inputList[i] instanceof String) {
-                final String s2 = (String) inputList[i++];
+                final String s2 = (String) inputList[i];
+                i++;
                 ++k;
                 j = s2.length();
                 s = s + s2;
@@ -84,24 +86,24 @@ public class CompressorRecipes {
     }
 
     public static void addShapelessRecipe(ItemStack par1ItemStack, Object... par2ArrayOfObj) {
-        final ArrayList arraylist = new ArrayList();
+        final List<Object> arraylist = new ArrayList<>();
         final int i = par2ArrayOfObj.length;
 
         for (int j = 0; j < i; ++j) {
             final Object object1 = par2ArrayOfObj[j];
 
-            if (object1 instanceof ItemStack) {
-                arraylist.add(((ItemStack) object1).copy());
-            } else if (object1 instanceof Item) {
-                arraylist.add(new ItemStack((Item) object1));
+            if (object1 instanceof ItemStack stack) {
+                arraylist.add(stack.copy());
+            } else if (object1 instanceof Item item) {
+                arraylist.add(new ItemStack(item));
             } else if (object1 instanceof String) {
                 arraylist.add(object1);
             } else {
-                if (!(object1 instanceof Block)) {
+                if (!(object1 instanceof Block block)) {
                     throw new RuntimeException("Invalid shapeless compressor recipe!");
                 }
 
-                arraylist.add(new ItemStack((Block) object1));
+                arraylist.add(new ItemStack(block));
             }
         }
 
@@ -123,7 +125,6 @@ public class CompressorRecipes {
         adventureOnly = true;
         CompressorRecipes.addShapelessRecipe(par1ItemStack, par2ArrayOfObj);
         adventureOnly = false;
-        return;
     }
 
     public static ItemStack findMatchingRecipe(IInventory inventory, World par2World) {
@@ -162,32 +163,27 @@ public class CompressorRecipes {
             }
 
             return new ItemStack(itemstack.getItem(), 1, j1);
-        } else {
-            final List<IRecipe> theRecipes = CompressorRecipes.getRecipeList();
-
-            for (j = 0; j < theRecipes.size(); ++j) {
-                final IRecipe irecipe = theRecipes.get(j);
-
-                if (irecipe instanceof ShapedRecipes
-                        && CompressorRecipes.matches((ShapedRecipes) irecipe, inventory, par2World)
-                        || irecipe instanceof ShapelessOreRecipe && CompressorRecipes
-                                .matchesShapeless((ShapelessOreRecipe) irecipe, inventory, par2World)) {
-                    return irecipe.getRecipeOutput().copy();
-                }
-            }
-
-            return null;
         }
+        final List<IRecipe> theRecipes = CompressorRecipes.getRecipeList();
+
+        for (j = 0; j < theRecipes.size(); ++j) {
+            final IRecipe irecipe = theRecipes.get(j);
+
+            if (irecipe instanceof ShapedRecipes && CompressorRecipes.matches((ShapedRecipes) irecipe, inventory)
+                    || irecipe instanceof ShapelessOreRecipe
+                            && CompressorRecipes.matchesShapeless((ShapelessOreRecipe) irecipe, inventory)) {
+                return irecipe.getRecipeOutput().copy();
+            }
+        }
+
+        return null;
     }
 
-    private static boolean matches(ShapedRecipes recipe, IInventory inventory, World par2World) {
+    private static boolean matches(ShapedRecipes recipe, IInventory inventory) {
         for (int i = 0; i <= 3 - recipe.recipeWidth; ++i) {
             for (int j = 0; j <= 3 - recipe.recipeHeight; ++j) {
-                if (CompressorRecipes.checkMatch(recipe, inventory, i, j, true)) {
-                    return true;
-                }
-
-                if (CompressorRecipes.checkMatch(recipe, inventory, i, j, false)) {
+                if (CompressorRecipes.checkMatch(recipe, inventory, i, j, true)
+                        || CompressorRecipes.checkMatch(recipe, inventory, i, j, false)) {
                     return true;
                 }
             }
@@ -219,15 +215,9 @@ public class CompressorRecipes {
                 }
 
                 if (itemstack1 != null || itemstack != null) {
-                    if (itemstack1 == null && itemstack != null || itemstack1 != null && itemstack == null) {
-                        return false;
-                    }
-
-                    if (itemstack.getItem() != itemstack1.getItem()) {
-                        return false;
-                    }
-
-                    if (itemstack.getItemDamage() != 32767 && itemstack.getItemDamage() != itemstack1.getItemDamage()) {
+                    if ((itemstack1 == null == (itemstack != null)) || itemstack.getItem() != itemstack1.getItem()
+                            || itemstack.getItemDamage() != 32767
+                                    && itemstack.getItemDamage() != itemstack1.getItemDamage()) {
                         return false;
                     }
                 }
@@ -237,7 +227,7 @@ public class CompressorRecipes {
         return true;
     }
 
-    private static boolean matchesShapeless(ShapelessOreRecipe recipe, IInventory var1, World par2World) {
+    private static boolean matchesShapeless(ShapelessOreRecipe recipe, IInventory var1) {
         final ArrayList<Object> required = new ArrayList<>(recipe.getInput());
 
         for (int x = 0; x < var1.getSizeInventory(); x++) {
@@ -245,16 +235,13 @@ public class CompressorRecipes {
 
             if (slot != null) {
                 boolean inRecipe = false;
-                final Iterator<Object> req = required.iterator();
-
-                while (req.hasNext()) {
+                for (Object next : required) {
                     boolean match = false;
-
-                    final Object next = req.next();
 
                     if (next instanceof ItemStack) {
                         match = OreDictionary.itemMatches((ItemStack) next, slot, false);
                     } else if (next instanceof ArrayList) {
+                        @SuppressWarnings("unchecked")
                         final Iterator<ItemStack> itr = ((ArrayList<ItemStack>) next).iterator();
                         while (itr.hasNext() && !match) {
                             match = OreDictionary.itemMatches(itr.next(), slot, false);

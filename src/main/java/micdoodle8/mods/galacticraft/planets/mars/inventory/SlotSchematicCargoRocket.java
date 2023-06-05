@@ -1,13 +1,5 @@
 package micdoodle8.mods.galacticraft.planets.mars.inventory;
 
-import micdoodle8.mods.galacticraft.core.Constants;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.items.GCItems;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
-import micdoodle8.mods.galacticraft.core.util.RecipeUtil;
-import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
@@ -16,6 +8,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import micdoodle8.mods.galacticraft.core.Constants;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.items.GCItems;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
+import micdoodle8.mods.galacticraft.core.util.RecipeUtil;
+import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
 
 public class SlotSchematicCargoRocket extends Slot {
 
@@ -60,11 +59,13 @@ public class SlotSchematicCargoRocket extends Slot {
     public boolean isItemValid(ItemStack itemStack) {
         if (this.index == 1) {
             return itemStack.getItem() == GCItems.basicItem && itemStack.getItemDamage() == 14;
-        } else if (this.index == 2 && GalacticraftCore.isGalaxySpaceLoaded) {
+        }
+        if (this.index == 2 && GalacticraftCore.isGalaxySpaceLoaded) {
             return itemStack.getItem()
                     == GameRegistry.findItem(Constants.MOD_ID_GALAXYSPACE, "item.RocketControlComputer")
                     && itemStack.getItemDamage() == 101;
-        } else if (this.index >= 3 && this.index <= 5 && GalacticraftCore.isGalaxySpaceLoaded) {
+        }
+        if (this.index >= 3 && this.index <= 5 && GalacticraftCore.isGalaxySpaceLoaded) {
             return itemStack.getItem()
                     == GameRegistry.findItem(Constants.MOD_ID_GALAXYSPACE, "item.ModuleSmallFuelCanister");
         } else if (this.index == 7) {

@@ -79,7 +79,7 @@ public class BlockRendererBreathableAir implements ISimpleBlockRenderingHandler 
         final float var9 = (var6 & 255) / 255.0F;
         final boolean var10 = par1Block.shouldSideBeRendered(var1, par2, par3 + 1, par4, 1);
         final boolean var11 = par1Block.shouldSideBeRendered(var1, par2, par3 - 1, par4, 0);
-        final boolean[] var12 = new boolean[] { par1Block.shouldSideBeRendered(var1, par2, par3, par4 - 1, 2),
+        final boolean[] var12 = { par1Block.shouldSideBeRendered(var1, par2, par3, par4 - 1, 2),
                 par1Block.shouldSideBeRendered(var1, par2, par3, par4 + 1, 3),
                 par1Block.shouldSideBeRendered(var1, par2 - 1, par3, par4, 4),
                 par1Block.shouldSideBeRendered(var1, par2 + 1, par3, par4, 5) };
@@ -133,35 +133,40 @@ public class BlockRendererBreathableAir implements ISimpleBlockRenderingHandler 
                     double var51;
                     double var49;
 
-                    if (var34 == 0) {
-                        var41 = var24;
-                        var43 = var30;
-                        var45 = par2;
-                        var49 = par2 + 1;
-                        var47 = par4 + var32;
-                        var51 = par4 + var32;
-                    } else if (var34 == 1) {
-                        var41 = var28;
-                        var43 = var26;
-                        var45 = par2 + 1;
-                        var49 = par2;
-                        var47 = par4 + 1 - var32;
-                        var51 = par4 + 1 - var32;
-                    } else if (var34 == 2) {
-                        var41 = var26;
-                        var43 = var24;
-                        var45 = par2 + var32;
-                        var49 = par2 + var32;
-                        var47 = par4 + 1;
-                        var51 = par4;
-                    } else {
-                        var41 = var30;
-                        var43 = var28;
-                        var45 = par2 + 1 - var32;
-                        var49 = par2 + 1 - var32;
-                        var47 = par4;
-                        var51 = par4 + 1;
-                    }
+                    var51 = switch (var34) {
+                        case 0 -> {
+                            var41 = var24;
+                            var43 = var30;
+                            var45 = par2;
+                            var49 = par2 + 1;
+                            var47 = par4 + var32;
+                            yield par4 + var32;
+                        }
+                        case 1 -> {
+                            var41 = var28;
+                            var43 = var26;
+                            var45 = par2 + 1;
+                            var49 = par2;
+                            var47 = par4 + 1 - var32;
+                            yield par4 + 1 - var32;
+                        }
+                        case 2 -> {
+                            var41 = var26;
+                            var43 = var24;
+                            var45 = par2 + var32;
+                            var49 = par2 + var32;
+                            var47 = par4 + 1;
+                            yield par4;
+                        }
+                        default -> {
+                            var41 = var30;
+                            var43 = var28;
+                            var45 = par2 + 1 - var32;
+                            var49 = par2 + 1 - var32;
+                            var47 = par4;
+                            yield par4 + 1;
+                        }
+                    };
 
                     final double var53 = 0 / 256.0F;
                     final double var55 = (16 - 0.01D) / 256.0D;

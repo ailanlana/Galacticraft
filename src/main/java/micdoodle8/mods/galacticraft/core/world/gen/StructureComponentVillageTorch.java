@@ -3,13 +3,13 @@ package micdoodle8.mods.galacticraft.core.world.gen;
 import java.util.List;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
-
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
+
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 
 public class StructureComponentVillageTorch extends StructureComponentVillage {
 
@@ -38,9 +38,8 @@ public class StructureComponentVillageTorch extends StructureComponentVillage {
         this.averageGroundLevel = nbt.getInteger("AvgGroundLevel");
     }
 
-    @SuppressWarnings("rawtypes")
     public static StructureBoundingBox func_74904_a(StructureComponentVillageStartPiece par0ComponentVillageStartPiece,
-            List par1List, Random par2Random, int par3, int par4, int par5, int par6) {
+            List<StructureComponent> par1List, Random par2Random, int par3, int par4, int par5, int par6) {
         final StructureBoundingBox var7 = StructureBoundingBox
                 .getComponentToAddBoundingBox(par3, par4, par5, 0, 0, 0, 3, 4, 2, par6);
         return StructureComponent.findIntersecting(par1List, var7) != null ? null : var7;

@@ -3,15 +3,6 @@ package micdoodle8.mods.galacticraft.core.blocks;
 import java.util.List;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical;
-import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityCircuitFabricator;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityCoalGenerator;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityElectricIngotCompressor;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenStorageModule;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -26,6 +17,15 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityCircuitFabricator;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityCoalGenerator;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityElectricIngotCompressor;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenStorageModule;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class BlockMachine2 extends BlockTileGC implements ItemBlockDesc.IBlockShiftDesc {
 
@@ -83,29 +83,33 @@ public class BlockMachine2 extends BlockTileGC implements ItemBlockDesc.IBlockSh
     public void randomDisplayTick(World par1World, int x, int y, int z, Random par5Random) {
         final TileEntity tile = par1World.getTileEntity(x, y, z);
 
-        if (tile instanceof TileEntityCoalGenerator) {
-            final TileEntityCoalGenerator tileEntity = (TileEntityCoalGenerator) tile;
-            if (tileEntity.heatGJperTick > 0) {
-                final int metadata = par1World.getBlockMetadata(x, y, z);
-                final float var7 = x + 0.5F;
-                final float var8 = y + 0.0F + par5Random.nextFloat() * 6.0F / 16.0F;
-                final float var9 = z + 0.5F;
-                final float var10 = 0.52F;
-                final float var11 = par5Random.nextFloat() * 0.6F - 0.3F;
+        if (tile instanceof TileEntityCoalGenerator tileEntity && tileEntity.heatGJperTick > 0) {
+            final int metadata = par1World.getBlockMetadata(x, y, z);
+            final float var7 = x + 0.5F;
+            final float var8 = y + 0.0F + par5Random.nextFloat() * 6.0F / 16.0F;
+            final float var9 = z + 0.5F;
+            final float var10 = 0.52F;
+            final float var11 = par5Random.nextFloat() * 0.6F - 0.3F;
 
-                if (metadata == 3) {
+            switch (metadata) {
+                case 3:
                     par1World.spawnParticle("smoke", var7 - var10, var8, var9 + var11, 0.0D, 0.0D, 0.0D);
                     par1World.spawnParticle("flame", var7 - var10, var8, var9 + var11, 0.0D, 0.0D, 0.0D);
-                } else if (metadata == 2) {
+                    break;
+                case 2:
                     par1World.spawnParticle("smoke", var7 + var10, var8, var9 + var11, 0.0D, 0.0D, 0.0D);
                     par1World.spawnParticle("flame", var7 + var10, var8, var9 + var11, 0.0D, 0.0D, 0.0D);
-                } else if (metadata == 1) {
+                    break;
+                case 1:
                     par1World.spawnParticle("smoke", var7 + var11, var8, var9 - var10, 0.0D, 0.0D, 0.0D);
                     par1World.spawnParticle("flame", var7 + var11, var8, var9 - var10, 0.0D, 0.0D, 0.0D);
-                } else if (metadata == 0) {
+                    break;
+                case 0:
                     par1World.spawnParticle("smoke", var7 + var11, var8, var9 + var10, 0.0D, 0.0D, 0.0D);
                     par1World.spawnParticle("flame", var7 + var11, var8, var9 + var10, 0.0D, 0.0D, 0.0D);
-                }
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -125,8 +129,7 @@ public class BlockMachine2 extends BlockTileGC implements ItemBlockDesc.IBlockSh
             if (side == metadata + 2) {
                 return this.iconOxygenInput;
             }
-            // If it is the back side
-            else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) {
+            if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) {
                 return this.iconOxygenOutput;
             }
 
@@ -159,13 +162,13 @@ public class BlockMachine2 extends BlockTileGC implements ItemBlockDesc.IBlockSh
             if (side == metadata + 2) {
                 return this.iconOxygenInput;
             }
-            // If it is the back side
-            else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) {
+            if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) {
                 return this.iconOxygenOutput;
             }
 
             return this.iconOxygenStorageModule[16];
-        } else if (metadata >= BlockMachine2.CIRCUIT_FABRICATOR_METADATA) {
+        }
+        if (metadata >= BlockMachine2.CIRCUIT_FABRICATOR_METADATA) {
             metadata -= BlockMachine2.CIRCUIT_FABRICATOR_METADATA;
 
             if (metadata == 0 && side == 4 || metadata == 1 && side == 5
@@ -285,7 +288,6 @@ public class BlockMachine2 extends BlockTileGC implements ItemBlockDesc.IBlockSh
             float hitX, float hitY, float hitZ) {
         if (!par1World.isRemote) {
             par5EntityPlayer.openGui(GalacticraftCore.instance, -1, par1World, x, y, z);
-            return true;
         }
 
         return true;
@@ -295,9 +297,11 @@ public class BlockMachine2 extends BlockTileGC implements ItemBlockDesc.IBlockSh
     public TileEntity createTileEntity(World world, int metadata) {
         if (metadata >= BlockMachine2.OXYGEN_STORAGE_MODULE_METADATA) {
             return new TileEntityOxygenStorageModule();
-        } else if (metadata >= BlockMachine2.CIRCUIT_FABRICATOR_METADATA) {
+        }
+        if (metadata >= BlockMachine2.CIRCUIT_FABRICATOR_METADATA) {
             return new TileEntityCircuitFabricator();
-        } else if (metadata >= BlockMachine2.ELECTRIC_COMPRESSOR_METADATA) {
+        }
+        if (metadata >= BlockMachine2.ELECTRIC_COMPRESSOR_METADATA) {
             return new TileEntityElectricIngotCompressor();
         } else {
             return null;
@@ -316,9 +320,8 @@ public class BlockMachine2 extends BlockTileGC implements ItemBlockDesc.IBlockSh
         return new ItemStack(this, 1, BlockMachine2.OXYGEN_STORAGE_MODULE_METADATA);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         par3List.add(this.getElectricCompressor());
         par3List.add(this.getCircuitFabricator());
         par3List.add(this.getOxygenStorageModule());
@@ -328,9 +331,11 @@ public class BlockMachine2 extends BlockTileGC implements ItemBlockDesc.IBlockSh
     public int damageDropped(int metadata) {
         if (metadata >= BlockMachine2.OXYGEN_STORAGE_MODULE_METADATA) {
             return BlockMachine2.OXYGEN_STORAGE_MODULE_METADATA;
-        } else if (metadata >= BlockMachine2.CIRCUIT_FABRICATOR_METADATA) {
+        }
+        if (metadata >= BlockMachine2.CIRCUIT_FABRICATOR_METADATA) {
             return BlockMachine2.CIRCUIT_FABRICATOR_METADATA;
-        } else if (metadata >= BlockMachine2.ELECTRIC_COMPRESSOR_METADATA) {
+        }
+        if (metadata >= BlockMachine2.ELECTRIC_COMPRESSOR_METADATA) {
             return BlockMachine2.ELECTRIC_COMPRESSOR_METADATA;
         } else {
             return 0;

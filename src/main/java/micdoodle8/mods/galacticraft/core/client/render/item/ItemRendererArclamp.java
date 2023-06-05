@@ -1,9 +1,6 @@
 package micdoodle8.mods.galacticraft.core.client.render.item;
 
-import micdoodle8.mods.galacticraft.core.client.render.tile.TileEntityArclampRenderer;
-
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
@@ -12,11 +9,11 @@ import net.minecraftforge.client.model.obj.WavefrontObject;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import micdoodle8.mods.galacticraft.core.client.render.tile.TileEntityArclampRenderer;
 
 public class ItemRendererArclamp implements IItemRenderer {
 
-    private void renderArclamp(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX,
-            float translateY, float translateZ) {
+    private void renderArclamp(ItemRenderType type) {
         GL11.glPushMatrix();
 
         switch (type) {
@@ -60,18 +57,13 @@ public class ItemRendererArclamp implements IItemRenderer {
      */
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-        switch (type) {
-            case ENTITY:
-                return true;
-            case EQUIPPED:
-                return true;
-            case EQUIPPED_FIRST_PERSON:
-                return true;
-            case INVENTORY:
-                return true;
-            default:
-                return false;
-        }
+        return switch (type) {
+            case ENTITY -> true;
+            case EQUIPPED -> true;
+            case EQUIPPED_FIRST_PERSON -> true;
+            case INVENTORY -> true;
+            default -> false;
+        };
     }
 
     @Override
@@ -83,16 +75,16 @@ public class ItemRendererArclamp implements IItemRenderer {
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         switch (type) {
             case EQUIPPED:
-                this.renderArclamp(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderArclamp(type);
                 break;
             case EQUIPPED_FIRST_PERSON:
-                this.renderArclamp(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderArclamp(type);
                 break;
             case INVENTORY:
-                this.renderArclamp(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderArclamp(type);
                 break;
             case ENTITY:
-                this.renderArclamp(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderArclamp(type);
                 break;
             default:
         }

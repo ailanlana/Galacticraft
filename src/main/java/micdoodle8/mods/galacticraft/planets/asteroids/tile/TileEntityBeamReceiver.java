@@ -1,5 +1,12 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.tile;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import com.google.common.collect.Lists;
+
+import cpw.mods.fml.relauncher.Side;
 import micdoodle8.mods.galacticraft.api.power.EnergySource;
 import micdoodle8.mods.galacticraft.api.power.EnergySource.EnergySourceAdjacent;
 import micdoodle8.mods.galacticraft.api.power.EnergySource.EnergySourceWireless;
@@ -17,14 +24,6 @@ import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical
 import micdoodle8.mods.galacticraft.core.tile.ReceiverMode;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import com.google.common.collect.Lists;
-import cpw.mods.fml.relauncher.Side;
-
-@SuppressWarnings("unused")
 public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEnergyHandlerGC, ILaserNode {
 
     @NetworkedField(targetSide = Side.CLIENT)
@@ -56,10 +55,7 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
                     && this.facing != ForgeDirection.UNKNOWN.ordinal()) {
                 final TileEntity tile = this.getAttachedTile();
 
-                if (tile instanceof TileBaseUniversalElectricalSource) {
-                    // GC energy source
-                    final TileBaseUniversalElectricalSource electricalTile = (TileBaseUniversalElectricalSource) tile;
-
+                if (tile instanceof TileBaseUniversalElectricalSource electricalTile) {
                     if (electricalTile.storage.getEnergyStoredGC() > 0) {
                         final EnergySourceAdjacent source = new EnergySourceAdjacent(
                                 ForgeDirection.getOrientation(this.facing ^ 1));
@@ -97,8 +93,7 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
                 } else {
                     final TileEntity tileAdj = this.getAttachedTile();
 
-                    if (tileAdj instanceof TileBaseUniversalElectrical) {
-                        final TileBaseUniversalElectrical electricalTile = (TileBaseUniversalElectrical) tileAdj;
+                    if (tileAdj instanceof TileBaseUniversalElectrical electricalTile) {
                         final EnergySourceAdjacent source = new EnergySourceAdjacent(
                                 ForgeDirection.getOrientation(this.facing ^ 1));
                         this.storage.extractEnergyGCnoMax(
@@ -224,10 +219,8 @@ public class TileEntityBeamReceiver extends TileEntityBeamOutput implements IEne
 
         float extracted = this.storage.extractEnergyGC(amount, simulate);
 
-        if (extracted < amount) {
-            if (tile instanceof EnergyStorageTile) {
-                extracted += ((EnergyStorageTile) tile).storage.extractEnergyGC(amount - extracted, simulate);
-            }
+        if (extracted < amount && tile instanceof EnergyStorageTile) {
+            extracted += ((EnergyStorageTile) tile).storage.extractEnergyGC(amount - extracted, simulate);
         }
 
         return extracted;

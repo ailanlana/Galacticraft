@@ -2,14 +2,6 @@ package micdoodle8.mods.galacticraft.core.client.gui.screen;
 
 import java.nio.DoubleBuffer;
 
-import micdoodle8.mods.galacticraft.api.client.IGameScreen;
-import micdoodle8.mods.galacticraft.api.client.IScreenManager;
-import micdoodle8.mods.galacticraft.api.entity.ITelemetry;
-import micdoodle8.mods.galacticraft.core.client.render.entities.RenderPlayerGC;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityTelemetry;
-import micdoodle8.mods.galacticraft.core.util.ColorUtil;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -36,6 +28,13 @@ import org.lwjgl.opengl.GL12;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.client.IGameScreen;
+import micdoodle8.mods.galacticraft.api.client.IScreenManager;
+import micdoodle8.mods.galacticraft.api.entity.ITelemetry;
+import micdoodle8.mods.galacticraft.core.client.render.entities.RenderPlayerGC;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityTelemetry;
+import micdoodle8.mods.galacticraft.core.util.ColorUtil;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class GameScreenText implements IGameScreen {
 
@@ -102,16 +101,16 @@ public class GameScreenText implements IGameScreen {
                     if (telemeter.clientClass == EntityPlayerMP.class) {
                         strName = telemeter.clientName;
                         entity = new EntityOtherPlayerMP(screen.driver.getWorldObj(), telemeter.clientGameProfile);
-                        renderEntity = (Render) RenderManager.instance.entityRenderMap.get(EntityPlayer.class);
+                        renderEntity = RenderManager.instance.entityRenderMap.get(EntityPlayer.class);
                     } else {
                         try {
-                            entity = (Entity) telemeter.clientClass.getConstructor(World.class)
+                            entity = telemeter.clientClass.getConstructor(World.class)
                                     .newInstance(screen.driver.getWorldObj());
                         } catch (final Exception ex) {}
                         if (entity != null) {
                             strName = entity.getCommandSenderName();
                         }
-                        renderEntity = (Render) RenderManager.instance.entityRenderMap.get(telemeter.clientClass);
+                        renderEntity = RenderManager.instance.entityRenderMap.get(telemeter.clientClass);
                     }
                 }
 

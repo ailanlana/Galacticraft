@@ -3,11 +3,6 @@ package micdoodle8.mods.galacticraft.core.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.items.GCItems;
-import micdoodle8.mods.galacticraft.core.items.ItemCanisterGeneric;
-import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
-
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,6 +12,11 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.IFluidContainerItem;
+
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.items.GCItems;
+import micdoodle8.mods.galacticraft.core.items.ItemCanisterGeneric;
+import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
 
 public class FluidUtil {
 
@@ -48,15 +48,11 @@ public class FluidUtil {
      * @return true if a type of recognised fuel, false if not
      */
     public static boolean testFuel(String name) {
-        if (name.startsWith("fuel")) {
+        if (name.startsWith("fuel") || name.contains("rocket") && name.contains("fuel")) {
             return true;
         }
 
-        if (name.contains("rocket") && name.contains("fuel")) {
-            return true;
-        }
-
-        return name.equals("rc jet fuel");
+        return "rc jet fuel".equals(name);
     }
 
     /**
@@ -319,7 +315,7 @@ public class FluidUtil {
      */
     public static boolean isWaterContainer(ItemStack var4) {
         final FluidStack liquid = FluidContainerRegistry.getFluidForFilledItem(var4);
-        return liquid != null && liquid.getFluid() != null && liquid.getFluid().getName().equals("water");
+        return liquid != null && liquid.getFluid() != null && "water".equals(liquid.getFluid().getName());
     }
 
     /**
@@ -342,33 +338,19 @@ public class FluidUtil {
     public static ItemStack getUsedContainer(ItemStack container) {
         if (FluidContainerRegistry.isBucket(container) && FluidContainerRegistry.isFilledContainer(container)) {
             return new ItemStack(Items.bucket, container.stackSize);
-        } else {
-            container.stackSize--;
-
-            if (container.stackSize == 0) {
-                return null;
-            }
-
-            return container;
         }
+        container.stackSize--;
+
+        if (container.stackSize == 0) {
+            return null;
+        }
+
+        return container;
     }
 
     public static int getFluidID(FluidStack stack) {
         try {
-            if (oldFluidIDMethod) {
-                try {
-                    if (getFluidMethod == null) {
-                        if (fluidStackClass == null) {
-                            fluidStackClass = Class.forName("net.minecraftforge.fluids.FluidStack");
-                        }
-                        getFluidMethod = fluidStackClass.getDeclaredMethod("getFluidID");
-                    }
-                    return (Integer) getFluidMethod.invoke(stack);
-                } catch (final NoSuchMethodException error) {
-                    oldFluidIDMethod = false;
-                    getFluidID(stack);
-                }
-            } else {
+            if (!oldFluidIDMethod) {
                 if (fluidIdField == null) {
                     if (fluidStackClass == null) {
                         fluidStackClass = Class.forName("net.minecraftforge.fluids.FluidStack");
@@ -376,6 +358,18 @@ public class FluidUtil {
                     fluidIdField = fluidStackClass.getDeclaredField("fluidID");
                 }
                 return fluidIdField.getInt(stack);
+            }
+            try {
+                if (getFluidMethod == null) {
+                    if (fluidStackClass == null) {
+                        fluidStackClass = Class.forName("net.minecraftforge.fluids.FluidStack");
+                    }
+                    getFluidMethod = fluidStackClass.getDeclaredMethod("getFluidID");
+                }
+                return (Integer) getFluidMethod.invoke(stack);
+            } catch (final NoSuchMethodException error) {
+                oldFluidIDMethod = false;
+                getFluidID(stack);
             }
         } catch (final Exception e) {
             e.printStackTrace();

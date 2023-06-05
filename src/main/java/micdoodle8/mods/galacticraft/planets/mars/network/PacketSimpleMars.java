@@ -4,19 +4,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.core.event.EventWakePlayer;
-import micdoodle8.mods.galacticraft.core.network.IPacket;
-import micdoodle8.mods.galacticraft.core.network.NetworkUtil;
-import micdoodle8.mods.galacticraft.core.util.GCLog;
-import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
-import micdoodle8.mods.galacticraft.planets.mars.client.gui.GuiCargoRocket;
-import micdoodle8.mods.galacticraft.planets.mars.client.gui.GuiSlimelingInventory;
-import micdoodle8.mods.galacticraft.planets.mars.entities.EntityCargoRocket;
-import micdoodle8.mods.galacticraft.planets.mars.entities.EntitySlimeling;
-import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityCryogenicChamber;
-import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityLaunchController;
-import micdoodle8.mods.galacticraft.planets.mars.util.MarsUtil;
-
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,6 +17,18 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import micdoodle8.mods.galacticraft.core.event.EventWakePlayer;
+import micdoodle8.mods.galacticraft.core.network.IPacket;
+import micdoodle8.mods.galacticraft.core.network.NetworkUtil;
+import micdoodle8.mods.galacticraft.core.util.GCLog;
+import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
+import micdoodle8.mods.galacticraft.planets.mars.client.gui.GuiCargoRocket;
+import micdoodle8.mods.galacticraft.planets.mars.client.gui.GuiSlimelingInventory;
+import micdoodle8.mods.galacticraft.planets.mars.entities.EntityCargoRocket;
+import micdoodle8.mods.galacticraft.planets.mars.entities.EntitySlimeling;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityCryogenicChamber;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityLaunchController;
+import micdoodle8.mods.galacticraft.planets.mars.util.MarsUtil;
 
 public class PacketSimpleMars implements IPacket {
 
@@ -114,7 +113,7 @@ public class PacketSimpleMars implements IPacket {
                         entityID = (Integer) this.data.get(2);
                         entity = player.worldObj.getEntityByID(entityID);
 
-                        if (entity != null && entity instanceof EntitySlimeling) {
+                        if (entity instanceof EntitySlimeling) {
                             FMLClientHandler.instance().getClient()
                                     .displayGuiScreen(new GuiSlimelingInventory(player, (EntitySlimeling) entity));
                         }
@@ -125,7 +124,7 @@ public class PacketSimpleMars implements IPacket {
                         entityID = (Integer) this.data.get(2);
                         entity = player.worldObj.getEntityByID(entityID);
 
-                        if (entity != null && entity instanceof EntityCargoRocket) {
+                        if (entity instanceof EntityCargoRocket) {
                             FMLClientHandler.instance().getClient()
                                     .displayGuiScreen(new GuiCargoRocket(player.inventory, (EntityCargoRocket) entity));
                         }
@@ -158,9 +157,7 @@ public class PacketSimpleMars implements IPacket {
             case S_UPDATE_SLIMELING_DATA:
                 final Entity entity = player.worldObj.getEntityByID((Integer) this.data.get(0));
 
-                if (entity instanceof EntitySlimeling) {
-                    final EntitySlimeling slimeling = (EntitySlimeling) entity;
-
+                if (entity instanceof EntitySlimeling slimeling) {
                     final int subType = (Integer) this.data.get(1);
 
                     switch (subType) {
@@ -233,38 +230,32 @@ public class PacketSimpleMars implements IPacket {
 
                 switch ((Integer) this.data.get(0)) {
                     case 0:
-                        if (tile instanceof TileEntityLaunchController) {
-                            final TileEntityLaunchController launchController = (TileEntityLaunchController) tile;
+                        if (tile instanceof TileEntityLaunchController launchController) {
                             launchController.setFrequency((Integer) this.data.get(4));
                         }
                         break;
                     case 1:
-                        if (tile instanceof TileEntityLaunchController) {
-                            final TileEntityLaunchController launchController = (TileEntityLaunchController) tile;
+                        if (tile instanceof TileEntityLaunchController launchController) {
                             launchController.setLaunchDropdownSelection((Integer) this.data.get(4));
                         }
                         break;
                     case 2:
-                        if (tile instanceof TileEntityLaunchController) {
-                            final TileEntityLaunchController launchController = (TileEntityLaunchController) tile;
+                        if (tile instanceof TileEntityLaunchController launchController) {
                             launchController.setDestinationFrequency((Integer) this.data.get(4));
                         }
                         break;
                     case 3:
-                        if (tile instanceof TileEntityLaunchController) {
-                            final TileEntityLaunchController launchController = (TileEntityLaunchController) tile;
+                        if (tile instanceof TileEntityLaunchController launchController) {
                             launchController.launchPadRemovalDisabled = (Integer) this.data.get(4) == 1;
                         }
                         break;
                     case 4:
-                        if (tile instanceof TileEntityLaunchController) {
-                            final TileEntityLaunchController launchController = (TileEntityLaunchController) tile;
+                        if (tile instanceof TileEntityLaunchController launchController) {
                             launchController.setLaunchSchedulingEnabled((Integer) this.data.get(4) == 1);
                         }
                         break;
                     case 5:
-                        if (tile instanceof TileEntityLaunchController) {
-                            final TileEntityLaunchController launchController = (TileEntityLaunchController) tile;
+                        if (tile instanceof TileEntityLaunchController launchController) {
                             launchController.requiresClientUpdate = true;
                         }
                         break;
@@ -275,8 +266,7 @@ public class PacketSimpleMars implements IPacket {
             case S_UPDATE_CARGO_ROCKET_STATUS:
                 final Entity entity2 = player.worldObj.getEntityByID((Integer) this.data.get(0));
 
-                if (entity2 instanceof EntityCargoRocket) {
-                    final EntityCargoRocket rocket = (EntityCargoRocket) entity2;
+                if (entity2 instanceof EntityCargoRocket rocket) {
                     rocket.statusValid = rocket.checkLaunchValidity();
                 }
                 break;

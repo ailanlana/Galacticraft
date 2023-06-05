@@ -1,9 +1,9 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
+import net.minecraft.util.AxisAlignedBB;
+
 import micdoodle8.mods.galacticraft.core.blocks.BlockOxygenDetector;
 import micdoodle8.mods.galacticraft.core.util.OxygenUtil;
-
-import net.minecraft.util.AxisAlignedBB;
 
 public class TileEntityOxygenDetector extends TileEntityAdvanced {
 
@@ -14,7 +14,7 @@ public class TileEntityOxygenDetector extends TileEntityAdvanced {
         if (this.worldObj != null && !this.worldObj.isRemote && this.ticks % 50 == 0) {
             this.blockType = this.getBlockType();
 
-            if (this.blockType != null && this.blockType instanceof BlockOxygenDetector) {
+            if (this.blockType instanceof BlockOxygenDetector) {
                 ((BlockOxygenDetector) this.blockType).updateOxygenState(
                         this.worldObj,
                         this.xCoord,

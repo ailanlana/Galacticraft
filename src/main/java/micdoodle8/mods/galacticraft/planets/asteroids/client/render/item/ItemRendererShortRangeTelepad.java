@@ -1,19 +1,16 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.client.render.item;
 
-import micdoodle8.mods.galacticraft.planets.asteroids.client.render.tile.TileEntityShortRangeTelepadRenderer;
-
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import micdoodle8.mods.galacticraft.planets.asteroids.client.render.tile.TileEntityShortRangeTelepadRenderer;
 
 public class ItemRendererShortRangeTelepad implements IItemRenderer {
 
-    private void renderBeamReceiver(ItemRenderType type, RenderBlocks render, ItemStack item, float translateX,
-            float translateY, float translateZ) {
+    private void renderBeamReceiver(ItemRenderType type) {
         GL11.glPushMatrix();
         this.transform(type);
 
@@ -24,42 +21,22 @@ public class ItemRendererShortRangeTelepad implements IItemRenderer {
         FMLClientHandler.instance().getClient().renderEngine
                 .bindTexture(TileEntityShortRangeTelepadRenderer.telepadTexture);
 
-        if (type == ItemRenderType.INVENTORY) {
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("Base");
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("Top");
+        TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("Base");
+        TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("Top");
 
-            FMLClientHandler.instance().getClient().renderEngine
-                    .bindTexture(TileEntityShortRangeTelepadRenderer.telepadTexture0);
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopMidxNegz");
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopPosxNegz");
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopNegxNegz");
+        FMLClientHandler.instance().getClient().renderEngine
+                .bindTexture(TileEntityShortRangeTelepadRenderer.telepadTexture0);
+        TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopMidxNegz");
+        TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopPosxNegz");
+        TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopNegxNegz");
 
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopMidxMidz");
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopPosxMidz");
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopNegxMidz");
+        TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopMidxMidz");
+        TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopPosxMidz");
+        TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopNegxMidz");
 
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopMidxPosz");
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopPosxPosz");
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopNegxPosz");
-        } else {
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("Base");
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("Top");
-
-            FMLClientHandler.instance().getClient().renderEngine
-                    .bindTexture(TileEntityShortRangeTelepadRenderer.telepadTexture0);
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopMidxNegz");
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopPosxNegz");
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopNegxNegz");
-
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopMidxMidz");
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopPosxMidz");
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopNegxMidz");
-
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopMidxPosz");
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopPosxPosz");
-            TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopNegxPosz");
-        }
-
+        TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopMidxPosz");
+        TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopPosxPosz");
+        TileEntityShortRangeTelepadRenderer.telepadModel.renderPart("TopNegxPosz");
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glPopMatrix();
     }
@@ -105,18 +82,13 @@ public class ItemRendererShortRangeTelepad implements IItemRenderer {
      */
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-        switch (type) {
-            case ENTITY:
-                return true;
-            case EQUIPPED:
-                return true;
-            case EQUIPPED_FIRST_PERSON:
-                return true;
-            case INVENTORY:
-                return true;
-            default:
-                return false;
-        }
+        return switch (type) {
+            case ENTITY -> true;
+            case EQUIPPED -> true;
+            case EQUIPPED_FIRST_PERSON -> true;
+            case INVENTORY -> true;
+            default -> false;
+        };
     }
 
     @Override
@@ -128,16 +100,16 @@ public class ItemRendererShortRangeTelepad implements IItemRenderer {
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         switch (type) {
             case EQUIPPED:
-                this.renderBeamReceiver(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderBeamReceiver(type);
                 break;
             case EQUIPPED_FIRST_PERSON:
-                this.renderBeamReceiver(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderBeamReceiver(type);
                 break;
             case INVENTORY:
-                this.renderBeamReceiver(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderBeamReceiver(type);
                 break;
             case ENTITY:
-                this.renderBeamReceiver(type, (RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+                this.renderBeamReceiver(type);
                 break;
             default:
                 break;

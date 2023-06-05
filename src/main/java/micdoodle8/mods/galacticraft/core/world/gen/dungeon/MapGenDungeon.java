@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
-import micdoodle8.mods.galacticraft.core.util.OxygenUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+import micdoodle8.mods.galacticraft.core.util.OxygenUtil;
 
 public class MapGenDungeon {
 
@@ -243,16 +243,7 @@ public class MapGenDungeon {
                             currentRoom = possibleRoom;
                             currentRoom.generate(blocks, metas, chunkX, chunkZ);
                             this.rooms.add(currentRoom);
-                            this.genCorridor(
-                                    corridor1,
-                                    rand,
-                                    possibleRoom.posY,
-                                    chunkX,
-                                    chunkZ,
-                                    dir,
-                                    blocks,
-                                    metas,
-                                    false);
+                            this.genCorridor(corridor1, possibleRoom.posY, chunkX, chunkZ, dir, blocks, metas, false);
                             break;
                         }
                     } else
@@ -382,36 +373,18 @@ public class MapGenDungeon {
                             currentRoom = possibleRoom;
                             currentRoom.generate(blocks, metas, chunkX, chunkZ);
                             this.rooms.add(currentRoom);
-                            this.genCorridor(
-                                    corridor2,
-                                    rand,
-                                    possibleRoom.posY,
-                                    chunkX,
-                                    chunkZ,
-                                    dir2,
-                                    blocks,
-                                    metas,
-                                    true);
-                            this.genCorridor(
-                                    corridor1,
-                                    rand,
-                                    possibleRoom.posY,
-                                    chunkX,
-                                    chunkZ,
-                                    dir,
-                                    blocks,
-                                    metas,
-                                    false);
+                            this.genCorridor(corridor2, possibleRoom.posY, chunkX, chunkZ, dir2, blocks, metas, true);
+                            this.genCorridor(corridor1, possibleRoom.posY, chunkX, chunkZ, dir, blocks, metas, false);
                             break;
-                        } else {}
+                        }
                     }
                 } else {}
             }
         }
     }
 
-    private void genCorridor(DungeonBoundingBox corridor, Random rand, int y, int cx, int cz, ForgeDirection dir,
-            Block[] blocks, byte[] metas, boolean doubleCorridor) {
+    private void genCorridor(DungeonBoundingBox corridor, int y, int cx, int cz, ForgeDirection dir, Block[] blocks,
+            byte[] metas, boolean doubleCorridor) {
         for (int i = corridor.minX - 1; i <= corridor.maxX + 1; i++) {
             for (int k = corridor.minZ - 1; k <= corridor.maxZ + 1; k++) {
                 loopj: for (int j = y - 1; j <= y + this.HALLWAY_HEIGHT; j++) {
@@ -508,8 +481,7 @@ public class MapGenDungeon {
     }
 
     public void handleTileEntities(Random rand) {
-        final ArrayList<DungeonRoom> rooms = new ArrayList<>();
-        rooms.addAll(this.rooms);
+        final ArrayList<DungeonRoom> rooms = new ArrayList<>(this.rooms);
         this.rooms.clear();
         for (final DungeonRoom room : rooms) {
             room.handleTileEntities(rand);
@@ -620,18 +592,17 @@ public class MapGenDungeon {
     }
 
     private Block getBlock(Block[] blocks, int x, int y, int z, int cx, int cz) {
-        if (MapGenDungeon.useArrays) {
-            cx *= 16;
-            cz *= 16;
-            x -= cx;
-            z -= cz;
-            if (x < 0 || x >= 16 || z < 0 || z >= 16) {
-                return Blocks.air;
-            }
-            return blocks[this.getIndex(x, y, z)];
-        } else {
+        if (!MapGenDungeon.useArrays) {
             return this.worldObj.getBlock(x, y, z);
         }
+        cx *= 16;
+        cz *= 16;
+        x -= cx;
+        z -= cz;
+        if (x < 0 || x >= 16 || z < 0 || z >= 16) {
+            return Blocks.air;
+        }
+        return blocks[this.getIndex(x, y, z)];
     }
 
     private int getIndex(int x, int y, int z) {
@@ -654,10 +625,10 @@ public class MapGenDungeon {
     private int clamp(int x, int min, int max) {
         if (x < min) {
             return min;
-        } else if (x > max) {
-            return max;
-        } else {
-            return x;
         }
+        if (x > max) {
+            return max;
+        }
+        return x;
     }
 }

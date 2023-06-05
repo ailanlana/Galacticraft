@@ -1,9 +1,5 @@
 package micdoodle8.mods.galacticraft.core.entities;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityParaChest;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -14,6 +10,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidRegistry;
+
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityParaChest;
 
 public class EntityParachest extends Entity {
 
@@ -94,7 +94,8 @@ public class EntityParachest extends Entity {
                         if (this.placeChest(x, y + i, z)) {
                             this.setDead();
                             return;
-                        } else if (this.cargo != null) {
+                        }
+                        if (this.cargo != null) {
                             for (final ItemStack stack : this.cargo) {
                                 final EntityItem e = new EntityItem(
                                         this.worldObj,
@@ -128,9 +129,7 @@ public class EntityParachest extends Entity {
         this.worldObj.setBlock(x, y, z, GCBlocks.parachest, 0, 3);
         final TileEntity te = this.worldObj.getTileEntity(x, y, z);
 
-        if (te instanceof TileEntityParaChest && this.cargo != null) {
-            final TileEntityParaChest chest = (TileEntityParaChest) te;
-
+        if (te instanceof TileEntityParaChest chest && this.cargo != null) {
             chest.chestContents = new ItemStack[this.cargo.length + 1];
 
             for (int i = 0; i < this.cargo.length; i++) {

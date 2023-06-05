@@ -3,6 +3,13 @@ package micdoodle8.mods.galacticraft.core.client.gui.container;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
@@ -15,13 +22,6 @@ import micdoodle8.mods.galacticraft.core.oxygen.OxygenPressureProtocol;
 import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenSealer;
 import micdoodle8.mods.galacticraft.core.util.EnumColor;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
 
 public class GuiOxygenSealer extends GuiContainerGC {
 
@@ -69,7 +69,6 @@ public class GuiOxygenSealer extends GuiContainerGC {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void initGui() {
         super.initGui();
@@ -201,10 +200,8 @@ public class GuiOxygenSealer extends GuiContainerGC {
         final int metadata = this.sealer.getWorldObj()
                 .getBlockMetadata(this.sealer.xCoord, this.sealer.yCoord + 1, this.sealer.zCoord);
 
-        if (blockAbove == GCBlocks.breatheableAir || blockAbove == GCBlocks.brightBreatheableAir) {
-            if (metadata == 1) {
-                return EnumColor.DARK_GREEN + GCCoreUtil.translate("gui.status.on.name");
-            }
+        if ((blockAbove == GCBlocks.breatheableAir || blockAbove == GCBlocks.brightBreatheableAir) && metadata == 1) {
+            return EnumColor.DARK_GREEN + GCCoreUtil.translate("gui.status.on.name");
         }
 
         if (this.sealer.thermalControlEnabled()) {
@@ -258,23 +255,20 @@ public class GuiOxygenSealer extends GuiContainerGC {
         final int threadCooldown = this.sealer.getScaledThreadCooldown(25);
 
         if (threadCooldown < 15) {
-            if (threadCooldown < 4) {
-                String elipsis = "";
-                for (int i = 0; i < (23 - threadCooldown) % 4; i++) {
-                    elipsis += ".";
-                }
-
-                return EnumColor.ORANGE + GCCoreUtil.translate("gui.status.checkStarting.name") + elipsis;
-            } else {
+            if (threadCooldown >= 4) {
                 return EnumColor.ORANGE + GCCoreUtil.translate("gui.status.checkPending.name");
             }
-        } else {
-            if (!this.sealer.sealed) {
-                return EnumColor.DARK_RED + GCCoreUtil.translate("gui.status.unsealed.name");
-            } else {
-                return EnumColor.DARK_GREEN + GCCoreUtil.translate("gui.status.sealed.name");
+            StringBuilder elipsis = new StringBuilder();
+            for (int i = 0; i < (23 - threadCooldown) % 4; i++) {
+                elipsis.append(".");
             }
+
+            return EnumColor.ORANGE + GCCoreUtil.translate("gui.status.checkStarting.name") + elipsis.toString();
         }
+        if (!this.sealer.sealed) {
+            return EnumColor.DARK_RED + GCCoreUtil.translate("gui.status.unsealed.name");
+        }
+        return EnumColor.DARK_GREEN + GCCoreUtil.translate("gui.status.sealed.name");
     }
 
     @Override

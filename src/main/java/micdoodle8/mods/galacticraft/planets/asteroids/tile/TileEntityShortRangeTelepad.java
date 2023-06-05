@@ -4,23 +4,6 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
-import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseElectricBlock;
-import micdoodle8.mods.galacticraft.core.tile.IMultiBlock;
-import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
-import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
-import micdoodle8.mods.galacticraft.core.util.EnumColor;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-import micdoodle8.mods.galacticraft.planets.GalacticraftPlanets;
-import micdoodle8.mods.galacticraft.planets.GuiIdsPlanets;
-import micdoodle8.mods.galacticraft.planets.asteroids.blocks.AsteroidBlocks;
-import micdoodle8.mods.galacticraft.planets.asteroids.blocks.BlockTelepadFake;
-import micdoodle8.mods.galacticraft.planets.asteroids.dimension.ShortRangeTelepadHandler;
-import micdoodle8.mods.galacticraft.planets.asteroids.network.PacketSimpleAsteroids;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -37,6 +20,22 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
+import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseElectricBlock;
+import micdoodle8.mods.galacticraft.core.tile.IMultiBlock;
+import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
+import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
+import micdoodle8.mods.galacticraft.core.util.EnumColor;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+import micdoodle8.mods.galacticraft.planets.GalacticraftPlanets;
+import micdoodle8.mods.galacticraft.planets.GuiIdsPlanets;
+import micdoodle8.mods.galacticraft.planets.asteroids.blocks.AsteroidBlocks;
+import micdoodle8.mods.galacticraft.planets.asteroids.blocks.BlockTelepadFake;
+import micdoodle8.mods.galacticraft.planets.asteroids.dimension.ShortRangeTelepadHandler;
+import micdoodle8.mods.galacticraft.planets.asteroids.network.PacketSimpleAsteroids;
 
 public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
         implements IMultiBlock, IInventory, ISidedInventory {
@@ -75,7 +74,6 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
     public boolean teleporting;
 
     public TileEntityShortRangeTelepad() {
-        super();
         this.storage.setMaxExtract(ConfigManagerCore.hardMode ? 115 : 50);
     }
 
@@ -151,8 +149,7 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
                                         this.yCoord + 2,
                                         this.zCoord + 1));
 
-                        if (tileAt != null && tileAt instanceof TileEntityShortRangeTelepad) {
-                            final TileEntityShortRangeTelepad destTelepad = (TileEntityShortRangeTelepad) tileAt;
+                        if (tileAt != null && tileAt instanceof TileEntityShortRangeTelepad destTelepad) {
                             final int teleportResult = destTelepad.canTeleportHere();
                             if (teleportResult == 0) {
                                 for (final EntityLivingBase e : containedEntities) {
@@ -463,36 +460,34 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
     }
 
     public boolean updateTarget() {
-        if (this.targetAddress >= 0 && !this.worldObj.isRemote) {
+        if (this.targetAddress < 0 || this.worldObj.isRemote) {
             this.targetAddressResult = EnumTelepadSearchResult.NOT_FOUND;
+            return false;
+        }
+        this.targetAddressResult = EnumTelepadSearchResult.NOT_FOUND;
 
-            final ShortRangeTelepadHandler.TelepadEntry addressResult = ShortRangeTelepadHandler
-                    .getLocationFromAddress(this.targetAddress);
+        final ShortRangeTelepadHandler.TelepadEntry addressResult = ShortRangeTelepadHandler
+                .getLocationFromAddress(this.targetAddress);
 
-            if (addressResult != null) {
-                if (this.worldObj.provider.dimensionId == addressResult.dimensionID) {
-                    final double distance = this.getDistanceFrom(
-                            addressResult.position.x + 0.5F,
-                            addressResult.position.y + 0.5F,
-                            addressResult.position.z + 0.5F);
+        if (addressResult == null) {
+            this.targetAddressResult = EnumTelepadSearchResult.NOT_FOUND;
+            return false;
+        }
+        if (this.worldObj.provider.dimensionId == addressResult.dimensionID) {
+            final double distance = this.getDistanceFrom(
+                    addressResult.position.x + 0.5F,
+                    addressResult.position.y + 0.5F,
+                    addressResult.position.z + 0.5F);
 
-                    if (distance < TELEPORTER_RANGE * TELEPORTER_RANGE) {
-                        this.targetAddressResult = EnumTelepadSearchResult.VALID;
-                        return true;
-                    } else {
-                        this.targetAddressResult = EnumTelepadSearchResult.TOO_FAR;
-                        return false;
-                    }
-                } else {
-                    this.targetAddressResult = EnumTelepadSearchResult.WRONG_DIM;
-                    return false;
-                }
+            if (distance < TELEPORTER_RANGE * TELEPORTER_RANGE) {
+                this.targetAddressResult = EnumTelepadSearchResult.VALID;
+                return true;
             } else {
-                this.targetAddressResult = EnumTelepadSearchResult.NOT_FOUND;
+                this.targetAddressResult = EnumTelepadSearchResult.TOO_FAR;
                 return false;
             }
         } else {
-            this.targetAddressResult = EnumTelepadSearchResult.NOT_FOUND;
+            this.targetAddressResult = EnumTelepadSearchResult.WRONG_DIM;
             return false;
         }
     }
@@ -520,25 +515,22 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
 
     @Override
     public ItemStack decrStackSize(int par1, int par2) {
-        if (this.containingItems[par1] != null) {
-            ItemStack var3;
-
-            if (this.containingItems[par1].stackSize <= par2) {
-                var3 = this.containingItems[par1];
-                this.containingItems[par1] = null;
-                return var3;
-            } else {
-                var3 = this.containingItems[par1].splitStack(par2);
-
-                if (this.containingItems[par1].stackSize == 0) {
-                    this.containingItems[par1] = null;
-                }
-
-                return var3;
-            }
-        } else {
+        if (this.containingItems[par1] == null) {
             return null;
         }
+        ItemStack var3;
+
+        if (this.containingItems[par1].stackSize <= par2) {
+            var3 = this.containingItems[par1];
+            this.containingItems[par1] = null;
+        } else {
+            var3 = this.containingItems[par1].splitStack(par2);
+
+            if (this.containingItems[par1].stackSize == 0) {
+                this.containingItems[par1] = null;
+            }
+        }
+        return var3;
     }
 
     @Override
@@ -547,9 +539,8 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
             final ItemStack var2 = this.containingItems[par1];
             this.containingItems[par1] = null;
             return var2;
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
@@ -630,11 +621,7 @@ public class TileEntityShortRangeTelepad extends TileBaseElectricBlock
         float f;
         f = rand.nextFloat() * 0.6F + 0.4F;
 
-        if (sending && this.targetAddressResult != EnumTelepadSearchResult.VALID) {
-            return new Vector3(f, f * 0.3F, f * 0.3F);
-        }
-
-        if (!sending && !this.addressValid) {
+        if ((sending ? this.targetAddressResult != EnumTelepadSearchResult.VALID : !this.addressValid)) {
             return new Vector3(f, f * 0.3F, f * 0.3F);
         }
 

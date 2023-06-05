@@ -1,11 +1,5 @@
 package micdoodle8.mods.galacticraft.core.blocks;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical;
-import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenDistributor;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -22,6 +16,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityOxygenDistributor;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class BlockOxygenDistributor extends BlockAdvancedTile implements ItemBlockDesc.IBlockShiftDesc {
 
@@ -115,9 +114,11 @@ public class BlockOxygenDistributor extends BlockAdvancedTile implements ItemBlo
     public IIcon getIcon(int side, int metadata) {
         if (side == 0 || side == 1) {
             return this.iconMachineSide;
-        } else if (side == metadata + 2) {
+        }
+        if (side == metadata + 2) {
             return this.iconOutput;
-        } else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) {
+        }
+        if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) {
             return this.iconInput;
         } else {
             return this.iconDistributor;

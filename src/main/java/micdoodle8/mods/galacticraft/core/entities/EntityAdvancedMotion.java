@@ -6,11 +6,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.network.PacketEntityUpdate;
-import micdoodle8.mods.galacticraft.core.network.PacketEntityUpdate.IEntityFullSync;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
@@ -27,6 +22,10 @@ import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.network.PacketEntityUpdate;
+import micdoodle8.mods.galacticraft.core.network.PacketEntityUpdate.IEntityFullSync;
 
 public abstract class EntityAdvancedMotion extends InventoryEntity implements IControllableEntity, IEntityFullSync {
 
@@ -139,38 +138,36 @@ public abstract class EntityAdvancedMotion extends InventoryEntity implements IC
     public boolean attackEntityFrom(DamageSource var1, float var2) {
         if (this.isDead || var1.equals(DamageSource.cactus) || !this.allowDamageSource(var1)) {
             return true;
-        } else {
-            final Entity e = var1.getEntity();
-            if (this.isEntityInvulnerable() || this.posY > 300
-                    || e instanceof EntityLivingBase && !(e instanceof EntityPlayer)) {
+        }
+        final Entity e = var1.getEntity();
+        if (this.isEntityInvulnerable() || this.posY > 300
+                || e instanceof EntityLivingBase && !(e instanceof EntityPlayer)) {
+            return false;
+        }
+        this.rockDirection = -this.rockDirection;
+        this.timeSinceHit = 10;
+        this.currentDamage = this.currentDamage + var2 * 10;
+        this.setBeenAttacked();
+
+        if (e instanceof EntityPlayer && ((EntityPlayer) e).capabilities.isCreativeMode) {
+            this.currentDamage = 100;
+        }
+
+        if (this.currentDamage > 70) {
+            if (this.riddenByEntity != null) {
+                this.riddenByEntity.mountEntity(this);
+
                 return false;
-            } else {
-                this.rockDirection = -this.rockDirection;
-                this.timeSinceHit = 10;
-                this.currentDamage = this.currentDamage + var2 * 10;
-                this.setBeenAttacked();
+            }
 
-                if (e instanceof EntityPlayer && ((EntityPlayer) e).capabilities.isCreativeMode) {
-                    this.currentDamage = 100;
-                }
+            if (!this.worldObj.isRemote) {
+                this.dropItems();
 
-                if (this.currentDamage > 70) {
-                    if (this.riddenByEntity != null) {
-                        this.riddenByEntity.mountEntity(this);
-
-                        return false;
-                    }
-
-                    if (!this.worldObj.isRemote) {
-                        this.dropItems();
-
-                        this.setDead();
-                    }
-                }
-
-                return true;
+                this.setDead();
             }
         }
+
+        return true;
     }
 
     public abstract List<ItemStack> getItemsDropped();
@@ -369,10 +366,8 @@ public abstract class EntityAdvancedMotion extends InventoryEntity implements IC
     public void spawnParticle(EntityFX fx) {
         final Minecraft mc = FMLClientHandler.instance().getClient();
 
-        if (mc != null && mc.renderViewEntity != null && mc.effectRenderer != null) {
-            if (fx != null) {
-                mc.effectRenderer.addEffect(fx);
-            }
+        if (mc != null && mc.renderViewEntity != null && mc.effectRenderer != null && fx != null) {
+            mc.effectRenderer.addEffect(fx);
         }
     }
 }

@@ -3,19 +3,19 @@ package micdoodle8.mods.galacticraft.planets.asteroids.entities;
 import java.util.Map;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.api.entity.ICameraZoomEntity;
-import micdoodle8.mods.galacticraft.api.entity.IIgnoreShift;
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.entities.EntityLanderBase;
-import micdoodle8.mods.galacticraft.core.entities.IScaleableFuelLevel;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
+import micdoodle8.mods.galacticraft.api.entity.ICameraZoomEntity;
+import micdoodle8.mods.galacticraft.api.entity.IIgnoreShift;
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.core.entities.EntityLanderBase;
+import micdoodle8.mods.galacticraft.core.entities.IScaleableFuelLevel;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class EntityEntryPod extends EntityLanderBase implements IScaleableFuelLevel, ICameraZoomEntity, IIgnoreShift {
 
@@ -67,10 +67,8 @@ public class EntityEntryPod extends EntityLanderBase implements IScaleableFuelLe
     public void tickInAir() {
         super.tickInAir();
 
-        if (this.worldObj.isRemote) {
-            if (!this.onGround) {
-                this.motionY -= 0.002D;
-            }
+        if (this.worldObj.isRemote && !this.onGround) {
+            this.motionY -= 0.002D;
         }
     }
 
@@ -157,16 +155,15 @@ public class EntityEntryPod extends EntityLanderBase implements IScaleableFuelLe
         if (this.riddenByEntity == null && var1 instanceof EntityPlayerMP) {
             GCCoreUtil.openParachestInv((EntityPlayerMP) var1, this);
             return true;
-        } else if (var1 instanceof EntityPlayerMP) {
+        }
+        if (var1 instanceof EntityPlayerMP) {
             if (!this.onGround) {
                 return false;
             }
 
             var1.mountEntity(null);
-            return true;
-        } else {
-            return true;
         }
+        return true;
     }
 
     @Override

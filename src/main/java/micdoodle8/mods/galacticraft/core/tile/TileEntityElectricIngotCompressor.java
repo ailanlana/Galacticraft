@@ -1,16 +1,7 @@
 package micdoodle8.mods.galacticraft.core.tile;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
-
-import micdoodle8.mods.galacticraft.api.recipe.CompressorRecipes;
-import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
-import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseElectricBlock;
-import micdoodle8.mods.galacticraft.core.inventory.PersistantInventoryCrafting;
-import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
-import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,6 +18,13 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import cpw.mods.fml.relauncher.Side;
+import micdoodle8.mods.galacticraft.api.recipe.CompressorRecipes;
+import micdoodle8.mods.galacticraft.core.energy.item.ItemElectricBase;
+import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseElectricBlock;
+import micdoodle8.mods.galacticraft.core.inventory.PersistantInventoryCrafting;
+import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
+import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class TileEntityElectricIngotCompressor extends TileBaseElectricBlock implements IInventory, ISidedInventory {
 
@@ -57,27 +55,18 @@ public class TileEntityElectricIngotCompressor extends TileBaseElectricBlock imp
         if (!this.worldObj.isRemote) {
             boolean updateInv = false;
 
-            if (this.hasEnoughEnergyToRun) {
-                if (this.canCompress()) {
-                    ++this.processTicks;
+            if (this.hasEnoughEnergyToRun && this.canCompress()) {
+                ++this.processTicks;
 
-                    this.processTimeRequired = TileEntityElectricIngotCompressor.PROCESS_TIME_REQUIRED_BASE * 2
-                            / (1 + this.poweredByTierGC);
+                this.processTimeRequired = TileEntityElectricIngotCompressor.PROCESS_TIME_REQUIRED_BASE * 2
+                        / (1 + this.poweredByTierGC);
 
-                    if (this.processTicks >= this.processTimeRequired) {
-                        this.worldObj.playSoundEffect(
-                                this.xCoord,
-                                this.yCoord,
-                                this.zCoord,
-                                "random.anvil_land",
-                                0.2F,
-                                0.5F);
-                        this.processTicks = 0;
-                        this.compressItems();
-                        updateInv = true;
-                    }
-                } else {
+                if (this.processTicks >= this.processTimeRequired) {
+                    this.worldObj
+                            .playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "random.anvil_land", 0.2F, 0.5F);
                     this.processTicks = 0;
+                    this.compressItems();
+                    updateInv = true;
                 }
             } else {
                 this.processTicks = 0;
@@ -142,10 +131,9 @@ public class TileEntityElectricIngotCompressor extends TileBaseElectricBlock imp
     private void compressIntoSlot(int slot) {
         if (this.canCompress()) {
             final ItemStack resultItemStack = this.producingStack.copy();
-            if (ConfigManagerCore.quickMode) {
-                if (resultItemStack.getItem().getUnlocalizedName(resultItemStack).contains("compressed")) {
-                    resultItemStack.stackSize *= 2;
-                }
+            if (ConfigManagerCore.quickMode
+                    && resultItemStack.getItem().getUnlocalizedName(resultItemStack).contains("compressed")) {
+                resultItemStack.stackSize *= 2;
             }
 
             if (this.containingItems[slot] == null) {
@@ -263,25 +251,22 @@ public class TileEntityElectricIngotCompressor extends TileBaseElectricBlock imp
             return result;
         }
 
-        if (this.containingItems[par1] != null) {
-            ItemStack var3;
-
-            if (this.containingItems[par1].stackSize <= par2) {
-                var3 = this.containingItems[par1];
-                this.containingItems[par1] = null;
-                return var3;
-            } else {
-                var3 = this.containingItems[par1].splitStack(par2);
-
-                if (this.containingItems[par1].stackSize == 0) {
-                    this.containingItems[par1] = null;
-                }
-
-                return var3;
-            }
-        } else {
+        if (this.containingItems[par1] == null) {
             return null;
         }
+        ItemStack var3;
+
+        if (this.containingItems[par1].stackSize <= par2) {
+            var3 = this.containingItems[par1];
+            this.containingItems[par1] = null;
+        } else {
+            var3 = this.containingItems[par1].splitStack(par2);
+
+            if (this.containingItems[par1].stackSize == 0) {
+                this.containingItems[par1] = null;
+            }
+        }
+        return var3;
     }
 
     @Override
@@ -294,9 +279,8 @@ public class TileEntityElectricIngotCompressor extends TileBaseElectricBlock imp
             final ItemStack var2 = this.containingItems[par1];
             this.containingItems[par1] = null;
             return var2;
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
@@ -338,7 +322,8 @@ public class TileEntityElectricIngotCompressor extends TileBaseElectricBlock imp
     public boolean isItemValidForSlot(int slotID, ItemStack itemStack) {
         if (slotID == 0) {
             return itemStack != null && ItemElectricBase.isElectricItem(itemStack.getItem());
-        } else if (slotID >= 3) {
+        }
+        if (slotID >= 3) {
             if (this.producingStack != null) {
                 final ItemStack stackInSlot = this.getStackInSlot(slotID);
                 return stackInSlot != null && stackInSlot.isItemEqual(itemStack);
@@ -373,24 +358,18 @@ public class TileEntityElectricIngotCompressor extends TileBaseElectricBlock imp
                     return true;
                 }
             } else if (recipe instanceof ShapelessOreRecipe) {
-                @SuppressWarnings("unchecked")
                 final ArrayList<Object> required = new ArrayList<>(((ShapelessOreRecipe) recipe).getInput());
-
-                final Iterator<Object> req = required.iterator();
 
                 int match = 0;
 
-                while (req.hasNext()) {
-                    final Object next = req.next();
-
+                for (Object next : required) {
                     if (next instanceof ItemStack) {
                         if (OreDictionary.itemMatches((ItemStack) next, stack, false)) {
                             match++;
                         }
                     } else if (next instanceof ArrayList) {
-                        final Iterator<ItemStack> itr = ((ArrayList<ItemStack>) next).iterator();
-                        while (itr.hasNext()) {
-                            if (OreDictionary.itemMatches(itr.next(), stack, false)) {
+                        for (ItemStack element : (ArrayList<ItemStack>) next) {
+                            if (OreDictionary.itemMatches(element, stack, false)) {
                                 match++;
                                 break;
                             }
@@ -430,8 +409,8 @@ public class TileEntityElectricIngotCompressor extends TileBaseElectricBlock imp
         if (side == 0) {
             return new int[] { 1, 2 };
         }
-        final int[] slots = new int[] { 0, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-        final ArrayList<Integer> removeSlots = new ArrayList();
+        final int[] slots = { 0, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+        final ArrayList<Integer> removeSlots = new ArrayList<>();
 
         for (int i = 3; i < 12; i++) {
             if (removeSlots.contains(i)) {

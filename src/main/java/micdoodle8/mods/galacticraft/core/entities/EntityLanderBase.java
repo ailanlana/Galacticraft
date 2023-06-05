@@ -5,14 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
-import micdoodle8.mods.galacticraft.core.inventory.IInventorySettable;
-import micdoodle8.mods.galacticraft.core.network.PacketDynamic;
-import micdoodle8.mods.galacticraft.core.network.PacketDynamicInventory;
-import micdoodle8.mods.galacticraft.core.util.FluidUtil;
-import micdoodle8.mods.galacticraft.core.util.WorldUtil;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -28,6 +20,13 @@ import net.minecraftforge.fluids.FluidTank;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import io.netty.buffer.ByteBuf;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
+import micdoodle8.mods.galacticraft.core.inventory.IInventorySettable;
+import micdoodle8.mods.galacticraft.core.network.PacketDynamic;
+import micdoodle8.mods.galacticraft.core.network.PacketDynamicInventory;
+import micdoodle8.mods.galacticraft.core.util.FluidUtil;
+import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 
 public abstract class EntityLanderBase extends EntityAdvancedMotion implements IInventorySettable, IScaleableFuelLevel {
 
@@ -38,7 +37,7 @@ public abstract class EntityLanderBase extends EntityAdvancedMotion implements I
     private UUID persistantRiderUUID;
     private Boolean shouldMoveClient;
     private Boolean shouldMoveServer;
-    private ArrayList prevData;
+    private ArrayList<Object> prevData;
     private boolean networkDataChanged;
 
     public EntityLanderBase(World var1, float yOffset) {
@@ -112,13 +111,11 @@ public abstract class EntityLanderBase extends EntityAdvancedMotion implements I
     public void onUpdate() {
         super.onUpdate();
 
-        if (this.ticks < 40 && this.posY > 150) {
-            if (this.riddenByEntity == null) {
-                final EntityPlayer player = this.worldObj.getClosestPlayerToEntity(this, 5);
+        if (this.ticks < 40 && this.posY > 150 && this.riddenByEntity == null) {
+            final EntityPlayer player = this.worldObj.getClosestPlayerToEntity(this, 5);
 
-                if (player != null && player.ridingEntity == null) {
-                    player.mountEntity(this);
-                }
+            if (player != null && player.ridingEntity == null) {
+                player.mountEntity(this);
             }
         }
 
@@ -229,11 +226,7 @@ public abstract class EntityLanderBase extends EntityAdvancedMotion implements I
 
     @Override
     public boolean shouldMove() {
-        if (this.shouldMoveClient == null || this.shouldMoveServer == null) {
-            return false;
-        }
-
-        if (this.ticks < 40) {
+        if (this.shouldMoveClient == null || this.shouldMoveServer == null || this.ticks < 40) {
             return false;
         }
 

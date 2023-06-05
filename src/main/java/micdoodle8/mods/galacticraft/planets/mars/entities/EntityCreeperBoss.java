@@ -4,23 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
-import micdoodle8.mods.galacticraft.api.entity.IEntityBreathable;
-import micdoodle8.mods.galacticraft.api.recipe.ISchematicPage;
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.entities.EntityAIArrowAttack;
-import micdoodle8.mods.galacticraft.core.entities.IBoss;
-import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityDungeonSpawner;
-import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-import micdoodle8.mods.galacticraft.planets.asteroids.ConfigManagerAsteroids;
-import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
-import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityTreasureChestMars;
-
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -52,6 +35,22 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ChestGenHooks;
 
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
+import micdoodle8.mods.galacticraft.api.entity.IEntityBreathable;
+import micdoodle8.mods.galacticraft.api.recipe.ISchematicPage;
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.entities.EntityAIArrowAttack;
+import micdoodle8.mods.galacticraft.core.entities.IBoss;
+import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityDungeonSpawner;
+import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+import micdoodle8.mods.galacticraft.planets.asteroids.ConfigManagerAsteroids;
+import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityTreasureChestMars;
 
 public class EntityCreeperBoss extends EntityMob
         implements IEntityBreathable, IBossDisplayData, IRangedAttackMob, IBoss {
@@ -84,22 +83,16 @@ public class EntityCreeperBoss extends EntityMob
 
     @Override
     public boolean attackEntityFrom(DamageSource damageSource, float damage) {
-        if (damageSource.getDamageType().equals("fireball")) {
+        if ("fireball".equals(damageSource.getDamageType())) {
             if (this.isEntityInvulnerable() || !super.attackEntityFrom(damageSource, damage)) {
                 return false;
-            } else {
-                final Entity entity = damageSource.getEntity();
-
-                if (this.riddenByEntity != entity && this.ridingEntity != entity) {
-                    if (entity != this) {
-                        this.entityToAttack = entity;
-                    }
-
-                    return true;
-                } else {
-                    return true;
-                }
             }
+            final Entity entity = damageSource.getEntity();
+
+            if (this.riddenByEntity != entity && this.ridingEntity != entity && entity != this) {
+                this.entityToAttack = entity;
+            }
+            return true;
         }
 
         return false;
@@ -150,7 +143,6 @@ public class EntityCreeperBoss extends EntityMob
         return null;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected void onDeathUpdate() {
         ++this.deathTicks;
@@ -219,7 +211,7 @@ public class EntityCreeperBoss extends EntityMob
                 this.worldObj.spawnEntityInWorld(new EntityXPOrb(this.worldObj, this.posX, this.posY, this.posZ, j));
             }
 
-            for (final TileEntity tile : (List<TileEntity>) this.worldObj.loadedTileEntityList) {
+            for (final TileEntity tile : this.worldObj.loadedTileEntityList) {
                 if (tile instanceof TileEntityTreasureChestMars) {
                     final double d3 = tile.xCoord + 0.5D - this.posX;
                     final double d4 = tile.yCoord + 0.5D - this.posY;
@@ -317,8 +309,7 @@ public class EntityCreeperBoss extends EntityMob
         new Vector3(this);
 
         if (this.roomCoords != null && this.roomSize != null) {
-            @SuppressWarnings("unchecked")
-            final List<Entity> entitiesWithin = this.worldObj.getEntitiesWithinAABB(
+            final List<EntityPlayer> entitiesWithin = this.worldObj.getEntitiesWithinAABB(
                     EntityPlayer.class,
                     AxisAlignedBB.getBoundingBox(
                             this.roomCoords.intX() - 1,
@@ -331,7 +322,6 @@ public class EntityCreeperBoss extends EntityMob
             this.entitiesWithin = entitiesWithin.size();
 
             if (this.entitiesWithin == 0 && this.entitiesWithinLast != 0) {
-                @SuppressWarnings("unchecked")
                 final List<EntityPlayer> entitiesWithin2 = this.worldObj.getEntitiesWithinAABB(
                         EntityPlayer.class,
                         AxisAlignedBB.getBoundingBox(
@@ -404,8 +394,7 @@ public class EntityCreeperBoss extends EntityMob
     }
 
     public ItemStack getGuaranteedLoot(Random rand) {
-        final List<ItemStack> stackList = new LinkedList<>();
-        stackList.addAll(GalacticraftRegistry.getDungeonLoot(2));
+        final List<ItemStack> stackList = new LinkedList<>(GalacticraftRegistry.getDungeonLoot(2));
         boolean hasT3Rocket = false;
         boolean hasAstroMiner = false;
         // Check if player seems to have Tier 3 rocket or Astro Miner already - in that
@@ -511,11 +500,10 @@ public class EntityCreeperBoss extends EntityMob
     private double func_82214_u(int par1) {
         if (par1 <= 0) {
             return this.posX;
-        } else {
-            final float f = (this.renderYawOffset + 180 * (par1 - 1)) / 180.0F * (float) Math.PI;
-            final float f1 = MathHelper.cos(f);
-            return this.posX + f1 * 1.3D;
         }
+        final float f = (this.renderYawOffset + 180 * (par1 - 1)) / 180.0F * (float) Math.PI;
+        final float f1 = MathHelper.cos(f);
+        return this.posX + f1 * 1.3D;
     }
 
     private double func_82208_v(int par1) {
@@ -525,11 +513,10 @@ public class EntityCreeperBoss extends EntityMob
     private double func_82213_w(int par1) {
         if (par1 <= 0) {
             return this.posZ;
-        } else {
-            final float f = (this.renderYawOffset + 180 * (par1 - 1)) / 180.0F * (float) Math.PI;
-            final float f1 = MathHelper.sin(f);
-            return this.posZ + f1 * 1.3D;
         }
+        final float f = (this.renderYawOffset + 180 * (par1 - 1)) / 180.0F * (float) Math.PI;
+        final float f1 = MathHelper.sin(f);
+        return this.posZ + f1 * 1.3D;
     }
 
     @Override

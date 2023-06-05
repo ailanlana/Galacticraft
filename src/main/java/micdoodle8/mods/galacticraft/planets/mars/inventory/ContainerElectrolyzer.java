@@ -1,15 +1,15 @@
 package micdoodle8.mods.galacticraft.planets.mars.inventory;
 
-import micdoodle8.mods.galacticraft.api.item.IItemElectric;
-import micdoodle8.mods.galacticraft.core.inventory.SlotSpecific;
-import micdoodle8.mods.galacticraft.core.util.FluidUtil;
-import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityElectrolyzer;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import micdoodle8.mods.galacticraft.api.item.IItemElectric;
+import micdoodle8.mods.galacticraft.core.inventory.SlotSpecific;
+import micdoodle8.mods.galacticraft.core.util.FluidUtil;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityElectrolyzer;
 
 public class ContainerElectrolyzer extends Container {
 
@@ -60,7 +60,7 @@ public class ContainerElectrolyzer extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1) {
         ItemStack var2 = null;
-        final Slot slot = (Slot) this.inventorySlots.get(par1);
+        final Slot slot = this.inventorySlots.get(par1);
 
         if (slot != null && slot.getHasStack()) {
             final ItemStack var4 = slot.getStack();
@@ -74,28 +74,24 @@ public class ContainerElectrolyzer extends Container {
                 if (par1 == 2) {
                     slot.onSlotChange(var4, var2);
                 }
-            } else {
-                if (var4.getItem() instanceof IItemElectric) {
-                    if (!this.mergeItemStack(var4, 0, 1, false)) {
-                        return null;
-                    }
-                } else {
-                    if (FluidUtil.isWaterContainer(var4)) {
-                        if (!this.mergeItemStack(var4, 1, 2, false)) {
-                            return null;
-                        }
-                    } else if (FluidUtil.isEmptyGasContainer(var4)) {
-                        if (!this.mergeItemStack(var4, 2, 4, false)) {
-                            return null;
-                        }
-                    } else if (par1 < 31) {
-                        if (!this.mergeItemStack(var4, 31, 40, false)) {
-                            return null;
-                        }
-                    } else if (!this.mergeItemStack(var4, 4, 31, false)) {
-                        return null;
-                    }
+            } else if (var4.getItem() instanceof IItemElectric) {
+                if (!this.mergeItemStack(var4, 0, 1, false)) {
+                    return null;
                 }
+            } else if (FluidUtil.isWaterContainer(var4)) {
+                if (!this.mergeItemStack(var4, 1, 2, false)) {
+                    return null;
+                }
+            } else if (FluidUtil.isEmptyGasContainer(var4)) {
+                if (!this.mergeItemStack(var4, 2, 4, false)) {
+                    return null;
+                }
+            } else if (par1 < 31) {
+                if (!this.mergeItemStack(var4, 31, 40, false)) {
+                    return null;
+                }
+            } else if (!this.mergeItemStack(var4, 4, 31, false)) {
+                return null;
             }
 
             if (var4.stackSize == 0) {

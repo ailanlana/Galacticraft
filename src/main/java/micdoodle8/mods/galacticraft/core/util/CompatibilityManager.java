@@ -2,13 +2,12 @@ package micdoodle8.mods.galacticraft.core.util;
 
 import java.lang.reflect.Method;
 
-import micdoodle8.mods.galacticraft.core.blocks.BlockEnclosed;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.entity.player.EntityPlayer;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
+import micdoodle8.mods.galacticraft.core.blocks.BlockEnclosed;
 
 public class CompatibilityManager {
 
@@ -71,7 +70,7 @@ public class CompatibilityManager {
                 classBCBlockGenericPipe = BlockEnclosed.blockPipeBC.getClass();
 
                 for (final Method m : classBCBlockGenericPipe.getMethods()) {
-                    if (m.getName().equals("createPipe") && m.getParameterTypes().length == 1) {
+                    if ("createPipe".equals(m.getName()) && m.getParameterTypes().length == 1) {
                         methodBCBlockPipe_createPipe = m;
                         break;
                     }

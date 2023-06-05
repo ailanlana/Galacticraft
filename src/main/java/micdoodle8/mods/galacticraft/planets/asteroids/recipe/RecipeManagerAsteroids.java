@@ -3,6 +3,13 @@ package micdoodle8.mods.galacticraft.planets.asteroids.recipe;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraftforge.oredict.OreDictionary;
+
 import micdoodle8.mods.galacticraft.api.recipe.CompressorRecipes;
 import micdoodle8.mods.galacticraft.core.blocks.BlockMachineTiered;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
@@ -13,13 +20,6 @@ import micdoodle8.mods.galacticraft.core.util.VersionUtil;
 import micdoodle8.mods.galacticraft.planets.asteroids.blocks.AsteroidBlocks;
 import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
 import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class RecipeManagerAsteroids {
 
@@ -288,11 +288,9 @@ public class RecipeManagerAsteroids {
         if (ConfigManagerCore.recipesRequireGCAdvancedMetals) {
             CompressorRecipes
                     .addShapelessRecipe(new ItemStack(AsteroidsItems.basicItem, 1, 6), titaniumIngot, titaniumIngot);
-        } else {
-            if (OreDictionary.getOres("ingotTitanium").size() > 0) {
-                for (final ItemStack stack : OreDictionary.getOres("ingotTitanium")) {
-                    CompressorRecipes.addShapelessRecipe(new ItemStack(AsteroidsItems.basicItem, 1, 6), stack, stack);
-                }
+        } else if (OreDictionary.getOres("ingotTitanium").size() > 0) {
+            for (final ItemStack stack : OreDictionary.getOres("ingotTitanium")) {
+                CompressorRecipes.addShapelessRecipe(new ItemStack(AsteroidsItems.basicItem, 1, 6), stack, stack);
             }
         }
 

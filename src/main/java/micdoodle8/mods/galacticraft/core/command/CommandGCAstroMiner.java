@@ -2,10 +2,6 @@ package micdoodle8.mods.galacticraft.core.command;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -13,6 +9,10 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
+
+import micdoodle8.mods.galacticraft.core.entities.player.GCPlayerStats;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+import micdoodle8.mods.galacticraft.core.util.PlayerUtil;
 
 public class CommandGCAstroMiner extends CommandBase {
 
@@ -32,7 +32,7 @@ public class CommandGCAstroMiner extends CommandBase {
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
+    public List<String> addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
         if (par2ArrayOfStr.length == 1) {
             return getListOfStringsMatchingLastWord(par2ArrayOfStr, "show", "set", "reset");
         }
@@ -66,11 +66,11 @@ public class CommandGCAstroMiner extends CommandBase {
 
         int type = 0;
         int newvalue = 0;
-        if (astring[0].equalsIgnoreCase("show")) {
+        if ("show".equalsIgnoreCase(astring[0])) {
             type = 1;
-        } else if (astring[0].equalsIgnoreCase("reset")) {
+        } else if ("reset".equalsIgnoreCase(astring[0])) {
             type = 2;
-        } else if (astring[0].length() > 3 && astring[0].substring(0, 3).equalsIgnoreCase("set")) {
+        } else if (astring[0].length() > 3 && "set".equalsIgnoreCase(astring[0].substring(0, 3))) {
             final String number = astring[0].substring(3);
             try {
                 newvalue = Integer.parseInt(number);
@@ -91,43 +91,41 @@ public class CommandGCAstroMiner extends CommandBase {
                             .getPlayerBaseServerFromPlayerUsername(icommandsender.getCommandSenderName(), true);
                 }
 
-                if (playerBase != null) {
-                    final GCPlayerStats stats = GCPlayerStats.get(playerBase);
-                    switch (type) {
-                        case 1:
-                            icommandsender.addChatMessage(
-                                    new ChatComponentText(
-                                            GCCoreUtil.translateWithFormat(
-                                                    "command.gcastrominer.count",
-                                                    playerBase.getGameProfile().getName(),
-                                                    "" + stats.astroMinerCount)));
-                            break;
-                        case 2:
-                            stats.astroMinerCount = 0;
-                            icommandsender.addChatMessage(
-                                    new ChatComponentText(
-                                            GCCoreUtil.translateWithFormat(
-                                                    "command.gcastrominer.count",
-                                                    playerBase.getGameProfile().getName(),
-                                                    "" + 0)));
-                            break;
-                        case 3:
-                            stats.astroMinerCount = newvalue;
-                            icommandsender.addChatMessage(
-                                    new ChatComponentText(
-                                            GCCoreUtil.translateWithFormat(
-                                                    "command.gcastrominer.count",
-                                                    playerBase.getGameProfile().getName(),
-                                                    "" + newvalue)));
-                            break;
-                    }
-                } else {
+                if (playerBase == null) {
                     throw new Exception("Could not find player with name: " + astring[1]);
+                }
+                final GCPlayerStats stats = GCPlayerStats.get(playerBase);
+                switch (type) {
+                    case 1:
+                        icommandsender.addChatMessage(
+                                new ChatComponentText(
+                                        GCCoreUtil.translateWithFormat(
+                                                "command.gcastrominer.count",
+                                                playerBase.getGameProfile().getName(),
+                                                "" + stats.astroMinerCount)));
+                        break;
+                    case 2:
+                        stats.astroMinerCount = 0;
+                        icommandsender.addChatMessage(
+                                new ChatComponentText(
+                                        GCCoreUtil.translateWithFormat(
+                                                "command.gcastrominer.count",
+                                                playerBase.getGameProfile().getName(),
+                                                "" + 0)));
+                        break;
+                    case 3:
+                        stats.astroMinerCount = newvalue;
+                        icommandsender.addChatMessage(
+                                new ChatComponentText(
+                                        GCCoreUtil.translateWithFormat(
+                                                "command.gcastrominer.count",
+                                                playerBase.getGameProfile().getName(),
+                                                "" + newvalue)));
+                        break;
                 }
             } catch (final Exception e) {
                 throw new CommandException(e.getMessage());
             }
-            return;
         }
     }
 }

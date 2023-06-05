@@ -2,6 +2,18 @@ package micdoodle8.mods.galacticraft.planets.asteroids.dimension;
 
 import java.util.Random;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.gen.ChunkProviderServer;
+
+import cpw.mods.fml.common.FMLLog;
 import micdoodle8.mods.galacticraft.api.entity.IRocketType;
 import micdoodle8.mods.galacticraft.api.recipe.SchematicRegistry;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
@@ -17,19 +29,6 @@ import micdoodle8.mods.galacticraft.planets.asteroids.entities.EntityEntryPod;
 import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
 import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
 import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraft.world.gen.ChunkProviderServer;
-
-import cpw.mods.fml.common.FMLLog;
 
 public class TeleportTypeAsteroids implements ITeleportType {
 
@@ -177,7 +176,6 @@ public class TeleportTypeAsteroids implements ITeleportType {
         }
 
         this.makePlatform(world, x, 48 + world.rand.nextInt(128), z);
-        return;
     }
 
     private void loadChunksAround(int x, int z, int i, ChunkProviderServer cp) {
@@ -285,7 +283,8 @@ public class TeleportTypeAsteroids implements ITeleportType {
         stats.rocketStacks = new ItemStack[20];
         stats.fuelLevel = 1000;
         int i = 0;
-        stats.rocketStacks[i++] = new ItemStack(GCItems.oxMask);
+        stats.rocketStacks[i] = new ItemStack(GCItems.oxMask);
+        i++;
         stats.rocketStacks[i++] = new ItemStack(GCItems.oxygenGear);
         stats.rocketStacks[i++] = new ItemStack(GCItems.oxTankMedium);
         stats.rocketStacks[i++] = new ItemStack(GCItems.oxTankHeavy);

@@ -9,6 +9,44 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.settings.GameSettings;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetHandler;
+import net.minecraft.network.Packet;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.server.S07PacketRespawn;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.WorldProvider;
+import net.minecraft.world.WorldServer;
+
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import cpw.mods.fml.server.FMLServerHandler;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
 import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
 import micdoodle8.mods.galacticraft.api.galaxies.GalaxyRegistry;
 import micdoodle8.mods.galacticraft.api.galaxies.Satellite;
@@ -61,45 +99,6 @@ import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 import micdoodle8.mods.galacticraft.core.wrappers.FlagData;
 import micdoodle8.mods.galacticraft.core.wrappers.Footprint;
 import micdoodle8.mods.galacticraft.core.wrappers.PlayerGearData;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.settings.GameSettings;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetHandler;
-import net.minecraft.network.Packet;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.server.S07PacketRespawn;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.WorldProvider;
-import net.minecraft.world.WorldServer;
-
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import cpw.mods.fml.server.FMLServerHandler;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 
 public class PacketSimple extends Packet implements IPacket {
 
@@ -261,13 +260,11 @@ public class PacketSimple extends Packet implements IPacket {
         if (player instanceof EntityClientPlayerMP) {
             playerBaseClient = (EntityClientPlayerMP) player;
             stats = GCPlayerStatsClient.get(playerBaseClient);
-        } else {
-            if (this.type != EnumSimplePacket.C_UPDATE_SPACESTATION_LIST
-                    && this.type != EnumSimplePacket.C_UPDATE_PLANETS_LIST
-                    && this.type != EnumSimplePacket.C_UPDATE_CONFIGS) {
-                return;
-            }
-        }
+        } else if (this.type != EnumSimplePacket.C_UPDATE_SPACESTATION_LIST
+                && this.type != EnumSimplePacket.C_UPDATE_PLANETS_LIST
+                && this.type != EnumSimplePacket.C_UPDATE_CONFIGS) {
+                    return;
+                }
 
         switch (this.type) {
             case C_AIR_REMAINING:
@@ -281,11 +278,9 @@ public class PacketSimple extends Packet implements IPacket {
                 if (String.valueOf(this.data.get(0))
                         .equals(FMLClientHandler.instance().getClient().thePlayer.getGameProfile().getName())) {
                     final String dimensionList = (String) this.data.get(1);
-                    if (ConfigManagerCore.enableDebug) {
-                        if (!dimensionList.equals(PacketSimple.spamCheckString)) {
-                            GCLog.info("DEBUG info: " + dimensionList);
-                            PacketSimple.spamCheckString = dimensionList;
-                        }
+                    if (ConfigManagerCore.enableDebug && !dimensionList.equals(PacketSimple.spamCheckString)) {
+                        GCLog.info("DEBUG info: " + dimensionList);
+                        PacketSimple.spamCheckString = dimensionList;
                     }
                     final String[] destinations = dimensionList.split("\\?");
                     final List<CelestialBody> possibleCelestialBodies = Lists.newArrayList();
@@ -588,7 +583,7 @@ public class PacketSimple extends Packet implements IPacket {
                         final int entityID = (Integer) this.data.get(2);
                         final Entity entity = player.worldObj.getEntityByID(entityID);
 
-                        if (entity != null && entity instanceof IInventorySettable) {
+                        if (entity instanceof IInventorySettable) {
                             FMLClientHandler.instance().getClient()
                                     .displayGuiScreen(new GuiParaChest(player.inventory, (IInventorySettable) entity));
                         }
@@ -786,8 +781,7 @@ public class PacketSimple extends Packet implements IPacket {
                         (Integer) this.data.get(0),
                         (Integer) this.data.get(1),
                         (Integer) this.data.get(2));
-                if (tile instanceof TileEntityScreen) {
-                    final TileEntityScreen screenTile = (TileEntityScreen) tile;
+                if (tile instanceof TileEntityScreen screenTile) {
                     final int screenType = (Integer) this.data.get(3);
                     final int flags = (Integer) this.data.get(4);
                     screenTile.imageType = screenType;
@@ -826,7 +820,7 @@ public class PacketSimple extends Packet implements IPacket {
                         }
                         ((TileEntityTelemetry) tile).clientGameProfile = profile;
                     } else {
-                        ((TileEntityTelemetry) tile).clientClass = (Class) EntityList.stringToClassMapping.get(name);
+                        ((TileEntityTelemetry) tile).clientClass = EntityList.stringToClassMapping.get(name);
                     }
                     ((TileEntityTelemetry) tile).clientData = new int[5];
                     for (int i = 4; i < 9; i++) {
@@ -903,10 +897,8 @@ public class PacketSimple extends Packet implements IPacket {
                     final Integer dim = provider.dimensionId;
                     GCLog.info("Found matching world (" + dim.toString() + ") for name: " + this.data.get(0));
 
-                    if (playerBase.worldObj instanceof WorldServer) {
-                        final WorldServer world = (WorldServer) playerBase.worldObj;
-
-                        WorldUtil.transferEntityToDimension(playerBase, dim, world, (Boolean) data.get(1), null);
+                    if (playerBase.worldObj instanceof WorldServer world) {
+                        WorldUtil.transferEntityToDimension(playerBase, dim, world, (Boolean) this.data.get(1), null);
                     }
 
                     stats.teleportCooldown = 10;
@@ -921,9 +913,7 @@ public class PacketSimple extends Packet implements IPacket {
                 if (!player.worldObj.isRemote && !player.isDead
                         && player.ridingEntity != null
                         && !player.ridingEntity.isDead
-                        && player.ridingEntity instanceof EntityTieredRocket) {
-                    final EntityTieredRocket ship = (EntityTieredRocket) player.ridingEntity;
-
+                        && player.ridingEntity instanceof EntityTieredRocket ship) {
                     if (!ship.landing) {
 
                         if (ship.hasValidFuel()) {
@@ -967,21 +957,13 @@ public class PacketSimple extends Packet implements IPacket {
                 }
                 break;
             case S_UPDATE_SHIP_YAW:
-                if (player.ridingEntity instanceof EntitySpaceshipBase) {
-                    final EntitySpaceshipBase ship = (EntitySpaceshipBase) player.ridingEntity;
-
-                    if (ship != null) {
-                        ship.rotationYaw = (Float) this.data.get(0);
-                    }
+                if (player.ridingEntity instanceof EntitySpaceshipBase ship && ship != null) {
+                    ship.rotationYaw = (Float) this.data.get(0);
                 }
                 break;
             case S_UPDATE_SHIP_PITCH:
-                if (player.ridingEntity instanceof EntitySpaceshipBase) {
-                    final EntitySpaceshipBase ship = (EntitySpaceshipBase) player.ridingEntity;
-
-                    if (ship != null) {
-                        ship.rotationPitch = (Float) this.data.get(0);
-                    }
+                if (player.ridingEntity instanceof EntitySpaceshipBase ship && ship != null) {
+                    ship.rotationPitch = (Float) this.data.get(0);
                 }
                 break;
             case S_SET_ENTITY_FIRE:
@@ -1006,9 +988,7 @@ public class PacketSimple extends Packet implements IPacket {
             case S_UNLOCK_NEW_SCHEMATIC:
                 final Container container = player.openContainer;
 
-                if (container instanceof ContainerSchematic) {
-                    final ContainerSchematic schematicContainer = (ContainerSchematic) container;
-
+                if (container instanceof ContainerSchematic schematicContainer) {
                     ItemStack stack = schematicContainer.craftMatrix.getStackInSlot(0);
 
                     if (stack != null) {
@@ -1039,9 +1019,7 @@ public class PacketSimple extends Packet implements IPacket {
                         (Integer) this.data.get(1),
                         (Integer) this.data.get(2));
 
-                if (tileAt instanceof IDisableableMachine) {
-                    final IDisableableMachine machine = (IDisableableMachine) tileAt;
-
+                if (tileAt instanceof IDisableableMachine machine) {
                     machine.setDisabled((Integer) this.data.get(3), !machine.getDisabled((Integer) this.data.get(3)));
                 }
                 break;
@@ -1073,45 +1051,38 @@ public class PacketSimple extends Packet implements IPacket {
 
                 switch ((Integer) this.data.get(0)) {
                     case 0:
-                        if (tile1 instanceof TileEntityAirLockController) {
-                            final TileEntityAirLockController airlockController = (TileEntityAirLockController) tile1;
+                        if (tile1 instanceof TileEntityAirLockController airlockController) {
                             airlockController.redstoneActivation = (Integer) this.data.get(4) == 1;
                         }
                         break;
                     case 1:
-                        if (tile1 instanceof TileEntityAirLockController) {
-                            final TileEntityAirLockController airlockController = (TileEntityAirLockController) tile1;
+                        if (tile1 instanceof TileEntityAirLockController airlockController) {
                             airlockController.playerDistanceActivation = (Integer) this.data.get(4) == 1;
                         }
                         break;
                     case 2:
-                        if (tile1 instanceof TileEntityAirLockController) {
-                            final TileEntityAirLockController airlockController = (TileEntityAirLockController) tile1;
+                        if (tile1 instanceof TileEntityAirLockController airlockController) {
                             airlockController.playerDistanceSelection = (Integer) this.data.get(4);
                         }
                         break;
                     case 3:
-                        if (tile1 instanceof TileEntityAirLockController) {
-                            final TileEntityAirLockController airlockController = (TileEntityAirLockController) tile1;
+                        if (tile1 instanceof TileEntityAirLockController airlockController) {
                             airlockController.playerNameMatches = (Integer) this.data.get(4) == 1;
                         }
                         break;
                     case 4:
-                        if (tile1 instanceof TileEntityAirLockController) {
-                            final TileEntityAirLockController airlockController = (TileEntityAirLockController) tile1;
+                        if (tile1 instanceof TileEntityAirLockController airlockController) {
                             airlockController.invertSelection = (Integer) this.data.get(4) == 1;
                         }
                         break;
                     case 5:
-                        if (tile1 instanceof TileEntityAirLockController) {
-                            final TileEntityAirLockController airlockController = (TileEntityAirLockController) tile1;
+                        if (tile1 instanceof TileEntityAirLockController airlockController) {
                             airlockController.lastHorizontalModeEnabled = airlockController.horizontalModeEnabled;
                             airlockController.horizontalModeEnabled = (Integer) this.data.get(4) == 1;
                         }
                         break;
                     case 6:
-                        if (tile1 instanceof IBubbleProvider) {
-                            final IBubbleProvider distributor = (IBubbleProvider) tile1;
+                        if (tile1 instanceof IBubbleProvider distributor) {
                             distributor.setBubbleVisible((Integer) this.data.get(4) == 1);
                         }
                         break;
@@ -1127,8 +1098,7 @@ public class PacketSimple extends Packet implements IPacket {
 
                 switch ((Integer) this.data.get(0)) {
                     case 0:
-                        if (tile2 instanceof TileEntityAirLockController) {
-                            final TileEntityAirLockController airlockController = (TileEntityAirLockController) tile2;
+                        if (tile2 instanceof TileEntityAirLockController airlockController) {
                             airlockController.playerToOpenFor = (String) this.data.get(4);
                         }
                         break;
@@ -1142,8 +1112,7 @@ public class PacketSimple extends Packet implements IPacket {
 
                 final Entity entity2 = player.worldObj.getEntityByID(entityID);
 
-                if (entity2 instanceof EntityAutoRocket) {
-                    final EntityAutoRocket autoRocket = (EntityAutoRocket) entity2;
+                if (entity2 instanceof EntityAutoRocket autoRocket) {
                     autoRocket.motionY += up ? 0.02F : -0.02F;
                 }
 

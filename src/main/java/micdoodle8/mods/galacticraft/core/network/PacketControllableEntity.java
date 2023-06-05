@@ -1,11 +1,10 @@
 package micdoodle8.mods.galacticraft.core.network;
 
-import micdoodle8.mods.galacticraft.core.entities.IControllableEntity;
-
 import net.minecraft.entity.player.EntityPlayer;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import micdoodle8.mods.galacticraft.core.entities.IControllableEntity;
 
 public class PacketControllableEntity implements IPacket {
 
@@ -38,7 +37,7 @@ public class PacketControllableEntity implements IPacket {
     }
 
     private void handleKeyPress(EntityPlayer player) {
-        if (player.ridingEntity != null && player.ridingEntity instanceof IControllableEntity) {
+        if (player.ridingEntity instanceof IControllableEntity) {
             ((IControllableEntity) player.ridingEntity).pressKey(this.keyPressed);
         }
     }

@@ -6,9 +6,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
-import micdoodle8.mods.galacticraft.api.entity.IIgnoreShift;
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,13 +19,15 @@ import net.minecraft.world.World;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import io.netty.buffer.ByteBuf;
+import micdoodle8.mods.galacticraft.api.entity.IIgnoreShift;
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
 
 public class EntityCelestialFake extends EntityAdvancedMotion implements IIgnoreShift {
 
     private UUID persistantRiderUUID;
     private Boolean shouldMoveClient;
     private Boolean shouldMoveServer;
-    private ArrayList prevData;
+    private ArrayList<Object> prevData;
     private boolean networkDataChanged;
 
     public EntityCelestialFake(World var1) {
@@ -78,13 +77,11 @@ public class EntityCelestialFake extends EntityAdvancedMotion implements IIgnore
     public void onUpdate() {
         super.onUpdate();
 
-        if (this.ticks < 40 && this.posY > 150) {
-            if (this.riddenByEntity == null) {
-                final EntityPlayer player = this.worldObj.getClosestPlayerToEntity(this, 5);
+        if (this.ticks < 40 && this.posY > 150 && this.riddenByEntity == null) {
+            final EntityPlayer player = this.worldObj.getClosestPlayerToEntity(this, 5);
 
-                if (player != null && player.ridingEntity == null) {
-                    player.mountEntity(this);
-                }
+            if (player != null && player.ridingEntity == null) {
+                player.mountEntity(this);
             }
         }
 

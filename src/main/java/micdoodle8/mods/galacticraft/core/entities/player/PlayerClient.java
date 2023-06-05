@@ -1,5 +1,17 @@
 package micdoodle8.mods.galacticraft.core.entities.player;
 
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraftforge.common.MinecraftForge;
+
+import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.api.entity.ICameraZoomEntity;
 import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
@@ -20,19 +32,6 @@ import micdoodle8.mods.galacticraft.core.util.EnumColor;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 import micdoodle8.mods.galacticraft.core.wrappers.PlayerGearData;
-
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraftforge.common.MinecraftForge;
-
-import cpw.mods.fml.client.FMLClientHandler;
 
 public class PlayerClient implements IPlayerClient {
 
@@ -125,21 +124,19 @@ public class PlayerClient implements IPlayerClient {
                     player.limbSwing -= adjust;
                 }
                 player.limbSwingAmount *= 0.9F;
-            } else {
-                if (stats.inFreefallLast && this.downMot2 < -0.008D) {
-                    stats.landingTicks = 5 - (int) (Math.min(this.downMot2, stats.downMotionLast) * 40);
-                    if (stats.landingTicks > GCPlayerStatsClient.MAX_LANDINGTICKS) {
-                        if (stats.landingTicks > GCPlayerStatsClient.MAX_LANDINGTICKS + 4) {
-                            stats.pjumpticks = stats.landingTicks - GCPlayerStatsClient.MAX_LANDINGTICKS - 5;
-                        }
-                        stats.landingTicks = GCPlayerStatsClient.MAX_LANDINGTICKS;
+            } else if (stats.inFreefallLast && this.downMot2 < -0.008D) {
+                stats.landingTicks = 5 - (int) (Math.min(this.downMot2, stats.downMotionLast) * 40);
+                if (stats.landingTicks > GCPlayerStatsClient.MAX_LANDINGTICKS) {
+                    if (stats.landingTicks > GCPlayerStatsClient.MAX_LANDINGTICKS + 4) {
+                        stats.pjumpticks = stats.landingTicks - GCPlayerStatsClient.MAX_LANDINGTICKS - 5;
                     }
-                    final float dYmax = 0.3F * stats.landingTicks / GCPlayerStatsClient.MAX_LANDINGTICKS;
-                    float factor = 1F;
-                    for (int i = 0; i <= stats.landingTicks; i++) {
-                        stats.landingYOffset[i] = dYmax * MathHelper.sin(i * 3.1415926F / stats.landingTicks) * factor;
-                        factor *= 0.97F;
-                    }
+                    stats.landingTicks = GCPlayerStatsClient.MAX_LANDINGTICKS;
+                }
+                final float dYmax = 0.3F * stats.landingTicks / GCPlayerStatsClient.MAX_LANDINGTICKS;
+                float factor = 1F;
+                for (int i = 0; i <= stats.landingTicks; i++) {
+                    stats.landingYOffset[i] = dYmax * MathHelper.sin(i * (float) Math.PI / stats.landingTicks) * factor;
+                    factor *= 0.97F;
                 }
             }
 
@@ -155,22 +152,19 @@ public class PlayerClient implements IPlayerClient {
         final boolean ridingThirdPersonEntity = player.ridingEntity instanceof ICameraZoomEntity
                 && ((ICameraZoomEntity) player.ridingEntity).defaultThirdPerson();
 
-        if (ridingThirdPersonEntity && !stats.lastRidingCameraZoomEntity) {
-            if (!ConfigManagerCore.disableVehicleCameraChanges) {
-                FMLClientHandler.instance().getClient().gameSettings.thirdPersonView = 1;
-            }
+        if (ridingThirdPersonEntity && !stats.lastRidingCameraZoomEntity
+                && !ConfigManagerCore.disableVehicleCameraChanges) {
+            FMLClientHandler.instance().getClient().gameSettings.thirdPersonView = 1;
         }
 
-        if (player.ridingEntity != null && player.ridingEntity instanceof ICameraZoomEntity) {
+        if (player.ridingEntity instanceof ICameraZoomEntity) {
             if (!ConfigManagerCore.disableVehicleCameraChanges) {
                 stats.lastZoomed = true;
                 TickHandlerClient.zoom(((ICameraZoomEntity) player.ridingEntity).getCameraZoom());
             }
-        } else if (stats.lastZoomed) {
-            if (!ConfigManagerCore.disableVehicleCameraChanges) {
-                stats.lastZoomed = false;
-                TickHandlerClient.zoom(4.0F);
-            }
+        } else if (stats.lastZoomed && !ConfigManagerCore.disableVehicleCameraChanges) {
+            stats.lastZoomed = false;
+            TickHandlerClient.zoom(4.0F);
         }
 
         stats.lastRidingCameraZoomEntity = ridingThirdPersonEntity;
@@ -222,21 +216,20 @@ public class PlayerClient implements IPlayerClient {
             final int y = player.playerLocation.posY;
             final int z = player.playerLocation.posZ;
 
-            if (player.worldObj.getTileEntity(x, y, z) instanceof TileEntityAdvanced) {
-                // int j = player.worldObj.getBlock(x, y, z).getBedDirection(player.worldObj, x,
-                // y, z);
-                switch (player.worldObj.getBlockMetadata(x, y, z) - 4) {
-                    case 0:
-                        return 90.0F;
-                    case 1:
-                        return 270.0F;
-                    case 2:
-                        return 180.0F;
-                    case 3:
-                        return 0.0F;
-                }
-            } else {
+            if (!(player.worldObj.getTileEntity(x, y, z) instanceof TileEntityAdvanced)) {
                 return vanillaDegrees;
+            }
+            // int j = player.worldObj.getBlock(x, y, z).getBedDirection(player.worldObj, x,
+            // y, z);
+            switch (player.worldObj.getBlockMetadata(x, y, z) - 4) {
+                case 0:
+                    return 90.0F;
+                case 1:
+                    return 270.0F;
+                case 2:
+                    return 180.0F;
+                case 3:
+                    return 0.0F;
             }
         }
 
@@ -257,55 +250,54 @@ public class PlayerClient implements IPlayerClient {
             final int iPosZ = (int) Math.floor(player.posZ);
 
             // If the block below is the moon block
-            if (player.worldObj.getBlock(iPosX, iPosY, iPosZ) == GCBlocks.blockMoon) {
-                // And is the correct metadata (moon turf)
-                if (player.worldObj.getBlockMetadata(iPosX, iPosY, iPosZ) == 5) {
-                    // If it has been long enough since the last step
-                    if (stats.distanceSinceLastStep > 0.35) {
-                        Vector3 pos = new Vector3(player);
-                        // Set the footprint position to the block below and add random number to stop
-                        // z-fighting
-                        pos.y = MathHelper.floor_double(player.posY - 1) + player.getRNG().nextFloat() / 100.0F;
+            // And is the correct metadata (moon turf)
+            if (player.worldObj.getBlock(iPosX, iPosY, iPosZ) == GCBlocks.blockMoon
+                    && player.worldObj.getBlockMetadata(iPosX, iPosY, iPosZ) == 5) {
+                // If it has been long enough since the last step
+                if (stats.distanceSinceLastStep > 0.35) {
+                    Vector3 pos = new Vector3(player);
+                    // Set the footprint position to the block below and add random number to stop
+                    // z-fighting
+                    pos.y = MathHelper.floor_double(player.posY - 1) + player.getRNG().nextFloat() / 100.0F;
 
-                        // Adjust footprint to left or right depending on step count
-                        switch (stats.lastStep) {
-                            case 0:
-                                pos.translate(
-                                        new Vector3(
-                                                Math.sin(Math.toRadians(-player.rotationYaw + 90)) * 0.25,
-                                                0,
-                                                Math.cos(Math.toRadians(-player.rotationYaw + 90)) * 0.25));
-                                break;
-                            case 1:
-                                pos.translate(
-                                        new Vector3(
-                                                Math.sin(Math.toRadians(-player.rotationYaw - 90)) * 0.25,
-                                                0,
-                                                Math.cos(Math.toRadians(-player.rotationYaw - 90)) * 0.25));
-                                break;
-                        }
-
-                        pos = WorldUtil.getFootprintPosition(
-                                player.worldObj,
-                                player.rotationYaw - 180,
-                                pos,
-                                new BlockVec3(player));
-
-                        final long chunkKey = ChunkCoordIntPair.chunkXZ2Int(pos.intX() >> 4, pos.intZ() >> 4);
-                        ClientProxyCore.footprintRenderer.addFootprint(
-                                chunkKey,
-                                player.worldObj.provider.dimensionId,
-                                pos,
-                                player.rotationYaw,
-                                player.getCommandSenderName());
-
-                        // Increment and cap step counter at 1
-                        stats.lastStep++;
-                        stats.lastStep %= 2;
-                        stats.distanceSinceLastStep = 0;
-                    } else {
-                        stats.distanceSinceLastStep += motionSqrd;
+                    // Adjust footprint to left or right depending on step count
+                    switch (stats.lastStep) {
+                        case 0:
+                            pos.translate(
+                                    new Vector3(
+                                            Math.sin(Math.toRadians(-player.rotationYaw + 90)) * 0.25,
+                                            0,
+                                            Math.cos(Math.toRadians(-player.rotationYaw + 90)) * 0.25));
+                            break;
+                        case 1:
+                            pos.translate(
+                                    new Vector3(
+                                            Math.sin(Math.toRadians(-player.rotationYaw - 90)) * 0.25,
+                                            0,
+                                            Math.cos(Math.toRadians(-player.rotationYaw - 90)) * 0.25));
+                            break;
                     }
+
+                    pos = WorldUtil.getFootprintPosition(
+                            player.worldObj,
+                            player.rotationYaw - 180,
+                            pos,
+                            new BlockVec3(player));
+
+                    final long chunkKey = ChunkCoordIntPair.chunkXZ2Int(pos.intX() >> 4, pos.intZ() >> 4);
+                    ClientProxyCore.footprintRenderer.addFootprint(
+                            chunkKey,
+                            player.worldObj.provider.dimensionId,
+                            pos,
+                            player.rotationYaw,
+                            player.getCommandSenderName());
+
+                    // Increment and cap step counter at 1
+                    stats.lastStep++;
+                    stats.lastStep %= 2;
+                    stats.distanceSinceLastStep = 0;
+                } else {
+                    stats.distanceSinceLastStep += motionSqrd;
                 }
             }
         }
@@ -340,7 +332,7 @@ public class PlayerClient implements IPlayerClient {
         if (repeatCount <= 3) {
             repeatCount++;
         }
-        if ((flag & 1 << i) > 0) {
+        if ((flag & 1 << i) != 0) {
             return;
         }
         flag |= 1 << i;

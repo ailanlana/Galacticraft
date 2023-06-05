@@ -1,5 +1,13 @@
 package micdoodle8.mods.galacticraft.planets.asteroids.inventory;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 import micdoodle8.mods.galacticraft.core.Constants;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.items.GCItems;
@@ -9,15 +17,6 @@ import micdoodle8.mods.galacticraft.core.util.RecipeUtil;
 import micdoodle8.mods.galacticraft.planets.asteroids.blocks.AsteroidBlocks;
 import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
 import micdoodle8.mods.galacticraft.planets.mars.items.MarsItems;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class SlotSchematicAstroMiner extends Slot {
 
@@ -62,9 +61,11 @@ public class SlotSchematicAstroMiner extends Slot {
     public boolean isItemValid(ItemStack itemStack) {
         if (this.index >= 1 && this.index <= 8) {
             return itemStack.getItem() == MarsItems.marsItemBasic && itemStack.getItemDamage() == 3;
-        } else if (this.index == 9 || this.index == 10) {
+        }
+        if (this.index == 9 || this.index == 10) {
             return itemStack.getItem() == GCItems.flagPole;
-        } else if (this.index >= 11 && this.index <= 13) {
+        }
+        if (this.index >= 11 && this.index <= 13) {
             return itemStack.getItem() == AsteroidsItems.basicItem && itemStack.getItemDamage() == 0;
         } else if (this.index >= 14 && this.index <= 17) {
             return itemStack.getItem() == AsteroidsItems.orionDrive;
@@ -76,18 +77,16 @@ public class SlotSchematicAstroMiner extends Slot {
             return itemStack.getItem() == GCItems.basicItem && itemStack.getItemDamage() == 14;
         } else if (this.index >= 21 && this.index <= 23) {
             return itemStack.getItem() == GCItems.heavyPlatingTier1;
-        } else if (this.index == 24 || this.index == 25) {
-            return itemStack.getItem() == Item.getItemFromBlock(RecipeUtil.getChestBlock())
-                    && itemStack.getItemDamage() == 1;
-        } else if (this.index == 26) {
-            return itemStack.getItem() == AsteroidsItems.basicItem && itemStack.getItemDamage() == 8;
-        } else if (this.index == 27) {
-            return itemStack.getItem() == Item.getItemFromBlock(AsteroidBlocks.beamReceiver);
-        } else if (this.index == 28 || this.index == 29) {
-            return itemStack.getItem() == GameRegistry.findItem(Constants.MOD_ID_GREGTECH, "gt.metaitem.01")
-                    && itemStack.getItemDamage() == 32603;
         } else {
-            return false;
+            return switch (this.index) {
+                case 24, 25 -> itemStack.getItem() == Item.getItemFromBlock(RecipeUtil.getChestBlock())
+                        && itemStack.getItemDamage() == 1;
+                case 26 -> itemStack.getItem() == AsteroidsItems.basicItem && itemStack.getItemDamage() == 8;
+                case 27 -> itemStack.getItem() == Item.getItemFromBlock(AsteroidBlocks.beamReceiver);
+                case 28, 29 -> itemStack.getItem() == GameRegistry.findItem(Constants.MOD_ID_GREGTECH, "gt.metaitem.01")
+                        && itemStack.getItemDamage() == 32603;
+                default -> false;
+            };
         }
     }
 

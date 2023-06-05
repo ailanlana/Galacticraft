@@ -3,11 +3,6 @@ package micdoodle8.mods.galacticraft.core.entities;
 import java.util.Iterator;
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.vector.Vector3;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
-import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -21,6 +16,11 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+
+import micdoodle8.mods.galacticraft.api.vector.Vector3;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 
 public class EntityMeteor extends Entity {
 
@@ -171,7 +171,7 @@ public class EntityMeteor extends Entity {
     }
 
     public static DamageSource causeMeteorDamage(EntityMeteor par0EntityMeteor, Entity par1Entity) {
-        if (par1Entity != null && par1Entity instanceof EntityPlayer) {
+        if (par1Entity instanceof EntityPlayer) {
             StatCollector.translateToLocalFormatted(
                     "death." + "meteor",
                     ((EntityPlayer) par1Entity).getGameProfile().getName()

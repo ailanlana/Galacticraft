@@ -2,14 +2,6 @@ package micdoodle8.mods.galacticraft.core.client.model;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.item.IHoldableItem;
-import micdoodle8.mods.galacticraft.api.prefab.entity.EntityTieredRocket;
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple;
-import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
-import micdoodle8.mods.galacticraft.core.wrappers.PlayerGearData;
-
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.model.ModelBiped;
@@ -29,7 +21,13 @@ import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.Loader;
+import micdoodle8.mods.galacticraft.api.item.IHoldableItem;
+import micdoodle8.mods.galacticraft.api.prefab.entity.EntityTieredRocket;
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple;
+import micdoodle8.mods.galacticraft.core.proxy.ClientProxyCore;
+import micdoodle8.mods.galacticraft.core.wrappers.PlayerGearData;
 
 /**
  * This renders the Galacticraft equipment, if RenderPlayerAPI / Smart Moving are not installed.
@@ -63,12 +61,6 @@ public class ModelPlayerGC extends ModelBiped {
     private boolean usingParachute;
 
     private final IModelCustom frequencyModule;
-
-    private static boolean crossbowModLoaded = false;
-
-    static {
-        ModelPlayerGC.crossbowModLoaded = Loader.isModLoaded("CrossbowMod2");
-    }
 
     public ModelPlayerGC(float var1) {
         super(var1);
@@ -232,7 +224,7 @@ public class ModelPlayerGC extends ModelBiped {
 
     @Override
     public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7) {
-        final Class<?> entityClass = EntityClientPlayerMP.class;
+        final Class<EntityClientPlayerMP> entityClass = EntityClientPlayerMP.class;
         final Render render = RenderManager.instance.getEntityClassRenderObject(entityClass);
         final ModelBiped modelBipedMain = ((RenderPlayer) render).modelBipedMain;
 
@@ -551,12 +543,10 @@ public class ModelPlayerGC extends ModelBiped {
                         200,
                         player.posZ + 20));
 
-        for (int i = 0; i < l.size(); i++) {
-            final Entity e = (Entity) l.get(i);
+        for (Object element : l) {
+            final Entity e = (Entity) element;
 
-            if (e instanceof EntityTieredRocket) {
-                final EntityTieredRocket ship = (EntityTieredRocket) e;
-
+            if (e instanceof EntityTieredRocket ship) {
                 if (ship.riddenByEntity != null && !ship.riddenByEntity.equals(player)
                         && (ship.getLaunched() || ship.timeUntilLaunch < 390)) {
                     this.bipedRightArm.rotateAngleZ -= (float) (Math.PI / 8) + MathHelper.sin(par3 * 0.9F) * 0.2F;

@@ -3,6 +3,15 @@ package micdoodle8.mods.galacticraft.core.client.gui.screen;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.gui.element.GuiElementCheckbox;
@@ -20,16 +29,6 @@ import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
 import micdoodle8.mods.galacticraft.core.util.ColorUtil;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import micdoodle8.mods.galacticraft.core.wrappers.FlagData;
-
-import net.minecraft.client.entity.EntityClientPlayerMP;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.client.FMLClientHandler;
 
 public class GuiJoinSpaceRace extends GuiScreen implements ICheckBoxCallback, ITextBoxCallback {
 
@@ -69,7 +68,6 @@ public class GuiJoinSpaceRace extends GuiScreen implements ICheckBoxCallback, IT
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void initGui() {
         super.initGui();
@@ -145,7 +143,7 @@ public class GuiJoinSpaceRace extends GuiScreen implements ICheckBoxCallback, IT
                     this.width / 2,
                     this.height / 2 - this.height / 3 - 15,
                     16777215);
-            this.drawFlagButton(par1, par2);
+            this.drawFlagButton();
             this.drawCenteredString(
                     this.fontRendererObj,
                     GCCoreUtil.translate("gui.spaceRace.join.owner.name") + ": "
@@ -186,7 +184,7 @@ public class GuiJoinSpaceRace extends GuiScreen implements ICheckBoxCallback, IT
         super.drawScreen(par1, par2, par3);
     }
 
-    private void drawFlagButton(int mouseX, int mouseY) {
+    private void drawFlagButton() {
         GL11.glPushMatrix();
         GL11.glTranslatef(
                 this.buttonFlag_xPosition + 2.9F,

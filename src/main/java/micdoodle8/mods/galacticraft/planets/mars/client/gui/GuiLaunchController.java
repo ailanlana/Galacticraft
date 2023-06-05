@@ -4,6 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiLabel;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ChatAllowedCharacters;
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import cpw.mods.fml.client.FMLClientHandler;
 import micdoodle8.mods.galacticraft.api.prefab.entity.EntityAutoRocket.EnumAutoLaunch;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import micdoodle8.mods.galacticraft.core.client.gui.container.GuiContainerGC;
@@ -26,21 +40,6 @@ import micdoodle8.mods.galacticraft.planets.mars.network.PacketSimpleMars;
 import micdoodle8.mods.galacticraft.planets.mars.network.PacketSimpleMars.EnumSimplePacketMars;
 import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityLaunchController;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiLabel;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ChatAllowedCharacters;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import cpw.mods.fml.client.FMLClientHandler;
-
 public class GuiLaunchController extends GuiContainerGC
         implements IDropboxCallback, ITextBoxCallback, ICheckBoxCallback {
 
@@ -58,7 +57,6 @@ public class GuiLaunchController extends GuiContainerGC
     private GuiElementTextBox frequency;
     private GuiElementTextBox destinationFrequency;
     private final GuiElementInfoRegion electricInfoRegion = new GuiElementInfoRegion(0, 0, 52, 9, null, 0, 0, this);
-    private final GuiElementInfoRegion waterTankInfoRegion = new GuiElementInfoRegion(0, 0, 41, 28, null, 0, 0, this);
 
     private int cannotEditTimer;
 
@@ -89,9 +87,9 @@ public class GuiLaunchController extends GuiContainerGC
                 ? GCCoreUtil.translate("gui.button.unhideDest.name")
                 : GCCoreUtil.translate("gui.button.hideDest.name");
         // Hacky way of rendering buttons properly, possibly bugs here:
-        final List buttonList = new ArrayList(this.buttonList);
-        final List labelList = new ArrayList(this.labelList);
-        final List<GuiElementInfoRegion> infoRegions = new ArrayList(this.infoRegions);
+        final List<GuiButton> buttonList = new ArrayList<>(this.buttonList);
+        final List<GuiLabel> labelList = new ArrayList<>(this.labelList);
+        final List<GuiElementInfoRegion> infoRegions = new ArrayList<>(this.infoRegions);
         this.buttonList.clear();
         this.labelList.clear();
         this.infoRegions.clear();
@@ -105,11 +103,11 @@ public class GuiLaunchController extends GuiContainerGC
 
         int k;
         for (k = 0; k < buttonList.size(); ++k) {
-            ((GuiButton) buttonList.get(k)).drawButton(this.mc, par1, par2);
+            buttonList.get(k).drawButton(this.mc, par1, par2);
         }
 
         for (k = 0; k < labelList.size(); ++k) {
-            ((GuiLabel) labelList.get(k)).func_146159_a(this.mc, par1, par2);
+            labelList.get(k).func_146159_a(this.mc, par1, par2);
         }
 
         for (k = 0; k < infoRegions.size(); ++k) {
@@ -132,11 +130,11 @@ public class GuiLaunchController extends GuiContainerGC
                 // scramble the destination number such that other players can't
                 // fly to it directly
                 final Random r = new Random();
-                String fakefrequency = "";
+                StringBuilder fakefrequency = new StringBuilder();
                 for (int i = 0; i < this.destinationFrequency.getMaxLength(); i++) {
-                    fakefrequency += (char) (r.nextInt(126 - 33) + 33);
+                    fakefrequency.append((char) (r.nextInt(126 - 33) + 33));
                 }
-                this.destinationFrequency.text = fakefrequency;
+                this.destinationFrequency.text = fakefrequency.toString();
             } else {
                 this.destinationFrequency.text = String.valueOf(this.launchController.destFrequency);
             }
@@ -145,33 +143,26 @@ public class GuiLaunchController extends GuiContainerGC
 
     @Override
     protected void keyTyped(char keyChar, int keyID) {
-        if (keyID != Keyboard.KEY_ESCAPE && keyID != this.mc.gameSettings.keyBindInventory.getKeyCode()) {
-            if (this.frequency.keyTyped(keyChar, keyID)) {
-                return;
-            }
-
-            if (this.destinationFrequency.keyTyped(keyChar, keyID)) {
-                return;
-            }
+        if (keyID != Keyboard.KEY_ESCAPE && keyID != this.mc.gameSettings.keyBindInventory.getKeyCode()
+                && (this.frequency.keyTyped(keyChar, keyID) || this.destinationFrequency.keyTyped(keyChar, keyID))) {
+            return;
         }
 
         super.keyTyped(keyChar, keyID);
     }
 
     public boolean isValid(String string) {
-        if (string.length() > 0 && ChatAllowedCharacters.isAllowedCharacter(string.charAt(string.length() - 1))) {
-            try {
-                Integer.parseInt(string);
-                return true;
-            } catch (final Exception e) {
-                return false;
-            }
-        } else {
+        if (string.length() <= 0 || !ChatAllowedCharacters.isAllowedCharacter(string.charAt(string.length() - 1))) {
+            return false;
+        }
+        try {
+            Integer.parseInt(string);
+            return true;
+        } catch (final Exception e) {
             return false;
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void initGui() {
         super.initGui();
@@ -255,8 +246,7 @@ public class GuiLaunchController extends GuiContainerGC
                         this.width,
                         this.height,
                         this));
-        batterySlotDesc = new ArrayList<>();
-        batterySlotDesc.addAll(GCCoreUtil.translateWithSplit("gui.launchController.desc.0"));
+        batterySlotDesc = new ArrayList<>(GCCoreUtil.translateWithSplit("gui.launchController.desc.0"));
         this.infoRegions.add(
                 new GuiElementInfoRegion(
                         (this.width - this.xSize) / 2 + 5,
@@ -267,8 +257,7 @@ public class GuiLaunchController extends GuiContainerGC
                         this.width,
                         this.height,
                         this));
-        batterySlotDesc = new ArrayList<>();
-        batterySlotDesc.addAll(GCCoreUtil.translateWithSplit("gui.launchController.desc.1"));
+        batterySlotDesc = new ArrayList<>(GCCoreUtil.translateWithSplit("gui.launchController.desc.1"));
         this.infoRegions.add(
                 new GuiElementInfoRegion(
                         (this.width - this.xSize) / 2 + 5,
@@ -496,21 +485,21 @@ public class GuiLaunchController extends GuiContainerGC
     public String getInitialText(GuiElementTextBox textBox) {
         if (textBox.equals(this.frequency)) {
             return String.valueOf(this.launchController.frequency);
-        } else if (textBox.equals(this.destinationFrequency)) {
+        }
+        if (textBox.equals(this.destinationFrequency)) {
             if (Minecraft.getMinecraft().thePlayer.getGameProfile().getName()
                     .equals(this.launchController.getOwnerName()) || this.launchController.getDisabled(2)) {
                 return String.valueOf(this.launchController.destFrequency);
-            } else {
-                // in case the player is not equal to the owner of the controller,
-                // scramble the destination number such that other players can't
-                // fly to it directly
-                final Random r = new Random();
-                String fakefrequency = "";
-                for (int i = 0; i < this.destinationFrequency.getMaxLength(); i++) {
-                    fakefrequency += (char) (r.nextInt(126 - 33) + 33);
-                }
-                return fakefrequency;
             }
+            // in case the player is not equal to the owner of the controller,
+            // scramble the destination number such that other players can't
+            // fly to it directly
+            final Random r = new Random();
+            StringBuilder fakefrequency = new StringBuilder();
+            for (int i = 0; i < this.destinationFrequency.getMaxLength(); i++) {
+                fakefrequency.append((char) (r.nextInt(126 - 33) + 33));
+            }
+            return fakefrequency.toString();
         }
 
         return "";
@@ -521,7 +510,8 @@ public class GuiLaunchController extends GuiContainerGC
         if (textBox.equals(this.frequency)) {
             return this.launchController.frequencyValid ? ColorUtil.to32BitColor(255, 20, 255, 20)
                     : ColorUtil.to32BitColor(255, 255, 25, 25);
-        } else if (textBox.equals(this.destinationFrequency)) {
+        }
+        if (textBox.equals(this.destinationFrequency)) {
             return this.launchController.destFrequencyValid ? ColorUtil.to32BitColor(255, 20, 255, 20)
                     : ColorUtil.to32BitColor(255, 255, 25, 25);
         }
@@ -559,7 +549,8 @@ public class GuiLaunchController extends GuiContainerGC
     public boolean getInitiallySelected(GuiElementCheckbox checkbox) {
         if (checkbox.equals(this.enablePadRemovalButton)) {
             return !this.launchController.launchPadRemovalDisabled;
-        } else if (checkbox.equals(this.launchWhenCheckbox)) {
+        }
+        if (checkbox.equals(this.launchWhenCheckbox)) {
             return this.launchController.launchSchedulingEnabled;
         }
 

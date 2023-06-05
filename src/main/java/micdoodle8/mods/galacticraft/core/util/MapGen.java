@@ -4,11 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
-
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
 
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -20,7 +17,10 @@ import net.minecraft.world.gen.layer.GenLayer;
 
 import org.apache.commons.io.FileUtils;
 
-@SuppressWarnings("unused")
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
+
 public class MapGen {
 
     public boolean calculatingMap = false;
@@ -180,9 +180,7 @@ public class MapGen {
         this.getHeightMap(x0, z0);
         final int halfFactor = limit * limit / 2;
         final ArrayList<Integer> cols = new ArrayList<>();
-        for (int j = 0; j < this.biomeCount.length; j++) {
-            this.biomeCount[j] = 0;
-        }
+        Arrays.fill(this.biomeCount, 0);
         for (int x = 0; x < 16; x += factor) {
             final int izstore = iz;
             for (int z = 0; z < 16; z += factor) {
@@ -282,7 +280,8 @@ public class MapGen {
                             double d15 = d10 - d16;
 
                             for (int z = 0; z < 4; ++z) {
-                                if ((d15 += d16) > 0.0D) {
+                                d15 += d16;
+                                if (d15 > 0.0D) {
                                     this.heights[idx + z] = truey;
                                 }
                             }

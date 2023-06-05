@@ -1,13 +1,13 @@
 package micdoodle8.mods.galacticraft.core.inventory;
 
-import micdoodle8.mods.galacticraft.api.item.IItemElectric;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityEnergyStorageModule;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import micdoodle8.mods.galacticraft.api.item.IItemElectric;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityEnergyStorageModule;
 
 public class ContainerEnergyStorageModule extends Container {
 
@@ -52,7 +52,7 @@ public class ContainerEnergyStorageModule extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotID) {
         ItemStack returnStack = null;
-        final Slot slot = (Slot) this.inventorySlots.get(slotID);
+        final Slot slot = this.inventorySlots.get(slotID);
         final int b = this.inventorySlots.size();
 
         if (slot != null && slot.getHasStack()) {
@@ -62,26 +62,21 @@ public class ContainerEnergyStorageModule extends Container {
             if (slotID != 0 && slotID != 1) {
                 if (itemStack.getItem() instanceof IItemElectric) {
                     if (((IItemElectric) itemStack.getItem()).getElectricityStored(itemStack) > 0) {
-                        if (!this.mergeItemStack(itemStack, 1, 2, false)) {
-                            if (((IItemElectric) itemStack.getItem()).getElectricityStored(itemStack)
-                                    < ((IItemElectric) itemStack.getItem()).getMaxElectricityStored(itemStack)
-                                    && !this.mergeItemStack(itemStack, 0, 1, false)) {
-                                return null;
-                            }
-                        }
-                    } else {
-                        if (!this.mergeItemStack(itemStack, 0, 1, false)) {
+                        if (!this.mergeItemStack(itemStack, 1, 2, false)
+                                && ((IItemElectric) itemStack.getItem()).getElectricityStored(itemStack)
+                                        < ((IItemElectric) itemStack.getItem()).getMaxElectricityStored(itemStack)
+                                && !this.mergeItemStack(itemStack, 0, 1, false)) {
                             return null;
                         }
-                    }
-                } else {
-                    if (slotID < b - 9) {
-                        if (!this.mergeItemStack(itemStack, b - 9, b, false)) {
-                            return null;
-                        }
-                    } else if (!this.mergeItemStack(itemStack, b - 36, b - 9, false)) {
+                    } else if (!this.mergeItemStack(itemStack, 0, 1, false)) {
                         return null;
                     }
+                } else if (slotID < b - 9) {
+                    if (!this.mergeItemStack(itemStack, b - 9, b, false)) {
+                        return null;
+                    }
+                } else if (!this.mergeItemStack(itemStack, b - 36, b - 9, false)) {
+                    return null;
                 }
             } else if (!this.mergeItemStack(itemStack, 2, 38, false)) {
                 return null;

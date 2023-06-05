@@ -1,7 +1,5 @@
 package micdoodle8.mods.galacticraft.core.client.gui.element;
 
-import micdoodle8.mods.galacticraft.core.util.ColorUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
@@ -12,6 +10,7 @@ import net.minecraft.util.ChatAllowedCharacters;
 import org.lwjgl.input.Keyboard;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import micdoodle8.mods.galacticraft.core.util.ColorUtil;
 
 public class GuiElementTextBox extends GuiButton {
 
@@ -164,30 +163,28 @@ public class GuiElementTextBox extends GuiButton {
 
     public int getIntegerValue() {
         try {
-            return Integer.parseInt(this.text.equals("") ? "0" : this.text);
+            return Integer.parseInt("".equals(this.text) ? "0" : this.text);
         } catch (final Exception e) {
             return -1;
         }
     }
 
     public boolean isValid(String string) {
-        if (this.numericOnly) {
-            if (string.length() > 0 && ChatAllowedCharacters.isAllowedCharacter(string.charAt(string.length() - 1))) {
-                try {
-                    Integer.parseInt(string);
-                    return true;
-                } catch (final Exception e) {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        } else {
+        if (!this.numericOnly) {
             if (string.length() <= 0) {
                 return false;
             }
 
             return ChatAllowedCharacters.isAllowedCharacter(string.charAt(string.length() - 1));
+        }
+        if ((string.length() <= 0) || !ChatAllowedCharacters.isAllowedCharacter(string.charAt(string.length() - 1))) {
+            return false;
+        }
+        try {
+            Integer.parseInt(string);
+            return true;
+        } catch (final Exception e) {
+            return false;
         }
     }
 
@@ -204,10 +201,9 @@ public class GuiElementTextBox extends GuiButton {
             this.text = this.parentGui.getInitialText(this);
             this.parentGui.onTextChanged(this, this.text);
             return true;
-        } else {
-            this.isTextFocused = false;
-            return false;
         }
+        this.isTextFocused = false;
+        return false;
     }
 
     public int getMaxLength() {

@@ -1,12 +1,5 @@
 package micdoodle8.mods.galacticraft.planets.mars.client.render.item;
 
-import micdoodle8.mods.galacticraft.api.entity.IRocketType.EnumRocketType;
-import micdoodle8.mods.galacticraft.core.client.render.item.ItemRendererTier1Rocket;
-import micdoodle8.mods.galacticraft.core.entities.EntityTier1Rocket;
-import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
-import micdoodle8.mods.galacticraft.planets.mars.client.model.ModelTier2Rocket;
-import micdoodle8.mods.galacticraft.planets.mars.entities.EntityTier2Rocket;
-
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,6 +11,12 @@ import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import micdoodle8.mods.galacticraft.api.entity.IRocketType.EnumRocketType;
+import micdoodle8.mods.galacticraft.core.client.render.item.ItemRendererTier1Rocket;
+import micdoodle8.mods.galacticraft.core.entities.EntityTier1Rocket;
+import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
+import micdoodle8.mods.galacticraft.planets.mars.client.model.ModelTier2Rocket;
+import micdoodle8.mods.galacticraft.planets.mars.entities.EntityTier2Rocket;
 
 public class ItemRendererTier2Rocket extends ItemRendererTier1Rocket {
 
@@ -44,13 +43,12 @@ public class ItemRendererTier2Rocket extends ItemRendererTier1Rocket {
         if (item.getItemDamage() < 10) {
             FMLClientHandler.instance().getClient().renderEngine.bindTexture(this.texture);
             this.modelSpaceship.render(this.spaceship, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-            GL11.glPopMatrix();
         } else {
             FMLClientHandler.instance().getClient().renderEngine
                     .bindTexture(ItemRendererTier2Rocket.cargoRocketTexture);
             this.cargoRocketModel.renderAll();
-            GL11.glPopMatrix();
         }
+        GL11.glPopMatrix();
 
         if (type == ItemRenderType.INVENTORY) {
             final int index = Math.min(
@@ -110,7 +108,7 @@ public class ItemRendererTier2Rocket extends ItemRendererTier1Rocket {
                 GL11.glScalef(0.45F, 0.45F, 0.45F);
             }
 
-            if (player != null && player.ridingEntity != null && player.ridingEntity instanceof EntityTier1Rocket) {
+            if (player != null && player.ridingEntity instanceof EntityTier1Rocket) {
                 GL11.glScalef(0.0F, 0.0F, 0.0F);
             }
         }
@@ -127,7 +125,7 @@ public class ItemRendererTier2Rocket extends ItemRendererTier1Rocket {
             GL11.glRotatef(73, 1.0F, 0, 0);
             GL11.glScalef(5.2F, 5.2F, 5.2F);
 
-            if (player != null && player.ridingEntity != null && player.ridingEntity instanceof EntityTier1Rocket) {
+            if (player != null && player.ridingEntity instanceof EntityTier1Rocket) {
                 GL11.glScalef(0.0F, 0.0F, 0.0F);
             }
         }

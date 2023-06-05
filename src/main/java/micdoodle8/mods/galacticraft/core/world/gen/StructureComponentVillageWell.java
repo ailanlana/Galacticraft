@@ -3,14 +3,14 @@ package micdoodle8.mods.galacticraft.core.world.gen;
 import java.util.List;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
+
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 
 public class StructureComponentVillageWell extends StructureComponentVillage {
 
@@ -47,9 +47,9 @@ public class StructureComponentVillageWell extends StructureComponentVillage {
         this.averageGroundLevel = nbt.getInteger("AvgGroundLevel");
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public void buildComponent(StructureComponent par1StructureComponent, List par2List, Random par3Random) {
+    public void buildComponent(StructureComponent par1StructureComponent, List<StructureComponent> par2List,
+            Random par3Random) {
         StructureVillagePiecesMoon.getNextStructureComponentVillagePath(
                 (StructureComponentVillageStartPiece) par1StructureComponent,
                 par2List,

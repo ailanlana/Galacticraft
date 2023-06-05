@@ -2,25 +2,6 @@ package micdoodle8.mods.galacticraft.planets.mars.blocks;
 
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.blocks.BlockTileGC;
-import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
-import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical;
-import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
-import micdoodle8.mods.galacticraft.core.tile.IMultiBlock;
-import micdoodle8.mods.galacticraft.core.util.EnumColor;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
-import micdoodle8.mods.galacticraft.core.world.IChunkLoader;
-import micdoodle8.mods.galacticraft.planets.GalacticraftPlanets;
-import micdoodle8.mods.galacticraft.planets.GuiIdsPlanets;
-import micdoodle8.mods.galacticraft.planets.mars.ConfigManagerMars;
-import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
-import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityCryogenicChamber;
-import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityLaunchController;
-import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityTerraformer;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -41,6 +22,24 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.blocks.BlockTileGC;
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseUniversalElectrical;
+import micdoodle8.mods.galacticraft.core.items.ItemBlockDesc;
+import micdoodle8.mods.galacticraft.core.tile.IMultiBlock;
+import micdoodle8.mods.galacticraft.core.util.EnumColor;
+import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+import micdoodle8.mods.galacticraft.core.world.IChunkLoader;
+import micdoodle8.mods.galacticraft.planets.GalacticraftPlanets;
+import micdoodle8.mods.galacticraft.planets.GuiIdsPlanets;
+import micdoodle8.mods.galacticraft.planets.mars.ConfigManagerMars;
+import micdoodle8.mods.galacticraft.planets.mars.MarsModule;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityCryogenicChamber;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityLaunchController;
+import micdoodle8.mods.galacticraft.planets.mars.tile.TileEntityTerraformer;
 
 public class BlockMachineMars extends BlockTileGC implements ItemBlockDesc.IBlockShiftDesc, IPartialSealableBlock {
 
@@ -100,21 +99,22 @@ public class BlockMachineMars extends BlockTileGC implements ItemBlockDesc.IBloc
             // If it is the front side
             if (side == metadata + 2) {
                 return this.iconInput;
-            } else if (side == ForgeDirection.UP.ordinal() || side == ForgeDirection.DOWN.ordinal()) {
+            }
+            if (side == ForgeDirection.UP.ordinal() || side == ForgeDirection.DOWN.ordinal()) {
                 return this.iconMachineSide;
             } else {
                 return this.iconLaunchController;
             }
-        } else if (metadata >= BlockMachineMars.CRYOGENIC_CHAMBER_METADATA) {
+        }
+        if (metadata >= BlockMachineMars.CRYOGENIC_CHAMBER_METADATA) {
             return this.iconCryochamber;
+        }
+        if (side == ForgeDirection.UP.ordinal() || side == ForgeDirection.DOWN.ordinal()) {
+            return this.iconMachineSide;
+        } else if (side == ForgeDirection.getOrientation(metadata + 2).ordinal()) {
+            return this.iconInput;
         } else {
-            if (side == ForgeDirection.UP.ordinal() || side == ForgeDirection.DOWN.ordinal()) {
-                return this.iconMachineSide;
-            } else if (side == ForgeDirection.getOrientation(metadata + 2).ordinal()) {
-                return this.iconInput;
-            } else {
-                return this.iconTerraformer;
-            }
+            return this.iconTerraformer;
         }
     }
 
@@ -161,7 +161,7 @@ public class BlockMachineMars extends BlockTileGC implements ItemBlockDesc.IBloc
 
             world.setBlockMetadataWithNotify(x, y, z, BlockMachineMars.LAUNCH_CONTROLLER_METADATA + change, 3);
         } else if (metadata >= BlockMachineMars.CRYOGENIC_CHAMBER_METADATA) {
-            if (!this.canPlaceChamberAt(world, x, y, z, entityLiving)) {
+            if (!this.canPlaceChamberAt(world, x, y, z)) {
                 if (entityLiving instanceof EntityPlayer) {
                     if (!world.isRemote) {
                         ((EntityPlayer) entityLiving).addChatMessage(
@@ -283,13 +283,12 @@ public class BlockMachineMars extends BlockTileGC implements ItemBlockDesc.IBloc
         final int metadata = world.getBlockMetadata(x, y, z);
 
         if (metadata >= BlockMachineMars.LAUNCH_CONTROLLER_METADATA
-                || (metadata < BlockMachineMars.CRYOGENIC_CHAMBER_METADATA)) {
+                || metadata < BlockMachineMars.CRYOGENIC_CHAMBER_METADATA) {
             par5EntityPlayer.openGui(GalacticraftPlanets.instance, GuiIdsPlanets.MACHINE_MARS, world, x, y, z);
             return true;
-        } else {
-            ((IMultiBlock) world.getTileEntity(x, y, z)).onActivated(par5EntityPlayer);
-            return true;
         }
+        ((IMultiBlock) world.getTileEntity(x, y, z)).onActivated(par5EntityPlayer);
+        return true;
     }
 
     @Override
@@ -309,9 +308,8 @@ public class BlockMachineMars extends BlockTileGC implements ItemBlockDesc.IBloc
         }
         if (metadata >= BlockMachineMars.CRYOGENIC_CHAMBER_METADATA) {
             return new TileEntityCryogenicChamber();
-        } else {
-            return new TileEntityTerraformer();
         }
+        return new TileEntityTerraformer();
     }
 
     @Override
@@ -343,15 +341,14 @@ public class BlockMachineMars extends BlockTileGC implements ItemBlockDesc.IBloc
         return new ItemStack(this, 1, BlockMachineMars.LAUNCH_CONTROLLER_METADATA);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         par3List.add(this.getTerraformer());
         par3List.add(this.getChamber());
         par3List.add(this.getLaunchController());
     }
 
-    private boolean canPlaceChamberAt(World world, int x0, int y0, int z0, EntityLivingBase player) {
+    private boolean canPlaceChamberAt(World world, int x0, int y0, int z0) {
         for (int y = 0; y < 3; y++) {
             final Block blockAt = world.getBlock(x0, y0 + y, z0);
             final int metaAt = world.getBlockMetadata(x0, y0 + y, z0);
@@ -372,11 +369,11 @@ public class BlockMachineMars extends BlockTileGC implements ItemBlockDesc.IBloc
     public int damageDropped(int metadata) {
         if (metadata >= BlockMachineMars.LAUNCH_CONTROLLER_METADATA) {
             return BlockMachineMars.LAUNCH_CONTROLLER_METADATA;
-        } else if (metadata >= BlockMachineMars.CRYOGENIC_CHAMBER_METADATA) {
-            return BlockMachineMars.CRYOGENIC_CHAMBER_METADATA;
-        } else {
-            return BlockMachineMars.TERRAFORMER_METADATA;
         }
+        if (metadata >= BlockMachineMars.CRYOGENIC_CHAMBER_METADATA) {
+            return BlockMachineMars.CRYOGENIC_CHAMBER_METADATA;
+        }
+        return BlockMachineMars.TERRAFORMER_METADATA;
     }
 
     @Override

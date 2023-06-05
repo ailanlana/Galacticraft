@@ -4,13 +4,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple;
-import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
-import micdoodle8.mods.galacticraft.core.util.RedstoneUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.entity.Entity;
@@ -26,12 +19,19 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple;
+import micdoodle8.mods.galacticraft.core.network.PacketSimple.EnumSimplePacket;
+import micdoodle8.mods.galacticraft.core.util.RedstoneUtil;
+
 public class TileEntityArclamp extends TileEntity {
 
     private int ticks = 0;
     private int sideRear = 0;
     public int facing = 0;
-    private final HashSet<BlockVec3> airToRestore = new HashSet();
+    private final HashSet<BlockVec3> airToRestore = new HashSet<>();
     private boolean isActive = false;
     private AxisAlignedBB thisAABB;
     private Vec3 thisPos;
@@ -163,15 +163,9 @@ public class TileEntityArclamp extends TileEntity {
 
                 if (!moblist.isEmpty()) {
                     for (final Entity entry : moblist) {
-                        if (!(entry instanceof EntityCreature)) {
+                        if (!(entry instanceof EntityCreature e)) {
                             continue;
                         }
-                        final EntityCreature e = (EntityCreature) entry;
-                        // Check whether the mob can actually *see* the arclamp tile
-                        // if (this.worldObj.func_147447_a(thisPos, Vec3.createVectorHelper(e.posX,
-                        // e.posY, e.posZ),
-                        // true, true, false) != null) continue;
-
                         final Vec3 vecNewTarget = RandomPositionGenerator
                                 .findRandomTargetBlockAwayFrom(e, 16, 7, this.thisPos);
                         if (vecNewTarget == null) {
@@ -187,17 +181,13 @@ public class TileEntityArclamp extends TileEntity {
                         }
                         final double distanceNew = vecNewTarget.squareDistanceTo(this.xCoord, this.yCoord, this.zCoord);
 
-                        if (distanceNew > e.getDistanceSq(this.xCoord, this.yCoord, this.zCoord)) {
-                            if (vecOldTarget == null || distanceNew
-                                    > vecOldTarget.squareDistanceTo(this.xCoord, this.yCoord, this.zCoord)) {
-                                e.getNavigator().tryMoveToXYZ(
-                                        vecNewTarget.xCoord,
-                                        vecNewTarget.yCoord,
-                                        vecNewTarget.zCoord,
-                                        0.3D);
-                                // System.out.println("Debug: Arclamp repelling entity:
-                                // "+e.getClass().getSimpleName());
-                            }
+                        if (distanceNew > e.getDistanceSq(this.xCoord, this.yCoord, this.zCoord)
+                                && (vecOldTarget == null || distanceNew
+                                        > vecOldTarget.squareDistanceTo(this.xCoord, this.yCoord, this.zCoord))) {
+                            e.getNavigator()
+                                    .tryMoveToXYZ(vecNewTarget.xCoord, vecNewTarget.yCoord, vecNewTarget.zCoord, 0.3D);
+                            // System.out.println("Debug: Arclamp repelling entity:
+                            // "+e.getClass().getSimpleName());
                         }
                     }
                 }
@@ -236,9 +226,9 @@ public class TileEntityArclamp extends TileEntity {
         final Block breatheableAirID = GCBlocks.breatheableAir;
         final Block brightAir = GCBlocks.brightAir;
         final Block brightBreatheableAir = GCBlocks.brightBreatheableAir;
-        final HashSet<BlockVec3> checked = new HashSet();
-        LinkedList<BlockVec3> currentLayer = new LinkedList();
-        LinkedList<BlockVec3> nextLayer = new LinkedList();
+        final HashSet<BlockVec3> checked = new HashSet<>();
+        LinkedList<BlockVec3> currentLayer = new LinkedList<>();
+        LinkedList<BlockVec3> nextLayer = new LinkedList<>();
         final BlockVec3 thisvec = new BlockVec3(this);
         currentLayer.add(thisvec);
         final World world = this.worldObj;
@@ -285,10 +275,10 @@ public class TileEntityArclamp extends TileEntity {
                                 }
                             } else {
                                 allAir = false;
-                                if (b != null && b.getLightOpacity(world, sideVec.x, sideVec.y, sideVec.z) == 0) {
-                                    if (side != sideskip1 && side != sideskip2) {
-                                        nextLayer.add(sideVec);
-                                    }
+                                if (b != null && b.getLightOpacity(world, sideVec.x, sideVec.y, sideVec.z) == 0
+                                        && side != sideskip1
+                                        && side != sideskip2) {
+                                    nextLayer.add(sideVec);
                                 }
                             }
                         }

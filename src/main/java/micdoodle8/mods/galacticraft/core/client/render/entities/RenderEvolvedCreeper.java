@@ -1,10 +1,5 @@
 package micdoodle8.mods.galacticraft.core.client.render.entities;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.client.model.ModelEvolvedCreeper;
-import micdoodle8.mods.galacticraft.core.entities.EntityEvolvedCreeper;
-import micdoodle8.mods.galacticraft.core.items.ItemSensorGlasses;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelBase;
@@ -21,6 +16,10 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.client.model.ModelEvolvedCreeper;
+import micdoodle8.mods.galacticraft.core.entities.EntityEvolvedCreeper;
+import micdoodle8.mods.galacticraft.core.items.ItemSensorGlasses;
 
 @SideOnly(Side.CLIENT)
 public class RenderEvolvedCreeper extends RenderCreeper {
@@ -35,7 +34,6 @@ public class RenderEvolvedCreeper extends RenderCreeper {
     private final ModelBase creeperModel = new ModelEvolvedCreeper(0.2F);
 
     public RenderEvolvedCreeper() {
-        super();
         this.mainModel = new ModelEvolvedCreeper();
     }
 
@@ -72,22 +70,21 @@ public class RenderEvolvedCreeper extends RenderCreeper {
 
         if ((int) (var5 * 10.0F) % 2 == 0) {
             return 0;
-        } else {
-            int var6 = (int) (var5 * 0.2F * 255.0F);
-
-            if (var6 < 0) {
-                var6 = 0;
-            }
-
-            if (var6 > 255) {
-                var6 = 255;
-            }
-
-            final short var7 = 255;
-            final short var8 = 255;
-            final short var9 = 255;
-            return var6 << 24 | var7 << 16 | var8 << 8 | var9;
         }
+        int var6 = (int) (var5 * 0.2F * 255.0F);
+
+        if (var6 < 0) {
+            var6 = 0;
+        }
+
+        if (var6 > 255) {
+            var6 = 255;
+        }
+
+        final short var7 = 255;
+        final short var8 = 255;
+        final short var9 = 255;
+        return var6 << 24 | var7 << 16 | var8 << 8 | var9;
     }
 
     protected int func_77061_b(EntityCreeper par1GCEntityCreeper, int par2, float par3) {

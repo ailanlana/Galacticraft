@@ -19,7 +19,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class PlayerUtil {
 
-    public static HashMap<String, GameProfile> knownSkins = new HashMap();
+    public static HashMap<String, GameProfile> knownSkins = new HashMap<>();
 
     public static EntityPlayerMP getPlayerForUsernameVanilla(MinecraftServer server, String username) {
         return VersionUtil.getPlayerForUsername(server, username);
@@ -31,20 +31,19 @@ public class PlayerUtil {
         if (server != null) {
             if (ignoreCase) {
                 return getPlayerForUsernameVanilla(server, username);
-            } else {
-                final Iterator iterator = server.getConfigurationManager().playerEntityList.iterator();
-                EntityPlayerMP entityplayermp;
-
-                do {
-                    if (!iterator.hasNext()) {
-                        return null;
-                    }
-
-                    entityplayermp = (EntityPlayerMP) iterator.next();
-                } while (!entityplayermp.getCommandSenderName().equalsIgnoreCase(username));
-
-                return entityplayermp;
             }
+            final Iterator<EntityPlayerMP> iterator = server.getConfigurationManager().playerEntityList.iterator();
+            EntityPlayerMP entityplayermp;
+
+            do {
+                if (!iterator.hasNext()) {
+                    return null;
+                }
+
+                entityplayermp = iterator.next();
+            } while (!entityplayermp.getCommandSenderName().equalsIgnoreCase(username));
+
+            return entityplayermp;
         }
 
         GCLog.severe("Warning: Could not find player base server instance for player " + username);
@@ -111,10 +110,10 @@ public class PlayerUtil {
     }
 
     public static EntityPlayerMP getPlayerByUUID(UUID theUUID) {
-        final List players = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+        final List<EntityPlayerMP> players = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
         EntityPlayerMP entityplayermp;
         for (int i = players.size() - 1; i >= 0; --i) {
-            entityplayermp = (EntityPlayerMP) players.get(i);
+            entityplayermp = players.get(i);
 
             if (entityplayermp.getUniqueID().equals(theUUID)) {
                 return entityplayermp;

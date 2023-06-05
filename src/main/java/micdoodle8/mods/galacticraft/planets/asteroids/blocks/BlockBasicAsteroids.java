@@ -4,13 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.api.block.IDetectableResource;
-import micdoodle8.mods.galacticraft.api.block.IPlantableBlock;
-import micdoodle8.mods.galacticraft.api.block.ITerraformableBlock;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
-import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -26,6 +19,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.block.IDetectableResource;
+import micdoodle8.mods.galacticraft.api.block.IPlantableBlock;
+import micdoodle8.mods.galacticraft.api.block.ITerraformableBlock;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.planets.asteroids.AsteroidsModule;
+import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
 
 public class BlockBasicAsteroids extends Block implements IDetectableResource, IPlantableBlock, ITerraformableBlock {
 
@@ -69,10 +68,9 @@ public class BlockBasicAsteroids extends Block implements IDetectableResource, I
 
     @Override
     public Item getItemDropped(int meta, Random random, int par3) {
-        switch (meta) {
-            default:
-                return super.getItemDropped(meta, random, par3);
-        }
+        return switch (meta) {
+            default -> super.getItemDropped(meta, random, par3);
+        };
     }
 
     @Override
@@ -97,12 +95,10 @@ public class BlockBasicAsteroids extends Block implements IDetectableResource, I
 
     @Override
     public int damageDropped(int meta) {
-        switch (meta) {
-            case 4:
-                return 0;
-            default:
-                return meta;
-        }
+        return switch (meta) {
+            case 4 -> 0;
+            default -> meta;
+        };
     }
 
     @Override
@@ -122,10 +118,9 @@ public class BlockBasicAsteroids extends Block implements IDetectableResource, I
         }
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @SideOnly(Side.CLIENT)
     @Override
-    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+    public void getSubBlocks(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
         int var4;
 
         for (var4 = 0; var4 < this.blockIcons.length; ++var4) {
@@ -135,14 +130,10 @@ public class BlockBasicAsteroids extends Block implements IDetectableResource, I
 
     @Override
     public boolean isValueable(int metadata) {
-        switch (metadata) {
-            case 3:
-            case 4:
-            case 5:
-                return true;
-            default:
-                return false;
-        }
+        return switch (metadata) {
+            case 3, 4, 5 -> true;
+            default -> false;
+        };
     }
 
     @Override
@@ -166,6 +157,7 @@ public class BlockBasicAsteroids extends Block implements IDetectableResource, I
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
         final int metadata = world.getBlockMetadata(x, y, z);

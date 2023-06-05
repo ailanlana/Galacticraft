@@ -3,11 +3,6 @@ package micdoodle8.mods.galacticraft.core.blocks;
 import java.util.List;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.tile.TileEntityMulti;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockDirectional;
@@ -30,6 +25,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
+import micdoodle8.mods.galacticraft.core.tile.TileEntityMulti;
 
 public class BlockMulti extends BlockContainer implements IPartialSealableBlock, ITileEntityProvider {
 
@@ -80,22 +79,15 @@ public class BlockMulti extends BlockContainer implements IPartialSealableBlock,
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int par1, int par2) {
-        switch (par2) {
-            case 0:
-                return this.fakeIcons[2];
-            case 2:
-                return this.fakeIcons[0];
-            case 3:
-                return this.fakeIcons[1];
-            case 4:
-                return this.fakeIcons[2];
-            case 5:
-                return this.fakeIcons[3];
-            case 6:
-                return this.fakeIcons[4];
-            default:
-                return this.fakeIcons[0];
-        }
+        return switch (par2) {
+            case 0 -> this.fakeIcons[2];
+            case 2 -> this.fakeIcons[0];
+            case 3 -> this.fakeIcons[1];
+            case 4 -> this.fakeIcons[2];
+            case 5 -> this.fakeIcons[3];
+            case 6 -> this.fakeIcons[4];
+            default -> this.fakeIcons[0];
+        };
     }
 
     @Override
@@ -118,23 +110,15 @@ public class BlockMulti extends BlockContainer implements IPartialSealableBlock,
         }
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
-    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisalignedbb, List list,
-            Entity entity) {
+    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisalignedbb,
+            List<AxisAlignedBB> list, Entity entity) {
         final int meta = world.getBlockMetadata(x, y, z);
 
         if (meta == 2 || meta == 6) {
             this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.2F, 1.0F);
-            super.addCollisionBoxesToList(world, x, y, z, axisalignedbb, list, entity);
         }
-        /*
-         * else if (meta == 7) { this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.38F, 1.0F);
-         * super.addCollisionBoxesToList(world, x, y, z, axisalignedbb, list, entity); }
-         */
-        else {
-            super.addCollisionBoxesToList(world, x, y, z, axisalignedbb, list, entity);
-        }
+        super.addCollisionBoxesToList(world, x, y, z, axisalignedbb, list, entity);
     }
 
     @Override
@@ -243,6 +227,7 @@ public class BlockMulti extends BlockContainer implements IPartialSealableBlock,
         return new TileEntityMulti();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
         final TileEntity tileEntity = world.getTileEntity(x, y, z);

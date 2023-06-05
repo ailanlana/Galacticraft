@@ -2,10 +2,6 @@ package micdoodle8.mods.galacticraft.planets.asteroids.dimension;
 
 import java.util.Map;
 
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.planets.asteroids.tick.AsteroidsTickHandlerServer;
-import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityShortRangeTelepad;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.WorldSavedData;
@@ -14,6 +10,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.google.common.collect.Maps;
+
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.planets.asteroids.tick.AsteroidsTickHandlerServer;
+import micdoodle8.mods.galacticraft.planets.asteroids.tile.TileEntityShortRangeTelepad;
 
 public class ShortRangeTelepadHandler extends WorldSavedData {
 
@@ -84,26 +84,22 @@ public class ShortRangeTelepadHandler extends WorldSavedData {
     }
 
     public static void addShortRangeTelepad(TileEntityShortRangeTelepad telepad) {
-        if (!telepad.getWorldObj().isRemote) {
-            if (telepad.addressValid) {
-                final TelepadEntry newEntry = new TelepadEntry(
-                        telepad.getWorldObj().provider.dimensionId,
-                        new BlockVec3(telepad));
-                final TelepadEntry previous = tileMap.put(telepad.address, newEntry);
+        if (!telepad.getWorldObj().isRemote && telepad.addressValid) {
+            final TelepadEntry newEntry = new TelepadEntry(
+                    telepad.getWorldObj().provider.dimensionId,
+                    new BlockVec3(telepad));
+            final TelepadEntry previous = tileMap.put(telepad.address, newEntry);
 
-                if (previous == null || !previous.equals(newEntry)) {
-                    AsteroidsTickHandlerServer.spaceRaceData.setDirty(true);
-                }
+            if (previous == null || !previous.equals(newEntry)) {
+                AsteroidsTickHandlerServer.spaceRaceData.setDirty(true);
             }
         }
     }
 
     public static void removeShortRangeTeleporter(TileEntityShortRangeTelepad telepad) {
-        if (!telepad.getWorldObj().isRemote) {
-            if (telepad.addressValid) {
-                tileMap.remove(telepad.address);
-                AsteroidsTickHandlerServer.spaceRaceData.setDirty(true);
-            }
+        if (!telepad.getWorldObj().isRemote && telepad.addressValid) {
+            tileMap.remove(telepad.address);
+            AsteroidsTickHandlerServer.spaceRaceData.setDirty(true);
         }
     }
 

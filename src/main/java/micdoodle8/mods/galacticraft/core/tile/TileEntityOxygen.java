@@ -2,6 +2,11 @@ package micdoodle8.mods.galacticraft.core.tile;
 
 import java.util.EnumSet;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.relauncher.Side;
 import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
 import micdoodle8.mods.galacticraft.api.transmission.grid.IOxygenNetwork;
 import micdoodle8.mods.galacticraft.api.transmission.tile.IOxygenReceiver;
@@ -10,12 +15,6 @@ import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
 import micdoodle8.mods.galacticraft.core.energy.tile.TileBaseElectricBlock;
 import micdoodle8.mods.galacticraft.core.oxygen.NetworkHelper;
 import micdoodle8.mods.galacticraft.core.util.Annotations.NetworkedField;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.relauncher.Side;
 
 public abstract class TileEntityOxygen extends TileBaseElectricBlock implements IOxygenReceiver, IOxygenStorage {
 
@@ -103,7 +102,7 @@ public abstract class TileEntityOxygen extends TileBaseElectricBlock implements 
 
     @Override
     public boolean canConnect(ForgeDirection direction, NetworkType type) {
-        if (direction == null || direction.equals(ForgeDirection.UNKNOWN)) {
+        if (direction == null || ForgeDirection.UNKNOWN.equals(direction)) {
             return false;
         }
 
@@ -219,9 +218,8 @@ public abstract class TileEntityOxygen extends TileBaseElectricBlock implements 
     public float getOxygenRequest(ForgeDirection direction) {
         if (this.shouldPullOxygen()) {
             return this.oxygenPerTick * 2;
-        } else {
-            return 0;
         }
+        return 0;
     }
 
     @Override

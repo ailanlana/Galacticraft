@@ -2,13 +2,6 @@ package micdoodle8.mods.galacticraft.core.energy.tile;
 
 import java.lang.reflect.Constructor;
 
-import mekanism.api.energy.IStrictEnergyAcceptor;
-import micdoodle8.mods.galacticraft.api.transmission.tile.IConductor;
-import micdoodle8.mods.galacticraft.api.transmission.tile.IElectrical;
-import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
-import micdoodle8.mods.galacticraft.core.energy.EnergyConfigHandler;
-import micdoodle8.mods.galacticraft.core.energy.EnergyUtil;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
@@ -21,6 +14,12 @@ import cpw.mods.fml.common.eventhandler.Event;
 import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
+import mekanism.api.energy.IStrictEnergyAcceptor;
+import micdoodle8.mods.galacticraft.api.transmission.tile.IConductor;
+import micdoodle8.mods.galacticraft.api.transmission.tile.IElectrical;
+import micdoodle8.mods.galacticraft.api.vector.BlockVec3;
+import micdoodle8.mods.galacticraft.core.energy.EnergyConfigHandler;
+import micdoodle8.mods.galacticraft.core.energy.EnergyUtil;
 
 @InterfaceList({ @Interface(modid = "IC2API", iface = "ic2.api.energy.tile.IEnergySink"),
         @Interface(modid = "IC2API", iface = "ic2.api.energy.tile.IEnergyEmitter"),
@@ -88,7 +87,7 @@ public abstract class TileBaseUniversalConductor extends TileBaseConductor
                 final Constructor<?> constr = tileLoadEvent.getConstructor(energyTile);
                 final Object o = constr.newInstance(this);
 
-                if (o != null && o instanceof Event) {
+                if (o instanceof Event) {
                     MinecraftForge.EVENT_BUS.post((Event) o);
                 }
             } catch (final Exception e) {
@@ -106,7 +105,7 @@ public abstract class TileBaseUniversalConductor extends TileBaseConductor
                     final Constructor<?> constr = tileLoadEvent.getConstructor(energyTile);
                     final Object o = constr.newInstance(this);
 
-                    if (o != null && o instanceof Event) {
+                    if (o instanceof Event) {
                         MinecraftForge.EVENT_BUS.post((Event) o);
                     }
                 } catch (final Exception e) {

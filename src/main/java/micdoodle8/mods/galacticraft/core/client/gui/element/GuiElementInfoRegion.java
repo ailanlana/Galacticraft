@@ -1,10 +1,6 @@
 package micdoodle8.mods.galacticraft.core.client.gui.element;
 
-import java.util.Iterator;
 import java.util.List;
-
-import micdoodle8.mods.galacticraft.core.client.gui.container.GuiContainerGC;
-import micdoodle8.mods.galacticraft.core.util.ColorUtil;
 
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.RenderHelper;
@@ -16,6 +12,8 @@ import org.lwjgl.opengl.GL12;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import micdoodle8.mods.galacticraft.core.client.gui.container.GuiContainerGC;
+import micdoodle8.mods.galacticraft.core.util.ColorUtil;
 
 @SideOnly(Side.CLIENT)
 public class GuiElementInfoRegion extends Gui {
@@ -83,10 +81,7 @@ public class GuiElementInfoRegion extends Gui {
 
         if (this.tooltipStrings != null && !this.tooltipStrings.isEmpty() && this.withinRegion) {
             int k = 0;
-            final Iterator<String> iterator = this.tooltipStrings.iterator();
-
-            while (iterator.hasNext()) {
-                final String s = iterator.next();
+            for (String s : this.tooltipStrings) {
                 final int l = FMLClientHandler.instance().getClient().fontRenderer.getStringWidth(s);
 
                 if (l > k) {

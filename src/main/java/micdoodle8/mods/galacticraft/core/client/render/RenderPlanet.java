@@ -1,7 +1,5 @@
 package micdoodle8.mods.galacticraft.core.client.render;
 
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.MathHelper;
@@ -10,6 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 
 public class RenderPlanet {
 
@@ -49,26 +48,14 @@ public class RenderPlanet {
     }
 
     public static void renderID(int id, float scale, float ticks) {
-        ResourceLocation texture;
-        switch (id) {
-            case 0:
-                texture = textureEuropa;
-                break;
-            case 1:
-                texture = textureGanymede;
-                break;
-            case 2:
-                texture = textureIo;
-                break;
-            case 3:
-                texture = textureJupiterInner;
-                break;
-            case 4:
-                texture = textureSaturn;
-                break;
-            default:
-                texture = textureGanymede;
-        }
+        ResourceLocation texture = switch (id) {
+            case 0 -> textureEuropa;
+            case 1 -> textureGanymede;
+            case 2 -> textureIo;
+            case 3 -> textureJupiterInner;
+            case 4 -> textureSaturn;
+            default -> textureGanymede;
+        };
         if (id == 3) // Jupiter
         {
             final float relSize = 48F;
@@ -129,7 +116,6 @@ public class RenderPlanet {
             tessellator.addVertexWithUV(x + width, ybb, 0F, prog + span, y3);
             tessellator.addVertexWithUV(x + width, yba, 0F, prog + span, y2);
             tessellator.addVertexWithUV(x, yba, 0F, prog, y2);
-            tessellator.draw();
         } else {
             final double xp = x + width * (1F - prog) / span;
             tessellator.startDrawingQuads();
@@ -155,7 +141,7 @@ public class RenderPlanet {
             tessellator.addVertexWithUV(x + width, ybb, 0F, prog - 1F + span, y3);
             tessellator.addVertexWithUV(x + width, yba, 0F, prog - 1F + span, y2);
             tessellator.addVertexWithUV(xp, yba, 0F, 0F, y2);
-            tessellator.draw();
         }
+        tessellator.draw();
     }
 }
