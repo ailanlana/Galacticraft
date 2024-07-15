@@ -4,7 +4,7 @@ dependencies {
 
     api('net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev')
 
-    compileOnly('com.github.GTNewHorizons:Applied-Energistics-2-Unofficial:rv3-beta-405-GTNH:api')
+    compileOnly('com.github.GTNewHorizons:Applied-Energistics-2-Unofficial:rv3-beta-408-GTNH:api')
     compileOnly('com.github.GTNewHorizons:BuildCraft:7.1.39:api')
 
     compileOnly('curse.maven:cofh-lib-220333:2388748')
