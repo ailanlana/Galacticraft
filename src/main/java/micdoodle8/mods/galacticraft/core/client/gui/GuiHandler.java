@@ -24,7 +24,6 @@ import micdoodle8.mods.galacticraft.core.client.gui.container.GuiCoalGenerator;
 import micdoodle8.mods.galacticraft.core.client.gui.container.GuiElectricFurnace;
 import micdoodle8.mods.galacticraft.core.client.gui.container.GuiElectricIngotCompressor;
 import micdoodle8.mods.galacticraft.core.client.gui.container.GuiEnergyStorageModule;
-import micdoodle8.mods.galacticraft.core.client.gui.container.GuiExtendedInventory;
 import micdoodle8.mods.galacticraft.core.client.gui.container.GuiFuelLoader;
 import micdoodle8.mods.galacticraft.core.client.gui.container.GuiIngotCompressor;
 import micdoodle8.mods.galacticraft.core.client.gui.container.GuiOxygenCollector;
@@ -183,8 +182,6 @@ public class GuiHandler implements IGuiHandler {
                     ((EntityTieredRocket) player.ridingEntity).getType());
         }
         switch (ID) {
-            case GuiIdsCore.EXTENDED_INVENTORY:
-                return new GuiExtendedInventory(player, ClientProxyCore.dummyInventory);
             case GuiIdsCore.SPACE_RACE_START:
                 return new GuiNewSpaceRace(player);
             case GuiIdsCore.SPACE_RACE_JOIN:

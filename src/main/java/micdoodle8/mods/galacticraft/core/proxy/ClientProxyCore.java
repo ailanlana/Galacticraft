@@ -84,7 +84,6 @@ import micdoodle8.mods.galacticraft.core.client.DynamicTextureProper;
 import micdoodle8.mods.galacticraft.core.client.FootprintRenderer;
 import micdoodle8.mods.galacticraft.core.client.fx.EffectHandler;
 import micdoodle8.mods.galacticraft.core.client.gui.screen.GuiCelestialSelection;
-import micdoodle8.mods.galacticraft.core.client.gui.screen.InventoryTabGalacticraft;
 import micdoodle8.mods.galacticraft.core.client.model.ModelPlayerBaseGC;
 import micdoodle8.mods.galacticraft.core.client.model.ModelRocketTier1;
 import micdoodle8.mods.galacticraft.core.client.render.ThreadDownloadImageDataGC;
@@ -172,8 +171,6 @@ import micdoodle8.mods.galacticraft.core.tile.TileEntityTreasureChest;
 import micdoodle8.mods.galacticraft.core.util.VersionUtil;
 import micdoodle8.mods.galacticraft.core.wrappers.BlockMetaList;
 import micdoodle8.mods.galacticraft.core.wrappers.PlayerGearData;
-import tconstruct.client.tabs.InventoryTabVanilla;
-import tconstruct.client.tabs.TabRegistry;
 
 public class ClientProxyCore extends CommonProxyCore {
 
@@ -288,10 +285,10 @@ public class ClientProxyCore extends CommonProxyCore {
 
     @Override
     public void postInit(FMLPostInitializationEvent event) {
-        ClientProxyCore.registerInventoryTabs();
+//        ClientProxyCore.registerInventoryTabs();
         ClientProxyCore.registerEntityRenderers();
         ClientProxyCore.registerItemRenderers();
-        MinecraftForge.EVENT_BUS.register(new TabRegistry());
+//        MinecraftForge.EVENT_BUS.register(new TabRegistry());
         // ClientProxyCore.playerList = GLAllocation.generateDisplayLists(1);
 
         try {
@@ -492,13 +489,13 @@ public class ClientProxyCore extends CommonProxyCore {
         }
     }
 
-    public static void registerInventoryTabs() {
-        if (!Loader.isModLoaded("TConstruct") && TabRegistry.getTabList().size() < 1) {
-            TabRegistry.registerTab(new InventoryTabVanilla());
-        }
-
-        TabRegistry.registerTab(new InventoryTabGalacticraft());
-    }
+//    public static void registerInventoryTabs() {
+//        if (!Loader.isModLoaded("TConstruct") && TabRegistry.getTabList().size() < 1) {
+//            TabRegistry.registerTab(new InventoryTabVanilla());
+//        }
+//
+//        TabRegistry.registerTab(new InventoryTabGalacticraft());
+//    }
 
     public static void renderPlanets(float par3) {}
 
